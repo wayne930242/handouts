@@ -34,7 +34,7 @@ export default function CampaignForm({ serverData }: { serverData: Campaign }) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: serverData,
+    defaultValues: Object.freeze(serverData),
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
