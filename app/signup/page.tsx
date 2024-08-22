@@ -2,8 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { SubmitButton } from "../../components/forms/submit-button";
-import { Input } from "@/components/forms/input";
-import { Label } from "@/components/forms/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { encodedRedirect } from "@/utils/utils";
 

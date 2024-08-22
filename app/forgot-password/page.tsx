@@ -2,8 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "../../components/forms/submit-button";
-import { Label } from "@/components/forms/label";
-import { Input } from "@/components/forms/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { headers } from "next/headers";
 import { encodedRedirect } from "@/utils/utils";
@@ -26,7 +26,7 @@ export default function ForgotPassword({
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
+      redirectTo: `${origin}/auth/callback?redirect_to=/reset-password`,
     });
 
     if (error) {

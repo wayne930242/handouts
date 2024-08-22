@@ -1,6 +1,6 @@
 import { FormMessage, Message } from "@/components/forms/form-message";
-import { Input } from "@/components/forms/input";
-import { Label } from "@/components/forms/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { createClient } from "@/utils/supabase/server";
 import { encodedRedirect } from "@/utils/utils";
@@ -20,7 +20,7 @@ export default async function ResetPassword({
     if (!password || !confirmPassword) {
       encodedRedirect(
         "error",
-        "/protected/reset-password",
+        "/reset-password",
         "Password and confirm password are required",
       );
     }
@@ -28,7 +28,7 @@ export default async function ResetPassword({
     if (password !== confirmPassword) {
       encodedRedirect(
         "error",
-        "/protected/reset-password",
+        "/reset-password",
         "Passwords do not match",
       );
     }
@@ -40,12 +40,12 @@ export default async function ResetPassword({
     if (error) {
       encodedRedirect(
         "error",
-        "/protected/reset-password",
+        "/reset-password",
         "Password update failed",
       );
     }
 
-    encodedRedirect("success", "/protected/reset-password", "Password updated");
+    encodedRedirect("success", "/reset-password", "Password updated");
   };
 
   return (

@@ -1,6 +1,8 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+
+import { Button } from "../ui/button";
 import { type ComponentProps } from "react";
 
 type Props = ComponentProps<"button"> & {
@@ -17,13 +19,12 @@ export function SubmitButton({
   const isPending = pending && action === props.formAction;
 
   return (
-    <button
+    <Button
       {...props}
-      className="bg-black h-8 flex items-center justify-center font-medium text-sm hover:bg-slate-800 transition-colors text-white rounded-md text-foreground"
       type="submit"
       aria-disabled={pending}
     >
       {isPending ? pendingText : children}
-    </button>
+    </Button>
   );
 }
