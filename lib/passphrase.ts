@@ -6,8 +6,23 @@ interface Passphrase {
   [campaign_id: string | number]: string;
 }
 
+function getCookies() {
+  try {
+    return cookies();
+  } catch (e) {
+    console.warn(
+      "User cookies are not available, falling back to search params"
+    );
+    return false;
+  }
+}
+
 export function getPassphrase(campaign_id: string | number): string | null {
-  const passphrases = cookies().get(STORAGE_KEY);
+  const c = getCookies();
+  if (c === false) {
+    return null;
+  }
+  const passphrases = c.get(STORAGE_KEY);
   if (typeof passphrases === "string") {
     try {
       const parsedPassphrases: Passphrase = JSON.parse(passphrases);
@@ -23,24 +38,17 @@ export function addPassphrase(
   campaign_id: string | number,
   passphrase: string
 ) {
-  const passphrases = cookies().get(STORAGE_KEY);
+  const c = getCookies();
+  if (c === false) {
+    const searchParams = new URLSearchParams();
+    searchParams.set("passphrase", passphrase);
+    return;
+  }
+  const passphrases = c.get(STORAGE_KEY);
   if (typeof passphrases === "string") {
     try {
       const parsedPassphrases: Passphrase = JSON.parse(passphrases);
       parsedPassphrases[campaign_id] = passphrase;
-      cookies().set(STORAGE_KEY, JSON.stringify(parsedPassphrases));
-    } catch (e) {
-      console.error("Error parsing passphrase:", e);
-    }
-  }
-}
-
-export function removePassphrase(campaign_id: string | number) {
-  const passphrases = cookies().get(STORAGE_KEY);
-  if (typeof passphrases === "string") {
-    try {
-      const parsedPassphrases: Passphrase = JSON.parse(passphrases);
-      delete parsedPassphrases[campaign_id];
       cookies().set(STORAGE_KEY, JSON.stringify(parsedPassphrases));
     } catch (e) {
       console.error("Error parsing passphrase:", e);

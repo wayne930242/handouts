@@ -7,17 +7,23 @@ interface Props {
   params: {
     id: string;
   };
+  searchParams: {
+    passphrase?: string;
+  };
 }
 
-export default async function CampaignPage({ params: { id } }: Props) {
+export default async function CampaignPage({
+  params: { id },
+  searchParams: { passphrase },
+}: Props) {
   const supabase = createClient();
-  const passphrase = getPassphrase(id);
+  const c_passphrase = getPassphrase(id);
 
   const { data: isAuthorized, error: authError } = await supabase.rpc(
     "check_campaign_passphrase_rpc",
     {
       campaign_id: id,
-      input_passphrase: passphrase,
+      input_passphrase: passphrase ?? c_passphrase,
     }
   );
 
