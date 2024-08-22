@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-export const STORAGE_KEY = "id-mix-passphrase";
+export const STORAGE_KEY = "id-passphrase-record";
 
 interface Passphrase {
   [campaign_id: string | number]: string;
