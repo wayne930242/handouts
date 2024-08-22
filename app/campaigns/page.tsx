@@ -33,7 +33,7 @@ export default async function ProtectedPage() {
           <Toolbar />
         </div>
       </div>
-      <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3 justify-start w-full justify-self-stretch">
+      <div className="flex flex-col max-w-4xl px-3 justify-start w-full">
         <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {campaigns?.map((campaign) => (
             <CampaignCard campaign={campaign} key={campaign.id} />

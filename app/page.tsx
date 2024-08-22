@@ -20,7 +20,7 @@ export default async function Index() {
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <NavBar isSupabaseConnected={isSupabaseConnected} />
 
-      <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
+      <div className="flex-1 flex flex-col max-w-4xl px-3">
         <h1 className="text-2xl font-bold text-center text-muted-foreground">
           Welcome to ShareHandouts!
         </h1>
