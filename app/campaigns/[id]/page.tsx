@@ -1,9 +1,7 @@
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
-import { Campaign } from "@/types/interfaces";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import CampaignForm from "./CampaignForm";
+
+import PageLayout from "@/components/layouts/PageLayout";
+import { getPassphrase } from "@/lib/passphrase";
 
 interface Props {
   params: {
@@ -12,51 +10,77 @@ interface Props {
 }
 
 export default async function CampaignPage({ params: { id } }: Props) {
-  const isNew = id === "new";
-
   const supabase = createClient();
+  const passphrase = getPassphrase(id);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return redirect("/login");
-  }
-
-  let data: Campaign = {
-    id: "new",
-    gm_id: user.id,
-    name: "New Campaign",
-    description: undefined,
-    passphrase: undefined,
-  };
-
-  if (!isNew) {
-    const result = await supabase
-      .from("campaigns")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    data = {
-      id: result.data.id,
-      gm_id: result.data.gm_id,
-      name: result.data.name,
-      description: result.data.description ?? undefined,
-      passphrase: result.data.passphrase ?? undefined,
-    };
-  }
-
-  return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <NavBar isSupabaseConnected={true} />
-
-      <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3 w-full">
-        <CampaignForm serverData={data} />
-      </div>
-
-      <Footer />
-    </div>
+  const { data: isAuthorized, error: authError } = await supabase.rpc(
+    "check_campaign_passphrase_rpc",
+    {
+      campaign_id: id,
+      input_passphrase: passphrase,
+    }
   );
+
+  if (authError) {
+    console.error("Error checking campaign access:", authError);
+    throw new Error("Failed to check campaign access");
+  }
+
+  if (!isAuthorized) {
+    throw new Error(
+      "Access denied: Invalid passphrase or insufficient permissions"
+    );
+  }
+
+  const { data, error } = await supabase
+    .from("campaigns")
+    .select(
+      `
+      id,
+      gm_id,
+      name,
+      description,
+      passphrase,
+      chapters:chapters (
+        id,
+        campaign_id,
+        title,
+        order_num,
+        sections:sections (
+          id,
+          chapter_id,
+          title,
+          order_num,
+          handouts:handouts (
+            id,
+            title,
+            content,
+            is_public,
+            section_id,
+            type,
+            owner_id,
+            note,
+            images:handout_images (
+              id,
+              handout_id,
+              image_url,
+              display_order,
+              caption,
+              type
+            )
+          )
+        )
+      )
+    `
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching campaigns:", error);
+    return null;
+  }
+  console.log(data);
+
+  return <PageLayout needsAuth>TEST</PageLayout>;
 }

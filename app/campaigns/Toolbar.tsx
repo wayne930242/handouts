@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 export default function Toolbar() {
   return (
     <div className="flex justify-between items-center w-full px-2">
@@ -7,7 +7,7 @@ export default function Toolbar() {
         <Button variant="outline">Join Campaign</Button>
       </div>
       <div>
-        <Link href="/campaigns/new">
+        <Link href="/campaigns/info/new">
           <Button>New</Button>
         </Link>
       </div>

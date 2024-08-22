@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
 import { createClient } from "@/utils/supabase/client";
-import { Campaign } from "@/types/interfaces";
+import { CampaignBase } from "@/types/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ const FormSchema = z.object({
   passphrase: z.string().optional(),
 });
 
-export default function CampaignForm({ serverData }: { serverData: Campaign }) {
+export default function CampaignForm({ serverData }: { serverData: CampaignBase }) {
   const supabase = createClient();
 
   const router = useRouter();

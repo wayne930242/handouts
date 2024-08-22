@@ -7,14 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Campaign } from "@/types/interfaces";
+import { CampaignBase } from "@/types/interfaces";
 import Link from "next/link";
 
-export default function CampaignCard({ campaign }: { campaign: Campaign }) {
+export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
   return (
-    <Card className="cursor-pointer">
-      <CardHeader>
-        <CardTitle>{campaign.name}</CardTitle>
+    <Card>
+      <CardHeader className="cursor-pointer hover:bg-accent">
+        <Link href={`/campaigns/${campaign.id}`}>
+          <CardTitle>{campaign.name}</CardTitle>
+        </Link>
       </CardHeader>
       <CardContent>
         <CardDescription>{campaign.description}</CardDescription>
@@ -22,7 +24,7 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
 
       <CardFooter>
         <div className="flex justify-end items-center gap-2 w-full">
-          <Link href={`/campaigns/${campaign.id}`}>
+          <Link href={`/campaigns/info/${campaign.id}`}>
             <Button variant="secondary">Edit</Button>
           </Link>
         </div>
