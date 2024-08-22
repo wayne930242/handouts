@@ -22,7 +22,7 @@ export function SubmitButton({
     <Button
       {...props}
       type="submit"
-      aria-disabled={pending}
+      disabled={pending}
     >
       {isPending ? pendingText : children}
     </Button>
