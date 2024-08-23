@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 import PageLayout from "@/components/layouts/PageLayout";
 import { getPassphrase } from "@/lib/passphrase";

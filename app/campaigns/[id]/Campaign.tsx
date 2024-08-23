@@ -1,7 +1,7 @@
 "use client";
 
 import useCampaignData from "@/lib/hooks/useCampaignData";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import Toolbar from "./CampaignToolbar";
 import useAppStore from "@/lib/store/useAppStore";
 import CampaignEditor from "./CampaignEditor";

@@ -2,8 +2,8 @@ import { FormMessage, Message } from "@/components/forms/form-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { createClient } from "@/utils/supabase/server";
-import { encodedRedirect } from "@/utils/utils";
+import { createClient } from "@/lib/supabase/server";
+import { encodedRedirect } from "@/lib/route";
 
 export default async function ResetPassword({
   searchParams,

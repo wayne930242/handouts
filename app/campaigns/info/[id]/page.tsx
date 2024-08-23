@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { CampaignBase } from "@/types/interfaces";
 
 import CampaignForm from "./CampaignForm";

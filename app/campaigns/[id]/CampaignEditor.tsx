@@ -1,29 +1,13 @@
 "use client";
 
-import {
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  useDroppable,
-  closestCenter,
-  TouchSensor,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Chapter } from "@/types/interfaces";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
-import useCampaignStore from "@/lib/store/useCampaignStore";
-import ChapterCard from "./CampaignEditor/ChapterCard";
 
-import { cn } from "@/lib/utils";
+import { Chapter } from "@/types/interfaces";
+import { createClient } from "@/lib/supabase/client";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+
+import { Button } from "@/components/ui/button";
+import ChaptersArea from "./CampaignEditor/ChaptersArea";
 
 const genEmptyChapter = (campaignId: string, orderNum: number): Chapter => ({
   id: "new",
@@ -38,19 +22,7 @@ export default function CampaignEditor() {
 
   const { campaignData, setCampaignData } = useCampaignStore();
 
-  const { isOver, setNodeRef } = useDroppable({
-    id: "campaign",
-  });
-
   const chapters = campaignData?.chapters ?? [];
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-    useSensor(TouchSensor)
-  );
 
   return (
     <div className="flex flex-col gap-2 w-full my-2">
@@ -63,7 +35,7 @@ export default function CampaignEditor() {
             onClick={() => {
               const newChapter = genEmptyChapter(
                 campaignData?.id as string,
-                campaignData?.chapters?.length ?? 0
+                (campaignData?.chapters?.length ?? 0) + 1
               );
               const { sections, ...newChapterWithoutSections } = newChapter;
               setCampaignData(
@@ -78,39 +50,7 @@ export default function CampaignEditor() {
           </Button>
         </div>
       </div>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={(event) => {
-          const { active, over } = event;
-
-          if (over && active.id !== over.id) {
-            const oldIndex = chapters.findIndex(
-              (item) => item.id === active.id
-            );
-            const newIndex = chapters.findIndex((item) => item.id === over.id);
-            const newChapters = arrayMove(chapters, oldIndex, newIndex);
-
-            newChapters.forEach((chapter, index) => {
-              if (chapter.order_num !== index + 1) {
-                chapter.order_num = index + 1;
-                setCampaignData(chapter, supabase, "chapters", "UPDATE");
-              }
-            });
-          }
-        }}
-      >
-        <SortableContext
-          items={chapters.map((chapter) => chapter.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          <div ref={setNodeRef} className={cn("grid grid-cols-1 gap-y-2")}>
-            {chapters.map((chapter) => (
-              <ChapterCard key={chapter.id} chapter={chapter} />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+      <ChaptersArea chapters={chapters} />
     </div>
   );
 }

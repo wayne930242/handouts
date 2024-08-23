@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "../../components/forms/submit-button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/forms/form-message";
-import { encodedRedirect } from "@/utils/utils";
+import { encodedRedirect } from "@/lib/route";
 
 export default function Login({ searchParams }: { searchParams: Message }) {
   const signIn = async (formData: FormData) => {

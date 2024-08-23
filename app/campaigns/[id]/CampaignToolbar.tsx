@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
 import useCampaignData from "@/lib/hooks/useCampaignData";
 import { Eye, Pen } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Toolbar({
   campaignId,

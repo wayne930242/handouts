@@ -1,11 +1,11 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { SubmitButton } from "../../components/forms/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormMessage, Message } from "@/components/forms/form-message";
-import { encodedRedirect } from "@/utils/utils";
+import { encodedRedirect } from "@/lib/route";
 
 export default function Signup({ searchParams }: { searchParams: Message }) {
   const signUp = async (formData: FormData) => {

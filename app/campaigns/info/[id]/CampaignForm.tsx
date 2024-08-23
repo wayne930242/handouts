@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { CampaignBase } from "@/types/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
