@@ -32,33 +32,7 @@ export const advancedArrayMove = <T extends Record<string, any>>(
     }
   }
 
-  return [...result];
-};
-
-export const advancedAddElement = <T extends Record<string, any>>(
-  arr: readonly T[],
-  newRecord: T,
-  orderNumKey?: keyof T,
-  removeKeys?: (keyof T)[]
-): T[] => {
-  const result = [...arr];
-
-  result.push(newRecord);
-
-  if (orderNumKey || removeKeys) {
-    for (let i = 0; i < result.length; i++) {
-      if (orderNumKey) {
-        result[i][orderNumKey] = (i + 1) as any;
-      }
-      if (removeKeys) {
-        for (const key of removeKeys) {
-          delete result[i][key];
-        }
-      }
-    }
-  }
-
-  return [...result];
+  return result;
 };
 
 export const advancedRemoveElement = <T extends Record<string, any>>(
@@ -73,6 +47,7 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
 
   if (orderNumKey || removeKeys) {
     for (let i = 0; i < result.length; i++) {
+      if (!result[i]) continue;
       if (orderNumKey) {
         result[i][orderNumKey] = (i + 1) as any;
       }
@@ -84,5 +59,5 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
     }
   }
 
-  return [...result];
+  return result;
 };

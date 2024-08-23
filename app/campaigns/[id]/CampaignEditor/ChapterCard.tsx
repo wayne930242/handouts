@@ -8,21 +8,25 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SectionsArea from "./SectionsArea";
-import { advancedAddElement } from "@/lib/arrayAction";
+import { advancedRemoveElement } from "@/lib/arrayAction";
 
 interface Props {
   chapter: Chapter;
 }
 
-const emptySection = (chapterId: number): Partial<Section> => ({
+const emptySection = (
+  chapterId: number,
+  orderNum: number
+): Partial<Section> => ({
   id: "new",
   chapter_id: chapterId,
   title: "",
+  order_num: orderNum,
 });
 
 export default function ChapterCard({ chapter }: Props) {
   const supabase = createClient();
-  const { setCampaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore();
 
   return (
     <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-2 rounded-md cursor-default">
@@ -63,21 +67,12 @@ export default function ChapterCard({ chapter }: Props) {
               variant="outline"
               size="sm"
               onClick={(e) => {
-                const oldSections: Partial<Section>[] = [
-                  ...(chapter.sections ?? []),
-                ];
-
-                const newSections = advancedAddElement(
-                  oldSections,
-                  emptySection(chapter.id as number),
-                  "order_num",
-                  ["handouts"]
+                const newSection = emptySection(
+                  chapter.id as number,
+                  (chapter.sections?.length ?? 0) + 1
                 );
-                const newSection = newSections[newSections.length - 1];
-                const otherSections = newSections.slice(0, -1);
 
                 setCampaignData(newSection, supabase, "sections", "INSERT");
-                setCampaignData(otherSections, supabase, "sections", "UPDATE");
               }}
             >
               <p>新段落</p>
@@ -92,6 +87,17 @@ export default function ChapterCard({ chapter }: Props) {
         size="icon"
         onClick={(e) => {
           e.stopPropagation();
+          if (!campaignData) return;
+          const { chapters } = campaignData;
+
+          const newChapters = advancedRemoveElement(
+            chapters ?? [],
+            chapter.order_num,
+            "order_num",
+            ["sections"]
+          );
+
+          setCampaignData(newChapters, supabase, "chapters", "UPDATE");
           setCampaignData(
             {
               id: chapter.id,

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { advancedRemoveElement } from "@/lib/arrayAction";
 
 interface Props {
   section: Section;
@@ -14,7 +15,7 @@ interface Props {
 
 export default function SectionCard({ section }: Props) {
   const supabase = createClient();
-  const { setCampaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore();
 
   return (
     <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-2 rounded-md cursor-default">
@@ -63,12 +64,24 @@ export default function SectionCard({ section }: Props) {
         size="icon"
         onClick={(e) => {
           e.stopPropagation();
+          const chapter = campaignData?.chapters.find(
+            (chapter) => chapter.id === section.chapter_id
+          );
+          if (!chapter) return;
+          const { sections } = chapter;
+          const newSections = advancedRemoveElement(
+            sections ?? [],
+            section.order_num,
+            "order_num",
+            ["handouts"]
+          );
+
+          setCampaignData(newSections, supabase, "sections", "UPDATE");
+
           setCampaignData(
             {
               id: section.id,
               chapter_id: section.chapter_id,
-              title: section.title,
-              order_num: section.order_num,
             },
             supabase,
             "sections",
