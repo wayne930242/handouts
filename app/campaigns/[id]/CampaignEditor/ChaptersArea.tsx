@@ -2,25 +2,23 @@
 
 import {
   DragDropContext,
-  DragStart,
   Draggable,
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
 
-import { Chapter } from "@/types/interfaces";
+import { Chapter, Section } from "@/types/interfaces";
 import ChapterCard from "./ChapterCard";
 import { advancedArrayMove } from "@/lib/arrayAction";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
-import { cn } from "@/lib/utils";
-
 interface Props {
   chapters: Chapter[];
+  campaignId: string;
 }
 
-export default function ChaptersArea({ chapters }: Props) {
+export default function ChaptersArea({ chapters, campaignId }: Props) {
   const supabase = createClient();
 
   const { campaignData, setCampaignData } = useCampaignStore();
@@ -33,10 +31,42 @@ export default function ChaptersArea({ chapters }: Props) {
     const sourceDroppableId = source.droppableId.split("-");
     const destDroppableId = destination.droppableId.split("-");
 
-    let newChapters = [...chapters];
+    console.log(sourceDroppableId, destDroppableId);
+    console.log(type);
 
     if (type === "CHAPTER") {
+      const sourceIndex = source.index;
+      const destIndex = destination.index;
+
+      const newChapters = advancedArrayMove(
+        chapters,
+        sourceIndex,
+        destIndex,
+        "order_num"
+      ).map((chapter) => {
+        const { id, campaign_id, title, order_num } = chapter;
+        return {
+          id,
+          campaign_id,
+          title,
+          order_num,
+        };
+      });
+
+      setCampaignData(newChapters, supabase, "chapters", "UPDATE");
     } else if (type === "SECTION") {
+      const sourceChapterIndex = chapters.findIndex(
+        (chapter) => chapter.id == sourceDroppableId[1]
+      );
+      const destChapterIndex = chapters.findIndex(
+        (chapter) => chapter.id == destDroppableId[1]
+      );
+      if (sourceChapterIndex === destChapterIndex) {
+        const sourceIndex = source.index;
+        const destIndex = destination.index;
+
+        const sections = chapters[sourceChapterIndex].sections;
+      }
     } else if (type === "HANDOUT") {
     }
   };

@@ -25,64 +25,42 @@ export const advancedArrayMove = <T extends Record<string, any>>(
 
   let elementToMove: T | undefined;
   if (!isInsertion) {
-    elementToMove = result[oldIndex];
-  }
-
-  const startIndex = isInsertion ? newIndex : Math.min(oldIndex, newIndex);
-  const endIndex = isRemoval
-    ? oldIndex
-    : isInsertion
-    ? len
-    : Math.max(oldIndex, newIndex);
-
-  for (let i = startIndex; i <= endIndex; i++) {
-    if (isRemoval) {
-      if (i > oldIndex) {
-        result[i - 1] = result[i];
-        if (orderNumKey) {
-          result[i - 1][orderNumKey] = (i - 1) as any;
-        }
-      }
-    } else if (isInsertion) {
-      if (i < newIndex) {
-        if (orderNumKey) {
-          result[i][orderNumKey] = i as any;
-        }
-      } else if (i === newIndex) {
-        result[i] = {} as T;
-        if (orderNumKey) {
-          result[i][orderNumKey] = i as any;
-        }
-      } else {
-        result[i] = result[i - 1];
-        if (orderNumKey) {
-          result[i][orderNumKey] = i as any;
-        }
-      }
-    } else {
-      // Moving existing element
-      if (oldIndex < newIndex) {
-        if (i > oldIndex && i <= newIndex) {
-          result[i - 1] = result[i];
-        } else if (i === newIndex) {
-          result[i] = elementToMove!;
-        }
-      } else {
-        // oldIndex > newIndex
-        if (i === newIndex) {
-          result[i] = elementToMove!;
-        } else if (i > newIndex && i < oldIndex) {
-          result[i + 1] = result[i];
-        }
-      }
-      if (orderNumKey) {
-        result[i][orderNumKey] = i as any;
-      }
-    }
+    elementToMove = { ...result[oldIndex] };
   }
 
   if (isRemoval) {
-    result.pop();
+    // Remove the element
+    result.splice(oldIndex, 1);
+    // Update orderNum and call callback for affected elements
+    for (let i = oldIndex; i < result.length; i++) {
+      if (orderNumKey) {
+        result[i][orderNumKey] = (i + 1) as any;
+      }
+    }
+  } else if (isInsertion) {
+    // Insert new element
+    result.splice(newIndex, 0, {} as T);
+    // Update orderNum and call callback for affected elements
+    for (let i = newIndex; i < result.length; i++) {
+      if (orderNumKey) {
+        result[i][orderNumKey] = (i + 1) as any;
+      }
+    }
+  } else {
+    // Move existing element
+    result.splice(oldIndex, 1);
+    result.splice(newIndex, 0, elementToMove!);
+
+    // Determine the range of affected elements
+    const start = Math.min(oldIndex, newIndex);
+    const end = Math.max(oldIndex, newIndex);
+
+    // Update orderNum and call callback for affected elements
+    for (let i = start; i <= end; i++) {
+      if (orderNumKey) {
+        result[i][orderNumKey] = (i + 1) as any;
+      }
+    }
   }
 
   return result;

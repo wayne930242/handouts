@@ -75,6 +75,7 @@ export type RealtimePayload<T> = {
 };
 
 export type CampaignSubTable =
+  | "campaigns"
   | "chapters"
   | "sections"
   | "handouts"
@@ -83,7 +84,9 @@ export type CampaignSubTable =
 export interface CampaignStore {
   campaignData: Campaign | null;
   setCampaignData: (
-    newData: Partial<Campaign | Chapter | Section | Handout | HandoutImage>,
+    newData:
+      | Partial<Campaign | Chapter | Section | Handout | HandoutImage>
+      | Array<Partial<Chapter | Section | Handout | HandoutImage>>,
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
     type: "INSERT" | "UPDATE" | "DELETE",

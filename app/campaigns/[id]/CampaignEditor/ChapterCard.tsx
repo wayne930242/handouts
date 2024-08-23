@@ -31,6 +31,7 @@ export default function ChapterCard({ chapter }: Props) {
         <div className="flex gap-2 flex-col grow">
           <div className="flex justify-between items-center gap-x-2 pl-6 pr-12">
             <div className="grow">
+              {chapter.id}
               <Input
                 value={chapter.title}
                 onChange={(e) => {
@@ -66,7 +67,7 @@ export default function ChapterCard({ chapter }: Props) {
                 setCampaignData(
                   emptySection(
                     chapter.id as number,
-                    (chapter.sections.length ?? 0) + 1
+                    (chapter.sections?.length ?? 0) + 1
                   ),
                   supabase,
                   "sections",

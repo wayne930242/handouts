@@ -21,6 +21,7 @@ export default function SectionCard({ section }: Props) {
       <div className="flex justify-between gap-x-2">
         <div className="flex gap-2 flex-col grow">
           <div className="flex justify-between items-center gap-x-2 px-12">
+            {section.id}
             <div className="grow">
               <Input
                 value={section.title}

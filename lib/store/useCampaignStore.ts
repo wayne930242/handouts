@@ -55,7 +55,7 @@ const updateCampaignNestedData = (
     case "chapters":
       updatedData.chapters = sortByOrderNum(
         updateNestedArray(
-          updatedData.chapters,
+          updatedData.chapters ?? [],
           newRecord as Chapter,
           oldRecord as Chapter,
           eventType
@@ -67,7 +67,7 @@ const updateCampaignNestedData = (
         ...chapter,
         sections: sortByOrderNum(
           updateNestedArray(
-            chapter.sections,
+            chapter.sections ?? [],
             newRecord as Section,
             oldRecord as Section,
             eventType
@@ -81,7 +81,7 @@ const updateCampaignNestedData = (
         sections: chapter.sections.map((section) => ({
           ...section,
           handouts: updateNestedArray(
-            section.handouts,
+            section.handouts ?? [],
             newRecord as Handout,
             oldRecord as Handout,
             eventType
@@ -98,7 +98,7 @@ const updateCampaignNestedData = (
             ...handout,
             images: sortHandoutImages(
               updateNestedArray(
-                handout.images,
+                handout.images ?? [],
                 newRecord as HandoutImage,
                 oldRecord as HandoutImage,
                 eventType
@@ -131,33 +131,61 @@ const useCampaignStore = create(
           if (type === "INSERT") {
             // Update by subscription
           } else if (type === "UPDATE") {
-            set((state) => {
-              if (!state.campaignData) return state;
-
-              let updatedData = updateCampaignNestedData(
-                state.campaignData,
-                tableName,
-                newData,
-                {},
-                "UPDATE"
-              );
-
-              return { campaignData: updatedData };
-            });
+            if (Array.isArray(newData)) {
+              for (const item of newData) {
+                set((state) => {
+                  if (!state.campaignData) return state;
+                  let updatedData = updateCampaignNestedData(
+                    state.campaignData,
+                    tableName,
+                    item,
+                    {},
+                    type
+                  );
+                  return { campaignData: updatedData };
+                });
+              }
+            } else {
+              set((state) => {
+                if (!state.campaignData) return state;
+                let updatedData = updateCampaignNestedData(
+                  state.campaignData,
+                  tableName,
+                  newData,
+                  {},
+                  type
+                );
+                return { campaignData: updatedData };
+              });
+            }
           } else if (type === "DELETE") {
-            set((state) => {
-              if (!state.campaignData) return state;
-
-              let updatedData = updateCampaignNestedData(
-                state.campaignData,
-                tableName,
-                newData,
-                {},
-                "DELETE"
-              );
-
-              return { campaignData: updatedData };
-            });
+            if (Array.isArray(newData)) {
+              for (const item of newData) {
+                set((state) => {
+                  if (!state.campaignData) return state;
+                  let updatedData = updateCampaignNestedData(
+                    state.campaignData,
+                    tableName,
+                    item,
+                    {},
+                    type
+                  );
+                  return { campaignData: updatedData };
+                });
+              }
+            } else {
+              set((state) => {
+                if (!state.campaignData) return state;
+                let updatedData = updateCampaignNestedData(
+                  state.campaignData,
+                  tableName,
+                  newData,
+                  {},
+                  type
+                );
+                return { campaignData: updatedData };
+              });
+            }
           }
         };
 
@@ -165,79 +193,43 @@ const useCampaignStore = create(
           set({ loading: true, error: null });
           let result;
           try {
-            switch (tableName) {
-              case "chapters":
-                if ("sections" in newData) {
-                  delete newData.sections;
-                }
-                break;
-              case "sections":
-                if ("handouts" in newData) {
-                  delete newData.handouts;
-                }
-                break;
-              case "handouts":
-                if ("images" in newData) {
-                  delete newData.images;
-                }
-                break;
-              case "handout_images":
-                break;
-            }
-
-            if (type === "INSERT") {
+            if (Array.isArray(newData)) {
               result = await supabaseClient
                 .from(tableName)
-                .insert({ ...newData, id: undefined })
-                .select()
-                .single();
-            } else if (type === "UPDATE") {
-              set((state) => {
-                if (!state.campaignData) return state;
-
-                let updatedData = updateCampaignNestedData(
-                  state.campaignData,
-                  tableName,
-                  newData,
-                  {},
-                  "UPDATE"
-                );
-
-                return { campaignData: updatedData };
-              });
+                .upsert(newData)
+                .select();
+              for (const item of result.data ?? []) {
+                set((state) => {
+                  if (!state.campaignData) return state;
+                  let updatedData = updateCampaignNestedData(
+                    state.campaignData,
+                    tableName,
+                    item,
+                    {},
+                    type
+                  );
+                  return { campaignData: updatedData };
+                });
+              }
+            } else {
               result = await supabaseClient
                 .from(tableName)
                 .update(newData)
                 .eq("id", newData.id)
                 .select()
                 .single();
-            } else if (type === "DELETE") {
+
               set((state) => {
                 if (!state.campaignData) return state;
-
                 let updatedData = updateCampaignNestedData(
                   state.campaignData,
                   tableName,
                   newData,
                   {},
-                  "DELETE"
+                  type
                 );
-
                 return { campaignData: updatedData };
               });
-
-              result = await supabaseClient
-                .from(tableName)
-                .delete()
-                .eq("id", newData.id)
-                .select()
-                .single();
-            }
-
-            if (result?.error) {
-              throw result.error;
-            } else {
-              throw new Error("Unknown error occurred");
             }
           } catch (error) {
             set({
@@ -247,6 +239,7 @@ const useCampaignStore = create(
                   : new Error("Unknown error occurred"),
             });
           }
+
           set({ loading: false });
         };
 

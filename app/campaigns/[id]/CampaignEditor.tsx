@@ -50,7 +50,10 @@ export default function CampaignEditor() {
           </Button>
         </div>
       </div>
-      <ChaptersArea chapters={chapters} />
+      <ChaptersArea
+        chapters={chapters}
+        campaignId={campaignData?.id as string}
+      />
     </div>
   );
 }
