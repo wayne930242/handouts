@@ -102,6 +102,8 @@ export interface CampaignStore {
 }
 
 export interface AppStore {
+  isDragging: boolean;
+  setIsDragging: (isDragging: boolean) => void;
   editingCampaign: boolean;
   setEditingCampaign: (editingCampaign: boolean) => void;
 }

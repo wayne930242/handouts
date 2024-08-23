@@ -8,6 +8,7 @@ import {
   useSensors,
   useDroppable,
   closestCenter,
+  TouchSensor,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -47,7 +48,8 @@ export default function CampaignEditor() {
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
+    useSensor(TouchSensor)
   );
 
   return (
