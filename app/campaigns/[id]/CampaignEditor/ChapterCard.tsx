@@ -8,19 +8,16 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SectionsArea from "./SectionsArea";
+import { advancedAddElement } from "@/lib/arrayAction";
 
 interface Props {
   chapter: Chapter;
 }
 
-const emptySection = (
-  chapterId: number,
-  orderNum: number
-): Partial<Section> => ({
+const emptySection = (chapterId: number): Partial<Section> => ({
   id: "new",
   chapter_id: chapterId,
   title: "",
-  order_num: orderNum,
 });
 
 export default function ChapterCard({ chapter }: Props) {
@@ -66,15 +63,21 @@ export default function ChapterCard({ chapter }: Props) {
               variant="outline"
               size="sm"
               onClick={(e) => {
-                setCampaignData(
-                  emptySection(
-                    chapter.id as number,
-                    (chapter.sections?.length ?? 0) + 1
-                  ),
-                  supabase,
-                  "sections",
-                  "INSERT"
+                const oldSections: Partial<Section>[] = [
+                  ...(chapter.sections ?? []),
+                ];
+
+                const newSections = advancedAddElement(
+                  oldSections,
+                  emptySection(chapter.id as number),
+                  "order_num",
+                  ["handouts"]
                 );
+                const newSection = newSections[newSections.length - 1];
+                const otherSections = newSections.slice(0, -1);
+
+                setCampaignData(newSection, supabase, "sections", "INSERT");
+                setCampaignData(otherSections, supabase, "sections", "UPDATE");
               }}
             >
               <p>新段落</p>

@@ -7,7 +7,6 @@ import {
   CampaignStore,
   RealtimePayload,
   CampaignSubTable,
-  Chapter,
   Section,
   Handout,
   HandoutImage,
@@ -32,38 +31,34 @@ const updateCampaignNestedData = (
 
   const updatedData = { ...campaignData };
 
-  const updateArray = <T extends { id: number | string }>(
-    array: T[],
-    record: T
-  ): T[] => {
+  const updateArray = <T extends { id: number | string }>(array: T[]): T[] => {
     switch (eventType) {
       case "INSERT":
-        return [...array, record];
+        return [...(array ?? []), newRecord];
       case "UPDATE":
-        return array.map((item) =>
-          item.id === record.id ? { ...item, ...record } : item
+        return (
+          array?.map((item) =>
+            item.id === newRecord.id ? { ...item, ...newRecord } : item
+          ) ?? []
         );
       case "DELETE":
-        return array.filter((item) => item.id !== record.id);
+        return array?.filter((item) => item.id !== oldRecord.id) ?? [];
       default:
-        return array;
+        return array ?? [];
     }
   };
 
   switch (table) {
     case "chapters":
-      updatedData.chapters = sortByOrderNum(
-        updateArray(updatedData.chapters, newRecord as Chapter)
-      );
+      updatedData.chapters = sortByOrderNum(updateArray(updatedData.chapters));
       break;
     case "sections":
       updatedData.chapters = updatedData.chapters.map((chapter) =>
-        chapter.id === (newRecord as Section).chapter_id
+        chapter.id === (newRecord as Section).chapter_id ||
+        eventType === "DELETE"
           ? {
               ...chapter,
-              sections: sortByOrderNum(
-                updateArray(chapter.sections, newRecord as Section)
-              ),
+              sections: sortByOrderNum(updateArray(chapter.sections)),
             }
           : chapter
       );
@@ -72,10 +67,11 @@ const updateCampaignNestedData = (
       updatedData.chapters = updatedData.chapters.map((chapter) => ({
         ...chapter,
         sections: chapter.sections.map((section) =>
-          section.id === (newRecord as Handout).section_id
+          section.id === (newRecord as Handout).section_id ||
+          eventType === "DELETE"
             ? {
                 ...section,
-                handouts: updateArray(section.handouts, newRecord as Handout),
+                handouts: updateArray(section.handouts),
               }
             : section
         ),
@@ -87,12 +83,11 @@ const updateCampaignNestedData = (
         sections: chapter.sections.map((section) => ({
           ...section,
           handouts: section.handouts.map((handout) =>
-            handout.id === (newRecord as HandoutImage).handout_id
+            handout.id === (newRecord as HandoutImage).handout_id ||
+            eventType === "DELETE"
               ? {
                   ...handout,
-                  images: sortHandoutImages(
-                    updateArray(handout.images, newRecord as HandoutImage)
-                  ),
+                  images: sortHandoutImages(updateArray(handout.images)),
                 }
               : handout
           ),
@@ -153,33 +148,7 @@ const useCampaignStore = create(
               });
             }
           } else if (type === "DELETE") {
-            if (Array.isArray(newData)) {
-              for (const item of newData) {
-                set((state) => {
-                  if (!state.campaignData) return state;
-                  let updatedData = updateCampaignNestedData(
-                    state.campaignData,
-                    tableName,
-                    item,
-                    {},
-                    type
-                  );
-                  return { campaignData: updatedData };
-                });
-              }
-            } else {
-              set((state) => {
-                if (!state.campaignData) return state;
-                let updatedData = updateCampaignNestedData(
-                  state.campaignData,
-                  tableName,
-                  newData,
-                  {},
-                  type
-                );
-                return { campaignData: updatedData };
-              });
-            }
+            // Update by subscription
           }
         };
 
@@ -323,6 +292,7 @@ const useCampaignStore = create(
         payload: RealtimePayload<T>
       ) => {
         const { eventType, new: newRecord, old: oldRecord } = payload;
+        console.log(payload);
 
         set((state) => {
           if (!state.campaignData) return state;

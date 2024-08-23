@@ -8,15 +8,12 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 
 import { Button } from "@/components/ui/button";
 import ChaptersArea from "./CampaignEditor/ChaptersArea";
+import { advancedAddElement } from "@/lib/arrayAction";
 
-const genEmptyChapter = (
-  campaignId: string,
-  orderNum: number
-): Partial<Chapter> => ({
+const genEmptyChapter = (campaignId: string): Partial<Chapter> => ({
   id: "new",
   campaign_id: campaignId,
   title: "",
-  order_num: orderNum,
 });
 
 export default function CampaignEditor() {
@@ -35,11 +32,22 @@ export default function CampaignEditor() {
             size="sm"
             className="flex gap-2 items-center"
             onClick={() => {
-              const newChapter = genEmptyChapter(
-                campaignData?.id as string,
-                (campaignData?.chapters?.length ?? 0) + 1
+              const oldCapters: Partial<Chapter>[] = [
+                ...(campaignData?.chapters ?? []),
+              ];
+
+              const newChapters = advancedAddElement(
+                oldCapters,
+                genEmptyChapter(campaignData?.id as string),
+                "order_num",
+                ["sections"]
               );
+
+              const newChapter = newChapters[newChapters.length - 1];
+              const otherChapters = newChapters.slice(0, -1);
+
               setCampaignData(newChapter, supabase, "chapters", "INSERT");
+              setCampaignData(otherChapters, supabase, "chapters", "UPDATE");
             }}
           >
             新章節 <Plus className="h-4 w-4" />
@@ -47,7 +55,7 @@ export default function CampaignEditor() {
         </div>
       </div>
       <ChaptersArea
-        chapters={chapters}
+        chapters={chapters ?? []}
         campaignId={campaignData?.id as string}
       />
     </div>

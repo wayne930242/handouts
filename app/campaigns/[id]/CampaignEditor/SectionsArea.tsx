@@ -7,8 +7,6 @@ import SectionCard from "./SectionCard";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
-import { cn } from "@/lib/utils";
-
 interface Props {
   sections: Section[];
   chapterId: number;
