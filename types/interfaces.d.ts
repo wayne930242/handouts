@@ -55,7 +55,7 @@ export interface HandoutImagesBase {
   id: string | "new";
   handout_id: string;
   image_url: string;
-  display_order?: number;
+  display_order: number;
   caption?: string;
   type: HandoutImageType;
 }

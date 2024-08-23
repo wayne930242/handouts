@@ -32,6 +32,13 @@ const updateNestedArray = <T extends { id: number | string }>(
   }
 };
 
+const sortByOrderNum = <T extends { order_num: number }>(arr: T[]): T[] => {
+  return [...arr].sort((a, b) => a.order_num - b.order_num);
+};
+
+const sortHandoutImages = (images: HandoutImage[]): HandoutImage[] => {
+  return [...images].sort((a, b) => a.display_order - b.display_order);
+};
 const updateCampaignNestedData = (
   campaignData: Campaign | null,
   table: string,
@@ -45,21 +52,25 @@ const updateCampaignNestedData = (
 
   switch (table) {
     case "chapters":
-      updatedData.chapters = updateNestedArray(
-        updatedData.chapters,
-        newRecord as Chapter,
-        oldRecord as Chapter,
-        eventType
+      updatedData.chapters = sortByOrderNum(
+        updateNestedArray(
+          updatedData.chapters,
+          newRecord as Chapter,
+          oldRecord as Chapter,
+          eventType
+        )
       );
       break;
     case "sections":
       updatedData.chapters = updatedData.chapters.map((chapter) => ({
         ...chapter,
-        sections: updateNestedArray(
-          chapter.sections,
-          newRecord as Section,
-          oldRecord as Section,
-          eventType
+        sections: sortByOrderNum(
+          updateNestedArray(
+            chapter.sections,
+            newRecord as Section,
+            oldRecord as Section,
+            eventType
+          )
         ),
       }));
       break;
@@ -84,11 +95,13 @@ const updateCampaignNestedData = (
           ...section,
           handouts: section.handouts.map((handout) => ({
             ...handout,
-            images: updateNestedArray(
-              handout.images,
-              newRecord as HandoutImage,
-              oldRecord as HandoutImage,
-              eventType
+            images: sortHandoutImages(
+              updateNestedArray(
+                handout.images,
+                newRecord as HandoutImage,
+                oldRecord as HandoutImage,
+                eventType
+              )
             ),
           })),
         })),
@@ -111,6 +124,26 @@ const useCampaignStore = create(
         try {
           let result;
 
+          switch (tableName) {
+            case "chapters":
+              if ("sections" in newData) {
+                delete newData.sections;
+              }
+              break;
+            case "sections":
+              if ("handouts" in newData) {
+                delete newData.handouts;
+              }
+              break;
+            case "handouts":
+              if ("images" in newData) {
+                delete newData.images;
+              }
+              break;
+            case "handout_images":
+              break;
+          }
+
           if (type === "INSERT") {
             result = await supabaseClient
               .from(tableName)
@@ -118,6 +151,19 @@ const useCampaignStore = create(
               .select()
               .single();
           } else if (type === "UPDATE") {
+            set((state) => {
+              if (!state.campaignData) return state;
+
+              let updatedData = updateCampaignNestedData(
+                state.campaignData,
+                tableName,
+                newData,
+                {},
+                "UPDATE"
+              );
+
+              return { campaignData: updatedData };
+            });
             result = await supabaseClient
               .from(tableName)
               .update(newData)
@@ -125,6 +171,20 @@ const useCampaignStore = create(
               .select()
               .single();
           } else if (type === "DELETE") {
+            set((state) => {
+              if (!state.campaignData) return state;
+
+              let updatedData = updateCampaignNestedData(
+                state.campaignData,
+                tableName,
+                newData,
+                {},
+                "DELETE"
+              );
+
+              return { campaignData: updatedData };
+            });
+
             result = await supabaseClient
               .from(tableName)
               .delete()
@@ -155,47 +215,64 @@ const useCampaignStore = create(
             .from("campaigns")
             .select(
               `
-          id,
-          gm_id,
-          name,
-          description,
-          passphrase,
-          chapters:chapters (
-            id,
-            campaign_id,
-            title,
-            order_num,
-            sections:sections (
               id,
-              chapter_id,
-              title,
-              order_num,
-              handouts:handouts (
+              gm_id,
+              name,
+              description,
+              passphrase,
+              chapters:chapters (
                 id,
+                campaign_id,
                 title,
-                content,
-                is_public,
-                section_id,
-                type,
-                owner_id,
-                note,
-                images:handout_images (
+                order_num,
+                sections:sections (
                   id,
-                  handout_id,
-                  image_url,
-                  display_order,
-                  caption,
-                  type
+                  chapter_id,
+                  title,
+                  order_num,
+                  handouts:handouts (
+                    id,
+                    title,
+                    content,
+                    is_public,
+                    section_id,
+                    type,
+                    owner_id,
+                    note,
+                    images:handout_images (
+                      id,
+                      handout_id,
+                      image_url,
+                      display_order,
+                      caption,
+                      type
+                    )
+                  )
                 )
               )
-            )
-          )
-        `
+            `
             )
             .eq("id", campaignId)
             .single();
 
           if (campaignData) {
+            // Sort chapters
+            campaignData.chapters.sort((a, b) => a.order_num - b.order_num);
+
+            // Sort sections within each chapter
+            campaignData.chapters.forEach((chapter) => {
+              chapter.sections.sort((a, b) => a.order_num - b.order_num);
+
+              // Sort handout images within each handout
+              chapter.sections.forEach((section) => {
+                section.handouts.forEach((handout) => {
+                  handout.images.sort(
+                    (a, b) => a.display_order - b.display_order
+                  );
+                });
+              });
+            });
+
             set({ campaignData, loading: false, error: null });
           }
         } catch (error) {
