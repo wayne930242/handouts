@@ -1,13 +1,34 @@
-'use client'
-import useCampaignData from "@/lib/hooks/useCampaignData"
-import { createClient } from "@/utils/supabase/client"
+"use client";
+
+import useCampaignData from "@/lib/hooks/useCampaignData";
+import { createClient } from "@/utils/supabase/client";
+import Toolbar from "./CampaignToolbar";
+import useAppStore from "@/lib/store/useAppStore";
+import CampaignEditor from "./CampaignEditor";
+import useSession from "@/lib/hooks/useSession";
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
-  const supabase = createClient()
+  const supabase = createClient();
 
-  const { campaignData } = useCampaignData(supabase, campaignId, isAuthorized)
+  const { campaignData } = useCampaignData(supabase, campaignId, isAuthorized);
+  const { editingCampaign } = useAppStore();
 
-  return <div>Campaign</div>
+  const session = useSession();
+  const canEdit = session?.user?.id === campaignData?.gm_id;
+
+  return (
+    <div className="w-full">
+      { canEdit && <Toolbar /> }
+      {editingCampaign && campaignData && (
+        <CampaignEditor campaign={campaignData} />
+      )}
+      {!campaignData && (
+        <div className="text-center font-bold text-muted-foreground text-sm">
+          Loading campaign...
+        </div>
+      )}
+    </div>
+  );
 }
 
 interface Props {
