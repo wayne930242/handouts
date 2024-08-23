@@ -61,3 +61,50 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
 
   return result;
 };
+
+export const advancedMoveAcrossArrays = <T extends Record<string, any>>(
+  sourceArr: readonly T[],
+  targetArr: readonly T[],
+  oldIndex: number,
+  newIndex: number,
+  orderNumKey?: keyof T,
+  removeKeys?: (keyof T)[]
+) => {
+  const newSourceArr = [...sourceArr];
+  const newTargetArr = [...targetArr];
+
+  const elementToMove = newSourceArr[oldIndex];
+
+  newSourceArr.splice(oldIndex, 1);
+  newTargetArr.splice(newIndex, 0, elementToMove);
+
+  // Update source array
+  for (let i = oldIndex; i < sourceArr.length; i++) {
+    if (!newSourceArr[i]) continue;
+    if (orderNumKey) {
+      newSourceArr[i][orderNumKey] = (i + 1) as any;
+    }
+    if (removeKeys) {
+      for (const key of removeKeys) {
+        delete newSourceArr[i][key];
+      }
+    }
+  }
+
+  // Update target array
+  const targetStart = newIndex;
+  const targetEnd = targetArr.length;
+  for (let i = targetStart; i < targetEnd; i++) {
+    if (!newTargetArr[i]) continue;
+    if (orderNumKey) {
+      newTargetArr[i][orderNumKey] = (i + 1) as any;
+    }
+    if (removeKeys) {
+      for (const key of removeKeys) {
+        delete newTargetArr[i][key];
+      }
+    }
+  }
+
+  return [newSourceArr, newTargetArr];
+};
