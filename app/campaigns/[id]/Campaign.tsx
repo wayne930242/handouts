@@ -6,16 +6,11 @@ import Toolbar from "./CampaignToolbar";
 import useAppStore from "@/lib/store/useAppStore";
 import CampaignEditor from "./CampaignEditor";
 import useSession from "@/lib/hooks/useSession";
-import OverlayLoading from "@/components/OverlayLoading";
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
   const supabase = createClient();
 
-  const { campaignData, loading } = useCampaignData(
-    supabase,
-    campaignId,
-    isAuthorized
-  );
+  const { campaignData } = useCampaignData(supabase, campaignId, isAuthorized);
   const { editingCampaign } = useAppStore();
 
   const session = useSession();
@@ -23,9 +18,10 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
 
   return (
     <div className="w-full">
-      {canEdit && <Toolbar />}
+      {canEdit && (
+        <Toolbar campaignId={campaignId} isAuthorized={isAuthorized} />
+      )}
       {editingCampaign && <CampaignEditor />}
-      {loading && <OverlayLoading />}
     </div>
   );
 }
