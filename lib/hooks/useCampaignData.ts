@@ -4,7 +4,7 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 
 const useCampaignData = (
   supabase: SupabaseClient,
-  campaignId: number,
+  campaignId: string,
   isAuthorized: boolean
 ) => {
   const {

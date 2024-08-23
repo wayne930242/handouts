@@ -1,7 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export interface CampaignBase {
-  id: number | "new";
+  id: string | "new";
   gm_id: string;
   name: string;
   description?: string;
@@ -26,16 +26,16 @@ export interface Handout extends HandoutBase {
 
 export interface ChapterBase {
   id: number | "new";
-  campaign_id: number;
+  campaign_id: string;
   title?: string;
-  order_num?: number;
+  order_num: number;
 }
 
 export interface SectionBase {
   id: number | "new";
   chapter_id: number;
   title?: string;
-  order_num?: number;
+  order_num: number;
 }
 
 export interface HandoutBase {
@@ -84,20 +84,20 @@ export interface CampaignStore {
   campaignData: Campaign | null;
   setCampaignData: (
     newData: Partial<Campaign | Chapter | Section | Handout | HandoutImage>,
-    currentData: Campaign | Chapter | Section | Handout | HandoutImage,
     supabaseClient: SupabaseClient,
-    tableName: CampaignSubTable
+    tableName: CampaignSubTable,
+    type: "INSERT" | "UPDATE" | "DELETE"
   ) => Promise<void>;
   loading: boolean;
   error: Error | null;
-  fetchCampaignData: (supabase: SupabaseClient, campaignId: number) => void;
+  fetchCampaignData: (supabase: SupabaseClient, campaignId: string) => void;
   handleRealtimeUpdate: <T extends { id: string }>(
     table: CampaignSubTable,
     payload: RealtimePayload<T>
   ) => void;
   setupRealtimeSubscription: (
     supabase: SupabaseClient,
-    campaignId: number
+    campaignId: string
   ) => () => void;
 }
 

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { idbStorage } from "./storage";
 import {
   Campaign,
   CampaignStore,
@@ -97,62 +99,62 @@ const updateCampaignNestedData = (
   return updatedData;
 };
 
-const useCampaignStore = create<CampaignStore>((set, get) => ({
-  campaignData: null,
-  loading: false,
-  error: null,
-  setCampaignData: async (newData, currentData, supabaseClient, tableName) => {
-    set({ loading: true, error: null });
+const useCampaignStore = create(
+  persist<CampaignStore>(
+    (set, get) => ({
+      campaignData: null,
+      loading: false,
+      error: null,
+      setCampaignData: async (newData, supabaseClient, tableName, type) => {
+        set({ loading: true, error: null });
 
-    try {
-      let result;
-      let eventType: "INSERT" | "UPDATE";
+        try {
+          let result;
 
-      if (currentData.id === "new") {
-        result = await supabaseClient
-          .from(tableName)
-          .insert({ ...newData, id: undefined })
-          .select()
-          .single();
-        eventType = "INSERT";
-      } else {
-        result = await supabaseClient
-          .from(tableName)
-          .update(newData)
-          .eq("id", currentData.id)
-          .select()
-          .single();
-        eventType = "UPDATE";
-      }
+          if (type === "INSERT") {
+            result = await supabaseClient
+              .from(tableName)
+              .insert({ ...newData, id: undefined })
+              .select()
+              .single();
+          } else if (type === "UPDATE") {
+            result = await supabaseClient
+              .from(tableName)
+              .update(newData)
+              .eq("id", newData.id)
+              .select()
+              .single();
+          } else if (type === "DELETE") {
+            result = await supabaseClient
+              .from(tableName)
+              .delete()
+              .eq("id", newData.id)
+              .select()
+              .single();
+          }
 
-      if (result.error) {
-        throw result.error;
-      }
-
-      const updatedCampaign = updateCampaignNestedData(
-        get().campaignData,
-        tableName,
-        result.data,
-        currentData,
-        eventType
-      );
-
-      set({ campaignData: updatedCampaign, loading: false });
-    } catch (error) {
-      set({
-        error:
-          error instanceof Error ? error : new Error("Unknown error occurred"),
-        loading: false,
-      });
-    }
-  },
-  fetchCampaignData: async (supabase, campaignId) => {
-    set({ loading: true });
-    try {
-      const { data: campaignData } = await supabase
-        .from("campaigns")
-        .select(
-          `
+          if (result?.error) {
+            throw result.error;
+          } else {
+            throw new Error("Unknown error occurred");
+          }
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error
+                ? error
+                : new Error("Unknown error occurred"),
+          });
+        }
+        set({ loading: false });
+      },
+      fetchCampaignData: async (supabase, campaignId) => {
+        set({ loading: true });
+        try {
+          const { data: campaignData } = await supabase
+            .from("campaigns")
+            .select(
+              `
           id,
           gm_id,
           name,
@@ -189,75 +191,81 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
             )
           )
         `
-        )
-        .eq("id", campaignId)
-        .single();
+            )
+            .eq("id", campaignId)
+            .single();
 
-      if (campaignData) {
-        set({ campaignData, loading: false, error: null });
-      }
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error : new Error("Unknown error"),
-        loading: false,
-      });
+          if (campaignData) {
+            set({ campaignData, loading: false, error: null });
+          }
+        } catch (error) {
+          set({
+            error: error instanceof Error ? error : new Error("Unknown error"),
+            loading: false,
+          });
+        }
+      },
+      handleRealtimeUpdate: <T extends { id: string | number }>(
+        table: CampaignSubTable,
+        payload: RealtimePayload<T>
+      ) => {
+        const { eventType, new: newRecord, old: oldRecord } = payload;
+
+        set((state) => {
+          if (!state.campaignData) return state;
+
+          let updatedData = updateCampaignNestedData(
+            state.campaignData,
+            table,
+            newRecord,
+            oldRecord,
+            eventType
+          );
+
+          return { campaignData: updatedData };
+        });
+      },
+      setupRealtimeSubscription: (supabase, campaignId) => {
+        const campaignChannel = supabase
+          .channel("campaign-changes")
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "chapters",
+              filter: `campaign_id=eq.${campaignId}`,
+            },
+            (payload) => get().handleRealtimeUpdate("chapters", payload as any)
+          )
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "sections" },
+            (payload) => get().handleRealtimeUpdate("sections", payload as any)
+          )
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "handouts" },
+            (payload) => get().handleRealtimeUpdate("handouts", payload as any)
+          )
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "handout_images" },
+            (payload) =>
+              get().handleRealtimeUpdate("handout_images", payload as any)
+          )
+          .subscribe();
+
+        return () => {
+          supabase.removeChannel(campaignChannel);
+        };
+      },
+    }),
+    {
+      name: "campaign-store",
+      storage: createJSONStorage(() => idbStorage),
     }
-  },
-  handleRealtimeUpdate: <T extends { id: string | number }>(
-    table: CampaignSubTable,
-    payload: RealtimePayload<T>
-  ) => {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-
-    set((state) => {
-      if (!state.campaignData) return state;
-
-      let updatedData = updateCampaignNestedData(
-        state.campaignData,
-        table,
-        newRecord,
-        oldRecord,
-        eventType
-      );
-
-      return { campaignData: updatedData };
-    });
-  },
-  setupRealtimeSubscription: (supabase, campaignId) => {
-    const campaignChannel = supabase
-      .channel("campaign-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "chapters",
-          filter: `campaign_id=eq.${campaignId}`,
-        },
-        (payload) => get().handleRealtimeUpdate("chapters", payload as any)
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "sections" },
-        (payload) => get().handleRealtimeUpdate("sections", payload as any)
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "handouts" },
-        (payload) => get().handleRealtimeUpdate("handouts", payload as any)
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "handout_images" },
-        (payload) =>
-          get().handleRealtimeUpdate("handout_images", payload as any)
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(campaignChannel);
-    };
-  },
-}));
+  )
+);
 
 export default useCampaignStore;
