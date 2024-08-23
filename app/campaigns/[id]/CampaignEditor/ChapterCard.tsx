@@ -37,7 +37,7 @@ export default function ChapterCard({ chapter }: Props) {
     >
       <div className="flex justify-between gap-x-2">
         <div className="flex gap-2 flex-col grow">
-          <div className="flex justify-between items-center gap-x-2">
+          <div className="flex justify-between items-center gap-x-2 pr-12">
             <Button
               className="shrink-0 grow-0"
               variant="outline"
@@ -84,8 +84,8 @@ export default function ChapterCard({ chapter }: Props) {
         </div>
       </div>
       <Button
-        className="absolute -top-3 -right-3"
-        variant="link"
+        className="absolute top-2 right-2"
+        variant="destructive"
         size="icon"
         onClick={(e) => {
           e.stopPropagation();
