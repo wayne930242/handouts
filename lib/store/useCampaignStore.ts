@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { idbStorage } from "./storage";
+import { debounce } from "@/lib/debounce";
 import {
   Campaign,
   CampaignStore,
@@ -118,38 +119,17 @@ const useCampaignStore = create(
       campaignData: null,
       loading: false,
       error: null,
-      setCampaignData: async (newData, supabaseClient, tableName, type) => {
-        set({ loading: true, error: null });
-
-        try {
-          let result;
-
-          switch (tableName) {
-            case "chapters":
-              if ("sections" in newData) {
-                delete newData.sections;
-              }
-              break;
-            case "sections":
-              if ("handouts" in newData) {
-                delete newData.handouts;
-              }
-              break;
-            case "handouts":
-              if ("images" in newData) {
-                delete newData.images;
-              }
-              break;
-            case "handout_images":
-              break;
-          }
-
+      setCampaignData: async (
+        newData,
+        supabaseClient,
+        tableName,
+        type,
+        key,
+        debounceTime
+      ) => {
+        const updateLocal = () => {
           if (type === "INSERT") {
-            result = await supabaseClient
-              .from(tableName)
-              .insert({ ...newData, id: undefined })
-              .select()
-              .single();
+            // Update by subscription
           } else if (type === "UPDATE") {
             set((state) => {
               if (!state.campaignData) return state;
@@ -164,12 +144,6 @@ const useCampaignStore = create(
 
               return { campaignData: updatedData };
             });
-            result = await supabaseClient
-              .from(tableName)
-              .update(newData)
-              .eq("id", newData.id)
-              .select()
-              .single();
           } else if (type === "DELETE") {
             set((state) => {
               if (!state.campaignData) return state;
@@ -184,29 +158,101 @@ const useCampaignStore = create(
 
               return { campaignData: updatedData };
             });
-
-            result = await supabaseClient
-              .from(tableName)
-              .delete()
-              .eq("id", newData.id)
-              .select()
-              .single();
           }
+        };
 
-          if (result?.error) {
-            throw result.error;
-          } else {
-            throw new Error("Unknown error occurred");
+        const updateDatabase = async () => {
+          set({ loading: true, error: null });
+          let result;
+          try {
+            switch (tableName) {
+              case "chapters":
+                if ("sections" in newData) {
+                  delete newData.sections;
+                }
+                break;
+              case "sections":
+                if ("handouts" in newData) {
+                  delete newData.handouts;
+                }
+                break;
+              case "handouts":
+                if ("images" in newData) {
+                  delete newData.images;
+                }
+                break;
+              case "handout_images":
+                break;
+            }
+
+            if (type === "INSERT") {
+              result = await supabaseClient
+                .from(tableName)
+                .insert({ ...newData, id: undefined })
+                .select()
+                .single();
+            } else if (type === "UPDATE") {
+              set((state) => {
+                if (!state.campaignData) return state;
+
+                let updatedData = updateCampaignNestedData(
+                  state.campaignData,
+                  tableName,
+                  newData,
+                  {},
+                  "UPDATE"
+                );
+
+                return { campaignData: updatedData };
+              });
+              result = await supabaseClient
+                .from(tableName)
+                .update(newData)
+                .eq("id", newData.id)
+                .select()
+                .single();
+            } else if (type === "DELETE") {
+              set((state) => {
+                if (!state.campaignData) return state;
+
+                let updatedData = updateCampaignNestedData(
+                  state.campaignData,
+                  tableName,
+                  newData,
+                  {},
+                  "DELETE"
+                );
+
+                return { campaignData: updatedData };
+              });
+
+              result = await supabaseClient
+                .from(tableName)
+                .delete()
+                .eq("id", newData.id)
+                .select()
+                .single();
+            }
+
+            if (result?.error) {
+              throw result.error;
+            } else {
+              throw new Error("Unknown error occurred");
+            }
+          } catch (error) {
+            set({
+              error:
+                error instanceof Error
+                  ? error
+                  : new Error("Unknown error occurred"),
+            });
           }
-        } catch (error) {
-          set({
-            error:
-              error instanceof Error
-                ? error
-                : new Error("Unknown error occurred"),
-          });
-        }
-        set({ loading: false });
+          set({ loading: false });
+        };
+
+        updateLocal();
+        const [debouncedFn] = debounce(updateDatabase, debounceTime, key);
+        debouncedFn();
       },
       fetchCampaignData: async (supabase, campaignId) => {
         set({ loading: true });

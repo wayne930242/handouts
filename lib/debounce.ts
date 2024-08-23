@@ -1,23 +1,32 @@
-function debounce<T extends (...args: any[]) => void>(
+const globalTimeouts: { [key: string]: ReturnType<typeof setTimeout> | null } =
+  {};
+
+export function debounce<T extends (...args: any[]) => void>(
   func: T,
-  delay: number
+  delay?: number,
+  key: string = "default"
 ): [(...args: Parameters<T>) => void, () => void] {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
   const clear = () => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
+    if (globalTimeouts[key] !== undefined && globalTimeouts[key] !== null) {
+      clearTimeout(globalTimeouts[key] as ReturnType<typeof setTimeout>);
+      globalTimeouts[key] = null;
     }
   };
 
   const debouncedFunc = (...args: Parameters<T>) => {
     clear();
 
-    timeoutId = setTimeout(() => {
+    if (delay === undefined || delay <= 0) {
       func(...args);
-      clear();
-    }, delay);
+    } else {
+      globalTimeouts[key] = setTimeout(() => {
+        func(...args);
+        globalTimeouts[key] = null;
+      }, delay);
+    }
   };
 
   return [debouncedFunc, clear];
 }
+
+export default debounce;

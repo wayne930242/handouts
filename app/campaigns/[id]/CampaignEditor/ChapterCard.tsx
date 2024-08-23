@@ -59,7 +59,9 @@ export default function ChapterCard({ chapter }: Props) {
                     },
                     supabase,
                     "chapters",
-                    "UPDATE"
+                    "UPDATE",
+                    "chapter-title",
+                    300,
                   );
                 }}
               />

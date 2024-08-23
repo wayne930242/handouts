@@ -86,7 +86,9 @@ export interface CampaignStore {
     newData: Partial<Campaign | Chapter | Section | Handout | HandoutImage>,
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
-    type: "INSERT" | "UPDATE" | "DELETE"
+    type: "INSERT" | "UPDATE" | "DELETE",
+    key?: string,
+    debounce?: number
   ) => Promise<void>;
   loading: boolean;
   error: Error | null;
