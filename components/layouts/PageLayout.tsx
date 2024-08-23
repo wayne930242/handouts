@@ -26,7 +26,7 @@ export default async function PageLayout({
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-8 items-center">
+    <div className="flex-1 w-full flex flex-col gap-4 items-center">
       <div className="mt-2 max-w-4xl w-full mx-auto flex flex-col gap-2">
         <NavBar />
         {header}

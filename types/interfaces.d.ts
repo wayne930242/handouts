@@ -25,21 +25,21 @@ export interface Handout extends HandoutBase {
 }
 
 export interface ChapterBase {
-  id: number;
+  id: number | "new";
   campaign_id: number;
   title?: string;
   order_num?: number;
 }
 
 export interface SectionBase {
-  id: number;
+  id: number | "new";
   chapter_id: number;
   title?: string;
   order_num?: number;
 }
 
 export interface HandoutBase {
-  id: string;
+  id: string | "new";
   title?: string;
   content?: string;
   is_public: boolean;
@@ -52,7 +52,7 @@ export interface HandoutBase {
 export type HandoutType = "image" | "link" | "youtube" | "file";
 
 export interface HandoutImagesBase {
-  id: string;
+  id: string | "new";
   handout_id: string;
   image_url: string;
   display_order?: number;
@@ -74,7 +74,7 @@ export type RealtimePayload<T> = {
   errors?: { [key: string]: string }[];
 };
 
-export type RealtimeTable =
+export type CampaignSubTable =
   | "chapters"
   | "sections"
   | "handouts"
@@ -82,11 +82,17 @@ export type RealtimeTable =
 
 export interface CampaignStore {
   campaignData: Campaign | null;
+  setCampaignData: (
+    newData: Partial<Campaign | Chapter | Section | Handout | HandoutImage>,
+    currentData: Campaign | Chapter | Section | Handout | HandoutImage,
+    supabaseClient: SupabaseClient,
+    tableName: CampaignSubTable
+  ) => Promise<void>;
   loading: boolean;
   error: Error | null;
   fetchCampaignData: (supabase: SupabaseClient, campaignId: number) => void;
   handleRealtimeUpdate: <T extends { id: string }>(
-    table: RealtimeTable,
+    table: CampaignSubTable,
     payload: RealtimePayload<T>
   ) => void;
   setupRealtimeSubscription: (

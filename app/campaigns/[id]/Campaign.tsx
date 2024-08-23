@@ -10,7 +10,7 @@ import useSession from "@/lib/hooks/useSession";
 export default function Campaign({ campaignId, isAuthorized }: Props) {
   const supabase = createClient();
 
-  const { campaignData } = useCampaignData(supabase, campaignId, isAuthorized);
+  const { campaignData, loading } = useCampaignData(supabase, campaignId, isAuthorized);
   const { editingCampaign } = useAppStore();
 
   const session = useSession();
@@ -18,11 +18,11 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
 
   return (
     <div className="w-full">
-      { canEdit && <Toolbar /> }
-      {editingCampaign && campaignData && (
-        <CampaignEditor campaign={campaignData} />
+      {canEdit && <Toolbar />}
+      {editingCampaign && (
+        <CampaignEditor />
       )}
-      {!campaignData && (
+      {loading && (
         <div className="text-center font-bold text-muted-foreground text-sm">
           Loading campaign...
         </div>
