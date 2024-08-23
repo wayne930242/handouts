@@ -76,11 +76,46 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           order_num: section.order_num,
         }));
 
+        setCampaignData(newSections, supabase, "sections", "UPDATE");
+      } else {
+        // Move section cross chapter
+        const destIndex = destination.index;
+        const destChapter = chapters[destIndex];
+        const destSections = destChapter.sections ?? [];
+
+        const sourceIndex = source.index;
+        const sourceChapter = chapters[sourceIndex];
+        const sourceSections = sourceChapter.sections ?? [];
+
+        const newSectionsOnDestChapter = advancedArrayMove(
+          destSections,
+          -1,
+          destIndex,
+          "order_num"
+        ).map((section) => ({
+          id: section.id,
+          chapter_id: destChapter.id,
+          title: section.title,
+          order_num: section.order_num,
+        }));
+
+        const newSectionsOnSourceChapter = advancedArrayMove(
+          sourceSections,
+          sourceIndex,
+          -1,
+          "order_num"
+        ).map((section) => ({
+          id: section.id,
+          chapter_id: sourceChapter.id,
+          title: section.title,
+          order_num: section.order_num,
+        }));
+
         setCampaignData(
-          newSections,
+          [...newSectionsOnDestChapter, ...newSectionsOnSourceChapter],
           supabase,
           "sections",
-          "UPDATE",
+          "UPDATE"
         );
       }
     } else if (type === "HANDOUT") {
@@ -98,7 +133,7 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           >
             {chapters.map((chapter, index) => (
               <Draggable
-                key={chapter.id}
+                key={chapter.id ?? "new-" + index}
                 draggableId={chapter.id.toString()}
                 index={index}
               >

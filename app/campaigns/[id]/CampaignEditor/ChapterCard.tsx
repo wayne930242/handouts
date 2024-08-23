@@ -13,12 +13,14 @@ interface Props {
   chapter: Chapter;
 }
 
-const emptySection = (chapterId: number, orderNum: number): Section => ({
+const emptySection = (
+  chapterId: number,
+  orderNum: number
+): Partial<Section> => ({
   id: "new",
   chapter_id: chapterId,
   title: "",
   order_num: orderNum,
-  handouts: [],
 });
 
 export default function ChapterCard({ chapter }: Props) {

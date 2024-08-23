@@ -13,26 +13,6 @@ import {
   HandoutImage,
 } from "@/types/interfaces";
 
-const updateNestedArray = <T extends { id: number | string }>(
-  array: T[],
-  newRecord: T,
-  oldRecord: T,
-  eventType: "INSERT" | "UPDATE" | "DELETE"
-): T[] => {
-  switch (eventType) {
-    case "INSERT":
-      return [...array, newRecord];
-    case "UPDATE":
-      return array.map((item) =>
-        item.id === newRecord.id ? { ...item, ...newRecord } : item
-      );
-    case "DELETE":
-      return array.filter((item) => item.id !== oldRecord.id);
-    default:
-      return array;
-  }
-};
-
 const sortByOrderNum = <T extends { order_num: number }>(arr: T[]): T[] => {
   return [...arr].sort((a, b) => a.order_num - b.order_num);
 };
@@ -40,53 +20,65 @@ const sortByOrderNum = <T extends { order_num: number }>(arr: T[]): T[] => {
 const sortHandoutImages = (images: HandoutImage[]): HandoutImage[] => {
   return [...images].sort((a, b) => a.display_order - b.display_order);
 };
+
 const updateCampaignNestedData = (
   campaignData: Campaign | null,
-  table: string,
+  table: CampaignSubTable,
   newRecord: any,
   oldRecord: any,
   eventType: "INSERT" | "UPDATE" | "DELETE"
 ): Campaign | null => {
   if (!campaignData) return null;
 
-  let updatedData = { ...campaignData };
+  const updatedData = { ...campaignData };
+
+  const updateArray = <T extends { id: number | string }>(
+    array: T[],
+    record: T
+  ): T[] => {
+    switch (eventType) {
+      case "INSERT":
+        return [...array, record];
+      case "UPDATE":
+        return array.map((item) =>
+          item.id === record.id ? { ...item, ...record } : item
+        );
+      case "DELETE":
+        return array.filter((item) => item.id !== record.id);
+      default:
+        return array;
+    }
+  };
 
   switch (table) {
     case "chapters":
       updatedData.chapters = sortByOrderNum(
-        updateNestedArray(
-          updatedData.chapters ?? [],
-          newRecord as Chapter,
-          oldRecord as Chapter,
-          eventType
-        )
+        updateArray(updatedData.chapters, newRecord as Chapter)
       );
       break;
     case "sections":
-      updatedData.chapters = updatedData.chapters.map((chapter) => ({
-        ...chapter,
-        sections: sortByOrderNum(
-          updateNestedArray(
-            chapter.sections ?? [],
-            newRecord as Section,
-            oldRecord as Section,
-            eventType
-          )
-        ),
-      }));
+      updatedData.chapters = updatedData.chapters.map((chapter) =>
+        chapter.id === (newRecord as Section).chapter_id
+          ? {
+              ...chapter,
+              sections: sortByOrderNum(
+                updateArray(chapter.sections, newRecord as Section)
+              ),
+            }
+          : chapter
+      );
       break;
     case "handouts":
       updatedData.chapters = updatedData.chapters.map((chapter) => ({
         ...chapter,
-        sections: chapter.sections.map((section) => ({
-          ...section,
-          handouts: updateNestedArray(
-            section.handouts ?? [],
-            newRecord as Handout,
-            oldRecord as Handout,
-            eventType
-          ),
-        })),
+        sections: chapter.sections.map((section) =>
+          section.id === (newRecord as Handout).section_id
+            ? {
+                ...section,
+                handouts: updateArray(section.handouts, newRecord as Handout),
+              }
+            : section
+        ),
       }));
       break;
     case "handout_images":
@@ -94,20 +86,22 @@ const updateCampaignNestedData = (
         ...chapter,
         sections: chapter.sections.map((section) => ({
           ...section,
-          handouts: section.handouts.map((handout) => ({
-            ...handout,
-            images: sortHandoutImages(
-              updateNestedArray(
-                handout.images ?? [],
-                newRecord as HandoutImage,
-                oldRecord as HandoutImage,
-                eventType
-              )
-            ),
-          })),
+          handouts: section.handouts.map((handout) =>
+            handout.id === (newRecord as HandoutImage).handout_id
+              ? {
+                  ...handout,
+                  images: sortHandoutImages(
+                    updateArray(handout.images, newRecord as HandoutImage)
+                  ),
+                }
+              : handout
+          ),
         })),
       }));
       break;
+    case "campaigns":
+      // Update campaign-level properties
+      return { ...updatedData, ...newRecord };
   }
 
   return updatedData;
@@ -191,7 +185,7 @@ const useCampaignStore = create(
 
         const updateDatabase = async () => {
           set({ loading: true, error: null });
-          let result;
+          let result: any;
           try {
             if (Array.isArray(newData)) {
               result = await supabaseClient
@@ -212,24 +206,27 @@ const useCampaignStore = create(
                 });
               }
             } else {
-              result = await supabaseClient
-                .from(tableName)
-                .update(newData)
-                .eq("id", newData.id)
-                .select()
-                .single();
-
-              set((state) => {
-                if (!state.campaignData) return state;
-                let updatedData = updateCampaignNestedData(
-                  state.campaignData,
-                  tableName,
-                  newData,
-                  {},
-                  type
-                );
-                return { campaignData: updatedData };
-              });
+              if (type === "INSERT") {
+                result = await supabaseClient
+                  .from(tableName)
+                  .insert({ ...newData, id: undefined })
+                  .select()
+                  .single();
+              } else if (type === "UPDATE") {
+                result = await supabaseClient
+                  .from(tableName)
+                  .update(newData)
+                  .eq("id", newData.id)
+                  .select()
+                  .single();
+              } else if (type === "DELETE") {
+                result = await supabaseClient
+                  .from(tableName)
+                  .delete()
+                  .eq("id", newData.id)
+                  .select()
+                  .single();
+              }
             }
           } catch (error) {
             set({

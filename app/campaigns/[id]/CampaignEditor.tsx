@@ -9,12 +9,14 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import ChaptersArea from "./CampaignEditor/ChaptersArea";
 
-const genEmptyChapter = (campaignId: string, orderNum: number): Chapter => ({
+const genEmptyChapter = (
+  campaignId: string,
+  orderNum: number
+): Partial<Chapter> => ({
   id: "new",
   campaign_id: campaignId,
   title: "",
   order_num: orderNum,
-  sections: [],
 });
 
 export default function CampaignEditor() {
@@ -37,13 +39,7 @@ export default function CampaignEditor() {
                 campaignData?.id as string,
                 (campaignData?.chapters?.length ?? 0) + 1
               );
-              const { sections, ...newChapterWithoutSections } = newChapter;
-              setCampaignData(
-                newChapterWithoutSections,
-                supabase,
-                "chapters",
-                "INSERT"
-              );
+              setCampaignData(newChapter, supabase, "chapters", "INSERT");
             }}
           >
             新章節 <Plus className="h-4 w-4" />

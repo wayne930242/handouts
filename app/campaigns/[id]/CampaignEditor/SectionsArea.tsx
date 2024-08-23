@@ -29,7 +29,7 @@ export default function SectionsArea({ sections, chapterId }: Props) {
         >
           {sections.map((section, index) => (
             <Draggable
-              key={section.id}
+              key={section.id ?? "new-" + index}
               draggableId={section.id.toString()}
               index={index}
             >
