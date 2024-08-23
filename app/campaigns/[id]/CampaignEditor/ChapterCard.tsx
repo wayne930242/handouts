@@ -27,35 +27,36 @@ export default function ChapterCard({ chapter }: Props) {
       }
     : undefined;
 
-  const handleDelete = () => {
-    setCampaignData(
-      {
-        id: chapter.id,
-        campaign_id: chapter.campaign_id,
-        title: chapter.title,
-        order_num: chapter.order_num,
-      },
-      supabase,
-      "chapters",
-      "DELETE"
-    );
-  };
-
   return (
     <div
       style={style}
       ref={setNodeRef}
       className="flex flex-col gap-2 w-full min-h-12 bg-black/5 p-2 rounded-md"
-      {...attributes}
-      {...listeners}
     >
       <div className="flex justify-between items-center">
-        <div>
+        <div {...attributes} {...listeners}>
           {chapter.title}
           {JSON.stringify(chapter)}
           <DndContext></DndContext>
         </div>
-        <Button variant="ghost" size="icon" onClick={handleDelete}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            setCampaignData(
+              {
+                id: chapter.id,
+                campaign_id: chapter.campaign_id,
+                title: chapter.title,
+                order_num: chapter.order_num,
+              },
+              supabase,
+              "chapters",
+              "DELETE"
+            );
+          }}
+        >
           <X className="h-4 w-4" />
         </Button>
       </div>
