@@ -1,3 +1,5 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+
 export interface CampaignBase {
   id: number | "new";
   gm_id: string;
@@ -58,4 +60,37 @@ export interface HandoutImagesBase {
   type: HandoutImageType;
 }
 
+export interface HandoutImage extends HandoutImagesBase {}
+
 export type HandoutImageType = "normal" | "map" | "scene" | "letter" | "ticket";
+
+export type RealtimePayload<T> = {
+  schema: "public";
+  table: string;
+  commit_timestamp: string;
+  eventType: "INSERT" | "UPDATE" | "DELETE";
+  new: T;
+  old: T;
+  errors?: { [key: string]: string }[];
+};
+
+export type RealtimeTable =
+  | "chapters"
+  | "sections"
+  | "handouts"
+  | "handout_images";
+
+export interface CampaignStore {
+  campaignData: Campaign | null;
+  loading: boolean;
+  error: Error | null;
+  fetchCampaignData: (supabase: SupabaseClient, campaignId: number) => void;
+  handleRealtimeUpdate: <T extends { id: string }>(
+    table: RealtimeTable,
+    payload: RealtimePayload<T>
+  ) => void;
+  setupRealtimeSubscription: (
+    supabase: SupabaseClient,
+    campaignId: number
+  ) => () => void;
+}
