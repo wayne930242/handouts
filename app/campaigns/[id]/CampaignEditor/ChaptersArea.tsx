@@ -43,15 +43,12 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
         sourceIndex,
         destIndex,
         "order_num"
-      ).map((chapter) => {
-        const { id, campaign_id, title, order_num } = chapter;
-        return {
-          id,
-          campaign_id,
-          title,
-          order_num,
-        };
-      });
+      ).map((chapter) => ({
+        id: chapter.id,
+        campaign_id: chapter.campaign_id,
+        title: chapter.title,
+        order_num: chapter.order_num,
+      }));
 
       setCampaignData(newChapters, supabase, "chapters", "UPDATE");
     } else if (type === "SECTION") {
@@ -66,6 +63,25 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
         const destIndex = destination.index;
 
         const sections = chapters[sourceChapterIndex].sections;
+
+        const newSections = advancedArrayMove(
+          sections,
+          sourceIndex,
+          destIndex,
+          "order_num"
+        ).map((section) => ({
+          id: section.id,
+          chapter_id: section.chapter_id,
+          title: section.title,
+          order_num: section.order_num,
+        }));
+
+        setCampaignData(
+          newSections,
+          supabase,
+          "sections",
+          "UPDATE",
+        );
       }
     } else if (type === "HANDOUT") {
     }
