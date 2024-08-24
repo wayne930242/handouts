@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { idbStorage } from "./storage";
-import { debounce } from "@/lib/debounce";
+import { debouncify } from "@/lib/debounce";
 import {
   CampaignStore,
   RealtimePayload,
@@ -22,8 +22,7 @@ const useCampaignStore = create(
         supabaseClient,
         tableName,
         type,
-        key,
-        debounceTime
+        debounce
       ) => {
         const updateLocal = () => {
           if (type === "INSERT") {
@@ -119,7 +118,11 @@ const useCampaignStore = create(
         };
 
         updateLocal();
-        const [debouncedFn] = debounce(updateDatabase, debounceTime, key);
+        const [debouncedFn] = debouncify(
+          updateDatabase,
+          debounce?.delay,
+          debounce?.key
+        );
         debouncedFn();
         if (process.env.NODE_ENV === "development") {
           console.info(get().campaignData);

@@ -40,8 +40,10 @@ export default function SectionCard({ section }: Props) {
                     supabase,
                     "sections",
                     "UPDATE",
-                    "section-title",
-                    1200
+                    {
+                      key: "section-title",
+                      delay: 1200,
+                    }
                   );
                 }}
               />
@@ -95,10 +97,7 @@ export default function SectionCard({ section }: Props) {
             },
             supabase,
             "sections",
-            "DELETE",
-            undefined,
-            undefined,
-            { chapter_id: section.chapter_id }
+            "DELETE"
           );
         }}
       >

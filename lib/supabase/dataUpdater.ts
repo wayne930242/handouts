@@ -26,11 +26,11 @@ export const updateCampaignNestedData = (
       break;
 
     case "sections":
-      updatedData.chapters = updatedData.chapters.map((chapter) => {
+      updatedData.chapters = updatedData.chapters?.map((chapter) => {
         if (eventType === "DELETE") {
           return {
             ...chapter,
-            sections: chapter.sections.filter(
+            sections: chapter.sections?.filter(
               (section) => section.id !== oldRecord.id
             ),
           };
@@ -50,7 +50,7 @@ export const updateCampaignNestedData = (
             // Remove the section if it's in the wrong chapter
             return {
               ...chapter,
-              sections: chapter.sections.filter(
+              sections: chapter.sections?.filter(
                 (section) => section.id !== newRecord.id
               ),
             };
@@ -60,13 +60,13 @@ export const updateCampaignNestedData = (
       break;
 
     case "handouts":
-      updatedData.chapters = updatedData.chapters.map((chapter) => ({
+      updatedData.chapters = updatedData.chapters?.map((chapter) => ({
         ...chapter,
-        sections: chapter.sections.map((section) => {
+        sections: chapter.sections?.map((section) => {
           if (eventType === "DELETE") {
             return {
               ...section,
-              handouts: section.handouts.filter(
+              handouts: section.handouts?.filter(
                 (handout) => handout.id !== oldRecord.id
               ),
             };
@@ -86,7 +86,7 @@ export const updateCampaignNestedData = (
               // Remove the handout if it's in the wrong section
               return {
                 ...section,
-                handouts: section.handouts.filter(
+                handouts: section.handouts?.filter(
                   (handout) => handout.id !== newRecord.id
                 ),
               };
@@ -99,13 +99,13 @@ export const updateCampaignNestedData = (
     case "handout_images":
       updatedData.chapters = updatedData.chapters.map((chapter) => ({
         ...chapter,
-        sections: chapter.sections.map((section) => ({
+        sections: chapter.sections?.map((section) => ({
           ...section,
-          handouts: section.handouts.map((handout) => {
+          handouts: section.handouts?.map((handout) => {
             if (eventType === "DELETE") {
               return {
                 ...handout,
-                images: handout.images.filter(
+                images: handout.images?.filter(
                   (image) => image.id !== oldRecord.id
                 ),
               };
@@ -125,7 +125,7 @@ export const updateCampaignNestedData = (
                 // Remove the image if it's in the wrong handout
                 return {
                   ...handout,
-                  images: handout.images.filter(
+                  images: handout.images?.filter(
                     (image) => image.id !== newRecord.id
                   ),
                 };

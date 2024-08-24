@@ -51,8 +51,10 @@ export default function ChapterCard({ chapter }: Props) {
                     supabase,
                     "chapters",
                     "UPDATE",
-                    "chapter-title",
-                    1200
+                    {
+                      key: "chapter-title",
+                      delay: 1200,
+                    }
                   );
                 }}
               />
@@ -111,10 +113,7 @@ export default function ChapterCard({ chapter }: Props) {
             },
             supabase,
             "chapters",
-            "DELETE",
-            undefined,
-            undefined,
-            { campaign_id: chapter.campaign_id }
+            "DELETE"
           );
         }}
       >

@@ -93,8 +93,10 @@ export interface CampaignStore {
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
     type: "INSERT" | "UPDATE" | "DELETE",
-    key?: string,
-    debounce?: number,
+    debounce?: {
+      key: string;
+      delay: number;
+    }
   ) => Promise<void>;
   loading: boolean;
   connected: boolean;

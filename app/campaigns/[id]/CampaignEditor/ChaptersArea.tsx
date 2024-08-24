@@ -120,19 +120,18 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           supabase,
           "sections",
           "UPDATE",
-          undefined,
-          undefined,
         );
         setCampaignData(
           newDestSections,
           supabase,
           "sections",
           "UPDATE",
-          undefined,
-          undefined,
         );
       }
     } else if (type === "HANDOUT") {
+      
+    } else if (type === "HANDOUT_IMAGE") {
+
     }
   };
 

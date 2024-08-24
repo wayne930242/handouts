@@ -1,7 +1,7 @@
 const globalTimeouts: { [key: string]: ReturnType<typeof setTimeout> | null } =
   {};
 
-export function debounce<T extends (...args: any[]) => void>(
+export function debouncify<T extends (...args: any[]) => void>(
   func: T,
   delay?: number,
   key: string = "default"
@@ -29,4 +29,4 @@ export function debounce<T extends (...args: any[]) => void>(
   return [debouncedFunc, clear];
 }
 
-export default debounce;
+export default debouncify;
