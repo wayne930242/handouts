@@ -59,7 +59,82 @@ export const updateCampaignNestedData = (
       });
       break;
 
+    case "handouts":
+      updatedData.chapters = updatedData.chapters.map((chapter) => ({
+        ...chapter,
+        sections: chapter.sections.map((section) => {
+          if (eventType === "DELETE") {
+            return {
+              ...section,
+              handouts: section.handouts.filter(
+                (handout) => handout.id !== oldRecord.id
+              ),
+            };
+          } else {
+            // Handle INSERT and UPDATE
+            if (section.id === newRecord.section_id) {
+              return {
+                ...section,
+                handouts: updateArray(
+                  section.handouts,
+                  newRecord,
+                  oldRecord,
+                  eventType
+                ),
+              };
+            } else {
+              // Remove the handout if it's in the wrong section
+              return {
+                ...section,
+                handouts: section.handouts.filter(
+                  (handout) => handout.id !== newRecord.id
+                ),
+              };
+            }
+          }
+        }),
+      }));
+      break;
 
+    case "handout_images":
+      updatedData.chapters = updatedData.chapters.map((chapter) => ({
+        ...chapter,
+        sections: chapter.sections.map((section) => ({
+          ...section,
+          handouts: section.handouts.map((handout) => {
+            if (eventType === "DELETE") {
+              return {
+                ...handout,
+                images: handout.images.filter(
+                  (image) => image.id !== oldRecord.id
+                ),
+              };
+            } else {
+              // Handle INSERT and UPDATE
+              if (handout.id === newRecord.handout_id) {
+                return {
+                  ...handout,
+                  images: updateArray(
+                    handout.images,
+                    newRecord,
+                    oldRecord,
+                    eventType
+                  ),
+                };
+              } else {
+                // Remove the image if it's in the wrong handout
+                return {
+                  ...handout,
+                  images: handout.images.filter(
+                    (image) => image.id !== newRecord.id
+                  ),
+                };
+              }
+            }
+          }),
+        })),
+      }));
+      break;
   }
 
   return updatedData;
