@@ -23,7 +23,7 @@ export default function SectionsArea({ sections, chapterId }: Props) {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="grid grid-cols-1 gap-y-2"
+          className="grid grid-cols-1 gap-y-3"
         >
           {sections.map((section, index) => (
             <Draggable

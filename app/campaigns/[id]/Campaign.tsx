@@ -1,20 +1,28 @@
 "use client";
-
+import { useEffect, useMemo } from "react";
+import useCampaignStore from "@/lib/store/useCampaignStore";
 import useCampaignData from "@/lib/hooks/useCampaignData";
-import { createClient } from "@/lib/supabase/client";
-import Toolbar from "./CampaignToolbar";
 import useAppStore from "@/lib/store/useAppStore";
-import CampaignEditor from "./CampaignEditor";
 import useSession from "@/lib/hooks/useSession";
+import { createClient } from "@/lib/supabase/client";
+
+import CampaignEditor from "./CampaignEditor";
+import Toolbar from "./CampaignToolbar";
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
-  const supabase = createClient();
-
-  const { campaignData } = useCampaignData(supabase, campaignId, isAuthorized);
+  const { campaignData } = useCampaignData(campaignId, isAuthorized);
   const { editingCampaign } = useAppStore();
+  const { setupRealtimeSubscription } = useCampaignStore();
 
   const session = useSession();
+  const supabase = useMemo(() => createClient(), []);
   const canEdit = session?.user?.id === campaignData?.gm_id;
+
+  useEffect(() => {
+    if (!isAuthorized) return;
+    const unsubscribe = setupRealtimeSubscription(supabase, campaignId);
+    return unsubscribe;
+  }, [supabase, campaignId, isAuthorized]);
 
   return (
     <div className="w-full">

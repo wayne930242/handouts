@@ -81,19 +81,26 @@ export type CampaignSubTable =
   | "handouts"
   | "handout_images";
 
+export type SetCampaignPayload =
+  | Partial<Campaign | Chapter | Section | Handout | HandoutImage>
+  | Array<Partial<Chapter | Section | Handout | HandoutImage>>;
+
 export interface CampaignStore {
   campaignData: Campaign | null;
   setCampaignData: (
-    newData:
-      | Partial<Campaign | Chapter | Section | Handout | HandoutImage>
-      | Array<Partial<Chapter | Section | Handout | HandoutImage>>,
+    newData: SetCampaignPayload,
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
     type: "INSERT" | "UPDATE" | "DELETE",
     key?: string,
-    debounce?: number
+    debounce?: number,
+    rowIdentifier?: Partial<
+      Campaign | Chapter | Section | Handout | HandoutImage
+    >
   ) => Promise<void>;
   loading: boolean;
+  connected: boolean;
+  connectedAtempts: number;
   error: Error | null;
   fetchCampaignData: (supabase: SupabaseClient, campaignId: string) => void;
   handleRealtimeUpdate: <T extends { id: string }>(

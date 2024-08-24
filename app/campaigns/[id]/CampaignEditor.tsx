@@ -33,7 +33,7 @@ export default function CampaignEditor() {
         <div>
           <Button
             size="sm"
-            className="flex gap-2 items-center"
+            className="flex gap-1.5 items-center"
             onClick={() => {
               const newChapter = genEmptyChapter(
                 campaignData?.id as string,
@@ -43,7 +43,8 @@ export default function CampaignEditor() {
               setCampaignData(newChapter, supabase, "chapters", "INSERT");
             }}
           >
-            新章節 <Plus className="h-4 w-4" />
+            <p>章節</p>
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>

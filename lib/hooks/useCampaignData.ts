@@ -1,25 +1,17 @@
-import { useEffect } from "react";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { useEffect, useMemo, useRef } from "react";
+import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
-const useCampaignData = (
-  supabase: SupabaseClient,
-  campaignId: string,
-  isAuthorized: boolean
-) => {
-  const {
-    campaignData,
-    loading,
-    error,
-    fetchCampaignData,
-    setupRealtimeSubscription,
-  } = useCampaignStore();
+const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
+  const { campaignData, loading, error, fetchCampaignData } =
+    useCampaignStore();
+  const supabase = useMemo(() => createClient(), []);
 
+  const isInit = useRef(false);
   useEffect(() => {
-    if (!isAuthorized) return;
+    if (!isAuthorized || isInit.current) return;
+    isInit.current = true;
     fetchCampaignData(supabase, campaignId);
-    const unsubscribe = setupRealtimeSubscription(supabase, campaignId);
-    return unsubscribe;
   }, [supabase, campaignId, isAuthorized]);
 
   return {

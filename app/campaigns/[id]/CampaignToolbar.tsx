@@ -3,9 +3,9 @@
 import { PacmanLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
-import useCampaignData from "@/lib/hooks/useCampaignData";
-import { Eye, Pen } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { Eye, Pen, Unplug } from "lucide-react";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+import { Badge } from "@/components/ui/badge";
 
 export default function Toolbar({
   campaignId,
@@ -15,16 +15,24 @@ export default function Toolbar({
   isAuthorized: boolean;
 }) {
   const { editingCampaign, setEditingCampaign } = useAppStore();
-  const supabase = createClient();
+  const { connected } = useCampaignStore();
 
-  const { loading } = useCampaignData(supabase, campaignId, isAuthorized);
+  const { loading } = useCampaignStore();
 
   return (
     <div className="flex justify-between items-center w-full px-2">
       <div className="grow-1 flex gap-2 items-center">
         <PacmanLoader color="#bbb" loading={loading} size={12} />
       </div>
-      <div>
+      <div className="flex gap-1.5 items-center">
+        {!connected && (
+          <Badge
+            variant="outline"
+            className="text-destructive border-transparent animate-pulse"
+          >
+            <Unplug className="h-4 w-4" />
+          </Badge>
+        )}
         <Button
           size="sm"
           className="flex gap-2 items-center"

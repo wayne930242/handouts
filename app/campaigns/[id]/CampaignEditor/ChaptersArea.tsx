@@ -7,9 +7,9 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 
-import { Chapter, Section } from "@/types/interfaces";
+import { Chapter } from "@/types/interfaces";
 import ChapterCard from "./ChapterCard";
-import { advancedArrayMove } from "@/lib/arrayAction";
+import { advancedArrayMove, advancedMoveAcrossArrays } from "@/lib/arrayAction";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
@@ -31,8 +31,8 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
     const sourceDroppableId = source.droppableId.split("-");
     const destDroppableId = destination.droppableId.split("-");
 
-    console.log(sourceDroppableId, destDroppableId);
-    console.log(type);
+    // console.log(sourceDroppableId, destDroppableId);
+    // console.log(type);
 
     if (type === "CHAPTER") {
       const sourceIndex = source.index;
@@ -62,6 +62,8 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
         const sourceIndex = source.index;
         const destIndex = destination.index;
 
+        if (sourceIndex === destIndex) return;
+
         const sections = chapters[sourceChapterIndex].sections;
 
         const newSections = advancedArrayMove(
@@ -78,45 +80,62 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
 
         setCampaignData(newSections, supabase, "sections", "UPDATE");
       } else {
-        // Move section cross chapter
-        const destIndex = destination.index;
-        const destChapter = chapters[destIndex];
-        const destSections = destChapter.sections ?? [];
-
         const sourceIndex = source.index;
-        const sourceChapter = chapters[sourceIndex];
-        const sourceSections = sourceChapter.sections ?? [];
+        const destIndex = destination.index;
 
-        const newSectionsOnDestChapter = advancedArrayMove(
-          destSections,
-          -1,
-          destIndex,
-          "order_num"
-        ).map((section) => ({
-          id: section.id,
-          chapter_id: destChapter.id,
-          title: section.title,
-          order_num: section.order_num,
-        }));
+        // Move section cross chapter
+        const sourceChapterId = Number(sourceDroppableId[1]);
+        const destChapterId = Number(destDroppableId[1]);
 
-        const newSectionsOnSourceChapter = advancedArrayMove(
+        if (Number.isNaN(sourceChapterId) || Number.isNaN(destChapterId)) {
+          console.error("Invalid chapter id");
+          return;
+        }
+
+        const sourceSections =
+          campaignData?.chapters.find(
+            (chapter) => chapter.id === sourceChapterId
+          )?.sections ?? [];
+        console.log(sourceSections);
+        const destSections =
+          campaignData?.chapters.find((chapter) => chapter.id === destChapterId)
+            ?.sections ?? [];
+
+        const [newSourceSections, newDestSections] = advancedMoveAcrossArrays(
           sourceSections,
+          destSections,
           sourceIndex,
-          -1,
-          "order_num"
-        ).map((section) => ({
-          id: section.id,
-          chapter_id: sourceChapter.id,
-          title: section.title,
-          order_num: section.order_num,
-        }));
-
-        setCampaignData(
-          [...newSectionsOnDestChapter, ...newSectionsOnSourceChapter],
-          supabase,
-          "sections",
-          "UPDATE"
+          destIndex,
+          "order_num",
+          ["handouts"],
+          undefined,
+          (section) => ({
+            ...section,
+            chapter_id: Number(destChapterId),
+          })
         );
+
+        console.log(newSourceSections, newDestSections);
+        // setCampaignData(
+        //   newSourceSections,
+        //   sourceSections,
+        //   supabase,
+        //   "sections",
+        //   "UPDATE",
+        //   undefined,
+        //   undefined,
+        //   { chapter_id: Number(sourceChapterId) }
+        // );
+        // setCampaignData(
+        //   newDestSections,
+        //   destSections,
+        //   supabase,
+        //   "sections",
+        //   "UPDATE",
+        //   undefined,
+        //   undefined,
+        //   { chapter_id: Number(destChapterId) }
+        // );
       }
     } else if (type === "HANDOUT") {
     }
@@ -124,12 +143,12 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="chapters" type="CHAPTER">
+      <Droppable droppableId={"chapters"} type="CHAPTER">
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="grid grid-cols-1 gap-y-2"
+            className="grid grid-cols-1 gap-y-4"
           >
             {chapters.map((chapter, index) => (
               <Draggable

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SectionsArea from "./SectionsArea";
 import { advancedRemoveElement } from "@/lib/arrayAction";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   chapter: Chapter;
@@ -29,13 +30,15 @@ export default function ChapterCard({ chapter }: Props) {
   const { setCampaignData, campaignData } = useCampaignStore();
 
   return (
-    <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-2 rounded-md cursor-default">
+    <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
       <div className="flex justify-between gap-x-2">
         <div className="flex gap-2 flex-col grow">
-          <div className="flex justify-between items-center gap-x-2 pl-6 pr-12">
-            <div className="grow">
-              {chapter.id}
+          <div className="flex justify-between items-center gap-x-2 pl-2 pr-8">
+            <div className="grow grid w-full items-center gap-1.5">
+              <Label htmlFor={"chapter-title-" + chapter.id}>章節標題</Label>
               <Input
+                id={"chapter-title-" + chapter.id}
+                placeholder="標題"
                 value={chapter.title}
                 onChange={(e) => {
                   setCampaignData(
@@ -49,7 +52,7 @@ export default function ChapterCard({ chapter }: Props) {
                     "chapters",
                     "UPDATE",
                     "chapter-title",
-                    300
+                    1200
                   );
                 }}
               />
@@ -61,12 +64,11 @@ export default function ChapterCard({ chapter }: Props) {
               sections={chapter.sections ?? []}
             />
           </div>
-          <div>
+          <div className="flex justify-end gap-x-2 my-1">
             <Button
-              className="w-full flex gap-2 items-center"
-              variant="outline"
+              className="flex gap-1.5 items-center"
               size="sm"
-              onClick={(e) => {
+              onClick={() => {
                 const newSection = emptySection(
                   chapter.id as number,
                   (chapter.sections?.length ?? 0) + 1
@@ -75,29 +77,31 @@ export default function ChapterCard({ chapter }: Props) {
                 setCampaignData(newSection, supabase, "sections", "INSERT");
               }}
             >
-              <p>新段落</p>
+              <p>段落</p>
               <Plus className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
       <Button
-        className="absolute top-2 right-2"
-        variant="destructive"
+        className="absolute top-0 right-0 rounded-full"
+        variant="ghost"
         size="icon"
         onClick={(e) => {
-          e.stopPropagation();
           if (!campaignData) return;
           const { chapters } = campaignData;
+          const chapterIndex = chapters.findIndex((c) => c.id === chapter.id);
 
           const newChapters = advancedRemoveElement(
             chapters ?? [],
-            chapter.order_num,
+            chapterIndex,
             "order_num",
             ["sections"]
           );
 
-          setCampaignData(newChapters, supabase, "chapters", "UPDATE");
+          if (newChapters.length !== 0) {
+            setCampaignData(newChapters, supabase, "chapters", "UPDATE");
+          }
           setCampaignData(
             {
               id: chapter.id,
@@ -107,7 +111,10 @@ export default function ChapterCard({ chapter }: Props) {
             },
             supabase,
             "chapters",
-            "DELETE"
+            "DELETE",
+            undefined,
+            undefined,
+            { campaign_id: chapter.campaign_id }
           );
         }}
       >
