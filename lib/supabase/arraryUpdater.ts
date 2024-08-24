@@ -5,13 +5,6 @@ export const updateArray = <T extends { id: number | string }>(
   eventType: "INSERT" | "UPDATE" | "DELETE"
 ): T[] => {
   if (!record) return array;
-  const orderKey = (
-    "order_num" in record
-      ? "order_num"
-      : "display_order" in record
-      ? "display_order"
-      : undefined
-  ) as keyof T | undefined;
 
   const safeArray = array || [];
 
@@ -22,9 +15,15 @@ export const updateArray = <T extends { id: number | string }>(
       break;
 
     case "UPDATE":
-      newArray = safeArray.map((item) =>
-        item.id === record.id ? { ...item, ...record } : item
-      );
+      const itemExists = safeArray.some((item) => item.id === record.id);
+      if (itemExists) {
+        newArray = safeArray.map((item) =>
+          item.id === record.id ? { ...item, ...record } : item
+        );
+      } else {
+        // If the item doesn't exist, treat it as an INSERT
+        newArray = [...safeArray, record];
+      }
       break;
 
     case "DELETE":
@@ -38,6 +37,13 @@ export const updateArray = <T extends { id: number | string }>(
       throw new Error(`Invalid event type: ${eventType}`);
   }
 
+  const orderKey = (
+    "order_num" in record
+      ? "order_num"
+      : "display_order" in record
+      ? "display_order"
+      : undefined
+  ) as keyof T | undefined;
   if (orderKey && typeof record[orderKey] === "number") {
     return newArray.sort(
       (a, b) => (a[orderKey] as number) - (b[orderKey] as number)

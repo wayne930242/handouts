@@ -5,7 +5,7 @@ export const advancedArrayMove = <T extends Record<string, any>>(
   orderNumKey?: keyof T,
   removeKeys?: (keyof T)[]
 ): T[] => {
-  const result = [...arr];
+  const result = arr.map((item) => ({ ...item }));
 
   if (
     oldIndex < 0 ||
@@ -29,12 +29,14 @@ export const advancedArrayMove = <T extends Record<string, any>>(
     for (let i = start; i <= end; i++) {
       if (!result[i]) continue;
       if (orderNumKey) {
-        result[i][orderNumKey] = (i + 1) as any;
+        result[i] = { ...result[i], [orderNumKey]: i + 1 };
       }
       if (removeKeys) {
-        for (const key of removeKeys) {
-          delete result[i][key];
-        }
+        result[i] = Object.fromEntries(
+          Object.entries(result[i]).filter(
+            ([key]) => !removeKeys.includes(key as keyof T)
+          )
+        ) as T;
       }
     }
   }
@@ -48,26 +50,27 @@ export const advancedInsertElement = <T extends Record<string, any>>(
   element: T,
   orderNumKey?: keyof T,
   removeKeys?: (keyof T)[]
-) => {
-  const result = [...arr];
+): T[] => {
+  const result = arr.map((item) => ({ ...item }));
 
   if (newIndex < 0) {
     result.push(element);
-    return result;
+  } else {
+    result.splice(newIndex, 0, element);
   }
-
-  result.splice(newIndex, 0, element);
 
   if (orderNumKey || removeKeys) {
     for (let i = 0; i < result.length; i++) {
       if (!result[i]) continue;
       if (orderNumKey) {
-        result[i][orderNumKey] = (i + 1) as any;
+        result[i] = { ...result[i], [orderNumKey]: i + 1 };
       }
       if (removeKeys) {
-        for (const key of removeKeys) {
-          delete result[i][key];
-        }
+        result[i] = Object.fromEntries(
+          Object.entries(result[i]).filter(
+            ([key]) => !removeKeys.includes(key as keyof T)
+          )
+        ) as T;
       }
     }
   }
@@ -81,7 +84,7 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
   orderNumKey?: keyof T,
   removeKeys?: (keyof T)[]
 ): T[] => {
-  const result = [...arr];
+  const result = arr.map((item) => ({ ...item }));
 
   result.splice(oldIndex, 1);
 
@@ -89,19 +92,20 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
     for (let i = 0; i < result.length; i++) {
       if (!result[i]) continue;
       if (orderNumKey) {
-        result[i][orderNumKey] = (i + 1) as any;
+        result[i] = { ...result[i], [orderNumKey]: i + 1 };
       }
       if (removeKeys) {
-        for (const key of removeKeys) {
-          delete result[i][key];
-        }
+        result[i] = Object.fromEntries(
+          Object.entries(result[i]).filter(
+            ([key]) => !removeKeys.includes(key as keyof T)
+          )
+        ) as T;
       }
     }
   }
 
   return result;
 };
-
 export const advancedMoveAcrossArrays = <T extends Record<string, any>>(
   sourceArr: readonly T[],
   targetArr: readonly T[],
@@ -111,52 +115,60 @@ export const advancedMoveAcrossArrays = <T extends Record<string, any>>(
   removeKeys?: (keyof T)[],
   sourceUpdater?: (arr: T) => T,
   targetUpdater?: (arr: T) => T
-) => {
-  const newSourceArr = [...sourceArr];
-  const newTargetArr = [...targetArr];
+): [T[], T[]] => {
+  const newSourceArr = sourceArr.map((item) => ({ ...item }));
+  const newTargetArr = targetArr.map((item) => ({ ...item }));
 
   const [elementToMove] = newSourceArr.splice(oldIndex, 1);
-  newTargetArr.splice(newIndex, 0, elementToMove);
+  const movedElement = { ...elementToMove };
 
-  // Update source array
-  for (let i = oldIndex; i < newSourceArr.length; i++) {
-    if (!newSourceArr[i]) continue;
-    if (orderNumKey) {
-      newSourceArr[i][orderNumKey] = (i + 1) as any;
-    }
-    if (removeKeys) {
-      for (const key of removeKeys) {
-        delete newSourceArr[i][key];
-      }
-    }
-    if (sourceUpdater) {
-      try {
-        newSourceArr[i] = sourceUpdater(newSourceArr[i]);
-      } catch (e) {
-        console.error("Source array update error:", e);
-      }
-    }
+  // Apply removeKeys to the moved element
+  if (removeKeys) {
+    removeKeys.forEach((key) => {
+      delete movedElement[key];
+    });
   }
 
-  // Update target array
-  for (let i = newIndex; i < newTargetArr.length; i++) {
-    if (!newTargetArr[i]) continue;
-    if (orderNumKey) {
-      newTargetArr[i][orderNumKey] = (i + 1) as any;
-    }
-    if (removeKeys) {
-      for (const key of removeKeys) {
-        delete newTargetArr[i][key];
-      }
-    }
-    if (targetUpdater) {
-      try {
-        newTargetArr[i] = targetUpdater(newTargetArr[i]);
-      } catch (e) {
-        console.error("Target array update error:", e);
-      }
-    }
+  // Apply targetUpdater to the moved element
+  if (targetUpdater) {
+    Object.assign(movedElement, targetUpdater(movedElement));
   }
+
+  newTargetArr.splice(newIndex, 0, movedElement);
+
+  const updateArray = (
+    arr: T[],
+    startIndex: number,
+    updater?: (arr: T) => T
+  ) => {
+    for (let i = startIndex; i < arr.length; i++) {
+      if (!arr[i]) continue;
+      let updatedItem = { ...arr[i] };
+
+      if (orderNumKey) {
+        updatedItem[orderNumKey] = (i + 1) as any;
+      }
+
+      if (removeKeys) {
+        removeKeys.forEach((key) => {
+          delete updatedItem[key];
+        });
+      }
+
+      if (updater) {
+        try {
+          updatedItem = { ...updatedItem, ...updater(updatedItem) };
+        } catch (e) {
+          console.error("Array update error:", e);
+        }
+      }
+
+      arr[i] = updatedItem;
+    }
+  };
+
+  updateArray(newSourceArr, oldIndex, sourceUpdater);
+  updateArray(newTargetArr, 0, targetUpdater); // Update all elements in the target array
 
   return [newSourceArr, newTargetArr];
 };

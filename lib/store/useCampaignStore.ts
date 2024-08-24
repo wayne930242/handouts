@@ -23,8 +23,7 @@ const useCampaignStore = create(
         tableName,
         type,
         key,
-        debounceTime,
-        rowIdentifier
+        debounceTime
       ) => {
         const updateLocal = () => {
           if (type === "INSERT") {
@@ -39,8 +38,7 @@ const useCampaignStore = create(
                     tableName,
                     item,
                     {},
-                    type,
-                    rowIdentifier
+                    type
                   );
                   return { campaignData: updatedData };
                 });
@@ -53,8 +51,7 @@ const useCampaignStore = create(
                   tableName,
                   newData,
                   {},
-                  type,
-                  rowIdentifier
+                  type
                 );
                 return { campaignData: updatedData };
               });
@@ -81,8 +78,7 @@ const useCampaignStore = create(
                     tableName,
                     item,
                     {},
-                    type,
-                    rowIdentifier
+                    type
                   );
                   return { campaignData: updatedData };
                 });
@@ -180,6 +176,10 @@ const useCampaignStore = create(
             })
             .order("order_num", {
               referencedTable: "chapters.sections",
+              ascending: true,
+            })
+            .order("order_num", {
+              referencedTable: "chapters.sections.handouts",
               ascending: true,
             })
             .order("display_order", {

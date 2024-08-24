@@ -47,6 +47,7 @@ export interface HandoutBase {
   type: HandoutType;
   owner_id: string;
   note?: string;
+  order_num: number;
 }
 
 export type HandoutType = "image" | "link" | "youtube" | "file";
@@ -94,9 +95,6 @@ export interface CampaignStore {
     type: "INSERT" | "UPDATE" | "DELETE",
     key?: string,
     debounce?: number,
-    rowIdentifier?: Partial<
-      Campaign | Chapter | Section | Handout | HandoutImage
-    >
   ) => Promise<void>;
   loading: boolean;
   connected: boolean;

@@ -1,11 +1,4 @@
-import {
-  Campaign,
-  CampaignSubTable,
-  HandoutImage,
-  Chapter,
-  Section,
-  Handout,
-} from "@/types/interfaces";
+import { Campaign, CampaignSubTable } from "@/types/interfaces";
 import { updateArray } from "./arraryUpdater";
 
 export const updateCampaignNestedData = (
@@ -13,126 +6,60 @@ export const updateCampaignNestedData = (
   table: CampaignSubTable,
   newRecord: any,
   oldRecord: any,
-  eventType: "INSERT" | "UPDATE" | "DELETE",
-  rowIdentifier?: Partial<Campaign | Chapter | Section | Handout | HandoutImage>
+  eventType: "INSERT" | "UPDATE" | "DELETE"
 ): Campaign | null => {
   if (!campaignData) return null;
 
   const updatedData = { ...campaignData };
 
-  if (table === "campaigns") {
-    return { ...updatedData, ...newRecord };
-  }
-  if (table === "chapters") {
-    updatedData.chapters = updateArray(
-      updatedData.chapters,
-      newRecord,
-      oldRecord,
-      eventType
-    );
-    if (rowIdentifier) {
-      console.warn("rowIdentifier is useless for chapters update");
-    }
-  }
-  if (table === "sections") {
-    const chapters = updatedData.chapters;
-    const chatperId = (newRecord as Section).chapter_id;
-    const chapterIndex = chapters.findIndex(
-      (chapter) => chapter.id === chatperId
-    );
-    if (chapterIndex === -1) return updatedData;
-    if (rowIdentifier) {
-      const filteredChapters = chapters.filter((chapter) => {
-        Object.entries(rowIdentifier).forEach(([key, value]) => {
-          if (chapter[key as keyof Chapter] !== value) return false;
-        });
-        return true;
-      });
+  switch (table) {
+    case "campaigns":
+      return { ...updatedData, ...newRecord };
+
+    case "chapters":
       updatedData.chapters = updateArray(
-        filteredChapters,
+        updatedData.chapters,
         newRecord,
         oldRecord,
         eventType
       );
-    } else {
-      updatedData.chapters[chapterIndex].sections = updateArray(
-        updatedData.chapters[chapterIndex].sections,
-        newRecord,
-        oldRecord,
-        eventType
-      );
-    }
-  }
-  if (table === "handouts") {
-    updatedData.chapters = updatedData.chapters.map((chapter) => ({
-      ...chapter,
-      sections: chapter.sections.map((section) => {
-        if (rowIdentifier) {
-          const filteredHandouts = section.handouts.filter((handout) => {
-            Object.entries(rowIdentifier).forEach(([key, value]) => {
-              if (handout[key as keyof Handout] !== value) return false;
-            });
-            return true;
-          });
+      break;
+
+    case "sections":
+      updatedData.chapters = updatedData.chapters.map((chapter) => {
+        if (eventType === "DELETE") {
           return {
-            ...section,
-            handouts: updateArray(
-              filteredHandouts,
-              newRecord,
-              oldRecord,
-              eventType
+            ...chapter,
+            sections: chapter.sections.filter(
+              (section) => section.id !== oldRecord.id
             ),
           };
         } else {
-          return {
-            ...section,
-            handouts: updateArray(
-              section.handouts,
-              newRecord,
-              oldRecord,
-              eventType
-            ),
-          };
-        }
-      }),
-    }));
-  }
-  if (table === "handout_images") {
-    updatedData.chapters = updatedData.chapters.map((chapter) => ({
-      ...chapter,
-      sections: chapter.sections.map((section) => ({
-        ...section,
-        handouts: section.handouts.map((handout) => {
-          if (rowIdentifier) {
-            const filteredImages = handout.images.filter((image) => {
-              Object.entries(rowIdentifier).forEach(([key, value]) => {
-                if (image[key as keyof HandoutImage] !== value) return false;
-              });
-              return true;
-            });
+          // Handle INSERT and UPDATE
+          if (chapter.id === newRecord.chapter_id) {
             return {
-              ...handout,
-              images: updateArray(
-                filteredImages,
+              ...chapter,
+              sections: updateArray(
+                chapter.sections,
                 newRecord,
                 oldRecord,
                 eventType
               ),
             };
           } else {
+            // Remove the section if it's in the wrong chapter
             return {
-              ...handout,
-              images: updateArray(
-                handout.images,
-                newRecord,
-                oldRecord,
-                eventType
+              ...chapter,
+              sections: chapter.sections.filter(
+                (section) => section.id !== newRecord.id
               ),
             };
           }
-        }),
-      })),
-    }));
+        }
+      });
+      break;
+
+
   }
 
   return updatedData;

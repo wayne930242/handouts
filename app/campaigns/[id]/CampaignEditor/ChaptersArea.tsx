@@ -96,7 +96,7 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           campaignData?.chapters.find(
             (chapter) => chapter.id === sourceChapterId
           )?.sections ?? [];
-        console.log(sourceSections);
+
         const destSections =
           campaignData?.chapters.find((chapter) => chapter.id === destChapterId)
             ?.sections ?? [];
@@ -111,31 +111,26 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           undefined,
           (section) => ({
             ...section,
-            chapter_id: Number(destChapterId),
+            chapter_id: destChapterId,
           })
         );
 
-        console.log(newSourceSections, newDestSections);
-        // setCampaignData(
-        //   newSourceSections,
-        //   sourceSections,
-        //   supabase,
-        //   "sections",
-        //   "UPDATE",
-        //   undefined,
-        //   undefined,
-        //   { chapter_id: Number(sourceChapterId) }
-        // );
-        // setCampaignData(
-        //   newDestSections,
-        //   destSections,
-        //   supabase,
-        //   "sections",
-        //   "UPDATE",
-        //   undefined,
-        //   undefined,
-        //   { chapter_id: Number(destChapterId) }
-        // );
+        setCampaignData(
+          newSourceSections,
+          supabase,
+          "sections",
+          "UPDATE",
+          undefined,
+          undefined,
+        );
+        setCampaignData(
+          newDestSections,
+          supabase,
+          "sections",
+          "UPDATE",
+          undefined,
+          undefined,
+        );
       }
     } else if (type === "HANDOUT") {
     }
