@@ -38,6 +38,8 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
       const sourceIndex = source.index;
       const destIndex = destination.index;
 
+      if (sourceIndex === destIndex) return;
+
       const newChapters = advancedArrayMove(
         chapters,
         sourceIndex,
@@ -53,10 +55,10 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
       setCampaignData(newChapters, supabase, "chapters", "UPDATE");
     } else if (type === "SECTION") {
       const sourceChapterIndex = chapters.findIndex(
-        (chapter) => chapter.id == sourceDroppableId[1]
+        (chapter) => String(chapter.id) == String(sourceDroppableId[1])
       );
       const destChapterIndex = chapters.findIndex(
-        (chapter) => chapter.id == destDroppableId[1]
+        (chapter) => String(chapter.id) == String(destDroppableId[1])
       );
       if (sourceChapterIndex === destChapterIndex) {
         const sourceIndex = source.index;
@@ -84,22 +86,22 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
         const destIndex = destination.index;
 
         // Move section cross chapter
-        const sourceChapterId = Number(sourceDroppableId[1]);
-        const destChapterId = Number(destDroppableId[1]);
+        const sourceChapterId = sourceDroppableId[1];
+        const destChapterId = destDroppableId[1];
 
-        if (Number.isNaN(sourceChapterId) || Number.isNaN(destChapterId)) {
-          console.error("Invalid chapter id");
+        if (sourceChapterId === destChapterId && sourceIndex === destIndex) {
           return;
         }
 
         const sourceSections =
           campaignData?.chapters.find(
-            (chapter) => chapter.id === sourceChapterId
+            (chapter) => String(chapter.id) === String(sourceChapterId)
           )?.sections ?? [];
 
         const destSections =
-          campaignData?.chapters.find((chapter) => chapter.id === destChapterId)
-            ?.sections ?? [];
+          campaignData?.chapters.find(
+            (chapter) => String(chapter.id) === String(destChapterId)
+          )?.sections ?? [];
 
         const [newSourceSections, newDestSections] = advancedMoveAcrossArrays(
           sourceSections,
@@ -111,27 +113,15 @@ export default function ChaptersArea({ chapters, campaignId }: Props) {
           undefined,
           (section) => ({
             ...section,
-            chapter_id: destChapterId,
+            chapter_id: Number(destChapterId),
           })
         );
 
-        setCampaignData(
-          newSourceSections,
-          supabase,
-          "sections",
-          "UPDATE",
-        );
-        setCampaignData(
-          newDestSections,
-          supabase,
-          "sections",
-          "UPDATE",
-        );
+        setCampaignData(newSourceSections, supabase, "sections", "UPDATE");
+        setCampaignData(newDestSections, supabase, "sections", "UPDATE");
       }
     } else if (type === "HANDOUT") {
-      
     } else if (type === "HANDOUT_IMAGE") {
-
     }
   };
 
