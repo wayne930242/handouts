@@ -2,20 +2,39 @@
 
 import { Plus, X } from "lucide-react";
 
-import { Section } from "@/types/interfaces";
+import { Handout, Section } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { advancedRemoveElement } from "@/lib/arrayAction";
 import { Label } from "@/components/ui/label";
+import HandoutsArea from "./HandoutsArea";
+import useSession from "@/lib/hooks/useSession";
 
 interface Props {
   section: Section;
 }
 
+const emptyHandout = (
+  sectionId: number,
+  orderNum: number,
+  ownerId: string
+): Partial<Handout> => ({
+  id: "new",
+  section_id: sectionId,
+  title: "",
+  content: "",
+  is_public: false,
+  note: "",
+  type: "text",
+  owner_id: ownerId,
+  order_num: orderNum,
+});
+
 export default function SectionCard({ section }: Props) {
   const supabase = createClient();
+  const session = useSession();
   const { setCampaignData, campaignData } = useCampaignStore();
 
   return (
@@ -49,6 +68,9 @@ export default function SectionCard({ section }: Props) {
               />
             </div>
           </div>
+          <div className="grow flex flex-col gap-y-2">
+            <HandoutsArea section={section} />
+          </div>
           <div className="flex justify-end gap-x-2 my-1">
             <Button
               className="flex gap-1.5 items-center"
@@ -56,6 +78,15 @@ export default function SectionCard({ section }: Props) {
               size="sm"
               onClick={(e) => {
                 e.preventDefault();
+                if (!session) return;
+
+                const newHandout = emptyHandout(
+                  section.id as number,
+                  (section.handouts?.length ?? 0) + 1,
+                  session.user.id
+                );
+
+                setCampaignData(newHandout, supabase, "handouts", "INSERT");
               }}
             >
               <p>手邊資料</p>

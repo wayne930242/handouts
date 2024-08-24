@@ -50,7 +50,7 @@ export interface HandoutBase {
   order_num: number;
 }
 
-export type HandoutType = "image" | "link" | "youtube" | "file";
+export type HandoutType = "text" | "image" | "link" | "youtube" | "file";
 
 export interface HandoutImagesBase {
   id: string | "new";

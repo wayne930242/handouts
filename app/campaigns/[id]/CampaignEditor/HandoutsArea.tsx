@@ -1,0 +1,48 @@
+"use client";
+
+import { Draggable, Droppable } from "@hello-pangea/dnd";
+
+import { Section } from "@/types/interfaces";
+import { createClient } from "@/lib/supabase/client";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+
+interface Props {
+  section: Section;
+}
+
+export default function HandoutsArea({ section }: Props) {
+  const supabase = createClient();
+
+  const { campaignData, setCampaignData } = useCampaignStore();
+
+  return (
+    <Droppable droppableId={"section-" + section.id} type="HANDOUT">
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className="grid grid-cols-1 gap-y-3"
+        >
+          {section.handouts.map((handout, index) => (
+            <Draggable
+              key={handout.id ?? "new-" + index}
+              draggableId={handout.id.toString()}
+              index={index}
+            >
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                >
+                  <div className="h-8 bg-slate-400" />
+                </div>
+              )}
+            </Draggable>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  );
+}
