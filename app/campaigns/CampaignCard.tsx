@@ -32,20 +32,29 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
 
       <CardFooter>
         <div className="flex justify-between items-center gap-2 w-full">
-          <Button
-            type="button"
-            onClick={() => {
-              navigator.clipboard.writeText(campaign.id);
-              toast({
-                title: "ID 已複製到剪貼簿",
-                description: `請將此 ID ——${campaign.id}——和你設定的通關密語分享給玩家。`,
-              });
-            }}
-          >
-            複製 ID
-          </Button>
+          <div className="flex gap-2 items-center">
+            <Button
+              type="button"
+              onClick={() => {
+                const info = {
+                  id: campaign.id,
+                  passphrase: campaign.passphrase,
+                  url: `https://handouts.wayneh.tw/campaigns/${campaign.id}`,
+                };
+
+                navigator.clipboard.writeText(JSON.stringify(info, null, 2));
+
+                toast({
+                  title: "資訊已複製到剪貼簿",
+                  description: `將資訊分享給玩家，就可以開始遊戲了。`,
+                });
+              }}
+            >
+              複製資訊
+            </Button>
+          </div>
           <Link href={`/campaigns/${campaign.id}`}>
-            <Button variant="secondary">編輯手邊資料</Button>
+            <Button variant="secondary">編輯 / 檢視</Button>
           </Link>
         </div>
       </CardFooter>

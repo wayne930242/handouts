@@ -24,7 +24,6 @@ export default function LinkViewer({ content }: Props) {
 
       try {
         const data: Metadata = await fetchUrlMetadata(content);
-        console.log(data);
         setMetadata(data);
         setLoading(false);
       } catch (err) {
@@ -57,7 +56,8 @@ export default function LinkViewer({ content }: Props) {
                 src={metadata?.image}
                 loader={({ src }) => src}
                 alt={metadata?.title}
-                layout="fill"
+                fill
+                unoptimized
               />
             </div>
           )}

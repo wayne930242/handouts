@@ -2,8 +2,15 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 import PageLayout from "@/components/layouts/PageLayout";
+import PassphraseForm from "@/components/PassphraseForm";
 
-export default async function Index() {
+interface Props {
+  searchParams: {
+    campaign_id?: string;
+  };
+}
+
+export default async function Index({ searchParams: { campaign_id } }: Props) {
   const supabase = createClient();
 
   const {
@@ -16,20 +23,13 @@ export default async function Index() {
 
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold text-center text-muted-foreground">
+      <h1 className="text-2xl font-bold text-center text-muted-foreground my-12">
         Welcome to ShareHandouts!
       </h1>
-      <div className="leading-loose">
-        <p>這個網站讓 GM 可以更容易地分享並且統整發過的遊戲手邊資料。</p>
-        <ul className="list-disc list-inside">
-          <li>如果你是 GM，你可以e登入並開始使用。</li>
-          <li>
-            如果你是玩家，你可以加入 GM 提供的戰役，並輸入通關密語（如果有的話）。
-          </li>
-        </ul>
-      </div>
 
-      <div>保留給 ID 與通關密語輸入欄</div>
+      <div className="flex flex-col items-center">
+        <PassphraseForm defaultId={campaign_id} />
+      </div>
     </PageLayout>
   );
 }

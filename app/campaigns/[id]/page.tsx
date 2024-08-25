@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import PageLayout from "@/components/layouts/PageLayout";
 import { getPassphrase } from "@/lib/passphrase";
 import Campaign from "./Campaign";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -18,6 +19,7 @@ export default async function CampaignPage({
   searchParams: { passphrase },
 }: Props) {
   const supabase = createClient();
+
   const c_passphrase = getPassphrase(id);
 
   const { data: isAuthorized, error: authError } = await supabase.rpc(
@@ -28,8 +30,12 @@ export default async function CampaignPage({
     }
   );
 
+  if (!isAuthorized || authError) {
+    redirect("/?campaign_id=" + id);
+  }
+
   return (
-    <PageLayout needsAuth>
+    <PageLayout>
       <Campaign campaignId={id} isAuthorized={isAuthorized} />
     </PageLayout>
   );

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import PassphraseDialog from "@/components/PassphraseDialog";
 
 import Footer from "./Footer";
 import NavBar from "./NavBar";
@@ -35,6 +36,7 @@ export default async function PageLayout({
         {children}
       </div>
       <Footer />
+      <PassphraseDialog />
     </div>
   );
 }
