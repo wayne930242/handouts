@@ -37,17 +37,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { createClient } from "@/lib/supabase/client";
 import { Handout } from "@/types/interfaces";
+import MyMDXEditor from "@/components/MyMDXEditor";
 
-const ImageEditor = dynamic(() => import("./HandoutEditor/ImageEditor"), {
+const ImageEditor = dynamic(() => import("./ContentEditor/ImageEditor"), {
   ssr: false,
 });
-const LinkEditor = dynamic(() => import("./HandoutEditor/LinkEditor"), {
+const LinkEditor = dynamic(() => import("./ContentEditor/LinkEditor"), {
   ssr: false,
 });
-const TextEditor = dynamic(() => import("./HandoutEditor/TextEditor"), {
+const TextEditor = dynamic(() => import("./ContentEditor/TextEditor"), {
   ssr: false,
 });
-const YoutubeEditor = dynamic(() => import("./HandoutEditor/YoutubeEditor"), {
+const YoutubeEditor = dynamic(() => import("./ContentEditor/YoutubeEditor"), {
   ssr: false,
 });
 
@@ -165,8 +166,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>編輯圖片</FormLabel>
                     <FormControl>
-                      <ImageEditor chapterId={chapterId} field={field} />
+                      <ImageEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -179,8 +181,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>編輯連結</FormLabel>
                     <FormControl>
-                      <LinkEditor chapterId={chapterId} field={field} />
+                      <LinkEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -193,8 +196,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>編輯 Youtube 連結</FormLabel>
                     <FormControl>
-                      <YoutubeEditor chapterId={chapterId} field={field} />
+                      <YoutubeEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -207,8 +211,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>編輯文字</FormLabel>
                     <FormControl>
-                      <TextEditor chapterId={chapterId} field={field} />
+                      <TextEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -222,6 +227,10 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 <FormItem>
                   <FormLabel>備註</FormLabel>
                   <FormControl>
+                    <MyMDXEditor
+                      markdown={field.value ?? ""}
+                      onChange={(value) => field.onChange(value)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

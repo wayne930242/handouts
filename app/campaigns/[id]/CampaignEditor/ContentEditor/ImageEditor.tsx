@@ -1,10 +1,11 @@
+'use client'
+
 import { ContentFieldProps } from "../HandoutCard";
 
-export default function TextEditor({}: Props) {
-  return <div>TextEditor</div>;
+export default function ImageEditor({}: Props) {
+  return <div>ImageEditor</div>;
 }
 
 interface Props {
   field: ContentFieldProps;
-  chapterId: number;
 }
