@@ -150,6 +150,8 @@ export interface AppStore {
   setIsDragging: (isDragging: boolean) => void;
   editingCampaign: boolean;
   setEditingCampaign: (editingCampaign: boolean) => void;
+  passphraseDialog: boolean;
+  setPassphraseDialog: (passphraseDialog: boolean) => void;
 }
 
 export interface Session {

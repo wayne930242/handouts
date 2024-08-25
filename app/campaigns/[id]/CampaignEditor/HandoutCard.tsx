@@ -144,7 +144,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="text">文字</SelectItem>
-                          <SelectItem value="image">圖片</SelectItem>
+                          {/* <SelectItem value="image">圖片</SelectItem> */}
                           <SelectItem value="link">連結</SelectItem>
                           <SelectItem value="youtube">Youtube</SelectItem>
                         </SelectContent>

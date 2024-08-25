@@ -6,6 +6,8 @@ const useAppStore = create<AppStore>((set) => ({
   setIsDragging: (isDragging) => set({ isDragging }),
   editingCampaign: false,
   setEditingCampaign: (editingCampaign) => set({ editingCampaign }),
+  passphraseDialog: false,
+  setPassphraseDialog: (passphraseDialog) => set({ passphraseDialog }),
 }));
 
 export default useAppStore;

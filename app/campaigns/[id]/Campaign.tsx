@@ -3,20 +3,26 @@ import { useEffect, useMemo } from "react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useCampaignData from "@/lib/hooks/useCampaignData";
 import useAppStore from "@/lib/store/useAppStore";
-import useSession from "@/lib/hooks/useSession";
 import { createClient } from "@/lib/supabase/client";
+import dynamic from "next/dynamic";
 
-import CampaignEditor from "./CampaignEditor";
 import Toolbar from "./CampaignToolbar";
+import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
+
+const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
+  ssr: false,
+});
+const CampaignViewer = dynamic(() => import("./CampaignViewer"), {
+  ssr: false,
+});
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
-  const { campaignData } = useCampaignData(campaignId, isAuthorized);
+  useCampaignData(campaignId, isAuthorized);
   const { editingCampaign } = useAppStore();
   const { setupRealtimeSubscription } = useCampaignStore();
 
-  const session = useSession();
   const supabase = useMemo(() => createClient(), []);
-  const canEdit = session?.user?.id === campaignData?.gm_id;
+  const canEdit = useCanEditCampaign();
 
   useEffect(() => {
     if (!isAuthorized) return;
@@ -29,7 +35,10 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
       {canEdit && (
         <Toolbar campaignId={campaignId} isAuthorized={isAuthorized} />
       )}
-      {editingCampaign && <CampaignEditor />}
+      <div className="flex flex-col gap-2 w-full my-2 px-2">
+        {editingCampaign && <CampaignEditor />}
+        {!editingCampaign && <CampaignViewer />}
+      </div>
     </div>
   );
 }

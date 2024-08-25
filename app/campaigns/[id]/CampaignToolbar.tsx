@@ -3,10 +3,11 @@
 import { PacmanLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
-import { Eye, Pen, Unplug } from "lucide-react";
+import { ArrowLeft, Eye, Pen, Unplug } from "lucide-react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 export default function Toolbar({
   campaignId,
@@ -23,11 +24,21 @@ export default function Toolbar({
   const supabase = createClient();
 
   return (
-    <div className="flex justify-between items-center w-full px-2">
+    <div className="flex justify-between items-center w-full">
       <div className="grow-1 flex gap-2 items-center">
-        <PacmanLoader color="#bbb" loading={loading} size={12} />
+        <Link href="/campaigns">
+          <Button
+            className="flex gap-1.5 items-center"
+            size="sm"
+            variant="ghost"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>回列表</span>
+          </Button>
+        </Link>
       </div>
       <div className="flex gap-1.5 items-center">
+        <PacmanLoader color="#bbb" loading={loading} size={12} />
         {!connected && (
           <Badge
             variant="outline"

@@ -28,7 +28,7 @@ export default function HandoutsArea({ section }: Props) {
           {...provided.droppableProps}
           className="grid grid-cols-1 gap-y-3"
         >
-          {section.handouts.map((handout, index) => (
+          {section.handouts?.map((handout, index) => (
             <Draggable
               key={handout.id ?? "new-" + index}
               draggableId={handout.id.toString()}
