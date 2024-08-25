@@ -1,10 +1,10 @@
-import { Handout } from "@/types/interfaces";
+import { ContentFieldProps } from "../HandoutCard";
 
 export default function YoutubeEditor({}: Props) {
   return <div>YoutubeEditor</div>;
 }
 
 interface Props {
-  handout: Handout;
+  field: ContentFieldProps;
   chapterId: number;
 }

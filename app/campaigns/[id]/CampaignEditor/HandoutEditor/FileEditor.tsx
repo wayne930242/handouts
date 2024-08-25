@@ -1,10 +1,11 @@
 import { Handout } from "@/types/interfaces";
+import { ContentFieldProps } from "../HandoutCard";
 
 export default function FileEditor({}: Props) {
   return <div>FileEditor</div>;
 }
 
 interface Props {
-  handout: Handout;
+  field: ContentFieldProps;
   chapterId: number;
 }

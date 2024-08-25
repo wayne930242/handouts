@@ -1,10 +1,10 @@
-import { Handout } from "@/types/interfaces";
+import { ContentFieldProps } from "../HandoutCard";
 
 export default function LinkEditor({}: Props) {
   return <div>LinkEditor</div>;
 }
 
 interface Props {
-  handout: Handout;
+  field: ContentFieldProps;
   chapterId: number;
 }
