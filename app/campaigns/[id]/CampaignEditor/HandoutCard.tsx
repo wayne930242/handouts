@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -90,6 +90,23 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     );
   };
 
+  const [triggerReset, setTriggerReset] = useState(false);
+
+  const timeOutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!triggerReset) return;
+    timeOutRef.current = setTimeout(() => {
+      setTriggerReset(false);
+    }, 10);
+
+    return () => {
+      if (timeOutRef.current) {
+        clearTimeout(timeOutRef.current);
+      }
+    };
+  }, [triggerReset]);
+
   return (
     <Card className="relative">
       <Form {...form}>
@@ -159,8 +176,8 @@ export default function HandoutCard({ handout, chapterId }: Props) {
               />
             </div>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 space-y-2  divide-y divide-border">
-            {form.getValues("type") === "image" && (
+          <CardContent className="grid grid-cols-1 space-y-2">
+            {!triggerReset && form.getValues("type") === "image" && (
               <FormField
                 control={form.control}
                 name="content"
@@ -205,7 +222,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 )}
               />
             )}
-            {form.getValues("type") === "text" && (
+            {!triggerReset && form.getValues("type") === "text" && (
               <FormField
                 control={form.control}
                 name="content"
@@ -213,33 +230,48 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   <FormItem>
                     <FormLabel>編輯文字</FormLabel>
                     <FormControl>
-                      <TextEditor field={field} />
+                      <TextEditor field={field} oldValue={handout.content} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             )}
-            <FormField
-              control={form.control}
-              name="note"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>備註</FormLabel>
-                  <FormControl>
-                    <MyMDXEditor
-                      markdown={field.value ?? ""}
-                      onChange={(value) => field.onChange(value)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+            {!triggerReset && (
+              <FormField
+                control={form.control}
+                name="note"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>備註</FormLabel>
+                    <FormControl>
+                      <MyMDXEditor
+                        markdown={field.value ?? ""}
+                        onChange={(value) => field.onChange(value)}
+                        oldMarkdown={handout.note}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            <div className="flex justify-end mt-4">
+              {form.formState.isDirty && (
+                <div className="text-sm text-destructive">有變更尚未儲存。</div>
               )}
-            />
+            </div>
           </CardContent>
 
-          <CardFooter className="flex gap-2 mt-6 flex-col-reverse sm:justify-end sm:flex-row items-stretch sm:items-center">
-            <Button variant="outline" type="button" onClick={() => form.reset}>
+          <CardFooter className="flex gap-2 mt-2 flex-col-reverse sm:justify-end sm:flex-row items-stretch sm:items-center">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => {
+                setTriggerReset(true);
+                form.reset();
+              }}
+            >
               取消
             </Button>
             <Button type="submit">儲存</Button>
