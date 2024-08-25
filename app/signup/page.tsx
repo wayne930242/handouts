@@ -23,7 +23,7 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
       email,
       password,
       options: {
-        emailRedirectTo: `https://handouts.wayneh.tw/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback`,
       },
     });
 
