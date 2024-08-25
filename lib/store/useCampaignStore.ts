@@ -17,50 +17,43 @@ const useCampaignStore = create(
       error: null,
       connected: false,
       connectedAtempts: 0,
-      setCampaignData: async (
+      setCampaignDataLocal: async (newData, tableName, type) => {
+        if (Array.isArray(newData)) {
+          for (const item of newData) {
+            set((state) => {
+              if (!state.campaignData) return state;
+              let updatedData = updateCampaignNestedData(
+                state.campaignData,
+                tableName,
+                item,
+                {},
+                type
+              );
+              return { campaignData: updatedData };
+            });
+          }
+        } else {
+          set((state) => {
+            if (!state.campaignData) return state;
+            let updatedData = updateCampaignNestedData(
+              state.campaignData,
+              tableName,
+              newData,
+              {},
+              type
+            );
+            return { campaignData: updatedData };
+          });
+        }
+      },
+      setCampaignDataRemote: async (
         newData,
         supabaseClient,
         tableName,
         type,
         debounce
       ) => {
-        const updateLocal = () => {
-          if (type === "INSERT") {
-            // Update by subscription
-          } else if (type === "UPDATE") {
-            if (Array.isArray(newData)) {
-              for (const item of newData) {
-                set((state) => {
-                  if (!state.campaignData) return state;
-                  let updatedData = updateCampaignNestedData(
-                    state.campaignData,
-                    tableName,
-                    item,
-                    {},
-                    type
-                  );
-                  return { campaignData: updatedData };
-                });
-              }
-            } else {
-              set((state) => {
-                if (!state.campaignData) return state;
-                let updatedData = updateCampaignNestedData(
-                  state.campaignData,
-                  tableName,
-                  newData,
-                  {},
-                  type
-                );
-                return { campaignData: updatedData };
-              });
-            }
-          } else if (type === "DELETE") {
-            // Update by subscription
-          }
-        };
-
-        const updateDatabase = async () => {
+        const updateRemote = async () => {
           set({ loading: true, error: null });
           let result: any;
           try {
@@ -116,14 +109,36 @@ const useCampaignStore = create(
 
           set({ loading: false });
         };
-
-        updateLocal();
         const [debouncedFn] = debouncify(
-          updateDatabase,
+          updateRemote,
           debounce?.delay,
           debounce?.key
         );
         debouncedFn();
+      },
+      setCampaignData: async (
+        newData,
+        supabaseClient,
+        tableName,
+        type,
+        debounce
+      ) => {
+        if (type === "INSERT") {
+          // Update by subscription
+        } else if (type === "UPDATE") {
+          get().setCampaignDataLocal(newData, tableName, type);
+        } else if (type === "DELETE") {
+          // Update by subscription
+        }
+
+        get().setCampaignDataRemote(
+          newData,
+          supabaseClient,
+          tableName,
+          type,
+          debounce
+        );
+
         if (process.env.NODE_ENV === "development") {
           console.info(get().campaignData);
         }

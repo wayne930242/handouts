@@ -15,6 +15,7 @@ export const updateArray = <T extends { id: number | string }>(
       break;
 
     case "UPDATE":
+      // In fact, is is UPSERT
       const itemExists = safeArray.some((item) => item.id === record.id);
       if (itemExists) {
         newArray = safeArray.map((item) =>

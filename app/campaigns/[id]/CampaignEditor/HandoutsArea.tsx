@@ -6,6 +6,8 @@ import { Section } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
+import HandoutCard from "./HandoutCard";
+
 interface Props {
   section: Section;
 }
@@ -35,7 +37,10 @@ export default function HandoutsArea({ section }: Props) {
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                 >
-                  <div className="h-8 bg-slate-400" />
+                  <HandoutCard
+                    handout={handout}
+                    chapterId={section.chapter_id}
+                  />
                 </div>
               )}
             </Draggable>

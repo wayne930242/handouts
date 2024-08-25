@@ -88,6 +88,21 @@ export type SetCampaignPayload =
 
 export interface CampaignStore {
   campaignData: Campaign | null;
+  setCampaignDataLocal: (
+    newData: SetCampaignPayload,
+    tableName: CampaignSubTable,
+    type: "INSERT" | "UPDATE" | "DELETE"
+  ) => void;
+  setCampaignDataRemote: (
+    newData: SetCampaignPayload,
+    supabaseClient: SupabaseClient,
+    tableName: CampaignSubTable,
+    type: "INSERT" | "UPDATE" | "DELETE",
+    debounce?: {
+      key: string;
+      delay: number;
+    }
+  ) => Promise<void>;
   setCampaignData: (
     newData: SetCampaignPayload,
     supabaseClient: SupabaseClient,
