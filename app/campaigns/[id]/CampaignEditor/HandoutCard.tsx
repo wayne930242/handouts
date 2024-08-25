@@ -283,7 +283,17 @@ export default function HandoutCard({ handout, chapterId }: Props) {
         variant="ghost"
         size="icon"
         type="button"
-        onClick={(e) => {}}
+        onClick={(e) => {
+          setCampaignData(
+            {
+              id: handout.id,
+              section_id: handout.section_id,
+            },
+            supabase,
+            "handouts",
+            "DELETE"
+          );
+        }}
       >
         <X className="h-4 w-4" />
       </Button>
