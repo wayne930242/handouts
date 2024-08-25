@@ -101,6 +101,17 @@ export type SetCampaignPayload =
   | Partial<Campaign | Chapter | Section | Handout | HandoutImage>
   | Array<Partial<Chapter | Section | Handout | HandoutImage>>;
 
+export type SetCampaignData = (
+  newData: SetCampaignPayload,
+  supabaseClient: SupabaseClient,
+  tableName: CampaignSubTable,
+  type: "INSERT" | "UPDATE" | "DELETE",
+  debounce?: {
+    key: string;
+    delay: number;
+  }
+) => Promise<void>;
+
 export interface CampaignStore {
   campaignData: Campaign | null;
   setCampaignDataLocal: (
@@ -118,16 +129,7 @@ export interface CampaignStore {
       delay: number;
     }
   ) => Promise<void>;
-  setCampaignData: (
-    newData: SetCampaignPayload,
-    supabaseClient: SupabaseClient,
-    tableName: CampaignSubTable,
-    type: "INSERT" | "UPDATE" | "DELETE",
-    debounce?: {
-      key: string;
-      delay: number;
-    }
-  ) => Promise<void>;
+  setCampaignData: SetCampaignData;
   loading: boolean;
   connected: boolean;
   connectedAtempts: number;

@@ -174,6 +174,7 @@ const useCampaignStore = create(
                       type,
                       owner_id,
                       note,
+                      order_num,
                       images:handout_images (
                         id,
                         handout_id,

@@ -18,7 +18,10 @@ export default function HandoutsArea({ section }: Props) {
   const { campaignData, setCampaignData } = useCampaignStore();
 
   return (
-    <Droppable droppableId={"section-" + section.id} type="HANDOUT">
+    <Droppable
+      droppableId={"chapter-" + section.chapter_id + "-section-" + section.id}
+      type="HANDOUT"
+    >
       {(provided) => (
         <div
           ref={provided.innerRef}

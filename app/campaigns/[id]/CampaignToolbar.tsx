@@ -6,6 +6,7 @@ import useAppStore from "@/lib/store/useAppStore";
 import { Eye, Pen, Unplug } from "lucide-react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Toolbar({
   campaignId,
@@ -15,9 +16,11 @@ export default function Toolbar({
   isAuthorized: boolean;
 }) {
   const { editingCampaign, setEditingCampaign } = useAppStore();
-  const { connected } = useCampaignStore();
+  const { connected, setupRealtimeSubscription } = useCampaignStore();
 
   const { loading } = useCampaignStore();
+
+  const supabase = createClient();
 
   return (
     <div className="flex justify-between items-center w-full px-2">
@@ -28,7 +31,10 @@ export default function Toolbar({
         {!connected && (
           <Badge
             variant="outline"
-            className="text-destructive border-transparent animate-pulse"
+            className="text-destructive border-transparent animate-pulse cursor-pointer"
+            onClick={() => {
+              setupRealtimeSubscription(supabase, campaignId);
+            }}
           >
             <Unplug className="h-4 w-4" />
           </Badge>

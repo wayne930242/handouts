@@ -158,7 +158,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
               />
             </div>
           </CardHeader>
-          <CardContent className="flex flex-col gap-y-2">
+          <CardContent className="grid grid-cols-1 space-y-2  divide-y divide-border">
             {form.getValues("type") === "image" && (
               <FormField
                 control={form.control}
@@ -215,6 +215,18 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 )}
               />
             )}
+            <FormField
+              control={form.control}
+              name="note"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>備註</FormLabel>
+                  <FormControl>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
 
           <CardFooter className="flex gap-2 mt-6 flex-col-reverse sm:justify-end sm:flex-row items-stretch sm:items-center">
