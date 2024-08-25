@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ControllerRenderProps, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Handout, HandoutType } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,9 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { Input } from "@/components/ui/input";
-import useCampaignStore from "@/lib/store/useCampaignStore";
 import {
   Form,
   FormField,
@@ -36,11 +33,11 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { createClient } from "@/lib/supabase/client";
 
-const FileEditor = dynamic(() => import("./HandoutEditor/FileEditor"), {
-  ssr: false,
-});
+import useCampaignStore from "@/lib/store/useCampaignStore";
+import { createClient } from "@/lib/supabase/client";
+import { Handout } from "@/types/interfaces";
+
 const ImageEditor = dynamic(() => import("./HandoutEditor/ImageEditor"), {
   ssr: false,
 });
@@ -56,7 +53,7 @@ const YoutubeEditor = dynamic(() => import("./HandoutEditor/YoutubeEditor"), {
 
 const formSchema = z.object({
   title: z.string().optional(),
-  type: z.enum(["text", "image", "link", "youtube", "file"]).optional(),
+  type: z.enum(["text", "image", "link", "youtube"]).optional(),
   content: z.string().optional(),
   is_public: z.boolean(),
   note: z.string().optional(),
@@ -132,7 +129,6 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                           <SelectItem value="image">圖片</SelectItem>
                           <SelectItem value="link">連結</SelectItem>
                           <SelectItem value="youtube">Youtube</SelectItem>
-                          <SelectItem value="file">檔案</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -199,20 +195,6 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   <FormItem>
                     <FormControl>
                       <YoutubeEditor chapterId={chapterId} field={field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            {form.getValues("type") === "file" && (
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <FileEditor chapterId={chapterId} field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
