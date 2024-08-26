@@ -8,13 +8,15 @@ const defaultUrl = "https://handouts.wayneh.tw";
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "ShareHandouts - a TRPG tool by WeiHung",
-  description: "一個讓你方便分享遊戲手邊資料的簡單工具。",
+  description:
+    "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
   openGraph: {
     type: "website",
     locale: "zh_TW",
     url: defaultUrl,
     title: "ShareHandouts - a TRPG tool by WeiHung",
-    description: "一個讓你方便分享遊戲手邊資料的簡單工具。",
+    description:
+      "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
     images: [
       {
         url: `${defaultUrl}/img/og-img.webp`,
@@ -27,7 +29,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ShareHandouts - a TRPG tool by WeiHung",
-    description: "一個讓你方便分享遊戲手邊資料的簡單工具。",
+    description:
+      "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
     images: [
       {
         url: `${defaultUrl}/img/og-img.webp`,
