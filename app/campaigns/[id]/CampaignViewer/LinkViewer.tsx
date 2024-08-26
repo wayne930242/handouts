@@ -22,15 +22,19 @@ export default function LinkViewer({ content }: Props) {
 
   useEffect(() => {
     const fetchMetadata = async () => {
+      setLoading(true);
       if (!content) return;
 
       try {
-        const data: Metadata = await fetchUrlMetadata(content);
+        const data: Metadata | undefined = await fetchUrlMetadata(content);
+        if (!data) {
+          throw new Error("Failed to fetch metadata");
+        }
         setMetadata(data);
-        setLoading(false);
       } catch (err) {
-        setLoading(false);
+        console.error(err);
       }
+      setLoading(false);
     };
 
     fetchMetadata();
@@ -39,7 +43,12 @@ export default function LinkViewer({ content }: Props) {
   return (
     <Card>
       <div className="grow flex gap-x-2 items-center justify-between w-full">
-        <a href={content} target="_blank" rel="noreferrer" className="grow w-full">
+        <a
+          href={content}
+          target="_blank"
+          rel="noreferrer"
+          className="grow w-full"
+        >
           <CardHeader className="flex flex-row items-center space-x-2">
             <CardTitle className="text-sm font-medium">
               <div className="flex gap-x-2 items-center grow">
@@ -71,12 +80,12 @@ export default function LinkViewer({ content }: Props) {
         <a href={content} target="_blank" rel="noreferrer">
           <CardContent className="flex flex-col gap-y-3">
             {loading && (
-              <div className="flex justify-center items-center h-40 w-40">
+              <div className="flex justify-center items-center h-24 w-full">
                 <PacmanLoader color="#bbb" loading={loading} size={24} />
               </div>
             )}
             {metadata?.image && (
-              <div className="relative h-40">
+              <div className="relative h-24">
                 <Image
                   className="object-cover"
                   src={metadata?.image}

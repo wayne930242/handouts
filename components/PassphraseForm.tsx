@@ -36,7 +36,7 @@ export default function PassphraseForm({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    updatePassphrase(data.id, data.passphrase);
+    await updatePassphrase(data.id, data.passphrase);
     afterSubmit?.();
     rounder.push("/campaigns/" + data.id);
   };

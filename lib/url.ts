@@ -14,7 +14,9 @@ interface UrlMetadata {
   url: string;
 }
 
-export async function fetchUrlMetadata(url: string): Promise<UrlMetadata> {
+export async function fetchUrlMetadata(
+  url: string
+): Promise<UrlMetadata | undefined> {
   const API_KEY = process.env.NEXT_PUBLIC_LINK_PREVIEW_KEY;
   if (!API_KEY) {
     throw new Error("API key is not defined");
@@ -39,10 +41,8 @@ export async function fetchUrlMetadata(url: string): Promise<UrlMetadata> {
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error fetching URL metadata:", error.message);
-      throw new Error(`Failed to fetch metadata: ${error.message}`);
     } else {
       console.error("Unknown error occurred while fetching URL metadata");
-      throw new Error("Failed to fetch metadata due to an unknown error");
     }
   }
 }

@@ -19,7 +19,7 @@ const getCookies = () => {
   }
 };
 
-export function updatePassphrase(
+export async function updatePassphrase(
   campaign_id: string | number,
   passphrase: string | undefined = ""
 ) {
@@ -27,7 +27,7 @@ export function updatePassphrase(
   if (cookieValue === false) {
     const searchParams = new URLSearchParams();
     searchParams.set("passphrase", passphrase);
-    return;
+    return Promise.resolve();
   }
 
   let parsedPassphrases: Passphrase = {};
@@ -36,7 +36,7 @@ export function updatePassphrase(
       parsedPassphrases = JSON.parse(cookieValue);
     } catch (e) {
       console.error("Error parsing passphrase:", e);
-      return;
+      return Promise.reject();
     }
   }
 
@@ -57,4 +57,5 @@ export function updatePassphrase(
       sameSite: "strict",
     });
   }
+  return Promise.resolve();
 }
