@@ -17,7 +17,15 @@ export default class ImageManager {
         file
       );
 
-    return data?.fullPath;
+    const path = data?.path;
+    if (!path) throw new Error("Failed to upload image");
+
+    const {
+      data: { publicUrl },
+    } = this.supabase.storage.from(this.bucketName).getPublicUrl(path);
+
+    console.log("publicUrl", publicUrl);
+    return publicUrl;
   }
 
   async deleteImageByCampaignId(campaign_id: string): Promise<any> {

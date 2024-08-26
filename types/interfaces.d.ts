@@ -116,6 +116,8 @@ export interface CampaignStore {
   campaignData: Campaign | null;
   asGM: boolean;
   setAsGM: (asGM: boolean) => void;
+  inWhiteList: boolean;
+  fetchWhiteList: (supabase: SupabaseClient) => void;
   setCampaignDataLocal: (
     newData: SetCampaignPayload,
     tableName: CampaignSubTable,

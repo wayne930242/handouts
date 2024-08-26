@@ -241,7 +241,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 )}
               />
             )}
-            {!triggerReset && (
+            {/* {!triggerReset && (
               <FormField
                 control={form.control}
                 name="note"
@@ -259,7 +259,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   </FormItem>
                 )}
               />
-            )}
+            )} */}
             <div className="flex justify-end mt-4">
               {form.formState.isDirty && (
                 <div className="text-sm text-destructive">有變更尚未儲存。</div>

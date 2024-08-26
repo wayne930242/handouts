@@ -18,6 +18,18 @@ const useCampaignStore = create(
       error: null,
       connected: false,
       connectedAtempts: 0,
+      inWhiteList: false,
+      fetchWhiteList: async (supabase) => {
+        const { data: inWhiteList, error } = await supabase.rpc(
+          "is_current_user_whitelisted"
+        );
+
+        if (error) {
+          console.error(error);
+        } else {
+          set({ inWhiteList });
+        }
+      },
       resetConnectedAttempts: () => set({ connectedAtempts: 0 }),
       setAsGM: (asGM) => set({ asGM }),
       setCampaignDataLocal: async (newData, tableName, type) => {
