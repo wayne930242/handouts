@@ -36,13 +36,13 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
             <Button
               type="button"
               onClick={() => {
-                const info = {
-                  id: campaign.id,
-                  passphrase: campaign.passphrase,
-                  url: `https://handouts.wayneh.tw/campaigns/${campaign.id}`,
-                };
+                const info = `
+**id**: \`${campaign.id}\`
+**passphrase**: \`${campaign.passphrase}\`
+**url**: https://handouts.wayneh.tw/campaigns/${campaign.id}
+`;
 
-                navigator.clipboard.writeText(JSON.stringify(info, null, 2));
+                navigator.clipboard.writeText(info);
 
                 toast({
                   title: "資訊已複製到剪貼簿",
