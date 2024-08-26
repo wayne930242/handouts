@@ -3,9 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { Metadata } from "next";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://handouts.wayneh.tw";
+const defaultUrl = "https://handouts.wayneh.tw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
