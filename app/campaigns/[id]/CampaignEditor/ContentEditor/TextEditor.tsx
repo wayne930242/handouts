@@ -13,11 +13,12 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
       oldMarkdown={oldValue}
       onChange={(value) => field.onChange(value)}
       imageUploadHandler={
-        campaignId
-          ? (image: File) => {
-              return Promise.resolve("https://picsum.photos/200/300");
-            }
-          : undefined
+        // campaignId
+        //   ? (image: File) => {
+        //       return Promise.resolve("https://picsum.photos/200/300");
+        //     }
+        //   :
+        undefined
       }
     />
   );
