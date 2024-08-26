@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       {
         url: `${defaultUrl}/img/og-img.webp`,
         width: 1200,
-        height: 630,
+        height: 714,
         alt: "ShareHandouts",
       },
     ],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       {
         url: `${defaultUrl}/img/og-img.webp`,
         width: 1200,
-        height: 630,
+        height: 714,
         alt: "ShareHandouts",
       },
     ],
