@@ -21,7 +21,7 @@ export default async function ResetPassword({
       encodedRedirect(
         "error",
         "/reset-password",
-        "Password and confirm password are required",
+        "密碼和確認密碼是必填的。",
       );
     }
 
@@ -29,7 +29,7 @@ export default async function ResetPassword({
       encodedRedirect(
         "error",
         "/reset-password",
-        "Passwords do not match",
+        "密碼不相符。",
       );
     }
 
@@ -41,7 +41,7 @@ export default async function ResetPassword({
       encodedRedirect(
         "error",
         "/reset-password",
-        "Password update failed",
+        "密碼更新失敗。",
       );
     }
 
@@ -51,26 +51,26 @@ export default async function ResetPassword({
   return (
     <div className="flex-1 flex flex-col items-center justify-center w-full">
       <form className="flex flex-col w-full max-w-md p-4 gap-2 [&>input]:mb-4">
-        <h1 className="text-2xl font-medium">Reset password</h1>
+        <h1 className="text-2xl font-medium">重設密碼</h1>
         <p className="text-sm text-foreground/60">
-          Please enter your new password below.
+          請輸入新密碼。
         </p>
 
-        <Label htmlFor="password">New password</Label>
+        <Label htmlFor="password">新密碼</Label>
         <Input
           type="password"
           name="password"
           placeholder="New password"
           required
         />
-        <Label htmlFor="confirmPassword">Confirm password</Label>
+        <Label htmlFor="confirmPassword">確認密碼</Label>
         <Input
           type="password"
           name="confirmPassword"
           placeholder="Confirm password"
           required
         />
-        <SubmitButton formAction={resetPassword}>Reset password</SubmitButton>
+        <SubmitButton formAction={resetPassword}>重設密碼</SubmitButton>
         <FormMessage message={searchParams} />
       </form>
     </div>

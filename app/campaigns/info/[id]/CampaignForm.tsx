@@ -94,9 +94,9 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>戰役名稱</FormLabel>
               <FormControl>
-                <Input placeholder="Campaign name" {...field} />
+                <Input placeholder="戰役名稱" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,9 +107,9 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>戰役描述</FormLabel>
               <FormControl>
-                <Textarea placeholder="Campaign description" {...field} />
+                <Textarea placeholder="戰役描述" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,7 +120,7 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="passphrase"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="w-full">Passphrase</FormLabel>
+              <FormLabel className="w-full">通關密語</FormLabel>
               <FormControl>
                 <Input placeholder="Campaign passphrase" {...field} />
               </FormControl>
@@ -144,7 +144,7 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
             type="submit"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
           >
-            {serverData.id === "new" ? "Create" : "Save"}
+            {serverData.id === "new" ? "創建" : "儲存"}
           </Button>
         </div>
       </form>

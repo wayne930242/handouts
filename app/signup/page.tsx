@@ -16,7 +16,7 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
     const origin = headers().get("origin");
 
     if (!email || !password) {
-      return { error: "Email and password are required" };
+      return { error: "email 和密碼是必填的。" };
     }
 
     const { error } = await supabase.auth.signUp({
@@ -29,12 +29,12 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
 
     if (error) {
       console.error(error.code + " " + error.message);
-      return encodedRedirect("error", "/signup", "Error trying to sign up");
+      return encodedRedirect("error", "/signup", "註冊失敗。");
     } else {
       return encodedRedirect(
         "success",
         "/signup",
-        "Thanks for signing up! Please check your email for a verification link.",
+        "感謝註冊！請確認你的 email 並點擊驗證連結。"
       );
     }
   };
@@ -67,21 +67,21 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        Back
+        返回
       </Link>
 
       <form className="flex flex-col w-full justify-center gap-2 text-foreground [&>input]:mb-6 max-w-md">
-        <h1 className="text-2xl font-medium">Sign up</h1>
+        <h1 className="text-2xl font-medium">註冊</h1>
         <p className="text-sm text text-foreground/60">
-          Already have an account?{" "}
+          已經有帳號了嗎？{" "}
           <Link className="text-blue-600 font-medium underline" href="/login">
-            Log in
+            登入
           </Link>
         </p>
         <div className="mt-8 flex flex-col gap-2 [&>input]:mb-3">
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">密碼</Label>
           <Input
             type="password"
             name="password"
@@ -89,7 +89,7 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
             required
           />
           <SubmitButton formAction={signUp} pendingText="Signing up...">
-            Sign up
+            註冊
           </SubmitButton>
         </div>
         <FormMessage message={searchParams} />

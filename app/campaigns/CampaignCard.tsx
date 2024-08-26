@@ -38,8 +38,8 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
               onClick={() => {
                 const info = `
 **id**: \`${campaign.id}\`
-**passphrase**: \`${campaign.passphrase}\`
-**url**: https://handouts.wayneh.tw/campaigns/${campaign.id}
+**通關密語**: \`${campaign.passphrase}\`
+**戰役連結**: https://handouts.wayneh.tw/campaigns/${campaign.id}
 `;
 
                 navigator.clipboard.writeText(info);

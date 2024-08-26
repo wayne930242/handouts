@@ -51,8 +51,12 @@ export default async function CampaignPage({ params: { id } }: Props) {
   return (
     <PageLayout needsAuth>
       <CampaignForm serverData={data} />
-      <Separator />
-      <DeleteZone campaignId={id} />
+      {id !== "new" && (
+        <>
+          <Separator />
+          <DeleteZone campaignId={id} />
+        </>
+      )}
     </PageLayout>
   );
 }

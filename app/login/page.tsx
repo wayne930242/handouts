@@ -21,7 +21,7 @@ export default function Login({ searchParams }: { searchParams: Message }) {
     });
 
     if (error) {
-      return encodedRedirect("error", "/login", "Could not authenticate user");
+      return encodedRedirect("error", "/login", "使用者授權失敗。");
     }
 
     return redirect("/campaigns");
@@ -47,28 +47,28 @@ export default function Login({ searchParams }: { searchParams: Message }) {
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        Back
+        返回
       </Link>
 
       <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground [&>input]:mb-6 max-w-md p-4">
         <h1 className="text-2xl font-medium">Log in</h1>
         <p className="text-sm text-foreground/60">
-          Don't have an account?{" "}
+          還沒有帳號嗎？{" "}
           <Link className="text-blue-600 font-medium underline" href="/signup">
-            Sign up
+            註冊
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
           <div className="flex justify-between items-center">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">密碼</Label>
 
             <Link
               className="text-sm text-blue-600 underline"
               href="/forgot-password"
             >
-              Forgot Password?
+              忘記密碼？
             </Link>
           </div>
           <Input
@@ -78,7 +78,7 @@ export default function Login({ searchParams }: { searchParams: Message }) {
             required
           />
           <SubmitButton formAction={signIn} pendingText="Signing In...">
-            Log in
+            登入
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>

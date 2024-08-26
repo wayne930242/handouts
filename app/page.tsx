@@ -24,7 +24,7 @@ export default async function Index({ searchParams: { campaign_id } }: Props) {
   return (
     <PageLayout>
       <h1 className="text-2xl font-bold text-center text-muted-foreground my-12">
-        Welcome to ShareHandouts!
+        歡迎使用 ShareHandouts！
       </h1>
 
       <div className="flex flex-col items-center">
