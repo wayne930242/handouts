@@ -114,6 +114,8 @@ export type SetCampaignData = (
 
 export interface CampaignStore {
   campaignData: Campaign | null;
+  asGM: boolean;
+  setAsGM: (asGM: boolean) => void;
   setCampaignDataLocal: (
     newData: SetCampaignPayload,
     tableName: CampaignSubTable,

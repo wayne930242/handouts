@@ -13,10 +13,12 @@ const useCampaignStore = create(
   persist<CampaignStore>(
     (set, get) => ({
       campaignData: null,
+      asGM: false,
       loading: false,
       error: null,
       connected: false,
       connectedAtempts: 0,
+      setAsGM: (asGM) => set({ asGM }),
       setCampaignDataLocal: async (newData, tableName, type) => {
         if (Array.isArray(newData)) {
           for (const item of newData) {
@@ -174,15 +176,7 @@ const useCampaignStore = create(
                       type,
                       owner_id,
                       note,
-                      order_num,
-                      images:handout_images (
-                        id,
-                        handout_id,
-                        image_url,
-                        display_order,
-                        caption,
-                        type
-                      )
+                      order_num
                     )
                   )
                 )
@@ -199,10 +193,6 @@ const useCampaignStore = create(
             })
             .order("order_num", {
               referencedTable: "chapters.sections.handouts",
-              ascending: true,
-            })
-            .order("display_order", {
-              referencedTable: "chapters.sections.handouts.handout_images",
               ascending: true,
             })
             .single();

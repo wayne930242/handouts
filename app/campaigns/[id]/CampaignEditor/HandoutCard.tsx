@@ -66,7 +66,7 @@ export type ContentFieldProps = ControllerRenderProps<
 >;
 
 export default function HandoutCard({ handout, chapterId }: Props) {
-  const { setCampaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore();
   const supabase = createClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -230,7 +230,11 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   <FormItem>
                     <FormLabel>編輯文字</FormLabel>
                     <FormControl>
-                      <TextEditor field={field} oldValue={handout.content} />
+                      <TextEditor
+                        field={field}
+                        oldValue={handout.content}
+                        campaignId={campaignData?.id}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

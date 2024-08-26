@@ -3,6 +3,8 @@ import { CampaignBase } from "@/types/interfaces";
 
 import CampaignForm from "./CampaignForm";
 import PageLayout from "@/components/layouts/PageLayout";
+import { Separator } from "@/components/ui/separator";
+import DeleteZone from "./DeleteZone";
 
 interface Props {
   params: {
@@ -49,6 +51,8 @@ export default async function CampaignPage({ params: { id } }: Props) {
   return (
     <PageLayout needsAuth>
       <CampaignForm serverData={data} />
+      <Separator />
+      <DeleteZone campaignId={id} />
     </PageLayout>
   );
 }

@@ -10,7 +10,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
  * const supabase = createClient();
  * const imageManager = new ImageManager(supabase, "another-bucket-name");
  */
-export default class ImageManager {
+class ImageManager {
   private supabase: SupabaseClient;
   private bucketName: string;
 
