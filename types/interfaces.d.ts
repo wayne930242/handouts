@@ -135,6 +135,7 @@ export interface CampaignStore {
   loading: boolean;
   connected: boolean;
   connectedAtempts: number;
+  resetConnectedAttempts: () => void;
   error: Error | null;
   fetchCampaignData: (supabase: SupabaseClient, campaignId: string) => void;
   handleRealtimeUpdate: <T extends { id: string }>(

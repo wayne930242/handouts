@@ -18,6 +18,7 @@ const useCampaignStore = create(
       error: null,
       connected: false,
       connectedAtempts: 0,
+      resetConnectedAttempts: () => set({ connectedAtempts: 0 }),
       setAsGM: (asGM) => set({ asGM }),
       setCampaignDataLocal: async (newData, tableName, type) => {
         if (Array.isArray(newData)) {

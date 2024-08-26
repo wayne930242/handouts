@@ -17,7 +17,8 @@ export default function Toolbar({
   isAuthorized: boolean;
 }) {
   const { editingCampaign, setEditingCampaign } = useAppStore();
-  const { connected, setupRealtimeSubscription } = useCampaignStore();
+  const { connected, setupRealtimeSubscription, resetConnectedAttempts } =
+    useCampaignStore();
 
   const { loading } = useCampaignStore();
 
@@ -44,6 +45,7 @@ export default function Toolbar({
             variant="outline"
             className="text-destructive border-transparent animate-pulse cursor-pointer"
             onClick={() => {
+              resetConnectedAttempts();
               setupRealtimeSubscription(supabase, campaignId);
             }}
           >
