@@ -22,8 +22,8 @@ export default function LinkViewer({ content }: Props) {
 
   useEffect(() => {
     const fetchMetadata = async () => {
-      setLoading(true);
       if (!content) return;
+      setLoading(true);
 
       try {
         const data: Metadata | undefined = await fetchUrlMetadata(content);
