@@ -48,7 +48,7 @@ export default function Toolbar({
           </Button>
         </Link>
       </div>
-      <div className="flex gap-1.5 items-center">
+      <div className="flex gap-2 items-center">
         <PacmanLoader color="#bbb" loading={loading} size={12} />
         {!connected && (
           <Badge
@@ -69,6 +69,7 @@ export default function Toolbar({
           disabled
         >
           <HardDriveUpload className="h-4 w-4" />
+          <span className="sr-only">{t("import")}</span>
         </Button>
         <Button
           size="sm"
@@ -97,6 +98,7 @@ export default function Toolbar({
           }}
         >
           <FileDown className="h-4 w-4" />
+          <span className="sr-only">{t("export")}</span>
         </Button>
         <Button
           size="sm"
