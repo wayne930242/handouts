@@ -175,6 +175,8 @@
     "backToList": "Back to List",
     "closeEdit": "Close Edit",
     "disconnected": "Disconnected",
-    "edit": "Edit"
+    "edit": "Edit",
+    "import": "Import",
+    "export": "Export"
   }
 }

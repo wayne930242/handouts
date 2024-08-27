@@ -2,7 +2,14 @@
 import { PacmanLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
-import { ArrowLeft, Eye, Pen, Unplug } from "lucide-react";
+import {
+  ArrowLeft,
+  Eye,
+  FileDown,
+  HardDriveUpload,
+  Pen,
+  Unplug,
+} from "lucide-react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
@@ -18,8 +25,12 @@ export default function Toolbar({
 }) {
   const t = useTranslations("Toolbar");
   const { editingCampaign, setEditingCampaign } = useAppStore();
-  const { connected, setupRealtimeSubscription, resetConnectedAttempts } =
-    useCampaignStore();
+  const {
+    campaignData,
+    connected,
+    setupRealtimeSubscription,
+    resetConnectedAttempts,
+  } = useCampaignStore();
   const { loading } = useCampaignStore();
   const supabase = createClient();
 
@@ -52,9 +63,45 @@ export default function Toolbar({
           </Badge>
         )}
         <Button
+          variant="destructive"
           size="sm"
           className="flex gap-2 items-center"
-          variant={editingCampaign ? "outline" : "secondary"}
+          disabled
+        >
+          <HardDriveUpload className="h-4 w-4" />
+        </Button>
+        <Button
+          size="sm"
+          className="flex gap-2 items-center"
+          variant="secondary"
+          onClick={() => {
+            // Convert campaignData to JSON string
+            const jsonString = JSON.stringify(campaignData, null, 2);
+
+            // Create a Blob with the JSON data
+            const blob = new Blob([jsonString], { type: "application/json" });
+
+            // Create a temporary URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary anchor element and trigger the download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `campaign-${campaignData?.id}.json`;
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }}
+        >
+          <FileDown className="h-4 w-4" />
+        </Button>
+        <Button
+          size="sm"
+          className="flex gap-2 items-center"
+          variant={editingCampaign ? "outline" : "default"}
           onClick={() => setEditingCampaign(!editingCampaign)}
         >
           {editingCampaign ? (
