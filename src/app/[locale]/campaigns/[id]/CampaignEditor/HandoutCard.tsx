@@ -118,7 +118,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     <Card className="relative">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Collapsible>
+          <Collapsible disabled={form.formState.isDirty}>
             <div className="flex justify-between items-start w-full px-2">
               <CardHeader className="mt-2 flex flex-col gap-y-2 items-stretch grow">
                 <FormField
