@@ -85,7 +85,7 @@ export default function LinkViewer({ content }: Props) {
               </div>
             )}
             {metadata?.image && (
-              <div className="relative h-24">
+              <div className="relative aspect-video">
                 <Image
                   className="object-cover"
                   src={metadata?.image}

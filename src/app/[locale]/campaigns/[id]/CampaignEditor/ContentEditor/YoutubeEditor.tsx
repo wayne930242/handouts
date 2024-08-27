@@ -33,6 +33,7 @@ export default function YoutubeEditor({ field }: Props) {
         }}
       />
       <YouTube
+        className="aspect-video"
         videoId={field.value}
         onReady={onPlayerReady}
         opts={{
