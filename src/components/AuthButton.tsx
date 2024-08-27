@@ -3,6 +3,7 @@ import { Link } from "@/navigation";
 import { redirect } from "@/navigation";
 import { Button } from "./ui/button";
 import { getTranslations } from "next-intl/server";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -23,10 +24,13 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      {t("welcome")}
       <form action={signOut}>
         <Button variant="outline">{t("logout")}</Button>
       </form>
+      <Avatar>
+        <AvatarImage src="/img/default-avatar.webp" />
+        <AvatarFallback>GM</AvatarFallback>
+      </Avatar>
     </div>
   ) : (
     <div className="flex gap-2">
