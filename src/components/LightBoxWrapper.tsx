@@ -21,7 +21,10 @@ export default function LightBoxWrapper({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="cursor-zoom-in w-full">{children}</div>
+        <div className="relative w-full h-96 overflow-hidden cursor-zoom-in">
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b h-24 from-transparent to-card pointer-events-none" />
+          <div className="w-full h-full overflow-y-hidden">{children}</div>
+        </div>
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-2 w-full p-4 max-w-4xl max-h-screen overflow-y-auto">
         <DialogHeader>
