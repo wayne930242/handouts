@@ -1,4 +1,65 @@
 {
+  "CampaignCard": {
+    "campaignId": "id",
+    "campaignLink": "Campaign Link",
+    "copyInfo": "Copy Info",
+    "edit": "Edit",
+    "editView": "Edit / View",
+    "infoDescription": "Share the information with players to start the game.",
+    "infoTitle": "Information copied to clipboard",
+    "passphrase": "Passphrase",
+    "view": "View"
+  },
+  "CampaignDeleteZone": {
+    "campaignIdLabel": "Campaign ID:",
+    "deleteButton": "Delete Campaign",
+    "description": "After deleting the campaign, all handouts, images, etc. will be deleted and cannot be recovered.",
+    "errorDescription": "An error occurred while deleting the campaign. Please try again later.",
+    "errorTitle": "Deletion Failed",
+    "formValidation": {
+      "required": "Please enter the campaign ID"
+    },
+    "idMismatchError": "The entered ID does not match",
+    "inputLabel": "Enter the campaign ID to confirm deletion",
+    "inputPlaceholder": "Campaign ID",
+    "successDescription": "Your campaign has been successfully deleted. You now have room to create more campaigns.",
+    "successTitle": "Deletion Successful",
+    "title": "Delete Campaign"
+  },
+  "CampaignEditor": {
+    "addChapter": "Add Chapter",
+    "chapterButton": "Chapter"
+  },
+  "CampaignForm": {
+    "campaignDescription": "Campaign Description",
+    "campaignDescriptionPlaceholder": "Enter campaign description",
+    "campaignName": "Campaign Name",
+    "campaignNamePlaceholder": "Enter campaign name",
+    "cancel": "Cancel",
+    "create": "Create",
+    "error": "Error",
+    "formTitle": {
+      "edit": "Edit Campaign",
+      "new": "Create New Campaign"
+    },
+    "passphrase": "Passphrase",
+    "passphrasePlaceholder": "Enter campaign passphrase",
+    "save": "Save"
+  },
+  "CampaignlistToolbar": {
+    "joinCampaign": "Join Campaign",
+    "newCampaign": "New Campaign"
+  },
+  "CampaignPage": {
+    "alert": "During the testing period, each user can only create 1 campaign. If you want to create more campaigns at this time, please contact the author.",
+    "createCampaign": "You can create a new campaign.",
+    "noCampaigns": "No campaigns found"
+  },
+  "ChapterCard": {
+    "addSection": "Section",
+    "chapterTitle": "Chapter Title",
+    "titlePlaceholder": "Title"
+  },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",
     "backButton": "Back",
@@ -9,6 +70,24 @@
     "login": "Log in",
     "submitButton": "Reset Password",
     "title": "Reset Password"
+  },
+  "HandoutCard": {
+    "cancel": "Cancel",
+    "editImage": "Edit Image",
+    "editLink": "Edit Link",
+    "editText": "Edit Text",
+    "editYoutube": "Edit Youtube",
+    "isPublic": "Make public to players",
+    "isPublicDescription": "Allow players to see this handout.",
+    "save": "Save",
+    "title": "Title",
+    "titlePlaceholder": "Title",
+    "type": "Type",
+    "typeLink": "Link",
+    "typePlaceholder": "Select handout type",
+    "typeText": "Text",
+    "typeYoutube": "Youtube",
+    "unsavedChanges": "There are unsaved changes."
   },
   "Index": {
     "campaignId": "Campaign ID",
@@ -43,6 +122,10 @@
     "subtitle": "Don't have an account?",
     "title": "Log in"
   },
+  "PassphraseDialog": {
+    "description": "Please enter the Campaign ID and passphrase provided by your GM.",
+    "title": "Passphrase"
+  },
   "PhraseForm": {
     "campaignId": "Campaign ID",
     "cancel": "Cancel",
@@ -66,6 +149,11 @@
     "description": "This page is only visible for logged in users.",
     "title": "Secret page"
   },
+  "SectionCard": {
+    "handoutButton": "Handouts",
+    "sectionTitle": "Section Title",
+    "titlePlaceholder": "Title"
+  },
   "Signup": {
     "alreadyHaveAccount": "Already have an account?",
     "backToHome": "Back",
@@ -78,5 +166,15 @@
     "signingUp": "Signing up...",
     "signUp": "Sign Up",
     "title": "Sign Up"
+  },
+  "TextEditor": {
+    "uploadFailed": "Upload Failed",
+    "uploadFailedDescription": "Image upload failed. Please try again later."
+  },
+  "Toolbar": {
+    "backToList": "Back to List",
+    "closeEdit": "Close Edit",
+    "disconnected": "Disconnected",
+    "edit": "Edit"
   }
 }

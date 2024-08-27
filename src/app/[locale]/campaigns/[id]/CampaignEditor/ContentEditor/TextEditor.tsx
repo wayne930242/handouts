@@ -1,5 +1,5 @@
 "use client";
-
+import { useTranslations } from "next-intl";
 import { toast } from "@/components/ui/use-toast";
 import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/MyMDXEditor";
@@ -16,6 +16,7 @@ const options = {
 };
 
 export default function TextEditor({ field, oldValue, campaignId }: Props) {
+  const t = useTranslations("TextEditor");
   const supabase = createClient();
   const imageManager = new ImageManager(supabase);
 
@@ -36,8 +37,8 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
                 return url;
               } catch (error) {
                 toast({
-                  title: "上傳失敗",
-                  description: "圖片上傳失敗，請稍後再試。",
+                  title: t("uploadFailed"),
+                  description: t("uploadFailedDescription"),
                   variant: "destructive",
                 });
                 throw error;

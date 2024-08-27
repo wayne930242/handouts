@@ -1,5 +1,5 @@
 "use client";
-
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +15,8 @@ import { Pencil } from "lucide-react";
 import { Link } from "@/navigation";
 
 export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
+  const t = useTranslations("CampaignCard");
+
   return (
     <Card>
       <CardHeader className="cursor-pointer hover:bg-accent">
@@ -29,7 +31,6 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
       <CardContent>
         <CardDescription>{campaign.description}</CardDescription>
       </CardContent>
-
       <CardFooter>
         <div className="flex justify-between items-center gap-2 w-full">
           <div className="flex gap-2 items-center">
@@ -37,24 +38,22 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
               type="button"
               onClick={() => {
                 const info = `
-**id**: \`${campaign.id}\`
-**通關密語**: \`${campaign.passphrase}\`
-**戰役連結**: https://handouts.wayneh.tw/campaigns/${campaign.id}
+**${t("campaignId")}**: \`${campaign.id}\`
+**${t("passphrase")}**: \`${campaign.passphrase}\`
+**${t("campaignLink")}**: https://handouts.wayneh.tw/campaigns/${campaign.id}
 `;
-
                 navigator.clipboard.writeText(info);
-
                 toast({
-                  title: "資訊已複製到剪貼簿",
-                  description: `將資訊分享給玩家，就可以開始遊戲了。`,
+                  title: t("infoTitle"),
+                  description: t("infoDescription"),
                 });
               }}
             >
-              複製資訊
+              {t("copyInfo")}
             </Button>
           </div>
           <Link href={`/campaigns/${campaign.id}`}>
-            <Button variant="secondary">編輯 / 檢視</Button>
+            <Button variant="secondary">{t("editView")}</Button>
           </Link>
         </div>
       </CardFooter>

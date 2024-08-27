@@ -4,7 +4,7 @@ import { CampaignBase } from "@/types/interfaces";
 import CampaignForm from "./CampaignForm";
 import PageLayout from "@/components/layouts/PageLayout";
 import { Separator } from "@/components/ui/separator";
-import DeleteZone from "./DeleteZone";
+import CampaignDeleteZone from "./DeleteZone";
 
 interface Props {
   params: {
@@ -54,7 +54,7 @@ export default async function CampaignPage({ params: { id } }: Props) {
       {id !== "new" && (
         <>
           <Separator />
-          <DeleteZone campaignId={id} />
+          <CampaignDeleteZone campaignId={id} />
         </>
       )}
     </PageLayout>

@@ -1,8 +1,5 @@
 "use client";
 
-import { useRouter } from "@/navigation";
-import { z } from "zod";
-
 import {
   Dialog,
   DialogContent,
@@ -10,22 +7,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useAppStore from "@/lib/store/useAppStore";
-
 import PassphraseForm from "./PassphraseForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import { useTranslations } from "next-intl";
 
 export default function PassphraseDialog() {
   const { passphraseDialog, setPassphraseDialog } = useAppStore();
+  const t = useTranslations("PassphraseDialog");
 
   return (
     <Dialog open={passphraseDialog} onOpenChange={setPassphraseDialog}>
       <DialogContent className="flex flex-col gap-2 w-full max-w-md p-4">
         <DialogHeader>
-          <DialogTitle>通關密語</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          請輸入 GM 提供給你的戰役 ID 與通關密語。
-        </DialogDescription>
+        <DialogDescription>{t("description")}</DialogDescription>
         <PassphraseForm
           afterSubmit={() => setPassphraseDialog(false)}
           afterCancel={() => setPassphraseDialog(false)}

@@ -1,4 +1,65 @@
 {
+  "CampaignCard": {
+    "campaignId": "id",
+    "campaignLink": "戰役連結",
+    "copyInfo": "複製資訊",
+    "edit": "編輯",
+    "editView": "編輯 / 檢視",
+    "infoDescription": "將資訊分享給玩家，就可以開始遊戲了。",
+    "infoTitle": "資訊已複製到剪貼簿",
+    "passphrase": "通關密語",
+    "view": "檢視"
+  },
+  "CampaignDeleteZone": {
+    "campaignIdLabel": "戰役 ID：",
+    "deleteButton": "刪除戰役",
+    "description": "刪除戰役後，所有的手邊資料、圖片等都將會被刪除，且無法復原。",
+    "errorDescription": "刪除戰役時發生錯誤，請稍後再試。",
+    "errorTitle": "刪除失敗",
+    "formValidation": {
+      "required": "請輸入戰役 ID"
+    },
+    "idMismatchError": "輸入的 ID 不匹配",
+    "inputLabel": "輸入戰役 ID 以確認刪除",
+    "inputPlaceholder": "戰役 ID",
+    "successDescription": "你的戰役已經成功刪除。你現在有額度可以創建更多戰役。",
+    "successTitle": "刪除成功",
+    "title": "刪除戰役"
+  },
+  "CampaignEditor": {
+    "addChapter": "章節",
+    "chapterButton": "章節"
+  },
+  "CampaignForm": {
+    "campaignDescription": "戰役描述",
+    "campaignDescriptionPlaceholder": "戰役描述",
+    "campaignName": "戰役名稱",
+    "campaignNamePlaceholder": "戰役名稱",
+    "cancel": "取消",
+    "create": "創建",
+    "error": "錯誤",
+    "formTitle": {
+      "edit": "編輯戰役",
+      "new": "創建新戰役"
+    },
+    "passphrase": "通關密語",
+    "passphrasePlaceholder": "通關密語",
+    "save": "儲存"
+  },
+  "CampaignlistToolbar": {
+    "joinCampaign": "加入戰役",
+    "newCampaign": "新戰役"
+  },
+  "CampaignPage": {
+    "alert": "測試期間，每個使用者只能創建 1 個戰役。如果你在此時想創建更多戰役，請聯絡作者。",
+    "createCampaign": "您可以創建一個新的戰役。",
+    "noCampaigns": "沒有找到戰役"
+  },
+  "ChapterCard": {
+    "addSection": "段落",
+    "chapterTitle": "章節標題",
+    "titlePlaceholder": "標題"
+  },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
     "backButton": "返回",
@@ -9,6 +70,24 @@
     "login": "登入",
     "submitButton": "重設密碼",
     "title": "重設密碼"
+  },
+  "HandoutCard": {
+    "cancel": "取消",
+    "editImage": "編輯圖片",
+    "editLink": "編輯連結",
+    "editText": "編輯文字",
+    "editYoutube": "編輯 Youtube",
+    "isPublic": "公開給玩家",
+    "isPublicDescription": "讓玩家可以看到這篇手邊資料。",
+    "save": "儲存",
+    "title": "標題",
+    "titlePlaceholder": "標題",
+    "type": "類型",
+    "typeLink": "連結",
+    "typePlaceholder": "選擇手邊資料類型",
+    "typeText": "文字",
+    "typeYoutube": "Youtube",
+    "unsavedChanges": "有變更尚未儲存。"
   },
   "Index": {
     "campaignId": "戰役 ID",
@@ -43,6 +122,10 @@
     "subtitle": "還沒有帳號嗎？",
     "title": "登入"
   },
+  "PassphraseDialog": {
+    "description": "請輸入 GM 提供給你的戰役 ID 與通關密語。",
+    "title": "通關密語"
+  },
   "PhraseForm": {
     "campaignId": "戰役 ID",
     "cancel": "取消",
@@ -66,6 +149,11 @@
     "description": "此頁面僅對已登入的用戶可見。",
     "title": "秘密頁面"
   },
+  "SectionCard": {
+    "handoutButton": "手邊資料",
+    "sectionTitle": "段落標題",
+    "titlePlaceholder": "標題"
+  },
   "Signup": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
     "backToHome": "返回",
@@ -78,5 +166,15 @@
     "signingUp": "註冊中...",
     "signUp": "註冊",
     "title": "註冊"
+  },
+  "TextEditor": {
+    "uploadFailed": "上傳失敗",
+    "uploadFailedDescription": "圖片上傳失敗，請稍後再試。"
+  },
+  "Toolbar": {
+    "backToList": "回列表",
+    "closeEdit": "關閉編輯",
+    "disconnected": "已斷線",
+    "edit": "編輯"
   }
 }

@@ -1,11 +1,13 @@
 "use client";
-
 import { Link } from "@/navigation";
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
+import { useTranslations } from "next-intl";
 
-export default function Toolbar() {
+export default function CampaignlistToolbar() {
   const { setPassphraseDialog } = useAppStore();
+  const t = useTranslations("CampaignlistToolbar");
+
   return (
     <div className="flex justify-between items-center w-full px-2">
       <div className="grow-1">
@@ -15,12 +17,12 @@ export default function Toolbar() {
             setPassphraseDialog(true);
           }}
         >
-          加入戰役
+          {t("joinCampaign")}
         </Button>
       </div>
       <div>
         <Link href="/campaigns/info/new">
-          <Button>新戰役</Button>
+          <Button>{t("newCampaign")}</Button>
         </Link>
       </div>
     </div>

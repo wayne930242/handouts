@@ -43,6 +43,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { createClient } from "@/lib/supabase/client";
 import { Handout } from "@/types/interfaces";
+import { useTranslations } from "next-intl";
 
 const ImageEditor = dynamic(() => import("./ContentEditor/ImageEditor"), {
   ssr: false,
@@ -73,6 +74,7 @@ export type ContentFieldProps = ControllerRenderProps<
 export default function HandoutCard({ handout, chapterId }: Props) {
   const { setCampaignData, campaignData } = useCampaignStore();
   const supabase = createClient();
+  const t = useTranslations("HandoutCard");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -124,9 +126,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>標題</FormLabel>
+                      <FormLabel>{t("title")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="標題" {...field} />
+                        <Input placeholder={t("titlePlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -140,7 +142,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                       name="type"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>類型</FormLabel>
+                          <FormLabel>{t("type")}</FormLabel>
                           <FormControl>
                             <Select
                               onValueChange={(value) => {
@@ -149,13 +151,21 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                               defaultValue={handout.type}
                             >
                               <SelectTrigger className="w-full">
-                                <SelectValue placeholder="選擇手邊資料類型" />
+                                <SelectValue
+                                  placeholder={t("typePlaceholder")}
+                                />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="text">文字</SelectItem>
+                                <SelectItem value="text">
+                                  {t("typeText")}
+                                </SelectItem>
                                 {/* <SelectItem value="image">圖片</SelectItem> */}
-                                <SelectItem value="link">連結</SelectItem>
-                                <SelectItem value="youtube">Youtube</SelectItem>
+                                <SelectItem value="link">
+                                  {t("typeLink")}
+                                </SelectItem>
+                                <SelectItem value="youtube">
+                                  {t("typeYoutube")}
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -175,9 +185,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                             />
                           </FormControl>
                           <div className="space-y-1, leading-none">
-                            <FormLabel>公開給玩家</FormLabel>
+                            <FormLabel>{t("isPublic")}</FormLabel>
                             <FormDescription className="hidden sm:block">
-                              讓玩家可以看到這篇手邊資料。
+                              {t("isPublicDescription")}
                             </FormDescription>
                           </div>
                         </FormItem>
@@ -201,7 +211,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>編輯圖片</FormLabel>
+                        <FormLabel>{t("editImage")} </FormLabel>
                         <FormControl>
                           <ImageEditor field={field} />
                         </FormControl>
@@ -216,7 +226,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>編輯連結</FormLabel>
+                        <FormLabel>{t("editLink")}</FormLabel>
                         <FormControl>
                           <LinkEditor field={field} />
                         </FormControl>
@@ -231,7 +241,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>編輯 Youtube 連結</FormLabel>
+                        <FormLabel>{t("editYoutube")}</FormLabel>
                         <FormControl>
                           <YoutubeEditor field={field} />
                         </FormControl>
@@ -246,7 +256,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     name="content"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>編輯文字</FormLabel>
+                        <FormLabel>{t("editText")}</FormLabel>
                         <FormControl>
                           <TextEditor
                             field={field}
@@ -281,7 +291,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                 <div className="flex justify-end mt-4">
                   {form.formState.isDirty && (
                     <div className="text-sm text-destructive">
-                      有變更尚未儲存。
+                      {t("unsavedChanges")}
                     </div>
                   )}
                 </div>
@@ -296,9 +306,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     form.reset();
                   }}
                 >
-                  取消
+                  {t("cancel")}
                 </Button>
-                <Button type="submit">儲存</Button>
+                <Button type="submit">{t("save")}</Button>
               </CardFooter>
             </CollapsibleContent>
           </Collapsible>

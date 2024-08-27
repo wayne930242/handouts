@@ -1,5 +1,4 @@
 "use client";
-
 import { z } from "zod";
 import {
   Card,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -27,12 +25,18 @@ import { useRouter } from "@/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
+import { useTranslations } from "next-intl";
 
 const FormSchema = z.object({
-  campaign_id: z.string().min(1, "請輸入戰役 ID"),
+  campaign_id: z.string().min(1, "formValidation.required"),
 });
 
-export default function DeleteZone({ campaignId }: { campaignId: string }) {
+export default function CampaignDeleteZone({
+  campaignId,
+}: {
+  campaignId: string;
+}) {
+  const t = useTranslations("CampaignDeleteZone");
   const supabase = createClient();
   const imageManager = new ImageManager(supabase);
   const router = useRouter();
@@ -51,16 +55,15 @@ export default function DeleteZone({ campaignId }: { campaignId: string }) {
         setLoading(true);
         await imageManager.deleteImageByCampaignId(data.campaign_id);
         await supabase.from("campaigns").delete().eq("id", data.campaign_id);
-
         toast({
-          title: "刪除成功",
-          description: "你的戰役已經成功刪除。你現在有額度可以創建更多戰役。",
+          title: t("successTitle"),
+          description: t("successDescription"),
         });
         router.push("/campaigns");
       } catch (error) {
         toast({
-          title: "刪除失敗",
-          description: "刪除戰役時發生錯誤，請稍後再試。",
+          title: t("errorTitle"),
+          description: t("errorDescription"),
           variant: "destructive",
         });
       }
@@ -68,7 +71,7 @@ export default function DeleteZone({ campaignId }: { campaignId: string }) {
     } else {
       form.setError("campaign_id", {
         type: "manual",
-        message: "輸入的 ID 不匹配",
+        message: t("idMismatchError"),
       });
     }
   }
@@ -76,14 +79,12 @@ export default function DeleteZone({ campaignId }: { campaignId: string }) {
   return (
     <Card className="w-full border border-destructive">
       <CardHeader>
-        <CardTitle className="text-destructive">刪除戰役</CardTitle>
+        <CardTitle className="text-destructive">{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription>
-          刪除戰役後，所有的手邊資料、圖片等都將會被刪除，且無法復原。
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
         <div className="border border-input p-4 my-4">
-          戰役 ID：{campaignId}
+          {t("campaignIdLabel")} {campaignId}
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -92,16 +93,16 @@ export default function DeleteZone({ campaignId }: { campaignId: string }) {
               name="campaign_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>輸入戰役 ID 以確認刪除</FormLabel>
+                  <FormLabel>{t("inputLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="戰役 ID" {...field} />
+                    <Input placeholder={t("inputPlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" variant="destructive">
-              刪除戰役
+              {t("deleteButton")}
             </Button>
           </form>
         </Form>

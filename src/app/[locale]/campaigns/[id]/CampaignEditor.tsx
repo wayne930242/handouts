@@ -1,13 +1,11 @@
 "use client";
-
 import { Plus } from "lucide-react";
-
 import { Chapter } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
-
 import { Button } from "@/components/ui/button";
 import ChaptersArea from "./CampaignEditor/ChaptersArea";
+import { useTranslations } from "next-intl";
 
 const genEmptyChapter = (
   campaignId: string,
@@ -20,10 +18,9 @@ const genEmptyChapter = (
 });
 
 export default function CampaignEditor() {
+  const t = useTranslations("CampaignEditor");
   const supabase = createClient();
-
   const { campaignData, setCampaignData } = useCampaignStore();
-
   const chapters = campaignData?.chapters ?? [];
 
   return (
@@ -39,11 +36,10 @@ export default function CampaignEditor() {
                 campaignData?.id as string,
                 (campaignData?.chapters?.length ?? 0) + 1
               );
-
               setCampaignData(newChapter, supabase, "chapters", "INSERT");
             }}
           >
-            <p>章節</p>
+            <p>{t("chapterButton")}</p>
             <Plus className="h-4 w-4" />
           </Button>
         </div>

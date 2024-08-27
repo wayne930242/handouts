@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Handout, Section } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
@@ -33,6 +34,7 @@ const emptyHandout = (
 });
 
 export default function SectionCard({ section }: Props) {
+  const t = useTranslations("SectionCard");
   const supabase = createClient();
   const session = useSession();
   const { setCampaignData, campaignData } = useCampaignStore();
@@ -43,10 +45,12 @@ export default function SectionCard({ section }: Props) {
         <div className="flex gap-2 flex-col grow">
           <div className="flex justify-between items-center gap-x-2 pl-2 pr-8">
             <div className="grow grid w-full items-center gap-1.5">
-              <Label htmlFor={"section-title-" + section.id}>段落標題</Label>
+              <Label htmlFor={"section-title-" + section.id}>
+                {t("sectionTitle")}
+              </Label>
               <Input
                 id={"section-title-" + section.id}
-                placeholder="標題"
+                placeholder={t("titlePlaceholder")}
                 value={section.title}
                 onChange={(e) => {
                   setCampaignData(
@@ -89,7 +93,7 @@ export default function SectionCard({ section }: Props) {
                 setCampaignData(newHandout, supabase, "handouts", "INSERT");
               }}
             >
-              <p>手邊資料</p>
+              <p>{t("handoutButton")}</p>
               <Plus className="h-4 w-4" />
             </Button>
           </div>

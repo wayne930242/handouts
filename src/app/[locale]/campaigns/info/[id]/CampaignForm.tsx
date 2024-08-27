@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 import {
   Form,
@@ -27,9 +28,13 @@ const FormSchema = z.object({
   passphrase: z.string().optional(),
 });
 
-export default function CampaignForm({ serverData }: { serverData: CampaignBase }) {
+export default function CampaignForm({
+  serverData,
+}: {
+  serverData: CampaignBase;
+}) {
+  const t = useTranslations("CampaignForm");
   const supabase = createClient();
-
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -74,7 +79,7 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
 
     if (errorMessage) {
       toast({
-        title: "Error",
+        title: t("error"),
         description: errorMessage,
         variant: "destructive",
       });
@@ -94,9 +99,9 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>戰役名稱</FormLabel>
+              <FormLabel>{t("campaignName")}</FormLabel>
               <FormControl>
-                <Input placeholder="戰役名稱" {...field} />
+                <Input placeholder={t("campaignNamePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,9 +112,12 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>戰役描述</FormLabel>
+              <FormLabel>{t("campaignDescription")}</FormLabel>
               <FormControl>
-                <Textarea placeholder="戰役描述" {...field} />
+                <Textarea
+                  placeholder={t("campaignDescriptionPlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,9 +128,9 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
           name="passphrase"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="w-full">通關密語</FormLabel>
+              <FormLabel className="w-full">{t("passphrase")}</FormLabel>
               <FormControl>
-                <Input placeholder="Campaign passphrase" {...field} />
+                <Input placeholder={t("passphrasePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -137,14 +145,14 @@ export default function CampaignForm({ serverData }: { serverData: CampaignBase 
               router.push("/campaigns");
             }}
           >
-            Cancel
+            {t("cancel")}
           </Button>
 
           <Button
             type="submit"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
           >
-            {serverData.id === "new" ? "創建" : "儲存"}
+            {serverData.id === "new" ? t("create") : t("save")}
           </Button>
         </div>
       </form>

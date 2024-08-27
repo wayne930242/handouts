@@ -1,5 +1,4 @@
 "use client";
-
 import { PacmanLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
@@ -8,6 +7,7 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
 import { Link } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 export default function Toolbar({
   campaignId,
@@ -16,12 +16,11 @@ export default function Toolbar({
   campaignId: string;
   isAuthorized: boolean;
 }) {
+  const t = useTranslations("Toolbar");
   const { editingCampaign, setEditingCampaign } = useAppStore();
   const { connected, setupRealtimeSubscription, resetConnectedAttempts } =
     useCampaignStore();
-
   const { loading } = useCampaignStore();
-
   const supabase = createClient();
 
   return (
@@ -34,7 +33,7 @@ export default function Toolbar({
             variant="ghost"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>回列表</span>
+            <span>{t("backToList")}</span>
           </Button>
         </Link>
       </div>
@@ -63,7 +62,7 @@ export default function Toolbar({
           ) : (
             <Pen className="h-4 w-4" />
           )}
-          {editingCampaign ? "關閉編輯" : "編輯"}
+          {editingCampaign ? t("closeEdit") : t("edit")}
         </Button>
       </div>
     </div>
