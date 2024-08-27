@@ -12,6 +12,11 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import LinkViewer from "./LinkViewer";
+import dynamic from "next/dynamic";
+
+const LightBoxWrapper = dynamic(() => import("@/components/LightBoxWrapper"), {
+  ssr: false,
+});
 
 export default function HandoutViewer({ handout }: Props) {
   const { setCampaignData } = useCampaignStore();
@@ -19,7 +24,10 @@ export default function HandoutViewer({ handout }: Props) {
   const supabase = createClient();
 
   return (
-    <div className="flex flex-col gap-y-2 w-full py-2" id={`handout-${handout.id}`}>
+    <div
+      className="flex flex-col gap-y-2 w-full py-2"
+      id={`handout-${handout.id}`}
+    >
       <div className="flex gap-2 items-center justify-between">
         <h3 className="text-lg font-bold grow">{handout.title}</h3>
         {canEdit && (
@@ -48,12 +56,14 @@ export default function HandoutViewer({ handout }: Props) {
         )}
       </div>
       {handout.type === "text" && (
-        <Markdown
-          className="prose prose-sm max-w-none"
-          remarkPlugins={[remarkGfm]}
-        >
-          {handout.content}
-        </Markdown>
+        <LightBoxWrapper>
+          <Markdown
+            className="prose prose-sm max-w-none"
+            remarkPlugins={[remarkGfm]}
+          >
+            {handout.content}
+          </Markdown>
+        </LightBoxWrapper>
       )}
       {handout.type === "youtube" && (
         <YouTube

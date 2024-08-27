@@ -76,7 +76,7 @@ export default function PassphraseForm({
               </FormItem>
             )}
           />
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button
               variant="outline"
               type="button"

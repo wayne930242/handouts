@@ -20,7 +20,7 @@ export default async function CampaignPage({
 }: Props) {
   const supabase = createClient();
 
-  const c_passphrase = getPassphrase(id);
+  const c_passphrase = await getPassphrase(id);
 
   const { data: isAuthorized, error: authError } = await supabase.rpc(
     "check_campaign_passphrase_rpc",

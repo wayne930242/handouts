@@ -6,7 +6,7 @@ interface Passphrase {
   [campaign_id: string | number]: string;
 }
 
-export function getPassphrase(campaign_id: string | number): string | null {
+export async function getPassphrase(campaign_id: string | number): Promise<string | null> {
   const c = cookies();
   const passphrasesCookie = c.get(STORAGE_KEY);
 
