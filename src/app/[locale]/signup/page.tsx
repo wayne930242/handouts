@@ -6,19 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { encodedRedirect } from "@/lib/route";
+import { getTranslations } from "next-intl/server";
 
-export default function Signup({ searchParams }: { searchParams: Message }) {
+export default async function Signup({
+  searchParams,
+}: {
+  searchParams: Message;
+}) {
+  const t = await getTranslations("Signup");
+
   const signUp = async (formData: FormData) => {
     "use server";
+    const t = await getTranslations("Signup");
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     const supabase = createClient();
     const origin = headers().get("origin");
-
     if (!email || !password) {
-      return { error: "email 和密碼是必填的。" };
+      return { error: t("emailRequired") };
     }
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -26,19 +32,13 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
         emailRedirectTo: `${origin}/auth/callback`,
       },
     });
-
     if (error) {
       console.error(error.code + " " + error.message);
-      return encodedRedirect("error", "/signup", "註冊失敗。");
+      return encodedRedirect("error", "/signup", t("registrationFailed"));
     } else {
-      return encodedRedirect(
-        "success",
-        "/signup",
-        "感謝註冊！請確認你的 email 並點擊驗證連結。"
-      );
+      return encodedRedirect("success", "/signup", t("registrationSuccess"));
     }
   };
-
   if ("message" in searchParams) {
     return (
       <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
@@ -46,7 +46,6 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
       </div>
     );
   }
-
   return (
     <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
       <Link
@@ -67,29 +66,28 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        返回
+        {t("backToHome")}
       </Link>
-
       <form className="flex flex-col w-full justify-center gap-2 text-foreground [&>input]:mb-6 max-w-md">
-        <h1 className="text-2xl font-medium">註冊</h1>
+        <h1 className="text-2xl font-medium">{t("title")}</h1>
         <p className="text-sm text text-foreground/60">
-          已經有帳號了嗎？{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link className="text-blue-600 font-medium underline" href="/login">
-            登入
+            {t("login")}
           </Link>
         </p>
         <div className="mt-8 flex flex-col gap-2 [&>input]:mb-3">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <Input name="email" placeholder="you@example.com" required />
-          <Label htmlFor="password">密碼</Label>
+          <Label htmlFor="password">{t("password")}</Label>
           <Input
             type="password"
             name="password"
             placeholder="••••••••"
             required
           />
-          <SubmitButton formAction={signUp} pendingText="Signing up...">
-            註冊
+          <SubmitButton formAction={signUp} pendingText={t("signingUp")}>
+            {t("signUp")}
           </SubmitButton>
         </div>
         <FormMessage message={searchParams} />

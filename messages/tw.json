@@ -1,30 +1,82 @@
 {
+  "ForgotPassword": {
+    "alreadyHaveAccount": "已經有帳號了嗎？",
+    "backButton": "返回",
+    "checkEmailMessage": "請查看你的電子郵件以重設密碼。",
+    "emailLabel": "電子郵件",
+    "emailPlaceholder": "你的電子郵件",
+    "heading": "重設密碼",
+    "login": "登入",
+    "submitButton": "重設密碼",
+    "title": "重設密碼"
+  },
   "Index": {
-    "welcome": "歡迎使用 Handouts！",
     "campaignId": "戰役 ID",
-    "passphrase": "通關密語"
+    "passphrase": "通關密語",
+    "welcome": "歡迎使用 Handouts！"
   },
   "LocaleLayout": {
-    "title": "Handouts - a TRPG tool by WeiHung",
     "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
     "loggedIn": "已以 {username} 的身份登入",
     "loggedOut": "您已登出。",
     "login": "登入",
     "logout": "登出",
-    "secret": "已登入用戶的秘密頁面"
-  },
-  "Login": {
-    "title": "登入",
-    "username": "用戶名",
-    "password": "密碼",
-    "submit": "登入",
-    "error": "{error, select, CredentialsSignin {無效的用戶名或密碼} other {未知錯誤}}"
+    "secret": "已登入用戶的秘密頁面",
+    "signup": "註冊",
+    "title": "Handouts - a TRPG tool by WeiHung",
+    "welcome": "歡迎"
   },
   "LocaleSwitcher": {
-    "switchLocale": "{locale, select, tw {繁中} en {英文} other {未知}}"
+    "switchLocale": "{locale, select, tw {繁中} en {EN} other {未知}}"
+  },
+  "Login": {
+    "authError": "使用者授權失敗。",
+    "backButton": "返回",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "forgotPassword": "忘記密碼？",
+    "loginButton": "登入",
+    "loginPending": "登入中...",
+    "password": "密碼",
+    "passwordPlaceholder": "••••••••",
+    "signupLink": "註冊",
+    "subtitle": "還沒有帳號嗎？",
+    "title": "登入"
+  },
+  "PhraseForm": {
+    "campaignId": "戰役 ID",
+    "cancel": "取消",
+    "passphrase": "通關密語",
+    "pleaseEnterCampaignId": "請輸入戰役 ID",
+    "pleaseEnterPassphrase": "請輸入通關密語",
+    "submit": "確定"
+  },
+  "ResetPassword": {
+    "confirmPassword": "確認密碼",
+    "description": "請輸入新密碼。",
+    "newPassword": "新密碼",
+    "passwordMismatch": "密碼不相符。",
+    "passwordRequired": "密碼和確認密碼是必填的。",
+    "resetButton": "重設密碼",
+    "title": "重設密碼",
+    "updateFailed": "密碼更新失敗。",
+    "updateSuccess": "密碼已更新"
   },
   "Secret": {
-    "title": "秘密頁面",
-    "description": "此頁面僅對已登入的用戶可見。"
+    "description": "此頁面僅對已登入的用戶可見。",
+    "title": "秘密頁面"
+  },
+  "Signup": {
+    "alreadyHaveAccount": "已經有帳號了嗎？",
+    "backToHome": "返回",
+    "email": "Email",
+    "emailRequired": "email 和密碼是必填的。",
+    "login": "登入",
+    "password": "密碼",
+    "registrationFailed": "註冊失敗。",
+    "registrationSuccess": "感謝註冊！請確認你的 email 並點擊驗證連結。",
+    "signingUp": "註冊中...",
+    "signUp": "註冊",
+    "title": "註冊"
   }
 }

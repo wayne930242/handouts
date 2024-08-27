@@ -17,6 +17,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { updatePassphrase } from "@/lib/passphraseCli";
+import { useTranslations } from "next-intl";
 
 const FormSchema = z.object({
   id: z.string().min(1),
@@ -29,6 +30,7 @@ export default function PassphraseForm({
   defaultId,
 }: Props) {
   const rounder = useRouter();
+  const t = useTranslations("PhraseForm");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,9 +55,9 @@ export default function PassphraseForm({
             name="id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>戰役 ID</FormLabel>
+                <FormLabel>{t("campaignId")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="請輸入戰役 ID" {...field} />
+                  <Input placeholder={t("pleaseEnterCampaignId")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -66,9 +68,9 @@ export default function PassphraseForm({
             name="passphrase"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>通關密語</FormLabel>
+                <FormLabel>{t("passphrase")} </FormLabel>
                 <FormControl>
-                  <Input placeholder="請輸入通關密語" {...field} />
+                  <Input placeholder={t("pleaseEnterPassphrase")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,9 +85,9 @@ export default function PassphraseForm({
                 afterCancel?.();
               }}
             >
-              取消
+              {t("cancel")}
             </Button>
-            <Button type="submit">確定</Button>
+            <Button type="submit">{t("submit")}</Button>
           </DialogFooter>
         </form>
       </Form>

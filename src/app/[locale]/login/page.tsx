@@ -6,24 +6,28 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { encodedRedirect } from "@/lib/route";
+import { getTranslations } from "next-intl/server";
 
-export default function Login({ searchParams }: { searchParams: Message }) {
+export default async function Login({
+  searchParams,
+}: {
+  searchParams: Message;
+}) {
+  const t = await getTranslations("Login");
+
   const signIn = async (formData: FormData) => {
     "use server";
-
+    const t = await getTranslations("Login");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();
-
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
     if (error) {
-      return encodedRedirect("error", "/login", "使用者授權失敗。");
+      return encodedRedirect("error", "/login", t("authError"));
     }
-
     return redirect("/campaigns");
   };
 
@@ -47,38 +51,36 @@ export default function Login({ searchParams }: { searchParams: Message }) {
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        返回
+        {t("backButton")}
       </Link>
-
       <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground [&>input]:mb-6 max-w-md p-4">
-        <h1 className="text-2xl font-medium">Log in</h1>
+        <h1 className="text-2xl font-medium">{t("title")}</h1>
         <p className="text-sm text-foreground/60">
-          還沒有帳號嗎？{" "}
+          {t("subtitle")}{" "}
           <Link className="text-blue-600 font-medium underline" href="/signup">
-            註冊
+            {t("signupLink")}
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Label htmlFor="email">{t("email")}</Label>
+          <Input name="email" placeholder={t("emailPlaceholder")} required />
           <div className="flex justify-between items-center">
-            <Label htmlFor="password">密碼</Label>
-
+            <Label htmlFor="password">{t("password")}</Label>
             <Link
               className="text-sm text-blue-600 underline"
               href="/forgot-password"
             >
-              忘記密碼？
+              {t("forgotPassword")}
             </Link>
           </div>
           <Input
             type="password"
             name="password"
-            placeholder="••••••••"
+            placeholder={t("passwordPlaceholder")}
             required
           />
-          <SubmitButton formAction={signIn} pendingText="Signing In...">
-            登入
+          <SubmitButton formAction={signIn} pendingText={t("loginPending")}>
+            {t("loginButton")}
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>

@@ -2,9 +2,12 @@ import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/navigation";
 import { redirect } from "@/navigation";
 import { Button } from "./ui/button";
+import { getTranslations } from "next-intl/server";
 
 export default async function AuthButton() {
   const supabase = createClient();
+
+  const t = await getTranslations("LocaleLayout");
 
   const {
     data: { user },
@@ -20,19 +23,19 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      歡迎
+      {t("welcome")}
       <form action={signOut}>
-        <Button variant="outline">登出</Button>
+        <Button variant="outline">{t("logout")}</Button>
       </form>
     </div>
   ) : (
     <div className="flex gap-2">
       <Link href="/login">
-        <Button size="sm">登入</Button>
+        <Button size="sm">{t("login")}</Button>
       </Link>
       <Link href="/signup">
         <Button size="sm" variant="outline">
-          註冊
+          {t("signup")}
         </Button>
       </Link>
     </div>

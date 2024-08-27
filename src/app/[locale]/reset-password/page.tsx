@@ -4,73 +4,58 @@ import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { createClient } from "@/lib/supabase/server";
 import { encodedRedirect } from "@/lib/route";
+import { getTranslations } from "next-intl/server";
 
 export default async function ResetPassword({
   searchParams,
 }: {
   searchParams: Message;
 }) {
+  const t = await getTranslations("ResetPassword");
+
   const resetPassword = async (formData: FormData) => {
     "use server";
+    const t = await getTranslations("Login");
     const supabase = createClient();
-
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
-
     if (!password || !confirmPassword) {
-      encodedRedirect(
-        "error",
-        "/reset-password",
-        "密碼和確認密碼是必填的。",
-      );
+      encodedRedirect("error", "/reset-password", t("passwordRequired"));
     }
-
     if (password !== confirmPassword) {
-      encodedRedirect(
-        "error",
-        "/reset-password",
-        "密碼不相符。",
-      );
+      encodedRedirect("error", "/reset-password", t("passwordMismatch"));
     }
-
     const { error } = await supabase.auth.updateUser({
       password: password,
     });
-
     if (error) {
-      encodedRedirect(
-        "error",
-        "/reset-password",
-        "密碼更新失敗。",
-      );
+      encodedRedirect("error", "/reset-password", t("updateFailed"));
     }
-
-    encodedRedirect("success", "/reset-password", "Password updated");
+    encodedRedirect("success", "/reset-password", t("updateSuccess"));
   };
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center w-full">
       <form className="flex flex-col w-full max-w-md p-4 gap-2 [&>input]:mb-4">
-        <h1 className="text-2xl font-medium">重設密碼</h1>
-        <p className="text-sm text-foreground/60">
-          請輸入新密碼。
-        </p>
-
-        <Label htmlFor="password">新密碼</Label>
+        <h1 className="text-2xl font-medium">{t("title")}</h1>
+        <p className="text-sm text-foreground/60">{t("description")}</p>
+        <Label htmlFor="password">{t("newPassword")}</Label>
         <Input
           type="password"
           name="password"
-          placeholder="New password"
+          placeholder={t("newPassword")}
           required
         />
-        <Label htmlFor="confirmPassword">確認密碼</Label>
+        <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
         <Input
           type="password"
           name="confirmPassword"
-          placeholder="Confirm password"
+          placeholder={t("confirmPassword")}
           required
         />
-        <SubmitButton formAction={resetPassword}>重設密碼</SubmitButton>
+        <SubmitButton formAction={resetPassword}>
+          {t("resetButton")}
+        </SubmitButton>
         <FormMessage message={searchParams} />
       </form>
     </div>

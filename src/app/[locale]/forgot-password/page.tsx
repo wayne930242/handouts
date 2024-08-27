@@ -7,45 +7,43 @@ import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { headers } from "next/headers";
 import { encodedRedirect } from "@/lib/route";
+import { getTranslations } from "next-intl/server";
 
-export default function ForgotPassword({
+export default async function ForgotPassword({
   searchParams,
 }: {
   searchParams: Message;
 }) {
+  const t = await getTranslations("ForgotPassword");
+
   const forgotPassword = async (formData: FormData) => {
     "use server";
-
+    const t = await getTranslations("Login");
     const email = formData.get("email")?.toString();
     const supabase = createClient();
     const origin = headers().get("origin");
     const callbackUrl = formData.get("callbackUrl")?.toString();
-
     if (!email) {
-      return encodedRedirect("error", "/forgot-password", "Email is required");
+      return encodedRedirect("error", "/forgot-password", t("emailRequired"));
     }
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${origin}/auth/callback?redirect_to=/reset-password`,
     });
-
     if (error) {
       console.error(error.message);
       return encodedRedirect(
         "error",
         "/forgot-password",
-        "Could not reset password",
+        t("resetPasswordError")
       );
     }
-
     if (callbackUrl) {
       return redirect(callbackUrl);
     }
-
     return encodedRedirect(
       "success",
       "/forgot-password",
-      "Check your email for a link to reset your password.",
+      t("checkEmailMessage")
     );
   };
 
@@ -69,22 +67,21 @@ export default function ForgotPassword({
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        Back
+        {t("backButton")}
       </Link>
-
       <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground [&>input]:mb-6 max-w-md p-4">
-        <h1 className="text-2xl font-medium">Reset Password</h1>
+        <h1 className="text-2xl font-medium">{t("heading")}</h1>
         <p className="text-sm text-foreground/60">
-          Already have an account?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link className="text-blue-600 font-medium underline" href="/login">
-            Log in
+            {t("login")}
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Label htmlFor="email">{t("emailLabel")}</Label>
+          <Input name="email" placeholder={t("emailPlaceholder")} required />
           <SubmitButton formAction={forgotPassword}>
-            Reset Password
+            {t("submitButton")}
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>

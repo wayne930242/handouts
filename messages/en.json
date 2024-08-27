@@ -1,30 +1,82 @@
 {
+  "ForgotPassword": {
+    "alreadyHaveAccount": "Already have an account?",
+    "backButton": "Back",
+    "checkEmailMessage": "Check your email for a link to reset your password.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "heading": "Reset Password",
+    "login": "Log in",
+    "submitButton": "Reset Password",
+    "title": "Reset Password"
+  },
   "Index": {
-    "welcome": "Welcome to Handouts!",
     "campaignId": "Campaign ID",
-    "passphrase": "Passphrase"
+    "passphrase": "Passphrase",
+    "welcome": "Welcome to Handouts!"
   },
   "LocaleLayout": {
-    "title": "Handouts - a TRPG tool by WeiHung",
     "description": "A simple tool to help you share and manage handouts of RPG campaigns. Developed by WeiHung.",
     "loggedIn": "Logged in as {username}",
     "loggedOut": "You are logged out.",
     "login": "Login",
     "logout": "Logout",
-    "secret": "Secret page for logged in users"
-  },
-  "Login": {
-    "title": "Login",
-    "username": "Username",
-    "password": "Password",
-    "submit": "Login",
-    "error": "{error, select, CredentialsSignin {Invalid username or password} other {Unknown error}}"
+    "secret": "Secret page for logged in users",
+    "signup": "Sign up",
+    "title": "Handouts - a TRPG tool by WeiHung",
+    "welcome": "Welcome"
   },
   "LocaleSwitcher": {
     "switchLocale": "{locale, select, tw {繁中} en {EN} other {Unknown}}"
   },
+  "Login": {
+    "authError": "User authentication failed.",
+    "backButton": "Back",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Log in",
+    "loginPending": "Logging in...",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signupLink": "Sign up",
+    "subtitle": "Don't have an account?",
+    "title": "Log in"
+  },
+  "PhraseForm": {
+    "campaignId": "Campaign ID",
+    "cancel": "Cancel",
+    "passphrase": "Passphrase",
+    "pleaseEnterCampaignId": "Please enter the campaign ID",
+    "pleaseEnterPassphrase": "Please enter the passphrase",
+    "submit": "Submit"
+  },
+  "ResetPassword": {
+    "confirmPassword": "Confirm Password",
+    "description": "Please enter your new password.",
+    "newPassword": "New Password",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordRequired": "Password and confirm password are required.",
+    "resetButton": "Reset Password",
+    "title": "Reset Password",
+    "updateFailed": "Password update failed.",
+    "updateSuccess": "Password updated"
+  },
   "Secret": {
-    "title": "Secret page",
-    "description": "This page is only visible for logged in users."
+    "description": "This page is only visible for logged in users.",
+    "title": "Secret page"
+  },
+  "Signup": {
+    "alreadyHaveAccount": "Already have an account?",
+    "backToHome": "Back",
+    "email": "Email",
+    "emailRequired": "Email and password are required.",
+    "login": "Login",
+    "password": "Password",
+    "registrationFailed": "Registration failed.",
+    "registrationSuccess": "Thank you for registering! Please check your email and click the verification link.",
+    "signingUp": "Signing up...",
+    "signUp": "Sign Up",
+    "title": "Sign Up"
   }
 }

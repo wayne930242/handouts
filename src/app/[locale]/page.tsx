@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import PageLayout from "@/components/layouts/PageLayout";
 import PassphraseForm from "@/components/PassphraseForm";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import { useTranslations } from "next-intl";
 
 interface Props {
   searchParams: {
