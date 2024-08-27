@@ -23,62 +23,68 @@ export default function HandoutViewer({ handout }: Props) {
   const canEdit = useCanEditCampaign();
   const supabase = createClient();
 
+  const Wrapper =
+    handout.type === "text" || handout.type === "youtube"
+      ? LightBoxWrapper
+      : ({ children }: any) => children;
+
   return (
-    <div
-      className="flex flex-col gap-y-2 w-full py-2"
-      id={`handout-${handout.id}`}
-    >
-      <div className="flex gap-2 items-center justify-between">
-        <h3 className="text-lg font-bold grow">{handout.title}</h3>
-        {canEdit && (
-          <Button
-            className={cn({
-              "text-destructive hover:text-destructive/80": !handout.is_public,
-              "text-green-600 hover:text-green-500": handout.is_public,
-            })}
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              setCampaignData(
-                {
-                  id: handout.id,
-                  section_id: handout.section_id,
-                  is_public: !handout.is_public,
-                },
-                supabase,
-                "handouts",
-                "UPDATE"
-              );
-            }}
-          >
-            {handout.is_public ? <Eye /> : <EyeOff />}
-          </Button>
-        )}
-      </div>
-      {handout.type === "text" && (
-        <LightBoxWrapper>
+    <Wrapper>
+      <div
+        className="flex flex-col gap-y-2 w-full py-2"
+        id={`handout-${handout.id}`}
+      >
+        <div className="flex gap-2 items-center justify-between">
+          <h3 className="text-lg font-bold grow">{handout.title}</h3>
+          {canEdit && (
+            <Button
+              className={cn({
+                "text-destructive hover:text-destructive/80":
+                  !handout.is_public,
+                "text-green-600 hover:text-green-500": handout.is_public,
+              })}
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                setCampaignData(
+                  {
+                    id: handout.id,
+                    section_id: handout.section_id,
+                    is_public: !handout.is_public,
+                  },
+                  supabase,
+                  "handouts",
+                  "UPDATE"
+                );
+              }}
+            >
+              {handout.is_public ? <Eye /> : <EyeOff />}
+            </Button>
+          )}
+        </div>
+        {handout.type === "text" && (
           <Markdown
             className="prose prose-sm max-w-none"
             remarkPlugins={[remarkGfm]}
           >
             {handout.content}
           </Markdown>
-        </LightBoxWrapper>
-      )}
-      {handout.type === "youtube" && (
-        <YouTube
-          videoId={handout.content}
-          opts={{
-            width: "100%",
-            playerVars: {
-              // https://developers.google.com/youtube/player_parameters
-              autoplay: 0,
-            },
-          }}
-        />
-      )}
-      {handout.type === "link" && <LinkViewer content={handout.content} />}
-    </div>
+        )}
+        {handout.type === "youtube" && (
+          <YouTube
+            videoId={handout.content}
+            opts={{
+              width: "100%",
+              playerVars: {
+                // https://developers.google.com/youtube/player_parameters
+                autoplay: 0,
+              },
+            }}
+          />
+        )}
+        {handout.type === "link" && <LinkViewer content={handout.content} />}
+      </div>
+    </Wrapper>
   );
 }
 
