@@ -4,9 +4,17 @@ import CampaignlistToolbar from "./Toolbar";
 import CampaignCard from "./CampaignCard";
 import PageLayout from "@/components/layouts/PageLayout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-export default async function CampaignPage() {
+interface Props {
+  params: {
+    locale: string;
+  };
+}
+
+export default async function CampaignPage({ params: { locale } }: Props) {
+  unstable_setRequestLocale(locale);
+
   const t = await getTranslations("CampaignPage");
   const supabase = createClient();
   const {

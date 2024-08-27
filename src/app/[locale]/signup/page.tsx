@@ -6,13 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { encodedRedirect } from "@/lib/route";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+
+interface Props {
+  params: {
+    locale: string;
+  };
+  searchParams: Message;
+}
 
 export default async function Signup({
   searchParams,
-}: {
-  searchParams: Message;
-}) {
+  params: { locale },
+}: Props) {
+  unstable_setRequestLocale(locale);
   const t = await getTranslations("Signup");
 
   const signUp = async (formData: FormData) => {

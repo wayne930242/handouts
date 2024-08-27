@@ -2,7 +2,11 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { Noto_Sans_TC } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { locales } from "@/navigation";
-import { getMessages, getTranslations } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  unstable_setRequestLocale,
+} from "next-intl/server";
 
 const defaultUrl = "https://handouts.wayneh.tw";
 
@@ -63,6 +67,7 @@ export default async function RootLayout({
   children,
   params: { locale },
 }: Props) {
+  unstable_setRequestLocale(locale);
   const messages = await getMessages();
 
   return (

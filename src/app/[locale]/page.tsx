@@ -17,6 +17,7 @@ export default async function Index({
   params: { locale },
 }: Props) {
   unstable_setRequestLocale(locale);
+
   const t = await getTranslations("Index");
 
   const supabase = createClient();

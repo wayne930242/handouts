@@ -7,13 +7,21 @@ import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/forms/form-message";
 import { headers } from "next/headers";
 import { encodedRedirect } from "@/lib/route";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+
+interface Props {
+  params: {
+    locale: string;
+  };
+  searchParams: Message;
+}
 
 export default async function ForgotPassword({
   searchParams,
-}: {
-  searchParams: Message;
-}) {
+  params: { locale },
+}: Props) {
+  unstable_setRequestLocale(locale);
+
   const t = await getTranslations("ForgotPassword");
 
   const forgotPassword = async (formData: FormData) => {

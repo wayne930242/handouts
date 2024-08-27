@@ -4,13 +4,20 @@ import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { createClient } from "@/lib/supabase/server";
 import { encodedRedirect } from "@/lib/route";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+
+interface Props {
+  params: {
+    locale: string;
+  };
+  searchParams: Message;
+}
 
 export default async function ResetPassword({
   searchParams,
-}: {
-  searchParams: Message;
-}) {
+  params: { locale },
+}: Props) {
+  unstable_setRequestLocale(locale);
   const t = await getTranslations("ResetPassword");
 
   const resetPassword = async (formData: FormData) => {
