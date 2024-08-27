@@ -5,15 +5,6 @@ import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import { createClient } from "@/lib/supabase/client";
 import ImageManager from "@/lib/supabase/ImageMamager";
-import imageCompression from "browser-image-compression";
-
-const options = {
-  maxSizeMB: 1,
-  maxWidthOrHeight: 1920,
-  useWebWorker: true,
-  fileType: "image/jpeg",
-  quality: 0.8,
-};
 
 export default function TextEditor({ field, oldValue, campaignId }: Props) {
   const t = useTranslations("TextEditor");
@@ -29,11 +20,7 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
         campaignId
           ? async (image: File) => {
               try {
-                const compressedImage = await imageCompression(image, options);
-                const url = imageManager.uploadImage(
-                  compressedImage,
-                  campaignId
-                );
+                const url = imageManager.uploadImage(image, campaignId);
                 return url;
               } catch (error) {
                 toast({
