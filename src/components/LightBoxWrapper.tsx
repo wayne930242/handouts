@@ -26,7 +26,7 @@ export default function LightBoxWrapper({
           <div className="w-full h-full overflow-y-hidden">{children}</div>
         </div>
       </DialogTrigger>
-      <DialogContent className="flex flex-col gap-2 w-full p-4 max-w-4xl max-h-screen overflow-y-auto">
+      <DialogContent className="flex flex-col gap-2 w-full p-4 max-w-4xl max-h-svh overflow-y-auto">
         <DialogHeader>
           <VisuallyHidden>
             <DialogTitle>Lightbox</DialogTitle>
