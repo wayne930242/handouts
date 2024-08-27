@@ -28,10 +28,12 @@ export default async function AuthButton() {
   ) : (
     <div className="flex gap-2">
       <Link href="/login">
-        <Button>登入</Button>
+        <Button size="sm">登入</Button>
       </Link>
       <Link href="/signup">
-        <Button variant="outline">註冊</Button>
+        <Button size="sm" variant="outline">
+          註冊
+        </Button>
       </Link>
     </div>
   );

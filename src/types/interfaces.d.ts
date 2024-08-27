@@ -1,4 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { locales } from "@/navigation";
+
+export type Locale = (typeof locales)[number];
 
 export interface CampaignBase {
   id: string | "new";

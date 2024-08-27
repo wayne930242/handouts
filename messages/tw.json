@@ -21,7 +21,7 @@
     "error": "{error, select, CredentialsSignin {無效的用戶名或密碼} other {未知錯誤}}"
   },
   "LocaleSwitcher": {
-    "switchLocale": "切換至{locale, select, de {德文} en {英文} other {未知}}"
+    "switchLocale": "{locale, select, tw {繁中} en {英文} other {未知}}"
   },
   "Secret": {
     "title": "秘密頁面",

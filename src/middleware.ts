@@ -1,75 +1,80 @@
-import { NextRequest, NextResponse } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
-import createIntlMiddleware from "next-intl/middleware";
+import { type NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import createMiddleware from "next-intl/middleware";
 import { locales } from "./navigation";
 
-const intlMiddleware = createIntlMiddleware({
+const intlMiddleware = createMiddleware({
   locales,
   localePrefix: "as-needed",
   defaultLocale: "en",
 });
 
-const publicPages = [
-  "/",
-  "/campaigns",
-  "/campaigns/info/[id]",
-  "/campaigns/[id]",
-  "/login",
-  "/signup",
-  "/forgot-password",
-  "/reset-password",
-];
-
-function isPublicPage(pathname: string): boolean {
-  // Remove locale prefix if present
-  const path =
-    pathname.replace(new RegExp(`^/(${locales.join("|")})`), "") || "/";
-
-  return publicPages.some((page) => {
-    // Convert route pattern to regex
-    const routePattern = `^${page
-      .replace(/\[.*?\]/g, "[^/]+")
-      .replace(/\/$/, "")}/?$`;
-    const regex = new RegExp(routePattern);
-    return regex.test(path);
-  });
-}
-
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-  // Apply internationalization first
-  const intlResult = intlMiddleware(request);
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value)
+            );
+            response = NextResponse.next({
+              request,
+            });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            );
+          },
+        },
+      }
+    );
 
-  // Then check if it's a public page
-  const pathnameIsPublic = isPublicPage(pathname);
+    await supabase.auth.getUser();
 
-  // Handle Supabase session
-  let response = await updateSession(request);
+    const intlResponse = intlMiddleware(request);
 
-  // If no response from updateSession, use the intlResult
-  if (!response) {
-    response = intlResult;
-  } else {
-    // Merge headers from intlResult into our response
-    intlResult.headers.forEach((value, key) => {
+    if (intlResponse.headers.get("Location")) {
+      response = NextResponse.redirect(
+        new URL(intlResponse.headers.get("Location")!, request.url)
+      );
+    } else {
+      response = NextResponse.rewrite(new URL(request.url));
+    }
+
+    intlResponse.headers.forEach((value, key) => {
       response.headers.set(key, value);
     });
-  }
 
-  // If it's not a public page, you might want to add additional auth checks here
-  if (!pathnameIsPublic) {
-    // Add your auth logic here
-    // For example, redirect to login if not authenticated
-    // const session = await getSession(request);
-    // if (!session) {
-    //   return NextResponse.redirect(new URL('/login', request.url));
-    // }
-  }
+    // Copy all cookies from response
+    const updatedCookies = response.cookies.getAll();
+    updatedCookies.forEach((cookie) => {
+      if (intlResponse.cookies.get(cookie.name)?.value !== cookie.value) {
+        intlResponse.cookies.set(cookie.name, cookie.value, cookie);
+      }
+    });
 
-  return response;
+    return intlResponse;
+  } catch (error) {
+    return response;
+  }
 }
 
+// config 部分保持不變
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/",
+    "/(tw|en)/:path*",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };
