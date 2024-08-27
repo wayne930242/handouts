@@ -1,4 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const withNextIntl = require('next-intl/plugin')();
 
-module.exports = nextConfig;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  useFileSystemPublicRoutes: true,
+};
+
+module.exports = withNextIntl(nextConfig);

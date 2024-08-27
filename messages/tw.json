@@ -1,0 +1,30 @@
+{
+  "Index": {
+    "welcome": "歡迎使用 Handouts！",
+    "campaignId": "戰役 ID",
+    "passphrase": "通關密語"
+  },
+  "LocaleLayout": {
+    "title": "Handouts - a TRPG tool by WeiHung",
+    "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
+    "loggedIn": "已以 {username} 的身份登入",
+    "loggedOut": "您已登出。",
+    "login": "登入",
+    "logout": "登出",
+    "secret": "已登入用戶的秘密頁面"
+  },
+  "Login": {
+    "title": "登入",
+    "username": "用戶名",
+    "password": "密碼",
+    "submit": "登入",
+    "error": "{error, select, CredentialsSignin {無效的用戶名或密碼} other {未知錯誤}}"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "切換至{locale, select, de {德文} en {英文} other {未知}}"
+  },
+  "Secret": {
+    "title": "秘密頁面",
+    "description": "此頁面僅對已登入的用戶可見。"
+  }
+}
