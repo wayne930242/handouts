@@ -151,6 +151,13 @@ export interface CampaignStore {
   ) => () => void;
 }
 
+export interface ConfirmDialogData {
+  id: string;
+  title: string;
+  description: string;
+  state: "confirmed" | "canceled" | "pending";
+}
+
 export interface AppStore {
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
@@ -158,6 +165,8 @@ export interface AppStore {
   setEditingCampaign: (editingCampaign: boolean) => void;
   passphraseDialog: boolean;
   setPassphraseDialog: (passphraseDialog: boolean) => void;
+  confirmDialog: ConfirmDialogData | null;
+  setConfirmDialog: (confirmDialog: ConfirmDialogData | null) => void;
 }
 
 export interface Session {

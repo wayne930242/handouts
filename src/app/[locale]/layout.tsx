@@ -1,4 +1,4 @@
-import { NextIntlClientProvider, useMessages } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { Noto_Sans_TC } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { locales } from "@/navigation";
@@ -7,6 +7,7 @@ import {
   getTranslations,
   unstable_setRequestLocale,
 } from "next-intl/server";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const defaultUrl = "https://handouts.wayneh.tw";
 
@@ -77,6 +78,7 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             {children}
             <Toaster />
+            <ConfirmDialog />
           </NextIntlClientProvider>
         </main>
       </body>

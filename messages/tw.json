@@ -1,4 +1,8 @@
 {
+  "ConfirmDialog": {
+    "cancel": "取消",
+    "confirm": "確認"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",

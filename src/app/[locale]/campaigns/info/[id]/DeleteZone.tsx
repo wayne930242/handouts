@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createClient } from "@/lib/supabase/client";
-import ImageManager from "@/lib/supabase/ImageMamager";
+import ImageManager from "@/lib/supabase/ImageManager";
 import { useRouter } from "@/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";

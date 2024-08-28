@@ -4,7 +4,7 @@ import { toast } from "@/components/ui/use-toast";
 import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import { createClient } from "@/lib/supabase/client";
-import ImageManager from "@/lib/supabase/ImageMamager";
+import ImageManager from "@/lib/supabase/ImageManager";
 
 export default function TextEditor({ field, oldValue, campaignId }: Props) {
   const t = useTranslations("TextEditor");

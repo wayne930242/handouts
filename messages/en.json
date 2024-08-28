@@ -1,4 +1,8 @@
 {
+  "ConfirmDialog": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",

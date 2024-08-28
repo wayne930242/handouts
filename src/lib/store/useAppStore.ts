@@ -8,6 +8,8 @@ const useAppStore = create<AppStore>((set) => ({
   setEditingCampaign: (editingCampaign) => set({ editingCampaign }),
   passphraseDialog: false,
   setPassphraseDialog: (passphraseDialog) => set({ passphraseDialog }),
+  confirmDialog: null,
+  setConfirmDialog: (comfirmDialog) => set({ confirmDialog: comfirmDialog }),
 }));
 
 export default useAppStore;
