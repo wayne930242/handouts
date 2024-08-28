@@ -64,7 +64,7 @@ export default function CampaignDeleteZone({
     if (data.campaign_id === campaignId) {
       try {
         setLoading(true);
-        await imageManager.deleteImageByCampaignId(data.campaign_id);
+        await imageManager.deleteImagesByCampaignId(data.campaign_id);
         await supabase.from("campaigns").delete().eq("id", data.campaign_id);
         toast({
           title: t("successTitle"),

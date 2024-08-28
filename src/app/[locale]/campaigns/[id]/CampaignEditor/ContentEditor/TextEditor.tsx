@@ -20,7 +20,8 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
         campaignId
           ? async (image: File) => {
               try {
-                const url = imageManager.uploadImage(image, campaignId);
+                const url = await imageManager.uploadImage(image, campaignId);
+                if (!url) throw new Error("Failed to upload image");
                 return url;
               } catch (error) {
                 toast({
