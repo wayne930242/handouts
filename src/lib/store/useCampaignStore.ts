@@ -138,8 +138,9 @@ const useCampaignStore = create(
         type,
         debounce
       ) => {
-        get().setCampaignDataLocal(newData, oldData, tableName, type);
-
+        if (type === "UPDATE") {
+          get().setCampaignDataLocal(newData, oldData, tableName, type);
+        }
         get().setCampaignDataRemote(
           newData,
           oldData,
@@ -148,10 +149,6 @@ const useCampaignStore = create(
           type,
           debounce
         );
-
-        if (process.env.NODE_ENV === "development") {
-          console.info(get().campaignData);
-        }
       },
       fetchCampaignData: async (supabase, campaignId) => {
         set({ loading: true });
@@ -265,12 +262,6 @@ const useCampaignStore = create(
             "postgres_changes",
             { event: "*", schema: "public", table: "handouts" },
             (payload) => get().handleRealtimeUpdate("handouts", payload as any)
-          )
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "handout_images" },
-            (payload) =>
-              get().handleRealtimeUpdate("handout_images", payload as any)
           )
           .subscribe((status) => {
             if (status === "SUBSCRIBED") {

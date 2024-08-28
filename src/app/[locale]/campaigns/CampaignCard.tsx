@@ -18,7 +18,7 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
   const t = useTranslations("CampaignCard");
 
   return (
-    <Card>
+    <Card className="flex flex-col gap-y-1 w-full">
       <CardHeader className="cursor-pointer hover:bg-accent">
         <Link
           href={`/campaigns/info/${campaign.id}`}
@@ -28,7 +28,7 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
           <Pencil className="h-4 w-4" />
         </Link>
       </CardHeader>
-      <CardContent>
+      <CardContent className="grow">
         <CardDescription>{campaign.description}</CardDescription>
       </CardContent>
       <CardFooter>

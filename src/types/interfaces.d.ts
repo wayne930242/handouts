@@ -53,34 +53,6 @@ export interface HandoutBase {
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
-export interface HandoutImagesBase {
-  id: string | "new";
-  handout_id: string;
-  image_url: string;
-  display_order: number;
-  caption?: string;
-  type: HandoutImageType;
-}
-
-export interface HandoutImage extends HandoutImagesBase {}
-
-export interface Image {
-  id: number;
-  related_id: number | string;
-  related_table: string;
-  image_url: string;
-  image_type: string;
-  description: string;
-  metadata: {
-    fileName: string;
-    contentType: string;
-    size: number;
-  };
-  created_at: string;
-}
-
-export type HandoutImageType = "normal" | "map" | "scene" | "letter" | "ticket";
-
 export type RealtimePayload<T> = {
   schema: "public";
   table: string;

@@ -27,12 +27,13 @@ export default async function CampaignPage({ params: { locale } }: Props) {
     .from("campaigns")
     .select("*")
     .eq("gm_id", user.id);
+
   return (
     <PageLayout header={<CampaignlistToolbar />} needsAuth>
       <Alert variant="destructive">
         <AlertDescription>{t("alert")}</AlertDescription>
       </Alert>
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {campaigns?.map((campaign) => (
           <CampaignCard campaign={campaign} key={campaign.id} />
         ))}
