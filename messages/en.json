@@ -1,8 +1,4 @@
 {
-  "ConfirmDialog": {
-    "cancel": "Cancel",
-    "confirm": "Confirm"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",
@@ -17,6 +13,8 @@
   "CampaignDeleteZone": {
     "campaignIdLabel": "Campaign ID:",
     "deleteButton": "Delete Campaign",
+    "deleteCampaign": "Delete Campaign",
+    "deleteCampaignDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",
     "description": "After deleting the campaign, all handouts, images, etc. will be deleted and cannot be recovered.",
     "errorDescription": "An error occurred while deleting the campaign. Please try again later.",
     "errorTitle": "Deletion Failed",
@@ -62,7 +60,13 @@
   "ChapterCard": {
     "addSection": "Section",
     "chapterTitle": "Chapter Title",
+    "deleteChapter": "Delete Chapter",
+    "deleteChapterDescription": "Deleting a chapter will also delete all sections and handouts in the chapter. This action cannot be undone. Are you sure you want to delete?",
     "titlePlaceholder": "Title"
+  },
+  "ConfirmDialog": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",
@@ -77,6 +81,8 @@
   },
   "HandoutCard": {
     "cancel": "Cancel",
+    "deleteHandout": "Delete Handout",
+    "deleteHandoutDescription": "Deleting a handout can not be undone. Are you sure you want to delete?",
     "editImage": "Edit Image",
     "editLink": "Edit Link",
     "editText": "Edit Text",
@@ -154,6 +160,8 @@
     "title": "Secret page"
   },
   "SectionCard": {
+    "deleteSection": "Delete Section",
+    "deleteSectionDescription": "Deleting a section will also delete all handouts in the section. This action cannot be undone. Are you sure you want to delete?",
     "handoutButton": "Handouts",
     "sectionTitle": "Section Title",
     "titlePlaceholder": "Title"
@@ -180,7 +188,7 @@
     "closeEdit": "Close Edit",
     "disconnected": "Disconnected",
     "edit": "Edit",
-    "import": "Import",
-    "export": "Export"
+    "export": "Export",
+    "import": "Import"
   }
 }

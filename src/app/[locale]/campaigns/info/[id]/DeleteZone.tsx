@@ -26,6 +26,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useTranslations } from "next-intl";
+import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 const FormSchema = z.object({
   campaign_id: z.string().min(1, "formValidation.required"),
@@ -42,6 +43,8 @@ export default function CampaignDeleteZone({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const waitingConfirm = useConfirmDialog();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -50,6 +53,14 @@ export default function CampaignDeleteZone({
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const confirmed = await waitingConfirm({
+      id: `delete-campaign-${data.campaign_id}`,
+      title: t("deleteCampaign"),
+      description: t("deleteCampaignDescription"),
+    });
+
+    if (!confirmed) return;
+
     if (data.campaign_id === campaignId) {
       try {
         setLoading(true);

@@ -12,6 +12,7 @@ import { advancedRemoveElement } from "@/lib/arrayAction";
 import { Label } from "@/components/ui/label";
 import HandoutsArea from "./HandoutsArea";
 import useSession from "@/lib/hooks/useSession";
+import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 interface Props {
   section: Section;
@@ -38,6 +39,8 @@ export default function SectionCard({ section }: Props) {
   const supabase = createClient();
   const session = useSession();
   const { setCampaignData, campaignData } = useCampaignStore();
+
+  const waitingConfirm = useConfirmDialog();
 
   return (
     <div className="relative flex flex-col gap-y-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -103,8 +106,18 @@ export default function SectionCard({ section }: Props) {
         className="absolute top-0 right-0 rounded-full"
         variant="ghost"
         size="icon"
-        onClick={(e) => {
-          e.stopPropagation();
+        onClick={async (e) => {
+          if (!campaignData) return;
+          const confirmed =
+            section.handouts?.length === 0 ||
+            (await waitingConfirm({
+              id: `delete-section-${section.id}`,
+              title: t("deleteSection"),
+              description: t("deleteSectionDescription"),
+            }));
+
+          if (!confirmed) return;
+
           const chapter = campaignData?.chapters.find(
             (chapter) => chapter.id === section.chapter_id
           );

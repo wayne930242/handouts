@@ -1,8 +1,4 @@
 {
-  "ConfirmDialog": {
-    "cancel": "取消",
-    "confirm": "確認"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",
@@ -17,6 +13,8 @@
   "CampaignDeleteZone": {
     "campaignIdLabel": "戰役 ID：",
     "deleteButton": "刪除戰役",
+    "deleteCampaign": "刪除戰役",
+    "deleteCampaignDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",
     "description": "刪除戰役後，所有的手邊資料、圖片等都將會被刪除，且無法復原。",
     "errorDescription": "刪除戰役時發生錯誤，請稍後再試。",
     "errorTitle": "刪除失敗",
@@ -62,7 +60,13 @@
   "ChapterCard": {
     "addSection": "段落",
     "chapterTitle": "章節標題",
+    "deleteChapter": "刪除章節",
+    "deleteChapterDescription": "刪除章節後，會連帶刪除該章節的所有的段落頷首邊資料，這個操作無法復原。是否確認刪除？",
     "titlePlaceholder": "標題"
+  },
+  "ConfirmDialog": {
+    "cancel": "取消",
+    "confirm": "確認"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
@@ -77,6 +81,8 @@
   },
   "HandoutCard": {
     "cancel": "取消",
+    "deleteHandout": "刪除手邊資料",
+    "deleteHandoutDescription": "刪除手邊資料後，無法復原。是否確認刪除？",
     "editImage": "編輯圖片",
     "editLink": "編輯連結",
     "editText": "編輯文字",
@@ -154,6 +160,8 @@
     "title": "秘密頁面"
   },
   "SectionCard": {
+    "deleteSection": "刪除段落",
+    "deleteSectionDescription": "刪除段落後，會連帶刪除該段落的所有的手邊資料，這個操作無法復原。是否確認刪除？",
     "handoutButton": "手邊資料",
     "sectionTitle": "段落標題",
     "titlePlaceholder": "標題"
@@ -180,7 +188,7 @@
     "closeEdit": "關閉編輯",
     "disconnected": "已斷線",
     "edit": "編輯",
-    "import": "匯入",
-    "export": "匯出"
+    "export": "匯出",
+    "import": "匯入"
   }
 }

@@ -9,6 +9,7 @@ import SectionsArea from "./SectionsArea";
 import { advancedRemoveElement } from "@/lib/arrayAction";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
+import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 interface Props {
   chapter: Chapter;
@@ -28,6 +29,8 @@ export default function ChapterCard({ chapter }: Props) {
   const t = useTranslations("ChapterCard");
   const supabase = createClient();
   const { setCampaignData, campaignData } = useCampaignStore();
+
+  const waitingConfirm = useConfirmDialog();
 
   return (
     <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -90,8 +93,18 @@ export default function ChapterCard({ chapter }: Props) {
         className="absolute top-0 right-0 rounded-full"
         variant="ghost"
         size="icon"
-        onClick={(e) => {
+        onClick={async (e) => {
           if (!campaignData) return;
+          const confirmed =
+            chapter.sections?.length === 0 ||
+            (await waitingConfirm({
+              id: `delete-chapter-${chapter.id}`,
+              title: t("deleteChapter"),
+              description: t("deleteChapterDescription"),
+            }));
+
+          if (!confirmed) return;
+
           const { chapters } = campaignData;
           const chapterIndex = chapters.findIndex((c) => c.id === chapter.id);
           const newChapters = advancedRemoveElement(

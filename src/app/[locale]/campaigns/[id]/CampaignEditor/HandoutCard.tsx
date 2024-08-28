@@ -44,6 +44,7 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { createClient } from "@/lib/supabase/client";
 import { Handout } from "@/types/interfaces";
 import { useTranslations } from "next-intl";
+import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 const ImageEditor = dynamic(() => import("./ContentEditor/ImageEditor"), {
   ssr: false,
@@ -113,6 +114,8 @@ export default function HandoutCard({ handout, chapterId }: Props) {
       }
     };
   }, [triggerReset]);
+
+  const waitingConfirm = useConfirmDialog();
 
   return (
     <Card className="relative">
@@ -319,7 +322,17 @@ export default function HandoutCard({ handout, chapterId }: Props) {
         variant="ghost"
         size="icon"
         type="button"
-        onClick={(e) => {
+        onClick={async (e) => {
+          const confirmed =
+            !handout.content ||
+            (await waitingConfirm({
+              id: `delete-handout-${handout.id}`,
+              title: t("deleteHandout"),
+              description: t("deleteHandoutDescription"),
+            }));
+
+          if (!confirmed) return;
+
           setCampaignData(
             {
               id: handout.id,
