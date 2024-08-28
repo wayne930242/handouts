@@ -3,7 +3,7 @@ import { redirect } from "@/navigation";
 import CampaignlistToolbar from "./Toolbar";
 import CampaignCard from "./CampaignCard";
 import PageLayout from "@/components/layouts/PageLayout";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+// import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 interface Props {
@@ -30,9 +30,9 @@ export default async function CampaignPage({ params: { locale } }: Props) {
 
   return (
     <PageLayout header={<CampaignlistToolbar />} needsAuth>
-      <Alert variant="destructive">
+      {/* <Alert variant="destructive">
         <AlertDescription>{t("alert")}</AlertDescription>
-      </Alert>
+      </Alert> */}
       <main className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {campaigns?.map((campaign) => (
           <CampaignCard campaign={campaign} key={campaign.id} />

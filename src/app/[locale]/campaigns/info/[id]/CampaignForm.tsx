@@ -74,7 +74,6 @@ export default function CampaignForm({
         if (updateError) {
           errorMessage = updateError.message;
         }
-        break;
     }
 
     if (errorMessage) {

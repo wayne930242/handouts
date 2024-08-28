@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import imageCompression from "browser-image-compression";
+import { blobToWebP } from "webp-converter-browser";
+import imageCompression, { Options } from "browser-image-compression";
 
 const defaultOptions = {
   maxSizeMB: 1,
@@ -12,7 +13,7 @@ const defaultOptions = {
 export default class ImageManager {
   private supabase: SupabaseClient;
   private bucketName: string;
-  private options: any;
+  private options: Options;
 
   constructor(
     supabase: SupabaseClient,
@@ -29,11 +30,13 @@ export default class ImageManager {
       ? await imageCompression(file, this.options)
       : file;
 
+    const webpImage = await blobToWebP(compressedImage);
+
     const { data, error } = await this.supabase.storage
       .from(this.bucketName)
       .upload(
         `campaigns/${campaign_id}/images/${Date.now()}_${file.name}`,
-        compressedImage
+        webpImage
       );
 
     const path = data?.path;
@@ -47,10 +50,15 @@ export default class ImageManager {
   }
 
   async deleteImageByCampaignId(campaign_id: string): Promise<any> {
-    const { error: removeError } = await this.supabase.storage
+    const { data: list, error: listError } = await this.supabase.storage
       .from(this.bucketName)
-      .remove([`campaigns/${campaign_id}/images`]);
-
-    return removeError;
+      .list(`campaigns/${campaign_id}/images`);
+    const filesToRemove = list?.map(
+      (file) => `campaigns/${campaign_id}/images/${file.name}`
+    );
+    if (!filesToRemove || filesToRemove.length === 0) {
+      return;
+    }
+    await this.supabase.storage.from(this.bucketName).remove(filesToRemove);
   }
 }

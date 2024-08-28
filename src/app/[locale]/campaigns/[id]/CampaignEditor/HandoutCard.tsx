@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { X, ChevronsUpDown, Plus } from "lucide-react";
+import { X, ChevronsUpDown } from "lucide-react";
 import dynamic from "next/dynamic";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -106,6 +106,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
       "handouts",
       "UPDATE"
     );
+    form.reset();
   };
 
   const [triggerReset, setTriggerReset] = useState(false);
@@ -282,25 +283,6 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     )}
                   />
                 )}
-                {/* {!triggerReset && (
-              <FormField
-                control={form.control}
-                name="note"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>備註</FormLabel>
-                    <FormControl>
-                      <MyMDXEditor
-                        markdown={field.value ?? ""}
-                        onChange={(value) => field.onChange(value)}
-                        oldMarkdown={handout.note}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )} */}
                 <div className="flex justify-end mt-4">
                   {form.formState.isDirty && (
                     <div className="text-sm text-destructive">
