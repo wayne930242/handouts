@@ -3,6 +3,8 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -29,8 +31,8 @@ export default function ConfirmDialog() {
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <DialogContent>{description}</DialogContent>
-        <DialogContent>
+        <DialogDescription>{description}</DialogDescription>
+        <DialogFooter>
           <Button
             variant="secondary"
             onClick={() => {
@@ -57,7 +59,7 @@ export default function ConfirmDialog() {
           >
             {t("confirm")}
           </Button>
-        </DialogContent>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

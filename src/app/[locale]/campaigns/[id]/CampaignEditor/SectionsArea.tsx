@@ -4,8 +4,6 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 
 import { Section } from "@/types/interfaces";
 import SectionCard from "./SectionCard";
-import { createClient } from "@/lib/supabase/client";
-import useCampaignStore from "@/lib/store/useCampaignStore";
 
 interface Props {
   sections: Section[];
@@ -13,10 +11,6 @@ interface Props {
 }
 
 export default function SectionsArea({ sections, chapterId }: Props) {
-  const supabase = createClient();
-
-  const { campaignData, setCampaignData } = useCampaignStore();
-
   return (
     <Droppable droppableId={"chapter-" + chapterId} type="SECTION">
       {(provided) => (

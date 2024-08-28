@@ -36,7 +36,7 @@ export default function CampaignEditor() {
                 campaignData?.id as string,
                 (campaignData?.chapters?.length ?? 0) + 1
               );
-              setCampaignData(newChapter, supabase, "chapters", "INSERT");
+              setCampaignData(newChapter, {}, supabase, "chapters", "INSERT");
             }}
           >
             <p>{t("chapterButton")}</p>

@@ -11,9 +11,6 @@ export const updateArray = <T extends { id: number | string }>(
   let newArray: T[];
   switch (eventType) {
     case "INSERT":
-      newArray = [...safeArray, record];
-      break;
-
     case "UPDATE":
       // In fact, is is UPSERT
       const itemExists = safeArray.some((item) => item.id === record.id);

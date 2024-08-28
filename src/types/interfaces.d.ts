@@ -104,6 +104,7 @@ export type SetCampaignPayload =
 
 export type SetCampaignData = (
   newData: SetCampaignPayload,
+  oldData: SetCampaignPayload,
   supabaseClient: SupabaseClient,
   tableName: CampaignSubTable,
   type: "INSERT" | "UPDATE" | "DELETE",
@@ -121,11 +122,13 @@ export interface CampaignStore {
   fetchWhiteList: (supabase: SupabaseClient) => void;
   setCampaignDataLocal: (
     newData: SetCampaignPayload,
+    oldData: SetCampaignPayload,
     tableName: CampaignSubTable,
     type: "INSERT" | "UPDATE" | "DELETE"
   ) => void;
   setCampaignDataRemote: (
     newData: SetCampaignPayload,
+    oldData: SetCampaignPayload,
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
     type: "INSERT" | "UPDATE" | "DELETE",

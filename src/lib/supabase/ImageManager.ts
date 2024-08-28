@@ -43,7 +43,6 @@ export default class ImageManager {
       data: { publicUrl },
     } = this.supabase.storage.from(this.bucketName).getPublicUrl(path);
 
-    console.log("publicUrl", publicUrl);
     return publicUrl;
   }
 

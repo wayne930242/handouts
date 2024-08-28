@@ -17,47 +17,44 @@ export default function useConfirmDialog() {
     return () => clearTimeoutSafely();
   }, []);
 
-  const waitForConfirmDialog = useCallback(
-    ({
-      id,
-      title,
-      description,
-    }: {
-      id: string;
-      title: string;
-      description: string;
-    }) => {
-      return new Promise<boolean>((resolve) => {
-        setConfirmDialog({
-          id,
-          title,
-          description,
-          state: "pending",
-        });
+  return ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+  }) => {
+    return new Promise<boolean>((resolve) => {
+      resolve(true);
 
-        const checkState = () => {
-          if (confirmDialog?.id === id) {
-            if (confirmDialog.state === "confirmed") {
-              setConfirmDialog(null);
-              resolve(true);
-            } else if (confirmDialog.state === "canceled") {
-              setConfirmDialog(null);
-              resolve(false);
-            } else {
-              clearTimeoutSafely();
-              timeoutRef.current = setTimeout(checkState, 100);
-            }
-          } else {
-            resolve(false);
-          }
-        };
+      // setConfirmDialog({
+      //   id,
+      //   title,
+      //   description,
+      //   state: "pending",
+      // });
 
-        clearTimeoutSafely();
-        timeoutRef.current = setTimeout(checkState, 0);
-      });
-    },
-    [confirmDialog, setConfirmDialog]
-  );
+      // const checkState = () => {
+      //   if (confirmDialog?.id === id) {
+      //     if (confirmDialog.state === "confirmed") {
+      //       setConfirmDialog(null);
+      //       resolve(true);
+      //     } else if (confirmDialog.state === "canceled") {
+      //       setConfirmDialog(null);
+      //       resolve(false);
+      //     } else {
+      //       clearTimeoutSafely();
+      //       timeoutRef.current = setTimeout(checkState, 100);
+      //     }
+      //   } else {
+      //     resolve(false);
+      //   }
+      // };
 
-  return waitForConfirmDialog;
+      // clearTimeoutSafely();
+      // timeoutRef.current = setTimeout(checkState, 0);
+    });
+  };
 }

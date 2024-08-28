@@ -86,11 +86,21 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     setCampaignData(
       {
         id: handout.id,
+        section_id: handout.section_id,
         title: data.title,
         type: data.type,
         content: data.content,
         is_public: data.is_public,
         note: data.note,
+      },
+      {
+        id: handout.id,
+        section_id: handout.section_id,
+        title: handout.title,
+        type: handout.type,
+        content: handout.content,
+        is_public: handout.is_public,
+        note: handout.note,
       },
       supabase,
       "handouts",
@@ -334,6 +344,10 @@ export default function HandoutCard({ handout, chapterId }: Props) {
           if (!confirmed) return;
 
           setCampaignData(
+            {
+              id: handout.id,
+              section_id: handout.section_id,
+            },
             {
               id: handout.id,
               section_id: handout.section_id,

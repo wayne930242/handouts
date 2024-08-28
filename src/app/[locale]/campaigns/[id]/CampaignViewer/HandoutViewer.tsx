@@ -52,6 +52,11 @@ export default function HandoutViewer({ handout }: Props) {
                     section_id: handout.section_id,
                     is_public: !handout.is_public,
                   },
+                  {
+                    id: handout.id,
+                    section_id: handout.section_id,
+                    is_public: handout.is_public,
+                  },
                   supabase,
                   "handouts",
                   "UPDATE"

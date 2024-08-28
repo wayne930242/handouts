@@ -32,21 +32,22 @@ const useCampaignStore = create(
       },
       resetConnectedAttempts: () => set({ connectedAtempts: 0 }),
       setAsGM: (asGM) => set({ asGM }),
-      setCampaignDataLocal: async (newData, tableName, type) => {
+      setCampaignDataLocal: async (newData, oldData, tableName, type) => {
         if (Array.isArray(newData)) {
-          for (const item of newData) {
+          newData.forEach((item, index) => {
             set((state) => {
               if (!state.campaignData) return state;
+              if (!Array.isArray(oldData)) return state;
               let updatedData = updateCampaignNestedData(
                 state.campaignData,
                 tableName,
                 item,
-                {},
+                oldData[index] as typeof item,
                 type
               );
               return { campaignData: updatedData };
             });
-          }
+          });
         } else {
           set((state) => {
             if (!state.campaignData) return state;
@@ -54,7 +55,7 @@ const useCampaignStore = create(
               state.campaignData,
               tableName,
               newData,
-              {},
+              oldData,
               type
             );
             return { campaignData: updatedData };
@@ -63,6 +64,7 @@ const useCampaignStore = create(
       },
       setCampaignDataRemote: async (
         newData,
+        oldData,
         supabaseClient,
         tableName,
         type,
@@ -70,42 +72,39 @@ const useCampaignStore = create(
       ) => {
         const updateRemote = async () => {
           set({ loading: true, error: null });
-          let result: any;
           try {
             if (Array.isArray(newData)) {
-              result = await supabaseClient
-                .from(tableName)
-                .upsert(newData)
-                .select();
-              for (const item of result.data ?? []) {
+              await supabaseClient.from(tableName).upsert(newData).select();
+              newData.forEach((item, index) => {
                 set((state) => {
                   if (!state.campaignData) return state;
+                  if (!Array.isArray(oldData)) return state;
                   let updatedData = updateCampaignNestedData(
                     state.campaignData,
                     tableName,
                     item,
-                    {},
+                    oldData[index] as typeof item,
                     type
                   );
                   return { campaignData: updatedData };
                 });
-              }
+              });
             } else {
               if (type === "INSERT") {
-                result = await supabaseClient
+                await supabaseClient
                   .from(tableName)
                   .insert({ ...newData, id: undefined })
                   .select()
                   .single();
               } else if (type === "UPDATE") {
-                result = await supabaseClient
+                await supabaseClient
                   .from(tableName)
                   .update(newData)
                   .eq("id", newData.id)
                   .select()
                   .single();
               } else if (type === "DELETE") {
-                result = await supabaseClient
+                await supabaseClient
                   .from(tableName)
                   .delete()
                   .eq("id", newData.id)
@@ -133,21 +132,17 @@ const useCampaignStore = create(
       },
       setCampaignData: async (
         newData,
+        oldData,
         supabaseClient,
         tableName,
         type,
         debounce
       ) => {
-        if (type === "INSERT") {
-          // Update by subscription
-        } else if (type === "UPDATE") {
-          get().setCampaignDataLocal(newData, tableName, type);
-        } else if (type === "DELETE") {
-          // Update by subscription
-        }
+        get().setCampaignDataLocal(newData, oldData, tableName, type);
 
         get().setCampaignDataRemote(
           newData,
+          oldData,
           supabaseClient,
           tableName,
           type,

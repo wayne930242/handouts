@@ -3,8 +3,6 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 
 import { Section } from "@/types/interfaces";
-import { createClient } from "@/lib/supabase/client";
-import useCampaignStore from "@/lib/store/useCampaignStore";
 
 import HandoutCard from "./HandoutCard";
 
@@ -13,10 +11,6 @@ interface Props {
 }
 
 export default function HandoutsArea({ section }: Props) {
-  const supabase = createClient();
-
-  const { campaignData, setCampaignData } = useCampaignStore();
-
   return (
     <Droppable
       droppableId={"chapter-" + section.chapter_id + "-section-" + section.id}

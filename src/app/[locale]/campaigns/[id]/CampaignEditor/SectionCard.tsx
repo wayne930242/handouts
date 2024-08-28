@@ -63,6 +63,12 @@ export default function SectionCard({ section }: Props) {
                       title: e.target.value,
                       order_num: section.order_num,
                     },
+                    {
+                      id: section.id,
+                      chapter_id: section.chapter_id,
+                      title: section.title,
+                      order_num: section.order_num,
+                    },
                     supabase,
                     "sections",
                     "UPDATE",
@@ -93,7 +99,7 @@ export default function SectionCard({ section }: Props) {
                   session.user.id
                 );
 
-                setCampaignData(newHandout, supabase, "handouts", "INSERT");
+                setCampaignData(newHandout, {}, supabase, "handouts", "INSERT");
               }}
             >
               <p>{t("handoutButton")}</p>
@@ -135,10 +141,20 @@ export default function SectionCard({ section }: Props) {
           );
 
           if (newSections.length !== 0) {
-            setCampaignData(newSections, supabase, "sections", "UPDATE");
+            setCampaignData(
+              newSections,
+              sections,
+              supabase,
+              "sections",
+              "UPDATE"
+            );
           }
 
           setCampaignData(
+            {
+              id: section.id,
+              chapter_id: section.chapter_id,
+            },
             {
               id: section.id,
               chapter_id: section.chapter_id,

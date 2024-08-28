@@ -53,6 +53,12 @@ export default function ChapterCard({ chapter }: Props) {
                       title: e.target.value,
                       order_num: chapter.order_num,
                     },
+                    {
+                      id: chapter.id,
+                      campaign_id: chapter.campaign_id,
+                      title: chapter.title,
+                      order_num: chapter.order_num,
+                    },
                     supabase,
                     "chapters",
                     "UPDATE",
@@ -80,7 +86,7 @@ export default function ChapterCard({ chapter }: Props) {
                   chapter.id as number,
                   (chapter.sections?.length ?? 0) + 1
                 );
-                setCampaignData(newSection, supabase, "sections", "INSERT");
+                setCampaignData(newSection, {}, supabase, "sections", "INSERT");
               }}
             >
               <p>{t("addSection")}</p>
@@ -114,9 +120,15 @@ export default function ChapterCard({ chapter }: Props) {
             ["sections"]
           );
           if (newChapters.length !== 0) {
-            setCampaignData(newChapters, supabase, "chapters", "UPDATE");
+            setCampaignData(newChapters, {}, supabase, "chapters", "UPDATE");
           }
           setCampaignData(
+            {
+              id: chapter.id,
+              campaign_id: chapter.campaign_id,
+              title: chapter.title,
+              order_num: chapter.order_num,
+            },
             {
               id: chapter.id,
               campaign_id: chapter.campaign_id,
