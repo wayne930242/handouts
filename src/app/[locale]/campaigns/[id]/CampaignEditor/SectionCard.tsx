@@ -38,7 +38,10 @@ export default function SectionCard({ section }: Props) {
   const t = useTranslations("SectionCard");
   const supabase = createClient();
   const session = useSession();
-  const { setCampaignData, campaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore((state) => ({
+    setCampaignData: state.setCampaignData,
+    campaignData: state.campaignData,
+  }));
 
   const deleteSection = async (sections: Section[]) => {
     if (!sections || sections.length === 0) return;

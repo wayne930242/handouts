@@ -12,7 +12,10 @@ export default function useConfirmDialog<T extends any>(
   onConfirm: (d: T) => Promise<any>,
   onCancel?: (d: T) => Promise<any>
 ) {
-  const { confirmDialog, setConfirmDialog } = useAppStore();
+  const { confirmDialog, setConfirmDialog } = useAppStore((state) => ({
+    confirmDialog: state.confirmDialog,
+    setConfirmDialog: state.setConfirmDialog,
+  }));
   const dataRef = useRef<T>();
 
   useEffect(() => {

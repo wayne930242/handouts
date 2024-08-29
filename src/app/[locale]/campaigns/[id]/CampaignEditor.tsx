@@ -20,7 +20,10 @@ const genEmptyChapter = (
 export default function CampaignEditor() {
   const t = useTranslations("CampaignEditor");
   const supabase = createClient();
-  const { campaignData, setCampaignData } = useCampaignStore();
+  const { campaignData, setCampaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    setCampaignData: state.setCampaignData,
+  }));
   const chapters = campaignData?.chapters ?? [];
 
   return (

@@ -18,8 +18,12 @@ const CampaignViewer = dynamic(() => import("./CampaignViewer"), {
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
   useCampaignData(campaignId, isAuthorized);
-  const { editingCampaign } = useAppStore();
-  const { setupRealtimeSubscription } = useCampaignStore();
+  const { editingCampaign } = useAppStore((state) => ({
+    editingCampaign: state.editingCampaign,
+  }));
+  const { setupRealtimeSubscription } = useCampaignStore((state) => ({
+    setupRealtimeSubscription: state.setupRealtimeSubscription,
+  }));
 
   const supabase = useMemo(() => createClient(), []);
   const canEdit = useCanEditCampaign();

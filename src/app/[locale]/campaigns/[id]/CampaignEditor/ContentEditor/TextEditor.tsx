@@ -7,7 +7,10 @@ import ImageManager from "@/lib/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 export default function TextEditor({ field, oldValue, campaignId }: Props) {
-  const { setIsLoading } = useAppStore();
+  const { setIsLoading } = useAppStore((state) => ({
+    setIsLoading: state.setIsLoading,
+  }));
+
   const t = useTranslations("TextEditor");
   const imageManager = new ImageManager();
 

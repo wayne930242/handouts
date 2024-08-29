@@ -19,7 +19,9 @@ const LightBoxWrapper = dynamic(() => import("@/components/LightBoxWrapper"), {
 });
 
 export default function HandoutViewer({ handout }: Props) {
-  const { setCampaignData } = useCampaignStore();
+  const { setCampaignData } = useCampaignStore((state) => ({
+    setCampaignData: state.setCampaignData,
+  }));
   const canEdit = useCanEditCampaign();
   const supabase = createClient();
 

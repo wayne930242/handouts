@@ -73,7 +73,10 @@ export type ContentFieldProps = ControllerRenderProps<
 >;
 
 export default function HandoutCard({ handout, chapterId }: Props) {
-  const { setCampaignData, campaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore((state) => ({
+    setCampaignData: state.setCampaignData,
+    campaignData: state.campaignData,
+  }));
   const supabase = createClient();
   const t = useTranslations("HandoutCard");
 

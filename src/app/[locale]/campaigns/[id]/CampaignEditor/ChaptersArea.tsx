@@ -17,7 +17,10 @@ interface Props {
 export default function ChaptersArea({ chapters, campaignId }: Props) {
   const supabase = createClient();
 
-  const { campaignData, setCampaignData } = useCampaignStore();
+  const { campaignData, setCampaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    setCampaignData: state.setCampaignData,
+  }));
 
   return (
     <DragDropContext

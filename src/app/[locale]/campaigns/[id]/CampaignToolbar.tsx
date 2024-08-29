@@ -26,14 +26,24 @@ export default function Toolbar({
   const t = useTranslations("Toolbar");
   const router = useRouter();
 
-  const { editingCampaign, setEditingCampaign } = useAppStore();
+  const { editingCampaign, setEditingCampaign } = useAppStore((state) => ({
+    editingCampaign: state.editingCampaign,
+    setEditingCampaign: state.setEditingCampaign,
+  }));
   const {
     campaignData,
     connected,
     setupRealtimeSubscription,
     resetConnectedAttempts,
-  } = useCampaignStore();
-  const { loading } = useCampaignStore();
+    loading,
+  } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    connected: state.connected,
+    setupRealtimeSubscription: state.setupRealtimeSubscription,
+    resetConnectedAttempts: state.resetConnectedAttempts,
+    loading: state.loading,
+  }));
+
   const supabase = createClient();
 
   return (

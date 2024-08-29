@@ -12,7 +12,10 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { useTranslations } from "next-intl";
 
 export default function PassphraseDialog() {
-  const { passphraseDialog, setPassphraseDialog } = useAppStore();
+  const { passphraseDialog, setPassphraseDialog } = useAppStore((state) => ({
+    passphraseDialog: state.passphraseDialog,
+    setPassphraseDialog: state.setPassphraseDialog,
+  }));
   const t = useTranslations("PassphraseDialog");
 
   return (

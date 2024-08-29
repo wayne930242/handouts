@@ -13,7 +13,11 @@ import useAppStore from "@/lib/store/useAppStore";
 import { useTranslations } from "next-intl";
 
 export default function ConfirmDialog() {
-  const { confirmDialog, setConfirmDialog } = useAppStore();
+  const { confirmDialog, setConfirmDialog } = useAppStore((state) => ({
+    confirmDialog: state.confirmDialog,
+    setConfirmDialog: state.setConfirmDialog,
+  }));
+
   const t = useTranslations("ConfirmDialog");
 
   const { id, title, description } = confirmDialog ?? {};

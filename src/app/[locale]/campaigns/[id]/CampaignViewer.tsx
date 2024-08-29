@@ -2,7 +2,9 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import ChapterViewer from "./CampaignViewer/ChapterViewer";
 
 export default function CampaignViewer() {
-  const { campaignData } = useCampaignStore();
+  const { campaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+  }));
 
   return (
     <div className="flex flex-col gap-2 w-full my-2">

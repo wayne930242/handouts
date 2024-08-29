@@ -28,7 +28,10 @@ const emptySection = (
 export default function ChapterCard({ chapter }: Props) {
   const t = useTranslations("ChapterCard");
   const supabase = createClient();
-  const { setCampaignData, campaignData } = useCampaignStore();
+  const { setCampaignData, campaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    setCampaignData: state.setCampaignData,
+  }));
 
   const deleteChapter = async (chapters: Chapter[]) => {
     if (!chapters || chapters.length === 0) return;

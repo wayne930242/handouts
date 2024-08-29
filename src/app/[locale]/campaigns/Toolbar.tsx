@@ -5,7 +5,9 @@ import useAppStore from "@/lib/store/useAppStore";
 import { useTranslations } from "next-intl";
 
 export default function CampaignlistToolbar() {
-  const { setPassphraseDialog } = useAppStore();
+  const { setPassphraseDialog } = useAppStore((state) => ({
+    setPassphraseDialog: state.setPassphraseDialog,
+  }));
   const t = useTranslations("CampaignlistToolbar");
 
   return (
