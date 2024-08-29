@@ -6,10 +6,17 @@ import AuthButton from "../AuthButton";
 import LocaleSwitcher from "../LocaleSwitcher";
 
 import Footer from "./Footer";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import NavItems from "./NavItems";
+import VisuallyHidden from "../ui/visuallyhidden";
 
 export default async function PageLayout({
   header,
@@ -53,6 +60,12 @@ export default async function PageLayout({
               </Button>
             </SheetTrigger>
             <SheetContent side="left">
+              <VisuallyHidden>
+                <SheetTitle>Navigation</SheetTitle>
+              </VisuallyHidden>
+              <VisuallyHidden>
+                <SheetDescription>Navigation menu</SheetDescription>
+              </VisuallyHidden>
               <nav className="grid gap-6 text-lg font-medium">
                 <NavItems />
               </nav>

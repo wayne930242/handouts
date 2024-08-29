@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import VisuallyHidden from "./ui/visuallyhidden";
+import { DialogDescription, DialogTitle } from "./ui/dialog";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -40,6 +42,12 @@ export default async function AuthButton() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <VisuallyHidden>
+            <DialogTitle>User menu</DialogTitle>
+          </VisuallyHidden>
+          <VisuallyHidden>
+            <DialogDescription>User menu</DialogDescription>
+          </VisuallyHidden>
           {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <form action={signOut}>
