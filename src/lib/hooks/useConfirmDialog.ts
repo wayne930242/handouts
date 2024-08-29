@@ -28,7 +28,7 @@ export default function useConfirmDialog<T extends any>(
   }, [confirmDialog, setConfirmDialog]);
 
   return {
-    setConfirm: (props: ConfirmProps, data?: any) => {
+    setConfirm: (props: ConfirmProps, data: T) => {
       dataRef.current = data;
       setConfirmDialog({
         ...props,
