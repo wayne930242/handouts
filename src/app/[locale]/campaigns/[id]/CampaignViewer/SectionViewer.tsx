@@ -3,6 +3,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import dynamic from "next/dynamic";
 
 import { Section } from "@/types/interfaces";
+import { cn } from "@/lib/utils";
 
 const HandoutViewer = dynamic(() => import("./HandoutViewer"), {
   ssr: false,
@@ -11,10 +12,12 @@ const HandoutViewer = dynamic(() => import("./HandoutViewer"), {
 export default function SectionViewer({ section }: Props) {
   return (
     <Card id={`handout-section-${section.id}`}>
-      <CardHeader>
-        <CardTitle className="text-center text-xl">{section.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
+      {section.title && (
+        <CardHeader>
+          <CardTitle className="text-center text-xl">{section.title}</CardTitle>
+        </CardHeader>
+      )}
+      <CardContent className={cn("p-3", { "pt-3": !section.title })}>
         {section.handouts?.length && (
           <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2 }}>
             <Masonry gutter="20px">

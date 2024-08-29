@@ -33,7 +33,7 @@ export default function HandoutViewer({ handout }: Props) {
   return (
     <Wrapper>
       <div
-        className="flex flex-col gap-y-2 w-full py-2"
+        className="flex flex-col gap-y-2 w-full h-full p-2 border border-dashed border-border rounded-sm"
         id={`handout-${handout.id}`}
       >
         <div className="flex gap-2 items-center justify-between">
