@@ -39,7 +39,7 @@ export default function CampaignDeleteZone({
 }) {
   const t = useTranslations("CampaignDeleteZone");
   const supabase = createClient();
-  const imageManager = new ImageManager(supabase);
+  const imageManager = new ImageManager();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

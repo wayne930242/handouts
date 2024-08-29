@@ -1,12 +1,6 @@
-import { SupabaseClient } from "@supabase/supabase-js";
 import { blobToWebP } from "webp-converter-browser";
 import imageCompression, { Options } from "browser-image-compression";
-import { createS3Client } from "./s3/client";
-import {
-  PutObjectCommand,
-  ListObjectsV2Command,
-  DeleteObjectsCommand,
-} from "@aws-sdk/client-s3";
+import ky from "ky";
 
 const defaultOptions: Options = {
   maxSizeMB: 1,
@@ -15,79 +9,22 @@ const defaultOptions: Options = {
   fileType: "image/jpeg",
 };
 
-export default class ImageManager {
-  private supabase: SupabaseClient;
-  private options: Options;
+type Fields = any;
 
-  constructor(supabase: SupabaseClient, options: Options = defaultOptions) {
-    this.supabase = supabase;
+export default class ImageManager {
+  private options: Options;
+  private baseUrl: string;
+
+  constructor(options: Options = defaultOptions) {
     this.options = options;
+    this.baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   }
 
-  async uploadImage(file: File, campaignId: string): Promise<string | null> {
-    const {
-      data: { session },
-    } = await this.supabase.auth.getSession();
-    if (!session) return null;
-
-    const s3Client = createS3Client(session.access_token);
+  async uploadImage(file: File, campaignId: string): Promise<string> {
     const compressedImage = await this.compressImage(file);
     const key = `${campaignId}/images/${Date.now()}.webp`;
-
-    const params = {
-      Bucket: process.env.NEXT_PUBLIC_S3_BUCKET!,
-      Key: key,
-      Body: compressedImage,
-      ACL: "public-read" as const,
-    };
-
-    try {
-      const command = new PutObjectCommand(params);
-      await s3Client.send(command);
-      return `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${key}`;
-    } catch (error) {
-      console.error("Upload failed:", error);
-      return null;
-    }
-  }
-
-  async deleteImagesByCampaignId(campaignId: string): Promise<void> {
-    const {
-      data: { session },
-    } = await this.supabase.auth.getSession();
-    if (!session) return;
-
-    const s3Client = createS3Client(session.access_token);
-    const prefix = `${campaignId}/images/`;
-
-    try {
-      const listCommand = new ListObjectsV2Command({
-        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET!,
-        Prefix: prefix,
-      });
-      const { Contents } = await s3Client.send(listCommand);
-
-      if (!Contents || Contents.length === 0) {
-        console.log("No images found for deletion.");
-        return;
-      }
-
-      const deleteParams = {
-        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET!,
-        Delete: {
-          Objects: Contents.map((item) => ({ Key: item.Key! })),
-        },
-      };
-
-      const deleteCommand = new DeleteObjectsCommand(deleteParams);
-      await s3Client.send(deleteCommand);
-
-      console.log(
-        `${Contents.length} images deleted from campaign ${campaignId}`
-      );
-    } catch (error) {
-      console.error("Deletion failed:", error);
-    }
+    const objectUrl = await this.uploadToS3(compressedImage, key);
+    return objectUrl;
   }
 
   private async compressImage(file: File): Promise<Blob> {
@@ -95,5 +32,49 @@ export default class ImageManager {
       ? await imageCompression(file, this.options)
       : file;
     return blobToWebP(compressedImage);
+  }
+
+  async deleteImagesByCampaignId(campaignId: string): Promise<void> {
+    try {
+      await ky.post(`${this.baseUrl}/api/delete-images`, {
+        json: { campaignId },
+      });
+    } catch (error) {
+      console.error("Delete failed:", error);
+      throw new Error("Failed to delete images from S3");
+    }
+  }
+
+  private async uploadToS3(file: Blob, key: string): Promise<string> {
+    try {
+      const data: {
+        url: string;
+        fields: Fields;
+      } = await ky
+        .post(`${this.baseUrl}/api/upload`, {
+          json: { filename: key, contentType: file.type },
+        })
+        .json();
+
+      if (!data) throw new Error("Api response is empty");
+
+      const fields = data.fields;
+      const url = data.url;
+
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append("file", file);
+
+      await ky.post(url, {
+        body: formData,
+      });
+
+      return `${url}${fields.key}`;
+    } catch (error) {
+      console.error("Upload failed:", error);
+      throw new Error("Failed to upload image to S3");
+    }
   }
 }

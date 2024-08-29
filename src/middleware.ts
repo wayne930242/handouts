@@ -70,11 +70,10 @@ export async function middleware(request: NextRequest) {
   }
 }
 
-// config 部分保持不變
 export const config = {
   matcher: [
     "/",
     "/(tw|en)/:path*",
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/|auth/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
