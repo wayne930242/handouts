@@ -37,9 +37,9 @@ export default function ConfirmDialog() {
             variant="secondary"
             onClick={() => {
               setConfirmDialog({
-                id: id ?? "",
-                title: title ?? "",
-                description: description ?? "",
+                id: id!,
+                title: title!,
+                description: description!,
                 state: "canceled",
               });
             }}
@@ -50,9 +50,9 @@ export default function ConfirmDialog() {
             variant="destructive"
             onClick={() => {
               setConfirmDialog({
-                id: id ?? "",
-                title: title ?? "",
-                description: description ?? "",
+                id: id!,
+                title: title!,
+                description: description!,
                 state: "confirmed",
               });
             }}

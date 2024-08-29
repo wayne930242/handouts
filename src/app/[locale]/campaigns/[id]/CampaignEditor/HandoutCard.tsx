@@ -126,7 +126,22 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     };
   }, [triggerReset]);
 
-  const waitingConfirm = useConfirmDialog();
+  const deleteHandout = async (h: Handout) => {
+    if (!h) return;
+    setCampaignData(
+      {
+        id: h.id,
+      },
+      {
+        id: h.id,
+        section_id: h.section_id,
+      },
+      supabase,
+      "handouts",
+      "DELETE"
+    );
+  };
+  const { setConfirm } = useConfirmDialog(deleteHandout);
 
   return (
     <Card className="relative">
@@ -315,29 +330,18 @@ export default function HandoutCard({ handout, chapterId }: Props) {
         size="icon"
         type="button"
         onClick={async (e) => {
-          const confirmed =
-            !handout.content ||
-            (await waitingConfirm({
-              id: `delete-handout-${handout.id}`,
-              title: t("deleteHandout"),
-              description: t("deleteHandoutDescription"),
-            }));
-
-          if (!confirmed) return;
-
-          setCampaignData(
-            {
-              id: handout.id,
-              section_id: handout.section_id,
-            },
-            {
-              id: handout.id,
-              section_id: handout.section_id,
-            },
-            supabase,
-            "handouts",
-            "DELETE"
-          );
+          if (!handout.content) {
+            deleteHandout(handout);
+          } else {
+            setConfirm(
+              {
+                id: `delete-handout-${handout.id}`,
+                title: t("deleteHandout"),
+                description: t("deleteHandoutDescription"),
+              },
+              handout
+            );
+          }
         }}
       >
         <X className="h-4 w-4" />

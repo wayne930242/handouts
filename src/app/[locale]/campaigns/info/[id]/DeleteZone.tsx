@@ -43,7 +43,34 @@ export default function CampaignDeleteZone({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const waitingConfirm = useConfirmDialog();
+  const { setConfirm } = useConfirmDialog(
+    async (data: z.infer<typeof FormSchema>) => {
+      if (data.campaign_id === campaignId) {
+        try {
+          setLoading(true);
+          await imageManager.deleteImagesByCampaignId(data.campaign_id);
+          await supabase.from("campaigns").delete().eq("id", data.campaign_id);
+          toast({
+            title: t("successTitle"),
+            description: t("successDescription"),
+          });
+          router.push("/campaigns");
+        } catch (error) {
+          toast({
+            title: t("errorTitle"),
+            description: t("errorDescription"),
+            variant: "destructive",
+          });
+        }
+        setLoading(false);
+      } else {
+        form.setError("campaign_id", {
+          type: "manual",
+          message: t("idMismatchError"),
+        });
+      }
+    }
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,38 +80,14 @@ export default function CampaignDeleteZone({
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const confirmed = await waitingConfirm({
-      id: `delete-campaign-${data.campaign_id}`,
-      title: t("deleteCampaign"),
-      description: t("deleteCampaignDescription"),
-    });
-
-    if (!confirmed) return;
-
-    if (data.campaign_id === campaignId) {
-      try {
-        setLoading(true);
-        await imageManager.deleteImagesByCampaignId(data.campaign_id);
-        await supabase.from("campaigns").delete().eq("id", data.campaign_id);
-        toast({
-          title: t("successTitle"),
-          description: t("successDescription"),
-        });
-        router.push("/campaigns");
-      } catch (error) {
-        toast({
-          title: t("errorTitle"),
-          description: t("errorDescription"),
-          variant: "destructive",
-        });
-      }
-      setLoading(false);
-    } else {
-      form.setError("campaign_id", {
-        type: "manual",
-        message: t("idMismatchError"),
-      });
-    }
+    setConfirm(
+      {
+        id: `delete-campaign-${data.campaign_id}`,
+        title: t("deleteCampaign"),
+        description: t("deleteCampaignDescription"),
+      },
+      data
+    );
   }
 
   return (
@@ -95,7 +98,10 @@ export default function CampaignDeleteZone({
       <CardContent>
         <CardDescription>{t("description")}</CardDescription>
         <div className="border border-input p-4 my-4">
-          {t("campaignIdLabel")} <span className="border border-red-300 px-2 py-1 rounded-md">{campaignId}</span>
+          {t("campaignIdLabel")}{" "}
+          <span className="border border-red-300 px-2 py-1 rounded-md">
+            {campaignId}
+          </span>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

@@ -2,59 +2,38 @@
 import { useEffect, useCallback, useRef } from "react";
 import useAppStore from "../store/useAppStore";
 
-export default function useConfirmDialog() {
-  const { confirmDialog, setConfirmDialog } = useAppStore();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+interface ConfirmProps {
+  id: string;
+  title: string;
+  description: string;
+}
 
-  const clearTimeoutSafely = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  };
+export default function useConfirmDialog<T extends any>(
+  onConfirm: (d: T) => Promise<any>,
+  onCancel?: (d: T) => Promise<any>
+) {
+  const { confirmDialog, setConfirmDialog } = useAppStore();
+  const dataRef = useRef<T>();
 
   useEffect(() => {
-    return () => clearTimeoutSafely();
-  }, []);
+    if (!confirmDialog || confirmDialog.state === "pending") return;
 
-  return ({
-    id,
-    title,
-    description,
-  }: {
-    id: string;
-    title: string;
-    description: string;
-  }) => {
-    return new Promise<boolean>((resolve) => {
-      resolve(true);
+    if (confirmDialog.state === "confirmed") {
+      onConfirm(dataRef.current as T);
+      setConfirmDialog(null);
+    } else if (confirmDialog.state === "canceled") {
+      onCancel?.(dataRef.current as T);
+      setConfirmDialog(null);
+    }
+  }, [confirmDialog, setConfirmDialog]);
 
-      // setConfirmDialog({
-      //   id,
-      //   title,
-      //   description,
-      //   state: "pending",
-      // });
-
-      // const checkState = () => {
-      //   if (confirmDialog?.id === id) {
-      //     if (confirmDialog.state === "confirmed") {
-      //       setConfirmDialog(null);
-      //       resolve(true);
-      //     } else if (confirmDialog.state === "canceled") {
-      //       setConfirmDialog(null);
-      //       resolve(false);
-      //     } else {
-      //       clearTimeoutSafely();
-      //       timeoutRef.current = setTimeout(checkState, 100);
-      //     }
-      //   } else {
-      //     resolve(false);
-      //   }
-      // };
-
-      // clearTimeoutSafely();
-      // timeoutRef.current = setTimeout(checkState, 0);
-    });
+  return {
+    setConfirm: (props: ConfirmProps, data?: any) => {
+      dataRef.current = data;
+      setConfirmDialog({
+        ...props,
+        state: "pending",
+      });
+    },
   };
 }

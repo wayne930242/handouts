@@ -13,7 +13,7 @@ import {
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
-import { Link } from "@/navigation";
+import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 
 export default function Toolbar({
@@ -24,6 +24,8 @@ export default function Toolbar({
   isAuthorized: boolean;
 }) {
   const t = useTranslations("Toolbar");
+  const router = useRouter();
+
   const { editingCampaign, setEditingCampaign } = useAppStore();
   const {
     campaignData,

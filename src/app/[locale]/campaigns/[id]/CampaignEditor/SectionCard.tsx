@@ -40,7 +40,36 @@ export default function SectionCard({ section }: Props) {
   const session = useSession();
   const { setCampaignData, campaignData } = useCampaignStore();
 
-  const waitingConfirm = useConfirmDialog();
+  const deleteSection = async (sections: Section[]) => {
+    if (!sections || sections.length === 0) return;
+    const sectionIndex = sections.findIndex((s) => s.id === section.id);
+
+    const newSections = advancedRemoveElement(
+      sections ?? [],
+      sectionIndex,
+      "order_num",
+      ["handouts"]
+    );
+
+    if (newSections.length) {
+      setCampaignData(newSections, sections, supabase, "sections", "UPDATE");
+    }
+
+    setCampaignData(
+      {
+        id: section.id,
+      },
+      {
+        id: section.id,
+        chapter_id: section.chapter_id,
+      },
+      supabase,
+      "sections",
+      "DELETE"
+    );
+  };
+
+  const { setConfirm } = useConfirmDialog(deleteSection);
 
   return (
     <div className="relative flex flex-col gap-y-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -114,55 +143,25 @@ export default function SectionCard({ section }: Props) {
         size="icon"
         onClick={async (e) => {
           if (!campaignData) return;
-          const confirmed =
-            section.handouts?.length === 0 ||
-            (await waitingConfirm({
-              id: `delete-section-${section.id}`,
-              title: t("deleteSection"),
-              description: t("deleteSectionDescription"),
-            }));
-
-          if (!confirmed) return;
-
           const chapter = campaignData?.chapters.find(
             (chapter) => chapter.id === section.chapter_id
           );
 
           if (!chapter) return;
-          const { sections } = chapter;
+          const sections = chapter.sections;
 
-          const sectionIndex = sections.findIndex((s) => s.id === section.id);
-
-          const newSections = advancedRemoveElement(
-            sections ?? [],
-            sectionIndex,
-            "order_num",
-            ["handouts"]
-          );
-
-          if (newSections.length !== 0) {
-            setCampaignData(
-              newSections,
-              sections,
-              supabase,
-              "sections",
-              "UPDATE"
+          if (!section.handouts?.length) {
+            deleteSection(sections);
+          } else {
+            setConfirm(
+              {
+                id: `delete-section-${section.id}`,
+                title: t("deleteSection"),
+                description: t("deleteSectionDescription"),
+              },
+              sections
             );
           }
-
-          setCampaignData(
-            {
-              id: section.id,
-              chapter_id: section.chapter_id,
-            },
-            {
-              id: section.id,
-              chapter_id: section.chapter_id,
-            },
-            supabase,
-            "sections",
-            "DELETE"
-          );
         }}
       >
         <X className="h-4 w-4" />

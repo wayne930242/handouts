@@ -30,7 +30,38 @@ export default function ChapterCard({ chapter }: Props) {
   const supabase = createClient();
   const { setCampaignData, campaignData } = useCampaignStore();
 
-  const waitingConfirm = useConfirmDialog();
+  const deleteChapter = async (chapters: Chapter[]) => {
+    if (!chapters || chapters.length === 0) return;
+    const chapterIndex = chapters.findIndex((c) => c.id === chapter.id);
+    const newChapters = advancedRemoveElement(
+      chapters ?? [],
+      chapterIndex,
+      "order_num",
+      ["sections"]
+    );
+    if (newChapters.length !== 0) {
+      setCampaignData(newChapters, {}, supabase, "chapters", "UPDATE");
+    }
+    setCampaignData(
+      {
+        id: chapter.id,
+        campaign_id: chapter.campaign_id,
+        title: chapter.title,
+        order_num: chapter.order_num,
+      },
+      {
+        id: chapter.id,
+        campaign_id: chapter.campaign_id,
+        title: chapter.title,
+        order_num: chapter.order_num,
+      },
+      supabase,
+      "chapters",
+      "DELETE"
+    );
+  };
+
+  const { setConfirm } = useConfirmDialog(deleteChapter);
 
   return (
     <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -101,44 +132,19 @@ export default function ChapterCard({ chapter }: Props) {
         size="icon"
         onClick={async (e) => {
           if (!campaignData) return;
-          const confirmed =
-            chapter.sections?.length === 0 ||
-            (await waitingConfirm({
-              id: `delete-chapter-${chapter.id}`,
-              title: t("deleteChapter"),
-              description: t("deleteChapterDescription"),
-            }));
-
-          if (!confirmed) return;
-
-          const { chapters } = campaignData;
-          const chapterIndex = chapters.findIndex((c) => c.id === chapter.id);
-          const newChapters = advancedRemoveElement(
-            chapters ?? [],
-            chapterIndex,
-            "order_num",
-            ["sections"]
-          );
-          if (newChapters.length !== 0) {
-            setCampaignData(newChapters, {}, supabase, "chapters", "UPDATE");
+          const chapters = campaignData.chapters;
+          if (!chapter.sections?.length) {
+            deleteChapter(chapters);
+          } else {
+            setConfirm(
+              {
+                id: `delete-chapter-${chapter.id}`,
+                title: t("deleteChapter"),
+                description: t("deleteChapterDescription"),
+              },
+              chapters
+            );
           }
-          setCampaignData(
-            {
-              id: chapter.id,
-              campaign_id: chapter.campaign_id,
-              title: chapter.title,
-              order_num: chapter.order_num,
-            },
-            {
-              id: chapter.id,
-              campaign_id: chapter.campaign_id,
-              title: chapter.title,
-              order_num: chapter.order_num,
-            },
-            supabase,
-            "chapters",
-            "DELETE"
-          );
         }}
       >
         <X className="h-4 w-4" />
