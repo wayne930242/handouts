@@ -6,12 +6,14 @@ import Footer from "./Footer";
 import NavBar from "./NavBar";
 
 export default async function PageLayout({
-  children,
   header,
+  children,
+  sidebar,
   needsAuth = false,
 }: {
   header?: React.ReactNode;
   children: React.ReactNode;
+  sidebar?: React.ReactNode;
   needsAuth?: boolean;
 }) {
   const supabase = createClient();
@@ -28,11 +30,13 @@ export default async function PageLayout({
 
   return (
     <div className="flex-1 w-full flex flex-col gap-4 items-center">
-      <div className="mt-2 max-w-4xl w-full mx-auto flex flex-col gap-2">
-        <NavBar />
+      <div className="mt-2 max-w-6xl w-full mx-auto flex flex-col gap-2">
+        <div className="w-full">
+          <NavBar />
+        </div>
         {header}
       </div>
-      <div className="flex-1 flex flex-col gap-8 max-w-4xl px-3 w-full">
+      <div className="flex-1 flex flex-col gap-8 max-w-6xl px-3 w-full">
         {children}
       </div>
       <Footer />
