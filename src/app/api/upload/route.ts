@@ -11,11 +11,11 @@ const s3Client = new S3Client({
 });
 
 export async function POST(request: Request) {
-  const { contentType } = await request.json();
+  const { contentType, filename } = await request.json();
   try {
     const { url, fields } = await createPresignedPost(s3Client, {
       Bucket: process.env.S3_BUCKET!,
-      Key: uuidv4(),
+      Key: filename,
       Conditions: [
         ["content-length-range", 0, 10485760], // up to 10 MB
         ["starts-with", "$Content-Type", contentType],

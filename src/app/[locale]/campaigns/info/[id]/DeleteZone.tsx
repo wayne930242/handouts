@@ -95,7 +95,7 @@ export default function CampaignDeleteZone({
       <CardContent>
         <CardDescription>{t("description")}</CardDescription>
         <div className="border border-input p-4 my-4">
-          {t("campaignIdLabel")} {campaignId}
+          {t("campaignIdLabel")} <span className="border border-red-300 px-2 py-1 rounded-md">{campaignId}</span>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
