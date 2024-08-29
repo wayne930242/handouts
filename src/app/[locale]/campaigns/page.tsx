@@ -42,7 +42,7 @@ export default async function CampaignPage({ params: { locale } }: Props) {
           </div>
         </div>
       )}
-      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2">
+      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {campaigns?.map((campaign) => (
           <CampaignCard campaign={campaign} key={campaign.id} />
         ))}

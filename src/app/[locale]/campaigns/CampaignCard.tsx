@@ -18,7 +18,7 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
   const t = useTranslations("CampaignCard");
 
   return (
-    <Card className="flex flex-col gap-y-1 w-full">
+    <Card className="flex flex-col gap-y-1 w-full min-h-56">
       <CardHeader className="cursor-pointer hover:bg-accent">
         <Link
           href={`/campaigns/info/${campaign.id}`}
