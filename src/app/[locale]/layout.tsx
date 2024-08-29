@@ -8,6 +8,7 @@ import {
   unstable_setRequestLocale,
 } from "next-intl/server";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import GlobalLoading from "./GlobalLoading";
 
 const defaultUrl = "https://handouts.wayneh.tw";
 
@@ -79,6 +80,7 @@ export default async function RootLayout({
             {children}
             <Toaster />
             <ConfirmDialog />
+            <GlobalLoading />
           </NextIntlClientProvider>
         </main>
       </body>

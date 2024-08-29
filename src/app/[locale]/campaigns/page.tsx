@@ -33,18 +33,19 @@ export default async function CampaignPage({ params: { locale } }: Props) {
       {/* <Alert variant="destructive">
         <AlertDescription>{t("alert")}</AlertDescription>
       </Alert> */}
-      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+
+      {campaigns?.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-2 text-center py-12">
+          <div className="text-2xl font-bold">{t("noCampaigns")}</div>
+          <div className="text-sm text-muted-foreground">
+            {t("createCampaign")}
+          </div>
+        </div>
+      )}
+      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2">
         {campaigns?.map((campaign) => (
           <CampaignCard campaign={campaign} key={campaign.id} />
         ))}
-        {campaigns?.length === 0 && (
-          <div className="flex flex-col items-center justify-center gap-2 text-center">
-            <div className="text-2xl font-bold">{t("noCampaigns")}</div>
-            <div className="text-sm text-muted-foreground">
-              {t("createCampaign")}
-            </div>
-          </div>
-        )}
       </main>
     </PageLayout>
   );

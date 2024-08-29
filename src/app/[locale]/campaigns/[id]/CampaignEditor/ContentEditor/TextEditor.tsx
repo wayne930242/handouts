@@ -4,8 +4,10 @@ import { toast } from "@/components/ui/use-toast";
 import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import ImageManager from "@/lib/ImageManager";
+import useAppStore from "@/lib/store/useAppStore";
 
 export default function TextEditor({ field, oldValue, campaignId }: Props) {
+  const { setIsLoading } = useAppStore();
   const t = useTranslations("TextEditor");
   const imageManager = new ImageManager();
 
@@ -17,6 +19,7 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
       imageUploadHandler={
         campaignId
           ? async (image: File) => {
+              setIsLoading(true);
               return imageManager
                 .uploadImage(image, campaignId)
                 .then((url) => url)
@@ -27,7 +30,8 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
                     variant: "destructive",
                   });
                   throw new Error("Failed to upload image");
-                });
+                })
+                .finally(() => setIsLoading(false));
             }
           : undefined
       }

@@ -53,11 +53,13 @@ export interface HandoutBase {
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
+export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
+
 export type RealtimePayload<T> = {
   schema: "public";
   table: string;
   commit_timestamp: string;
-  eventType: "INSERT" | "UPDATE" | "DELETE";
+  eventType: MutateEventType;
   new: T;
   old: T;
   errors?: { [key: string]: string }[];
@@ -79,7 +81,7 @@ export type SetCampaignData = (
   oldData: SetCampaignPayload,
   supabaseClient: SupabaseClient,
   tableName: CampaignSubTable,
-  type: "INSERT" | "UPDATE" | "DELETE",
+  type: MutateEventType,
   debounce?: {
     key: string;
     delay: number;
@@ -96,14 +98,14 @@ export interface CampaignStore {
     newData: SetCampaignPayload,
     oldData: SetCampaignPayload,
     tableName: CampaignSubTable,
-    type: "INSERT" | "UPDATE" | "DELETE"
+    type: MutateEventType
   ) => void;
   setCampaignDataRemote: (
     newData: SetCampaignPayload,
     oldData: SetCampaignPayload,
     supabaseClient: SupabaseClient,
     tableName: CampaignSubTable,
-    type: "INSERT" | "UPDATE" | "DELETE",
+    type: MutateEventType,
     debounce?: {
       key: string;
       delay: number;
@@ -142,6 +144,8 @@ export interface AppStore {
   setPassphraseDialog: (passphraseDialog: boolean) => void;
   confirmDialog: ConfirmDialogData | null;
   setConfirmDialog: (confirmDialog: ConfirmDialogData | null) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 export interface Session {
