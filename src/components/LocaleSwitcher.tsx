@@ -43,7 +43,7 @@ export default function LocaleSwitcher(): React.ReactElement {
 
   return (
     <Select onValueChange={handleLocaleChange}>
-      <SelectTrigger className="px-2 h-9 border-transparent focus:ring-transparent">
+      <SelectTrigger className="w-18 px-2 h-9 border-transparent focus:ring-transparent">
         <SelectValue placeholder={t("switchLocale", { locale })} />
       </SelectTrigger>
       <SelectContent>

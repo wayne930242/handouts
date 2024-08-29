@@ -1,6 +1,3 @@
-import { redirect } from "@/navigation";
-import { createClient } from "@/lib/supabase/server";
-
 import PageLayout from "@/components/layouts/PageLayout";
 import PassphraseForm from "@/components/PassphraseForm";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
@@ -19,16 +16,6 @@ export default async function Index({
   unstable_setRequestLocale(locale);
 
   const t = await getTranslations("Index");
-
-  const supabase = createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    return redirect("/campaigns");
-  }
 
   return (
     <PageLayout>

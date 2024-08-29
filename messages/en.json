@@ -105,13 +105,18 @@
     "welcome": "Welcome to Handouts!"
   },
   "LocaleLayout": {
+    "campaigns": "Campaigns",
     "description": "A simple tool to help you share and manage handouts of RPG campaigns. Developed by WeiHung.",
     "loggedIn": "Logged in as {username}",
     "loggedOut": "You are logged out.",
     "login": "Login",
     "logout": "Logout",
+    "myfavorites": "My Favorites",
+    "profile": "Profile",
+    "rules": "Rules",
     "secret": "Secret page for logged in users",
     "signup": "Sign up",
+    "subscriptions": "Subscriptions",
     "title": "Handouts - a TRPG tool by WeiHung",
     "welcome": "Welcome"
   },

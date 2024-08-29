@@ -4,19 +4,24 @@ import { redirect } from "@/navigation";
 import { Button } from "./ui/button";
 import { getTranslations } from "next-intl/server";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export default async function AuthButton() {
   const supabase = createClient();
-
   const t = await getTranslations("LocaleLayout");
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const signOut = async () => {
     "use server";
-
     const supabase = createClient();
     await supabase.auth.signOut();
     return redirect("/login");
@@ -24,13 +29,30 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      <form action={signOut}>
-        <Button variant="outline">{t("logout")}</Button>
-      </form>
-      <Avatar>
-        <AvatarImage src="/img/default-avatar.webp" />
-        <AvatarFallback>GM</AvatarFallback>
-      </Avatar>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" size="icon" className="rounded-full">
+            <Avatar>
+              <AvatarImage src="/img/default-avatar.webp" />
+              <AvatarFallback>GM</AvatarFallback>
+            </Avatar>
+            <span className="sr-only">Toggle user menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
+          <DropdownMenuSeparator />
+          <form action={signOut}>
+            <Button
+              className="w-full border-none justify-start cursor-default px-2 py-1.5"
+              variant="outline"
+              size="sm"
+            >
+              {t("logout")}
+            </Button>
+          </form>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   ) : (
     <div className="flex gap-2">
