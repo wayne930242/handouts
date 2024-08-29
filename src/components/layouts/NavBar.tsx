@@ -9,7 +9,7 @@ export default function NavBar({}) {
       <div className="w-full max-w-4xl flex justify-between items-center py-2 px-3 text-sm">
         <Link href="/" className="flex items-center gap-1 relative">
           <div className="text-2xl font-bold">Handouts</div>
-          <Badge className="absolute top-4 -right-11 px-1.5 py-0.5" variant="destructive">
+          <Badge className="absolute top-2 -right-11 px-1.5 py-0.5" variant="destructive">
             BETA
           </Badge>
         </Link>
