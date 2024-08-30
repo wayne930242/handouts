@@ -56,6 +56,7 @@ export default function CampaignForm({
             name: data.name,
             description: data.description,
             passphrase: data.passphrase,
+            status: "ACTIVE",
           },
         ]);
 
@@ -64,6 +65,10 @@ export default function CampaignForm({
         }
         break;
       default:
+        if (!serverData.id) {
+          errorMessage = "Campaign ID is required";
+          break;
+        }
         const { error: updateError } = await supabase
           .from("campaigns")
           .update({

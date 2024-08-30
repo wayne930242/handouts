@@ -22,6 +22,10 @@ export default async function CampaignPage({
 
   const c_passphrase = await getPassphrase(id);
 
+  if (!c_passphrase) {
+    return redirect("/?campaign_id=" + id);
+  }
+
   const { data: isAuthorized, error: authError } = await supabase.rpc(
     "check_campaign_passphrase_rpc",
     {
@@ -31,12 +35,12 @@ export default async function CampaignPage({
   );
 
   if (!isAuthorized || authError) {
-    redirect("/?campaign_id=" + id);
+    return redirect("/?campaign_id=" + id);
   }
 
   return (
     <PageLayout>
-      {isAuthorized && <Campaign campaignId={id} isAuthorized={isAuthorized} />}
+      <Campaign campaignId={id} isAuthorized={isAuthorized} />
     </PageLayout>
   );
 }

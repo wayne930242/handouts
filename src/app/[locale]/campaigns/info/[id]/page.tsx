@@ -40,11 +40,11 @@ export default async function CampaignPage({ params: { id } }: Props) {
       .single();
 
     data = {
-      id: result.data.id,
-      gm_id: result.data.gm_id,
-      name: result.data.name,
-      description: result.data.description ?? undefined,
-      passphrase: result.data.passphrase ?? undefined,
+      id: result.data?.id,
+      gm_id: result.data?.gm_id,
+      name: result.data?.name,
+      description: result.data?.description ?? undefined,
+      passphrase: result.data?.passphrase ?? undefined,
     };
   }
 
