@@ -27,7 +27,7 @@ export default async function CampaignPage({ params: { id } }: Props) {
   const queryClient = new QueryClient();
 
   if (id !== "new") {
-    await prefetchQuery(queryClient, getRuleInfo(supabase, id, user.id));
+    await prefetchQuery(queryClient, getRuleInfo(supabase, id));
   }
 
   return (

@@ -42,7 +42,7 @@ export default function RuleForm({
   const t = useTranslations("RuleForm");
   const supabase = createClient();
   const router = useRouter();
-  const { data: ruleInfo } = useQuery(getRuleInfo(supabase, id, userId), {
+  const { data: ruleInfo } = useQuery(getRuleInfo(supabase, id), {
     enabled: id !== "new",
   });
 

@@ -3,7 +3,6 @@ import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import { createClient } from "@/lib/supabase/server";
 import { getPassphrase } from "@/lib/passphrase";
-import { getCampaignDetail } from "@/lib/supabase/query/campaignsQuery";
 
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layouts/PageLayout";
