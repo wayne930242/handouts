@@ -1,6 +1,14 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.lint": true,
+  "deno.unstable": true,
   "i18n-ally.localesPaths": [
     "messages"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

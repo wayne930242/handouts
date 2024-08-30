@@ -36,7 +36,7 @@ export default async function CampaignPage({
 
   return (
     <PageLayout>
-      <Campaign campaignId={id} isAuthorized={isAuthorized} />
+      {isAuthorized && <Campaign campaignId={id} isAuthorized={isAuthorized} />}
     </PageLayout>
   );
 }

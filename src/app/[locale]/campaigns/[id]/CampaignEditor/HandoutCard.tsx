@@ -61,7 +61,7 @@ const YoutubeEditor = dynamic(() => import("./ContentEditor/YoutubeEditor"), {
 
 const formSchema = z.object({
   title: z.string().max(255).optional(),
-  type: z.enum(["text", "image", "link", "youtube"]).optional(),
+  type: z.string().optional(),
   content: z.string().optional(),
   is_public: z.boolean(),
   note: z.string().optional(),
@@ -82,7 +82,13 @@ export default function HandoutCard({ handout, chapterId }: Props) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: Object.freeze(handout),
+    defaultValues: {
+      title: handout.title,
+      type: handout.type ?? "text",
+      content: handout.content ?? undefined,
+      is_public: handout.is_public ?? false,
+      note: handout.note ?? undefined,
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -180,7 +186,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                               onValueChange={(value) => {
                                 field.onChange(value);
                               }}
-                              defaultValue={handout.type}
+                              defaultValue={handout.type ?? "text"}
                             >
                               <SelectTrigger className="w-full">
                                 <SelectValue
@@ -292,7 +298,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                         <FormControl>
                           <TextEditor
                             field={field}
-                            oldValue={handout.content}
+                            oldValue={handout.content ?? undefined}
                             campaignId={campaignData?.id}
                           />
                         </FormControl>

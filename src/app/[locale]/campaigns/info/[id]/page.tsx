@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { CampaignBase } from "@/types/interfaces";
+import { CampaignData } from "@/types/interfaces";
 
 import CampaignForm from "./CampaignForm";
 import PageLayout from "@/components/layouts/PageLayout";
@@ -24,7 +24,7 @@ export default async function CampaignPage({ params: { id } }: Props) {
     return <></>;
   }
 
-  let data: CampaignBase = {
+  let data: Partial<CampaignData> = {
     id: "new",
     gm_id: user.id,
     name: "New Campaign",

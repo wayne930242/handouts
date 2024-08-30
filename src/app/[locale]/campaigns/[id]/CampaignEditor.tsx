@@ -11,7 +11,6 @@ const genEmptyChapter = (
   campaignId: string,
   orderNum: number
 ): Partial<Chapter> => ({
-  id: "new",
   campaign_id: campaignId,
   title: "",
   order_num: orderNum,

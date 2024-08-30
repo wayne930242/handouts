@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { idbStorage } from "./storage";
+import { Database } from "@/types/database.types";
 import { debouncify } from "@/lib/debounce";
 import {
   CampaignStore,

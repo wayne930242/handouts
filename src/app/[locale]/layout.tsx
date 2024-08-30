@@ -10,6 +10,7 @@ import {
 import ConfirmDialog from "@/components/ConfirmDialog";
 import GlobalLoading from "./GlobalLoading";
 import PassphraseDialog from "@/components/PassphraseDialog";
+import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { BASE_URL } from "@/config/app";
 
 const defaultUrl = BASE_URL;
@@ -75,18 +76,20 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={font.className}>
-      <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
-          <NextIntlClientProvider messages={messages}>
-            {children}
-            <Toaster />
-            <ConfirmDialog />
-            <GlobalLoading />
-            <PassphraseDialog />
-          </NextIntlClientProvider>
-        </main>
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang={locale} className={font.className}>
+        <body className="bg-background text-foreground">
+          <main className="min-h-screen flex flex-col items-center">
+            <NextIntlClientProvider messages={messages}>
+              {children}
+              <Toaster />
+              <ConfirmDialog />
+              <GlobalLoading />
+              <PassphraseDialog />
+            </NextIntlClientProvider>
+          </main>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }

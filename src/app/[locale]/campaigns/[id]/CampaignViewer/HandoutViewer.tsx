@@ -90,7 +90,7 @@ export default function HandoutViewer({ handout }: Props) {
               }}
             />
           )}
-          {handout.type === "link" && <LinkViewer content={handout.content} />}
+          {handout.type === "link" && <LinkViewer content={handout.content ?? ""} />}
         </div>
       </Wrapper>
     )

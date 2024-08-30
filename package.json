@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "sync-database": "supabase gen types --lang=typescript --project-id \"kibgdeavtiiiashuzkot\" --schema public > src/types/database.types.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.637.0",
@@ -24,8 +25,10 @@
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@radix-ui/react-visually-hidden": "^1.1.0",
+    "@supabase-cache-helpers/postgrest-react-query": "^1.9.0",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.45.1",
+    "@tanstack/react-query": "^5.52.3",
     "autoprefixer": "10.4.20",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.0",
@@ -58,13 +61,15 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.14",
+    "@tanstack/eslint-plugin-query": "^5.52.3",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "22.5.0",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
     "@types/react-responsive-masonry": "^2.1.3",
     "@types/uuid": "^10.0.0",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "supabase": "^1.191.3"
   },
   "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
 }

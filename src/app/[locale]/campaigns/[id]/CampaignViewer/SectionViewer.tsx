@@ -25,7 +25,7 @@ export default function SectionViewer({ section }: Props) {
                 <HandoutViewer
                   handout={handout}
                   key={handout.id}
-                  chapterId={section.chapter_id}
+                  chapterId={section.chapter_id!}
                 />
               ))}
             </Masonry>

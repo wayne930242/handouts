@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
 import { createClient } from "@/lib/supabase/client";
-import { CampaignBase } from "@/types/interfaces";
+import { CampaignData } from "@/types/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
@@ -31,7 +31,7 @@ const FormSchema = z.object({
 export default function CampaignForm({
   serverData,
 }: {
-  serverData: CampaignBase;
+  serverData: Partial<CampaignData>;
 }) {
   const t = useTranslations("CampaignForm");
   const supabase = createClient();
@@ -39,7 +39,11 @@ export default function CampaignForm({
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: Object.freeze(serverData),
+    defaultValues: {
+      name: serverData.name,
+      description: serverData.description ?? undefined,
+      passphrase: serverData.passphrase ?? undefined,
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {

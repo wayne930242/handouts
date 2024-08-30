@@ -1,55 +1,30 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { locales } from "@/navigation";
+import { Database } from "./database.types";
 
 export type Locale = (typeof locales)[number];
 
-export interface CampaignBase {
-  id: string | "new";
-  gm_id: string;
-  name: string;
-  description?: string;
-  passphrase?: string;
-}
+export type CampaignData = Database["public"]["Tables"]["campaigns"]["Row"];
 
-export interface Campaign extends CampaignBase {
+export type Campaign = Omit<CampaignData, 'passphrase' | 'created_at' | 'status'> & {
   chapters: Chapter[];
 }
 
-export interface Chapter extends ChapterBase {
+export type Chapter = ChapterData & {
   sections: Section[];
 }
 
-export interface Section extends SectionBase {
+export type Section = SectionData & {
   handouts: Handout[];
 }
 
-export interface Handout extends HandoutBase {}
+export type Handout = Omit<HandoutData, 'updated_at' | 'created_at'>
 
-export interface ChapterBase {
-  id: number | "new";
-  campaign_id: string;
-  title?: string;
-  order_num: number;
-}
+export type ChapterData = Database["public"]["Tables"]["chapters"]["Row"]
 
-export interface SectionBase {
-  id: number | "new";
-  chapter_id: number;
-  title?: string;
-  order_num: number;
-}
+export type SectionData = Database["public"]["Tables"]["sections"]["Row"]
 
-export interface HandoutBase {
-  id: string | "new";
-  title?: string;
-  content?: string;
-  is_public: boolean;
-  section_id: number;
-  type: HandoutType;
-  owner_id: string;
-  note?: string;
-  order_num: number;
-}
+export type HandoutData = Database["public"]["Tables"]["handouts"]["Row"]
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
@@ -73,8 +48,8 @@ export type CampaignSubTable =
   | "handout_images";
 
 export type SetCampaignPayload =
-  | Partial<Campaign | Chapter | Section | Handout | HandoutImage>
-  | Array<Partial<Chapter | Section | Handout | HandoutImage>>;
+  | Partial<Campaign | Chapter | Section | Handout>
+  | Array<Partial<Chapter | Section | Handout>>;
 
 export type SetCampaignData = (
   newData: SetCampaignPayload,
@@ -194,4 +169,16 @@ export interface Session {
     updated_at: string;
     is_anonymous: boolean;
   };
+}
+
+// Rules Data
+export interface Rule {
+  id: string;
+  owner_id: string;
+  title: string;
+  content: string | null;
+  passphrase: string | null;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
 }

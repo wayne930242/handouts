@@ -36,7 +36,7 @@ export default function HandoutsArea({ section }: Props) {
                 >
                   <HandoutCard
                     handout={handout}
-                    chapterId={section.chapter_id}
+                    chapterId={section.chapter_id!}
                   />
                 </div>
               )}
