@@ -1,6 +1,5 @@
 import { redirect } from "@/navigation";
 import { createClient } from "@/lib/supabase/server";
-import PassphraseDialog from "@/components/PassphraseDialog";
 
 import AuthButton from "../AuthButton";
 import LocaleSwitcher from "../LocaleSwitcher";
@@ -85,7 +84,6 @@ export default async function PageLayout({
         </div>
       </div>
       <Footer />
-      <PassphraseDialog />
     </div>
   );
 }

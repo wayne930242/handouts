@@ -18,6 +18,8 @@ import {
 import { Input } from "./ui/input";
 import { updatePassphrase } from "@/lib/passphraseCli";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const FormSchema = z.object({
   id: z.string().min(1),
@@ -30,12 +32,23 @@ export default function PassphraseForm({
   defaultId,
 }: Props) {
   const rounder = useRouter();
+  const searchParams = useSearchParams();
+
   const t = useTranslations("PhraseForm");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: { id: defaultId ?? "", passphrase: "" },
   });
+
+  useEffect(() => {
+    if (searchParams.get("campaign_id")) {
+      form.setValue("id", searchParams.get("campaign_id") as string);
+    }
+    if (searchParams.get("passphrase")) {
+      form.setValue("passphrase", searchParams.get("passphrase") as string);
+    }
+  }, [searchParams]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     await updatePassphrase(data.id, data.passphrase);

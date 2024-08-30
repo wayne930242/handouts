@@ -13,9 +13,16 @@ import { toast } from "@/components/ui/use-toast";
 import { CampaignBase } from "@/types/interfaces";
 import { Pencil } from "lucide-react";
 import { Link } from "@/navigation";
+import { BASE_URL } from "@/config/app";
 
 export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
   const t = useTranslations("CampaignCard");
+
+  const passphraseParams = campaign.passphrase
+    ? `&passphrase=${campaign.passphrase}`
+    : "";
+  const campaignLink = `${BASE_URL}/?campaign_id=${campaign.id}`;
+  const campaignLinkWithPassphrase = `${BASE_URL}/?campaign_id=${campaign.id}${passphraseParams}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
@@ -40,7 +47,8 @@ export default function CampaignCard({ campaign }: { campaign: CampaignBase }) {
                 const info = `
 **${t("campaignId")}**: \`${campaign.id}\`
 **${t("passphrase")}**: \`${campaign.passphrase}\`
-**${t("campaignLink")}**: https://handouts.wayneh.tw/campaigns/${campaign.id}
+**${t("campaignLink")}**: ${campaignLink}
+**${t("campaignLinkWithPassphrase")}**: ${campaignLinkWithPassphrase}
 `;
                 navigator.clipboard.writeText(info);
                 toast({

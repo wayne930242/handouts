@@ -8,6 +8,7 @@
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",
+    "campaignLinkWithPassphrase": "戰役連結含通關密語",
     "copyInfo": "複製資訊",
     "edit": "編輯",
     "editView": "編輯 / 檢視",

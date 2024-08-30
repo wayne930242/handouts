@@ -1,6 +1,7 @@
 import PageLayout from "@/components/layouts/PageLayout";
 import PassphraseForm from "@/components/PassphraseForm";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import SearchParamsListener from "./SearchParamsListener";
 
 interface Props {
   searchParams: {
@@ -26,6 +27,7 @@ export default async function Index({
       <div className="flex flex-col items-center">
         <PassphraseForm defaultId={campaign_id} />
       </div>
+      <SearchParamsListener />
     </PageLayout>
   );
 }

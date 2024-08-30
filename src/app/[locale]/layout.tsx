@@ -9,8 +9,10 @@ import {
 } from "next-intl/server";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import GlobalLoading from "./GlobalLoading";
+import PassphraseDialog from "@/components/PassphraseDialog";
+import { BASE_URL } from "@/config/app";
 
-const defaultUrl = "https://handouts.wayneh.tw";
+const defaultUrl = BASE_URL;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -81,6 +83,7 @@ export default async function RootLayout({
             <Toaster />
             <ConfirmDialog />
             <GlobalLoading />
+            <PassphraseDialog />
           </NextIntlClientProvider>
         </main>
       </body>
