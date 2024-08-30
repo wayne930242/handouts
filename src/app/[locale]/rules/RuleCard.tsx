@@ -36,7 +36,7 @@ export default function RuleCard({ rule }: { rule: Rule }) {
           <Pencil className="h-4 w-4" />
         </Link>
       </CardHeader>
-      <CardContent className="grow relative h-48 overflow-hidden">
+      <CardContent className="grow relative h-32 overflow-hidden">
         {rule.banner_url && (
           <Image
             className="object-cover"
@@ -47,8 +47,11 @@ export default function RuleCard({ rule }: { rule: Rule }) {
             fill
           />
         )}
-        <div className="absolute inset-0 bg-white/50" />
-        <CardDescription>{rule.description}</CardDescription>
+      </CardContent>
+      <CardContent className="grow relative overflow-hidden py-2">
+        <CardDescription className="bg-transparent">
+          {rule.description}
+        </CardDescription>
       </CardContent>
       <CardFooter>
         <div className="flex justify-between items-center gap-2 w-full">

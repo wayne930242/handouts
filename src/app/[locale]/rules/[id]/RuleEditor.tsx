@@ -52,6 +52,7 @@ export default function RuleEditor({ rule }: Props) {
     if (file) {
       const imageUrl = await imageManager.uploadImage(file, "rules", rule.id);
       data.banner_url = imageUrl;
+      setFile(null);
     }
 
     const { error: updateError } = await supabase
@@ -122,26 +123,30 @@ export default function RuleEditor({ rule }: Props) {
             }}
           />
           <div className="w-full h-72 border border-border p-2 flex justify-center items-center rounded-sm relative">
-            {file && (
+            {(rule.banner_url || file) && (
               <Image
                 className="object-cover"
-                src={URL.createObjectURL(file)}
+                src={file ? URL.createObjectURL(file) : rule.banner_url!}
                 alt="banner"
                 loader={({ src }) => src}
                 fill
                 unoptimized
               />
             )}
-            {file && (
+            {(file || rule.banner_url) && (
               <Button
                 className="absolute top-0 right-0"
                 type="button"
                 size="icon"
                 variant="ghost"
                 onClick={() => {
-                  setFile(null);
-                  if (inputRef.current) {
-                    inputRef.current.value = "";
+                  if (file) {
+                    setFile(null);
+                    if (inputRef.current) {
+                      inputRef.current.value = "";
+                    }
+                  } else {
+                    form.setValue("banner_url", undefined);
                   }
                 }}
               >

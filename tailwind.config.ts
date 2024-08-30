@@ -18,6 +18,27 @@ const config = {
       },
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            blockquote: {
+              fontStyle: 'normal',
+              fontWeight: '500',
+              borderLeftWidth: '0.25rem',
+              borderLeftColor: '#e5e7eb',
+              quotes: 'none',
+              marginLeft: '1rem',
+              paddingLeft: '1rem',
+            },
+            'blockquote p:first-of-type::before': {
+              content: 'none',
+            },
+            'blockquote p:last-of-type::after': {
+              content: 'none',
+            },
+          },
+        }
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
