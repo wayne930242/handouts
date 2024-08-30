@@ -1,24 +1,38 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { getCampaignDetail } from "../supabase/query/campaignQuery";
 
 const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
-  const { campaignData, loading, error, fetchCampaignData } =
-    useCampaignStore();
-  const supabase = useMemo(() => createClient(), []);
+  const { initCampaignData, setLoading } = useCampaignStore(state => ({
+    initCampaignData: state.initCampaignData,
+    setLoading: state.setLoading,
+  }));
 
-  const isInit = useRef(false);
+  const supabase = useMemo(() => createClient(), []);
+  const { data: campaignData, isFetching, error, refetch } = useQuery(
+    getCampaignDetail(supabase, campaignId),
+    {
+      enabled: isAuthorized,
+    });
+
   useEffect(() => {
-    if (!isAuthorized || isInit.current) return;
-    isInit.current = true;
-    fetchCampaignData(supabase, campaignId);
-  }, [supabase, campaignId, isAuthorized]);
+    if (isFetching) setLoading(true);
+    else setLoading(false);
+  }, [isFetching, setLoading]);
+
+  useEffect(() => {
+    if (!campaignData) return;
+
+    initCampaignData(campaignData);
+  }, [initCampaignData, campaignData]);
 
   return {
     campaignData,
-    loading,
+    isFetching,
     error,
-    refetch: () => fetchCampaignData(supabase, campaignId),
+    refetch,
   };
 };
 

@@ -16,6 +16,7 @@ const useCampaignStore = create(
       initCampaignData: (campaignData) => set({ campaignData }),
       asGM: false,
       loading: false,
+      setLoading: (loading) => set({ loading }),
       error: null,
       connected: false,
       connectedAtempts: 0,
@@ -156,73 +157,6 @@ const useCampaignStore = create(
           type,
           debounce
         );
-      },
-      fetchCampaignData: async (supabase, campaignId) => {
-        set({ loading: true });
-        try {
-          const { data: campaignData } = await supabase
-            .from("campaigns")
-            .select(
-              `
-                id,
-                gm_id,
-                name,
-                description,
-                passphrase,
-                status,
-                chapters:chapters (
-                  id,
-                  campaign_id,
-                  title,
-                  order_num,
-                  sections:sections (
-                    id,
-                    chapter_id,
-                    title,
-                    order_num,
-                    handouts:handouts (
-                      id,
-                      title,
-                      content,
-                      is_public,
-                      section_id,
-                      type,
-                      owner_id,
-                      note,
-                      order_num
-                    )
-                  )
-                )
-              `
-            )
-            .eq("id", campaignId)
-            .order("order_num", {
-              referencedTable: "chapters",
-              ascending: true,
-            })
-            .order("order_num", {
-              referencedTable: "chapters.sections",
-              ascending: true,
-            })
-            .order("order_num", {
-              referencedTable: "chapters.sections.handouts",
-              ascending: true,
-            })
-            .single();
-
-          if (campaignData) {
-            if (process.env.NODE_ENV === "development") {
-              console.info("Init CampaignData:", campaignData);
-            }
-
-            set({ campaignData, error: null });
-          }
-        } catch (error) {
-          set({
-            error: error instanceof Error ? error : new Error("Unknown error"),
-          });
-        }
-        set({ loading: false });
       },
       handleRealtimeUpdate: <T extends { id: string | number }>(
         table: CampaignSubTable,

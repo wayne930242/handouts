@@ -92,11 +92,11 @@ export interface CampaignStore {
   ) => Promise<void>;
   setCampaignData: SetCampaignDataPayload;
   loading: boolean;
+  setLoading: (loading: boolean) => void;
   connected: boolean;
   connectedAtempts: number;
   resetConnectedAttempts: () => void;
   error: Error | null;
-  fetchCampaignData: (supabase: MySupabaseClient, campaignId: string) => void;
   handleRealtimeUpdate: <T extends { id: string }>(
     table: CampaignSubTable,
     payload: RealtimePayload<T>
