@@ -60,7 +60,7 @@ const YoutubeEditor = dynamic(() => import("./ContentEditor/YoutubeEditor"), {
 });
 
 const formSchema = z.object({
-  title: z.string().optional(),
+  title: z.string().max(255).optional(),
   type: z.enum(["text", "image", "link", "youtube"]).optional(),
   content: z.string().optional(),
   is_public: z.boolean(),

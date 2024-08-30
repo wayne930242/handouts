@@ -23,9 +23,9 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 
 const FormSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).max(255),
   description: z.string().optional(),
-  passphrase: z.string().optional(),
+  passphrase: z.string().max(255).optional(),
 });
 
 export default function CampaignForm({

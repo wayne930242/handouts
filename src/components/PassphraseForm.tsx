@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 
 const FormSchema = z.object({
   id: z.string().min(1),
-  passphrase: z.string().optional(),
+  passphrase: z.string().max(255).optional(),
 });
 
 export default function PassphraseForm({
