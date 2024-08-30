@@ -70,7 +70,7 @@ export const MyMDXEditor = React.forwardRef<
           markdownShortcutPlugin(),
           ...(plugins ?? []),
         ]}
-        contentEditableClassName="prose"
+        contentEditableClassName="prose max-w-screen-2xl"
         ref={ref}
         {...rest}
       />
