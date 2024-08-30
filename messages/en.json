@@ -1,4 +1,10 @@
 {
+  "CampaignMenu": {
+    "info": "Info",
+    "export": "Export",
+    "import": "Import",
+    "delete": "Delete"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",

@@ -1,4 +1,10 @@
 {
+  "CampaignMenu": {
+    "info": "資訊",
+    "export": "匯出",
+    "import": "匯入",
+    "delete": "刪除"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",

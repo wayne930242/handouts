@@ -26,32 +26,30 @@ export default async function AuthButton() {
   };
 
   return user ? (
-    <div className="flex items-center gap-4">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon" className="rounded-full">
-            <Avatar>
-              <AvatarImage src="/img/default-avatar.webp" />
-              <AvatarFallback>GM</AvatarFallback>
-            </Avatar>
-            <span className="sr-only">Toggle user menu</span>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="icon" className="rounded-full">
+          <Avatar>
+            <AvatarImage src="/img/default-avatar.webp" />
+            <AvatarFallback>GM</AvatarFallback>
+          </Avatar>
+          <span className="sr-only">Toggle user menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
+        <DropdownMenuSeparator />
+        <form action={signOut}>
+          <Button
+            className="w-full border-none justify-start cursor-default px-2 py-1.5"
+            variant="outline"
+            size="sm"
+          >
+            {t("logout")}
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
-          <DropdownMenuSeparator />
-          <form action={signOut}>
-            <Button
-              className="w-full border-none justify-start cursor-default px-2 py-1.5"
-              variant="outline"
-              size="sm"
-            >
-              {t("logout")}
-            </Button>
-          </form>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+        </form>
+      </DropdownMenuContent>
+    </DropdownMenu>
   ) : (
     <div className="flex gap-2">
       <Link href="/login">
