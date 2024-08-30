@@ -31,67 +31,69 @@ export default function HandoutViewer({ handout }: Props) {
       : ({ children }: any) => children;
 
   return (
-    <Wrapper>
-      <div
-        className="flex flex-col gap-y-2 w-full h-full p-2 border border-dashed border-border rounded-sm"
-        id={`handout-${handout.id}`}
-      >
-        <div className="flex gap-2 items-center justify-between">
-          <h3 className="text-lg font-bold grow">{handout.title}</h3>
-          {canEdit && (
-            <Button
-              className={cn({
-                "text-destructive hover:text-destructive/80":
-                  !handout.is_public,
-                "text-green-600 hover:text-green-500": handout.is_public,
-              })}
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                setCampaignData(
-                  {
-                    id: handout.id,
-                    section_id: handout.section_id,
-                    is_public: !handout.is_public,
-                  },
-                  {
-                    id: handout.id,
-                    section_id: handout.section_id,
-                    is_public: handout.is_public,
-                  },
-                  supabase,
-                  "handouts",
-                  "UPDATE"
-                );
-              }}
+    (handout.content || handout.title) && (
+      <Wrapper>
+        <div
+          className="flex flex-col gap-y-2 w-full h-full p-2 border border-dashed border-border rounded-sm"
+          id={`handout-${handout.id}`}
+        >
+          <div className="flex gap-2 items-center justify-between">
+            <h3 className="text-lg font-bold grow">{handout.title}</h3>
+            {canEdit && (
+              <Button
+                className={cn({
+                  "text-destructive hover:text-destructive/80":
+                    !handout.is_public,
+                  "text-green-600 hover:text-green-500": handout.is_public,
+                })}
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  setCampaignData(
+                    {
+                      id: handout.id,
+                      section_id: handout.section_id,
+                      is_public: !handout.is_public,
+                    },
+                    {
+                      id: handout.id,
+                      section_id: handout.section_id,
+                      is_public: handout.is_public,
+                    },
+                    supabase,
+                    "handouts",
+                    "UPDATE"
+                  );
+                }}
+              >
+                {handout.is_public ? <Eye /> : <EyeOff />}
+              </Button>
+            )}
+          </div>
+          {handout.type === "text" && (
+            <Markdown
+              className="prose prose-sm max-w-none"
+              remarkPlugins={[remarkGfm]}
             >
-              {handout.is_public ? <Eye /> : <EyeOff />}
-            </Button>
+              {handout.content}
+            </Markdown>
           )}
+          {handout.type === "youtube" && (
+            <YouTube
+              videoId={handout.content}
+              opts={{
+                width: "100%",
+                playerVars: {
+                  // https://developers.google.com/youtube/player_parameters
+                  autoplay: 0,
+                },
+              }}
+            />
+          )}
+          {handout.type === "link" && <LinkViewer content={handout.content} />}
         </div>
-        {handout.type === "text" && (
-          <Markdown
-            className="prose prose-sm max-w-none"
-            remarkPlugins={[remarkGfm]}
-          >
-            {handout.content}
-          </Markdown>
-        )}
-        {handout.type === "youtube" && (
-          <YouTube
-            videoId={handout.content}
-            opts={{
-              width: "100%",
-              playerVars: {
-                // https://developers.google.com/youtube/player_parameters
-                autoplay: 0,
-              },
-            }}
-          />
-        )}
-        {handout.type === "link" && <LinkViewer content={handout.content} />}
-      </div>
-    </Wrapper>
+      </Wrapper>
+    )
   );
 }
 
