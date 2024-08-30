@@ -49,14 +49,14 @@ export type CampaignSubTable =
   | "sections"
   | "handouts";
 
-export type SetCampaignPayload =
+export type CampaignTableDataPayload =
   | CampaignData | ChapterData | SectionData | HandoutData
   | Omit<CampaignData, 'id'> | Omit<ChapterData, 'id'> | Omit<SectionData, 'id'> | Omit<HandoutData, 'id'>
   | Array<ChapterData | SectionData | HandoutData>;
 
-export type SetCampaignData = (
-  newData: SetCampaignPayload,
-  oldData: Partial<SetCampaignPayload>,
+export type SetCampaignDataPayload = (
+  newData: CampaignTableDataPayload,
+  oldData: Partial<CampaignTableDataPayload>,
   supabaseClient: MySupabaseClient,
   tableName: CampaignSubTable,
   type: MutateEventType,
@@ -68,19 +68,20 @@ export type SetCampaignData = (
 
 export interface CampaignStore {
   campaignData: Campaign | null;
+  initCampaignData: (campaignData: Campaign) => any;
   asGM: boolean;
   setAsGM: (asGM: boolean) => void;
   inWhiteList: boolean;
   fetchWhiteList: (supabase: MySupabaseClient) => void;
   setCampaignDataLocal: (
-    newData: SetCampaignPayload,
-    oldData: Partial<SetCampaignPayload>,
+    newData: CampaignTableDataPayload,
+    oldData: Partial<CampaignTableDataPayload>,
     tableName: CampaignSubTable,
     type: MutateEventType
   ) => void;
   setCampaignDataRemote: (
-    newData: SetCampaignPayload,
-    oldData: Partial<SetCampaignPayload>,
+    newData: CampaignTableDataPayload,
+    oldData: Partial<CampaignTableDataPayload>,
     supabaseClient: MySupabaseClient,
     tableName: CampaignSubTable,
     type: MutateEventType,
@@ -89,7 +90,7 @@ export interface CampaignStore {
       delay: number;
     }
   ) => Promise<void>;
-  setCampaignData: SetCampaignData;
+  setCampaignData: SetCampaignDataPayload;
   loading: boolean;
   connected: boolean;
   connectedAtempts: number;

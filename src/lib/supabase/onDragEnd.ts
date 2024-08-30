@@ -1,13 +1,13 @@
 import { DropResult } from "@hello-pangea/dnd";
 import { advancedArrayMove, advancedMoveAcrossArrays } from "@/lib/arrayAction";
-import { Campaign, SetCampaignData } from "@/types/interfaces";
+import { Campaign, SetCampaignDataPayload } from "@/types/interfaces";
 import { MySupabaseClient } from "@/types/interfaces";
 
 export default function onDragEnd(
   result: DropResult,
   campaignData: Campaign | null,
   supabase: MySupabaseClient,
-  setCampaignData: SetCampaignData
+  setCampaignData: SetCampaignDataPayload
 ) {
   const { source, destination, type } = result;
 

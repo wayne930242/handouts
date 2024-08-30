@@ -13,6 +13,7 @@ const useCampaignStore = create(
   persist<CampaignStore>(
     (set, get) => ({
       campaignData: null,
+      initCampaignData: (campaignData) => set({ campaignData }),
       asGM: false,
       loading: false,
       error: null,
