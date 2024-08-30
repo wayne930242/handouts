@@ -4,10 +4,9 @@ import CampaignlistToolbar from "./Toolbar";
 
 import PageLayout from "@/components/layouts/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
-// import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { getOwnedCampaignList } from "@/lib/supabase/query/getOwnedCampaignList";
+import { getOwnedCampaignList } from "@/lib/supabase/query/campaignQuery";
 import Campaigns from "./Campaigns";
 
 interface Props {
@@ -35,9 +34,6 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   return (
     <PageLayout header={<CampaignlistToolbar />} needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        {/* <Alert variant="destructive">
-        <AlertDescription>{t("alert")}</AlertDescription>
-      </Alert> */}
         <Campaigns gmId={user.id} />
       </HydrationBoundary>
     </PageLayout>

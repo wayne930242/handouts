@@ -17,10 +17,11 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
 import { createClient } from "@/lib/supabase/client";
-import { FullCampaignData } from "@/types/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { getCampaignInfo } from "@/lib/supabase/query/campaignQuery";
 
 const FormSchema = z.object({
   name: z.string().min(1).max(255),
@@ -29,30 +30,42 @@ const FormSchema = z.object({
 });
 
 export default function CampaignForm({
-  serverData,
+  id,
+  userId,
 }: {
-  serverData: FullCampaignData;
+  id: string;
+  userId: string;
 }) {
   const t = useTranslations("CampaignForm");
   const supabase = createClient();
   const router = useRouter();
+  const { data: campaignInfo } = useQuery(
+    getCampaignInfo(supabase, id, userId),
+    {
+      enabled: id !== "new",
+    }
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: serverData.name,
-      description: serverData.description ?? undefined,
-      passphrase: serverData.passphrase ?? undefined,
+      name: campaignInfo ? campaignInfo.name : undefined,
+      description: campaignInfo
+        ? campaignInfo.description ?? undefined
+        : undefined,
+      passphrase: campaignInfo
+        ? campaignInfo.passphrase ?? undefined
+        : undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
-    switch (serverData.id) {
+    switch (id) {
       case "new":
         const { error: createError } = await supabase.from("campaigns").insert([
           {
-            gm_id: serverData.gm_id,
+            gm_id: userId,
             name: data.name,
             description: data.description,
             passphrase: data.passphrase,
@@ -65,20 +78,20 @@ export default function CampaignForm({
         }
         break;
       default:
-        if (!serverData.id) {
+        if (!id) {
           errorMessage = "Campaign ID is required";
           break;
         }
         const { error: updateError } = await supabase
           .from("campaigns")
           .update({
-            id: serverData.id,
-            gm_id: serverData.gm_id,
+            id,
+            gm_id: userId,
             name: data.name,
             description: data.description,
             passphrase: data.passphrase,
           })
-          .eq("id", serverData.id);
+          .eq("id", id);
 
         if (updateError) {
           errorMessage = updateError.message;
@@ -160,7 +173,7 @@ export default function CampaignForm({
             type="submit"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
           >
-            {serverData.id === "new" ? t("create") : t("save")}
+            {id === "new" ? t("create") : t("save")}
           </Button>
         </div>
       </form>

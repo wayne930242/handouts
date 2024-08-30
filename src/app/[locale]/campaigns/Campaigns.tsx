@@ -1,11 +1,10 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { getOwnedCampaignList } from "@/lib/supabase/query/getOwnedCampaignList";
+import { getOwnedCampaignList } from "@/lib/supabase/query/campaignQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import CampaignCard from "./CampaignCard";
 import { useTranslations } from "next-intl";
-import OverlayLoading from "@/components/OverlayLoading";
 import { PacmanLoader } from "react-spinners";
 
 export default function Campaigns({ gmId }: { gmId: string }) {
