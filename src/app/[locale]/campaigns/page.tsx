@@ -1,10 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "@/navigation";
 import CampaignlistToolbar from "./Toolbar";
-import CampaignCard from "./CampaignCard";
+
 import PageLayout from "@/components/layouts/PageLayout";
+import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 // import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { getOwnedCampaignList } from "@/lib/supabase/query/getOwnedCampaignList";
+import Campaigns from "./Campaigns";
 
 interface Props {
   params: {
@@ -23,30 +27,19 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   if (!user) {
     return redirect("/login");
   }
-  const { data: campaigns } = await supabase
-    .from("campaigns")
-    .select("*")
-    .eq("gm_id", user.id);
+
+  const queryClient = new QueryClient();
+
+  await prefetchQuery(queryClient, getOwnedCampaignList(supabase, user.id));
 
   return (
     <PageLayout header={<CampaignlistToolbar />} needsAuth>
-      {/* <Alert variant="destructive">
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {/* <Alert variant="destructive">
         <AlertDescription>{t("alert")}</AlertDescription>
       </Alert> */}
-
-      {campaigns?.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-2 text-center py-12">
-          <div className="text-2xl font-bold">{t("noCampaigns")}</div>
-          <div className="text-sm text-muted-foreground">
-            {t("createCampaign")}
-          </div>
-        </div>
-      )}
-      <main className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {campaigns?.map((campaign) => (
-          <CampaignCard campaign={campaign} key={campaign.id} />
-        ))}
-      </main>
+        <Campaigns gmId={user.id} />
+      </HydrationBoundary>
     </PageLayout>
   );
 }
