@@ -1,12 +1,15 @@
-import { SupabaseClient } from "@supabase/supabase-js";
 import { locales } from "@/navigation";
 import { Database } from "./database.types";
+import { SupabaseClient } from "@supabase/supabase-js";
+
+export type MySupabaseClient = SupabaseClient<Database>;
 
 export type Locale = (typeof locales)[number];
 
-export type CampaignData = Database["public"]["Tables"]["campaigns"]["Row"];
+export type FullCampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'>
+export type CampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'passphrase' | 'created_at'>
 
-export type Campaign = Omit<CampaignData, 'passphrase' | 'created_at' | 'status'> & {
+export type Campaign = CampaignData & {
   chapters: Chapter[];
 }
 
@@ -18,13 +21,13 @@ export type Section = SectionData & {
   handouts: Handout[];
 }
 
-export type Handout = Omit<HandoutData, 'updated_at' | 'created_at'>
+export type Handout = HandoutData
 
 export type ChapterData = Database["public"]["Tables"]["chapters"]["Row"]
 
 export type SectionData = Database["public"]["Tables"]["sections"]["Row"]
 
-export type HandoutData = Database["public"]["Tables"]["handouts"]["Row"]
+export type HandoutData = Omit<Database["public"]["Tables"]["handouts"]["Row"], 'updated_at' | 'created_at'>
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
@@ -44,17 +47,17 @@ export type CampaignSubTable =
   | "campaigns"
   | "chapters"
   | "sections"
-  | "handouts"
-  | "handout_images";
+  | "handouts";
 
 export type SetCampaignPayload =
-  | Partial<Campaign | Chapter | Section | Handout>
-  | Array<Partial<Chapter | Section | Handout>>;
+  | CampaignData | ChapterData | SectionData | HandoutData
+  | Omit<CampaignData, 'id'> | Omit<ChapterData, 'id'> | Omit<SectionData, 'id'> | Omit<HandoutData, 'id'>
+  | Array<ChapterData | SectionData | HandoutData>;
 
 export type SetCampaignData = (
   newData: SetCampaignPayload,
-  oldData: SetCampaignPayload,
-  supabaseClient: SupabaseClient,
+  oldData: Partial<SetCampaignPayload>,
+  supabaseClient: MySupabaseClient,
   tableName: CampaignSubTable,
   type: MutateEventType,
   debounce?: {
@@ -68,17 +71,17 @@ export interface CampaignStore {
   asGM: boolean;
   setAsGM: (asGM: boolean) => void;
   inWhiteList: boolean;
-  fetchWhiteList: (supabase: SupabaseClient) => void;
+  fetchWhiteList: (supabase: MySupabaseClient) => void;
   setCampaignDataLocal: (
     newData: SetCampaignPayload,
-    oldData: SetCampaignPayload,
+    oldData: Partial<SetCampaignPayload>,
     tableName: CampaignSubTable,
     type: MutateEventType
   ) => void;
   setCampaignDataRemote: (
     newData: SetCampaignPayload,
-    oldData: SetCampaignPayload,
-    supabaseClient: SupabaseClient,
+    oldData: Partial<SetCampaignPayload>,
+    supabaseClient: MySupabaseClient,
     tableName: CampaignSubTable,
     type: MutateEventType,
     debounce?: {
@@ -92,13 +95,13 @@ export interface CampaignStore {
   connectedAtempts: number;
   resetConnectedAttempts: () => void;
   error: Error | null;
-  fetchCampaignData: (supabase: SupabaseClient, campaignId: string) => void;
+  fetchCampaignData: (supabase: MySupabaseClient, campaignId: string) => void;
   handleRealtimeUpdate: <T extends { id: string }>(
     table: CampaignSubTable,
     payload: RealtimePayload<T>
   ) => void;
   setupRealtimeSubscription: (
-    supabase: SupabaseClient,
+    supabase: MySupabaseClient,
     campaignId: string
   ) => () => void;
 }

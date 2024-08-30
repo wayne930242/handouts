@@ -3,7 +3,7 @@
 import { Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Handout, Section } from "@/types/interfaces";
+import { HandoutData, Section } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,7 @@ const emptyHandout = (
   sectionId: number,
   orderNum: number,
   ownerId: string
-): Partial<Handout> => ({
-  id: "new",
+): Omit<HandoutData, "id"> => ({
   section_id: sectionId,
   title: "",
   content: "",
@@ -59,9 +58,7 @@ export default function SectionCard({ section }: Props) {
     }
 
     setCampaignData(
-      {
-        id: section.id,
-      },
+      section,
       {
         id: section.id,
         chapter_id: section.chapter_id,

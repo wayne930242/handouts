@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { idbStorage } from "./storage";
-import { Database } from "@/types/database.types";
 import { debouncify } from "@/lib/debounce";
 import {
   CampaignStore,
@@ -98,6 +97,9 @@ const useCampaignStore = create(
                   .select()
                   .single();
               } else if (type === "UPDATE") {
+                if (!('id' in newData)) {
+                  throw new Error("New data must have an ID for UPDATE");
+                }
                 await supabaseClient
                   .from(tableName)
                   .update(newData)
@@ -105,6 +107,9 @@ const useCampaignStore = create(
                   .select()
                   .single();
               } else if (type === "DELETE") {
+                if (!('id' in newData)) {
+                  throw new Error("New data must have an ID for DELETE");
+                }
                 await supabaseClient
                   .from(tableName)
                   .delete()
@@ -163,6 +168,7 @@ const useCampaignStore = create(
                 name,
                 description,
                 passphrase,
+                status,
                 chapters:chapters (
                   id,
                   campaign_id,

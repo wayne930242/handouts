@@ -51,8 +51,7 @@ export default function HandoutViewer({ handout }: Props) {
                 onClick={() => {
                   setCampaignData(
                     {
-                      id: handout.id,
-                      section_id: handout.section_id,
+                      ...handout,
                       is_public: !handout.is_public,
                     },
                     {

@@ -60,7 +60,7 @@ const YoutubeEditor = dynamic(() => import("./ContentEditor/YoutubeEditor"), {
 });
 
 const formSchema = z.object({
-  title: z.string().max(255).optional(),
+  title: z.string().max(255),
   type: z.string().optional(),
   content: z.string().optional(),
   is_public: z.boolean(),
@@ -97,10 +97,12 @@ export default function HandoutCard({ handout, chapterId }: Props) {
         id: handout.id,
         section_id: handout.section_id,
         title: data.title,
-        type: data.type,
-        content: data.content,
+        type: data.type ?? null,
+        content: data.content ?? null,
         is_public: data.is_public,
-        note: data.note,
+        note: data.note ?? null,
+        order_num: handout.order_num,
+        owner_id: handout.owner_id,
       },
       {
         id: handout.id,
@@ -138,9 +140,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
   const deleteHandout = async (h: Handout) => {
     if (!h) return;
     setCampaignData(
-      {
-        id: h.id,
-      },
+      h,
       {
         id: h.id,
         section_id: h.section_id,

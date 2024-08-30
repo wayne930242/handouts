@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
 import { createClient } from "@/lib/supabase/client";
-import { CampaignData } from "@/types/interfaces";
+import { FullCampaignData } from "@/types/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
@@ -31,7 +31,7 @@ const FormSchema = z.object({
 export default function CampaignForm({
   serverData,
 }: {
-  serverData: Partial<CampaignData>;
+  serverData: FullCampaignData;
 }) {
   const t = useTranslations("CampaignForm");
   const supabase = createClient();

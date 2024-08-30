@@ -10,12 +10,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { CampaignData } from "@/types/interfaces";
+import { FullCampaignData } from "@/types/interfaces";
 import { Pencil } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 
-export default function CampaignCard({ campaign }: { campaign: CampaignData }) {
+export default function CampaignCard({ campaign }: { campaign: FullCampaignData }) {
   const t = useTranslations("CampaignCard");
 
   const passphraseParams = campaign.passphrase

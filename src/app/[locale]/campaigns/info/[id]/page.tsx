@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { CampaignData } from "@/types/interfaces";
+import { CampaignData, FullCampaignData } from "@/types/interfaces";
 
 import CampaignForm from "./CampaignForm";
 import PageLayout from "@/components/layouts/PageLayout";
@@ -24,33 +24,38 @@ export default async function CampaignPage({ params: { id } }: Props) {
     return <></>;
   }
 
-  let data: Partial<CampaignData> = {
+  const newCampaign: FullCampaignData = {
     id: "new",
     gm_id: user.id,
     name: "New Campaign",
-    description: undefined,
-    passphrase: undefined,
+    description: null,
+    passphrase: null,
+    status: "ACTIVE",
   };
 
-  if (!isNew) {
-    const result = await supabase
-      .from("campaigns")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    data = {
-      id: result.data?.id,
-      gm_id: result.data?.gm_id,
-      name: result.data?.name,
-      description: result.data?.description ?? undefined,
-      passphrase: result.data?.passphrase ?? undefined,
-    };
-  }
+  const getData = async () => {
+    if (!isNew) {
+      try {
+        const result = await supabase
+          .from("campaigns")
+          .select("*")
+          .eq("id", id)
+          .single();
+        if (!result.data) {
+          throw new Error("Campaign not found");
+        }
+        return result.data;
+      } catch (error) {
+        return newCampaign;
+      }
+    } else {
+      return newCampaign;
+    }
+  };
 
   return (
     <PageLayout needsAuth>
-      <CampaignForm serverData={data} />
+      <CampaignForm serverData={await getData()} />
       {id !== "new" && (
         <>
           <Separator />

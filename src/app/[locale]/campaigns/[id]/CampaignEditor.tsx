@@ -1,6 +1,6 @@
 "use client";
 import { Plus } from "lucide-react";
-import { Chapter } from "@/types/interfaces";
+import { ChapterData } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 const genEmptyChapter = (
   campaignId: string,
   orderNum: number
-): Partial<Chapter> => ({
+): Omit<ChapterData, "id"> => ({
   campaign_id: campaignId,
   title: "",
   order_num: orderNum,

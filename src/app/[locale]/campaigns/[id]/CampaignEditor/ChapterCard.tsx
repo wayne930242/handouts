@@ -1,6 +1,6 @@
 "use client";
 import { Plus, X } from "lucide-react";
-import { Chapter, Section } from "@/types/interfaces";
+import { Chapter, SectionData } from "@/types/interfaces";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ interface Props {
 const emptySection = (
   chapterId: number,
   orderNum: number
-): Partial<Section> => ({
+): Omit<SectionData, "id"> => ({
   chapter_id: chapterId,
   title: "",
   order_num: orderNum,
