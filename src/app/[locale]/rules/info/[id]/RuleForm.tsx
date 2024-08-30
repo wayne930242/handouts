@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,41 +22,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
+import { getRuleInfo } from "@/lib/supabase/query/rulesQuery";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const FormSchema = z.object({
-  name: z.string().min(1).max(255),
+  title: z.string().min(1).max(255),
   description: z.string().optional(),
   passphrase: z.string().max(255).optional(),
+  is_public: z.boolean(),
 });
 
-export default function CampaignForm({
+export default function RuleForm({
   id,
   userId,
 }: {
   id: string;
   userId: string;
 }) {
-  const t = useTranslations("CampaignForm");
+  const t = useTranslations("RuleForm");
   const supabase = createClient();
   const router = useRouter();
-  const { data: campaignInfo } = useQuery(
-    getCampaignInfo(supabase, id, userId),
-    {
-      enabled: id !== "new",
-    }
-  );
+  const { data: ruleInfo } = useQuery(getRuleInfo(supabase, id, userId), {
+    enabled: id !== "new",
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: campaignInfo ? campaignInfo.name : undefined,
-      description: campaignInfo
-        ? campaignInfo.description ?? undefined
-        : undefined,
-      passphrase: campaignInfo
-        ? campaignInfo.passphrase ?? undefined
-        : undefined,
+      title: ruleInfo ? ruleInfo.title : undefined,
+      description: ruleInfo ? ruleInfo.description ?? undefined : undefined,
+      passphrase: ruleInfo ? ruleInfo.passphrase ?? undefined : undefined,
+      is_public: ruleInfo ? ruleInfo.is_public ?? false : false,
     },
   });
 
@@ -63,13 +60,13 @@ export default function CampaignForm({
     let errorMessage: string | undefined;
     switch (id) {
       case "new":
-        const { error: createError } = await supabase.from("campaigns").insert([
+        const { error: createError } = await supabase.from("rules").insert([
           {
-            gm_id: userId,
-            name: data.name,
+            title: data.title,
+            owner_id: userId,
             description: data.description,
             passphrase: data.passphrase,
-            status: "ACTIVE",
+            is_public: data.is_public,
           },
         ]);
 
@@ -83,11 +80,12 @@ export default function CampaignForm({
           break;
         }
         const { error: updateError } = await supabase
-          .from("campaigns")
+          .from("rules")
           .update({
             id,
-            gm_id: userId,
-            name: data.name,
+            owner_id: userId,
+            title: data.title,
+            is_public: data.is_public,
             description: data.description,
             passphrase: data.passphrase,
           })
@@ -105,7 +103,7 @@ export default function CampaignForm({
         variant: "destructive",
       });
     } else {
-      router.push("/campaigns");
+      router.push("/rules");
     }
   };
 
@@ -117,12 +115,12 @@ export default function CampaignForm({
       >
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("campaignName")}</FormLabel>
+              <FormLabel>{t("ruleName")}</FormLabel>
               <FormControl>
-                <Input placeholder={t("campaignNamePlaceholder")} {...field} />
+                <Input placeholder={t("ruleNamePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,10 +131,10 @@ export default function CampaignForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("campaignDescription")}</FormLabel>
+              <FormLabel>{t("ruleDescription")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t("campaignDescriptionPlaceholder")}
+                  placeholder={t("ruleDescriptionPlaceholder")}
                   {...field}
                 />
               </FormControl>
@@ -163,7 +161,7 @@ export default function CampaignForm({
             variant="destructive"
             onClick={() => {
               form.reset();
-              router.push("/campaigns");
+              router.push("/rules");
             }}
           >
             {t("cancel")}

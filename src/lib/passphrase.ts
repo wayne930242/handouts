@@ -1,12 +1,9 @@
+import { Passphrase, PassphraseDialogKey } from "@/types/interfaces";
 import { cookies } from "next/headers";
 
 const STORAGE_KEY = "id-passphrase-record";
 
-interface Passphrase {
-  [campaign_id: string | number]: string;
-}
-
-export async function getPassphrase(campaign_id: string | number): Promise<string | null> {
+export async function getPassphrase(id: string | number, key: PassphraseDialogKey): Promise<string | null> {
   const c = cookies();
   const passphrasesCookie = c.get(STORAGE_KEY);
 
@@ -17,7 +14,7 @@ export async function getPassphrase(campaign_id: string | number): Promise<strin
   try {
     const passphrases = passphrasesCookie.value;
     const parsedPassphrases: Passphrase = JSON.parse(passphrases);
-    return parsedPassphrases[campaign_id] ?? null;
+    return parsedPassphrases[`${key}-${id}`] ?? null;
   } catch (e) {
     console.error("Error parsing passphrase:", e);
     return null;

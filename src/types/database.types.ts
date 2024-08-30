@@ -376,8 +376,10 @@ export type Database = {
       }
       rules: {
         Row: {
+          banner_url: string | null
           content: string | null
           created_at: string | null
+          description: string | null
           id: string
           is_public: boolean | null
           owner_id: string | null
@@ -386,8 +388,10 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          banner_url?: string | null
           content?: string | null
           created_at?: string | null
+          description?: string | null
           id?: string
           is_public?: boolean | null
           owner_id?: string | null
@@ -396,8 +400,10 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          banner_url?: string | null
           content?: string | null
           created_at?: string | null
+          description?: string | null
           id?: string
           is_public?: boolean | null
           owner_id?: string | null
@@ -585,6 +591,20 @@ export type Database = {
       check_campaign_passphrase_rpc: {
         Args: {
           campaign_id: string
+          input_passphrase: string
+        }
+        Returns: boolean
+      }
+      check_rule_passphrase: {
+        Args: {
+          rule_id: string
+          input_passphrase: string
+        }
+        Returns: boolean
+      }
+      check_rule_passphrase_rpc: {
+        Args: {
+          rule_id: string
           input_passphrase: string
         }
         Returns: boolean

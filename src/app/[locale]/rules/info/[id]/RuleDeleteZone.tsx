@@ -29,14 +29,10 @@ import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 const FormSchema = z.object({
-  campaign_id: z.string().min(1, "formValidation.required"),
+  rule_id: z.string().min(1, "formValidation.required"),
 });
 
-export default function CampaignDeleteZone({
-  campaignId,
-}: {
-  campaignId: string;
-}) {
+export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
   const t = useTranslations("CampaignDeleteZone");
   const supabase = createClient();
   const imageManager = new ImageManager();
@@ -45,16 +41,16 @@ export default function CampaignDeleteZone({
 
   const { setConfirm } = useConfirmDialog(
     async (data: z.infer<typeof FormSchema>) => {
-      if (data.campaign_id === campaignId) {
+      if (data.rule_id === ruleId) {
         try {
           setLoading(true);
-          await imageManager.deleteImagesByCampaignId(data.campaign_id);
-          await supabase.from("campaigns").delete().eq("id", data.campaign_id);
+          await imageManager.deleteImagesByCampaignId("rules", data.rule_id);
+          await supabase.from("rules").delete().eq("id", data.rule_id);
           toast({
             title: t("successTitle"),
             description: t("successDescription"),
           });
-          router.push("/campaigns");
+          router.push("/rules");
         } catch (error) {
           toast({
             title: t("errorTitle"),
@@ -64,7 +60,7 @@ export default function CampaignDeleteZone({
         }
         setLoading(false);
       } else {
-        form.setError("campaign_id", {
+        form.setError("rule_id", {
           type: "manual",
           message: t("idMismatchError"),
         });
@@ -75,14 +71,14 @@ export default function CampaignDeleteZone({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      campaign_id: "",
+      rule_id: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setConfirm(
       {
-        id: `delete-campaign-${data.campaign_id}`,
+        id: `delete-campaign-${data.rule_id}`,
         title: t("deleteCampaign"),
         description: t("deleteCampaignDescription"),
       },
@@ -98,16 +94,16 @@ export default function CampaignDeleteZone({
       <CardContent>
         <CardDescription>{t("description")}</CardDescription>
         <div className="border border-input p-4 my-4">
-          {t("campaignIdLabel")}{" "}
+          {t("idLabel")}{" "}
           <span className="border border-red-300 px-2 py-1 rounded-md">
-            {campaignId}
+            {ruleId}
           </span>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="campaign_id"
+              name="rule_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("inputLabel")}</FormLabel>

@@ -1,12 +1,9 @@
 "use client";
 
+import { Passphrase, PassphraseDialogKey, PassphraseId } from "@/types/interfaces";
 import Cookies from "js-cookie";
 
 const STORAGE_KEY = "id-passphrase-record";
-
-interface Passphrase {
-  [campaign_id: string | number]: string;
-}
 
 const getCookies = () => {
   try {
@@ -20,8 +17,9 @@ const getCookies = () => {
 };
 
 export async function updatePassphrase(
-  campaign_id: string | number,
-  passphrase: string | undefined = ""
+  id: string,
+  passphrase: string | undefined = "",
+  key: PassphraseDialogKey
 ) {
   const cookieValue = getCookies();
   if (cookieValue === false) {
@@ -39,9 +37,10 @@ export async function updatePassphrase(
       return Promise.reject();
     }
   }
+  const idKey: PassphraseId = `${key}-${id}`;
 
-  if (campaign_id in parsedPassphrases) {
-    parsedPassphrases[campaign_id] = passphrase;
+  if (idKey in parsedPassphrases) {
+    parsedPassphrases[idKey] = passphrase;
     const expirationDate = new Date();
     expirationDate.setMonth(expirationDate.getMonth() + 1);
 
@@ -51,7 +50,7 @@ export async function updatePassphrase(
       sameSite: "strict",
     });
   } else {
-    Cookies.set(STORAGE_KEY, JSON.stringify({ [campaign_id]: passphrase }), {
+    Cookies.set(STORAGE_KEY, JSON.stringify({ [idKey]: passphrase }), {
       expires: 30, // 30 days
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

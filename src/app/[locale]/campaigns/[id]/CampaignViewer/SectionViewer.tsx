@@ -10,7 +10,7 @@ const HandoutViewer = dynamic(() => import("./HandoutViewer"), {
 });
 
 export default function SectionViewer({ section }: Props) {
-  return (
+  return section.handouts?.length ? (
     <Card id={`handout-section-${section.id}`}>
       {section.title && (
         <CardHeader>
@@ -33,7 +33,7 @@ export default function SectionViewer({ section }: Props) {
         )}
       </CardContent>
     </Card>
-  );
+  ) : null;
 }
 
 interface Props {

@@ -24,7 +24,7 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
           ? async (image: File) => {
               setIsLoading(true);
               return imageManager
-                .uploadImage(image, campaignId)
+                .uploadImage(image, "campaigns", campaignId)
                 .then((url) => url)
                 .catch((e) => {
                   toast({

@@ -20,6 +20,7 @@ import { updatePassphrase } from "@/lib/passphraseCli";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { PassphraseDialogKey } from "@/types/interfaces";
 
 const FormSchema = z.object({
   id: z.string().min(1),
@@ -30,6 +31,7 @@ export default function PassphraseForm({
   afterSubmit,
   afterCancel,
   defaultId,
+  tableKey,
 }: Props) {
   const rounder = useRouter();
   const searchParams = useSearchParams();
@@ -38,22 +40,31 @@ export default function PassphraseForm({
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { id: defaultId ?? "", passphrase: "" },
+    defaultValues: { id: defaultId ?? undefined, passphrase: undefined },
   });
 
   useEffect(() => {
-    if (searchParams.get("campaign_id")) {
-      form.setValue("id", searchParams.get("campaign_id") as string);
+    if (tableKey === "campaigns" && "campaign_id") {
+      form.setValue(
+        "id",
+        (searchParams.get("campaign_id") as string) ?? undefined
+      );
+    }
+    if (tableKey === "rules" && "rule_id") {
+      form.setValue("id", (searchParams.get("rule_id") as string) ?? undefined);
     }
     if (searchParams.get("passphrase")) {
-      form.setValue("passphrase", searchParams.get("passphrase") as string);
+      form.setValue(
+        "passphrase",
+        (searchParams.get("passphrase") as string) ?? undefined
+      );
     }
-  }, [searchParams]);
+  }, [searchParams, tableKey]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    await updatePassphrase(data.id, data.passphrase);
+    await updatePassphrase(data.id, data.passphrase, tableKey);
     afterSubmit?.();
-    rounder.push("/campaigns/" + data.id);
+    rounder.push("/" + tableKey + "/" + data.id);
   };
 
   return (
@@ -68,9 +79,18 @@ export default function PassphraseForm({
             name="id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("campaignId")}</FormLabel>
+                <FormLabel>
+                  {tableKey === "campaigns" ? t("campaignId") : t("ruleId")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder={t("pleaseEnterCampaignId")} {...field} />
+                  <Input
+                    placeholder={
+                      tableKey === "campaigns"
+                        ? t("pleaseEnterCampaignId")
+                        : t("pleaseEnterRuleId")
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,4 +132,5 @@ interface Props {
   defaultId?: string;
   afterSubmit?: () => void;
   afterCancel?: () => void;
+  tableKey: PassphraseDialogKey;
 }

@@ -1,10 +1,4 @@
 {
-  "CampaignMenu": {
-    "info": "Info",
-    "export": "Export",
-    "import": "Import",
-    "delete": "Delete"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",
@@ -18,7 +12,6 @@
     "view": "View"
   },
   "CampaignDeleteZone": {
-    "campaignIdLabel": "Campaign ID:",
     "deleteButton": "Delete Campaign",
     "deleteCampaign": "Delete Campaign",
     "deleteCampaignDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",
@@ -28,6 +21,7 @@
     "formValidation": {
       "required": "Please enter the campaign ID"
     },
+    "idLabel": "Campaign ID:",
     "idMismatchError": "The entered ID does not match",
     "inputLabel": "Enter the campaign ID to confirm deletion",
     "inputPlaceholder": "Campaign ID",
@@ -55,9 +49,11 @@
     "passphrasePlaceholder": "Enter campaign passphrase",
     "save": "Save"
   },
-  "CampaignlistToolbar": {
-    "joinCampaign": "Join Campaign",
-    "newCampaign": "New Campaign"
+  "CampaignMenu": {
+    "delete": "Delete",
+    "export": "Export",
+    "import": "Import",
+    "info": "Info"
   },
   "CampaignPage": {
     "alert": "During the testing period, each user can only create 1 campaign. If you want to create more campaigns at this time, please contact the author.",
@@ -74,6 +70,12 @@
   "ConfirmDialog": {
     "cancel": "Cancel",
     "confirm": "Confirm"
+  },
+  "DataToolbar": {
+    "joinCampaign": "Join Campaign",
+    "joinRule": "Read Rule",
+    "newCampaign": "New Campaign",
+    "newRule": "New Rule"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",
@@ -145,7 +147,11 @@
     "title": "Log in"
   },
   "PassphraseDialog": {
-    "description": "Please enter the Campaign ID and passphrase provided by your GM.",
+    "campaignDescription": "Please enter the Campaign ID and passphrase provided by your GM.",
+    "campaignTitle": "Enter passphrase to join campaign",
+    "description": "Please enter the ID and passphrase provided by your GM.",
+    "ruleDescription": "Please enter the Rule ID and passphrase provided by your GM.",
+    "ruleTitle": "Enter passphrase to read rule",
     "title": "Passphrase"
   },
   "PhraseForm": {
@@ -154,6 +160,8 @@
     "passphrase": "Passphrase",
     "pleaseEnterCampaignId": "Please enter the campaign ID",
     "pleaseEnterPassphrase": "Please enter the passphrase",
+    "pleaseEnterRuleId": "Please enter the rule ID",
+    "ruleId": "Rule ID",
     "submit": "Submit"
   },
   "ResetPassword": {
@@ -166,6 +174,71 @@
     "title": "Reset Password",
     "updateFailed": "Password update failed.",
     "updateSuccess": "Password updated"
+  },
+  "RuleDeleteZone": {
+    "deleteButton": "Delete Rule",
+    "deleteRule": "Delete Rule",
+    "deleteRuleDescription": "Deleting a rule will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "description": "Deleting a rule will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "errorDescription": "An error occurred while deleting the rule. Please try again later.",
+    "errorTitle": "Deletion Failed",
+    "formValidation": {
+      "required": "Please enter the rule ID"
+    },
+    "idLabel": "Rule ID:",
+    "idMismatchError": "The entered ID does not match",
+    "inputLabel": "Enter the rule ID to confirm deletion",
+    "inputPlaceholder": "Rule ID",
+    "successDescription": "Your rule has been successfully deleted. You now have room to create more rules.",
+    "successTitle": "Deletion Successful",
+    "title": "Delete Rule"
+  },
+  "RuleEditor": {
+    "bannerUrl": "Banner Image",
+    "bannerUrlPlaceholder": "Choose banner image",
+    "cancel": "Cancel",
+    "errorDescription": "Unable to update the rule. Please try again later.",
+    "errorTitle": "Update Failed",
+    "ruleContent": "Rule Content",
+    "ruleName": "Rule Name",
+    "ruleNamePlaceholder": "Enter rule name",
+    "save": "Save",
+    "successDescription": "The rule has been successfully updated.",
+    "successTitle": "Update Successful",
+    "uploadFailed": "Upload Failed",
+    "uploadFailedDescription": "Unable to upload the image. Please try again later."
+  },
+  "RuleForm": {
+    "cancel": "Cancel",
+    "create": "Create",
+    "error": "Error",
+    "formTitle": {
+      "edit": "Edit Rule",
+      "new": "Create New Rule"
+    },
+    "passphrase": "Passphrase",
+    "passphrasePlaceholder": "Enter rule passphrase",
+    "ruleDescription": "Rule Description",
+    "ruleDescriptionPlaceholder": "Enter Rule description",
+    "ruleName": "Rule Name",
+    "ruleNamePlaceholder": "Enter rule name",
+    "save": "Save"
+  },
+  "RuleMenu": {
+    "delete": "Delete",
+    "info": "Info"
+  },
+  "RulesPage": {
+    "copyInfo": "Copy Info",
+    "createCampaign": "You can create a new rule.",
+    "editView": "Edit / View",
+    "infoDescription": "Share the information with players, please be careful about copyright issues.",
+    "infoTitle": "Information copied to clipboard",
+    "noRules": "No rules found.",
+    "passphrase": "Passphrase",
+    "ruleId": "Rule ID",
+    "ruleLink": "Rule Link",
+    "ruleLinkWithPassphrase": "Rule Link with Passphrase"
   },
   "Secret": {
     "description": "This page is only visible for logged in users.",
@@ -187,8 +260,8 @@
     "password": "Password",
     "registrationFailed": "Registration failed.",
     "registrationSuccess": "Thank you for registering! Please check your email and click the verification link.",
-    "signingUp": "Signing up...",
     "signUp": "Sign Up",
+    "signingUp": "Signing up...",
     "title": "Sign Up"
   },
   "TextEditor": {

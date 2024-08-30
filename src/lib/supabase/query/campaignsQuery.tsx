@@ -1,4 +1,4 @@
-import { FullCampaignData, MySupabaseClient } from "@/types/interfaces";
+import { MySupabaseClient } from "@/types/interfaces";
 
 export const getOwnedCampaignList = (
   supabase: MySupabaseClient,

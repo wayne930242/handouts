@@ -5,10 +5,10 @@ import { createClient } from "@/lib/supabase/server";
 import { getPassphrase } from "@/lib/passphrase";
 import { getCampaignDetail } from "@/lib/supabase/query/campaignsQuery";
 
-import Campaign from "./Campaign";
-
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layouts/PageLayout";
+import { getRuleInfo } from "@/lib/supabase/query/rulesQuery";
+import Rule from "./Rule";
 
 interface Props {
   params: {
@@ -25,27 +25,28 @@ export default async function CampaignPage({
 }: Props) {
   const supabase = createClient();
 
-  const c_passphrase = await getPassphrase(id, "campaigns");
+  const c_passphrase = await getPassphrase(id, "rules");
 
   const { data: isAuthorized, error: authError } = await supabase.rpc(
-    "check_campaign_passphrase_rpc",
+    "check_rule_passphrase_rpc",
     {
-      campaign_id: id,
       input_passphrase: passphrase ?? c_passphrase ?? "",
+      rule_id: id,
     }
   );
 
   if (!isAuthorized || authError) {
-    return redirect("/?campaign_id=" + id);
+    console.log(authError, isAuthorized);
+    return redirect("/?rule_id=" + id);
   }
 
   const queryClient = new QueryClient();
-  await prefetchQuery(queryClient, getCampaignDetail(supabase, id));
+  await prefetchQuery(queryClient, getRuleInfo(supabase, id));
 
   return (
-    <PageLayout>
+    <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Campaign campaignId={id} isAuthorized={isAuthorized} />
+        <Rule ruleId={id} />
       </HydrationBoundary>
     </PageLayout>
   );

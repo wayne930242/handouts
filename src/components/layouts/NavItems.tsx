@@ -10,10 +10,10 @@ const Routers = [
     path: "/campaigns",
     exact: false,
   },
-  // {
-  //   path: "/rules",
-  //   exact: false,
-  // },
+  {
+    path: "/rules",
+    exact: false,
+  },
 ] as const;
 
 export default function NavItems() {

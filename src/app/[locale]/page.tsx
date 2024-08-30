@@ -25,7 +25,6 @@ export default async function Index({
       </h1>
 
       <div className="flex flex-col items-center">
-        <PassphraseForm defaultId={campaign_id} />
       </div>
       <SearchParamsListener />
     </PageLayout>

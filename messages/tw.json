@@ -1,10 +1,4 @@
 {
-  "CampaignMenu": {
-    "info": "資訊",
-    "export": "匯出",
-    "import": "匯入",
-    "delete": "刪除"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",
@@ -18,7 +12,6 @@
     "view": "檢視"
   },
   "CampaignDeleteZone": {
-    "campaignIdLabel": "戰役 ID：",
     "deleteButton": "刪除戰役",
     "deleteCampaign": "刪除戰役",
     "deleteCampaignDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",
@@ -28,6 +21,7 @@
     "formValidation": {
       "required": "請輸入戰役 ID"
     },
+    "idLabel": "戰役 ID：",
     "idMismatchError": "輸入的 ID 不匹配",
     "inputLabel": "輸入戰役 ID 以確認刪除",
     "inputPlaceholder": "戰役 ID",
@@ -55,9 +49,11 @@
     "passphrasePlaceholder": "通關密語",
     "save": "儲存"
   },
-  "CampaignlistToolbar": {
-    "joinCampaign": "加入戰役",
-    "newCampaign": "新戰役"
+  "CampaignMenu": {
+    "delete": "刪除",
+    "export": "匯出",
+    "import": "匯入",
+    "info": "資訊"
   },
   "CampaignPage": {
     "alert": "測試期間，每個使用者只能創建 1 個戰役。如果你在此時想創建更多戰役，請聯絡作者。",
@@ -74,6 +70,12 @@
   "ConfirmDialog": {
     "cancel": "取消",
     "confirm": "確認"
+  },
+  "DataToolbar": {
+    "joinCampaign": "加入戰役",
+    "joinRule": "看規則",
+    "newCampaign": "新戰役",
+    "newRule": "新規則"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
@@ -145,8 +147,12 @@
     "title": "登入"
   },
   "PassphraseDialog": {
-    "description": "請輸入 GM 提供給你的戰役 ID 與通關密語。",
-    "title": "通關密語"
+    "campaignDescription": "請輸入 GM 提供給你的戰役 ID 與通關密語。",
+    "campaignTitle": "輸入通關密語來加入戰役",
+    "description": "請輸入 GM 提供給你的 ID 與通關密語。",
+    "ruleDescription": "請輸入 GM 提供給你的規則 ID 與通關密語。",
+    "ruleTitle": "輸入通關密語來閱讀規則",
+    "title": "輸入通關密語"
   },
   "PhraseForm": {
     "campaignId": "戰役 ID",
@@ -166,6 +172,71 @@
     "title": "重設密碼",
     "updateFailed": "密碼更新失敗。",
     "updateSuccess": "密碼已更新"
+  },
+  "RuleDeleteZone": {
+    "deleteButton": "刪除規則",
+    "deleteRule": "刪除規則",
+    "deleteRuleDescription": "刪除規則後，會連帶刪除該規則的所有內容，這個操作無法復原。是否確認刪除？",
+    "description": "刪除規則後，會連帶刪除該規則的所有內容，這個操作無法復原。是否確認刪除？",
+    "errorDescription": "刪除規則時發生錯誤，請稍後再試。",
+    "errorTitle": "刪除失敗",
+    "formValidation": {
+      "required": "請輸入規則 ID"
+    },
+    "idLabel": "規則 ID：",
+    "idMismatchError": "輸入的 ID 不匹配",
+    "inputLabel": "輸入規則 ID 以確認刪除",
+    "inputPlaceholder": "規則 ID",
+    "successDescription": "你的規則已經成功刪除。你現在有額度可以創建更多規則。",
+    "successTitle": "刪除成功",
+    "title": "刪除規則"
+  },
+  "RuleEditor": {
+    "bannerUrl": "橫幅圖片",
+    "bannerUrlPlaceholder": "選擇橫幅圖片",
+    "cancel": "取消",
+    "errorDescription": "無法更新規則。請稍後再試。",
+    "errorTitle": "更新失敗",
+    "ruleContent": "規則內容",
+    "ruleName": "規則名稱",
+    "ruleNamePlaceholder": "輸入規則名稱",
+    "save": "儲存",
+    "successDescription": "規則已成功更新。",
+    "successTitle": "更新成功",
+    "uploadFailed": "上傳失敗",
+    "uploadFailedDescription": "無法上傳圖片。請稍後再試。"
+  },
+  "RuleForm": {
+    "cancel": "取消",
+    "create": "創建",
+    "error": "錯誤",
+    "formTitle": {
+      "edit": "編輯規則",
+      "new": "創建新規則"
+    },
+    "passphrase": "通關密語",
+    "passphrasePlaceholder": "輸入規則通關密語",
+    "ruleDescription": "規則描述",
+    "ruleDescriptionPlaceholder": "輸入規則描述",
+    "ruleName": "規則名稱",
+    "ruleNamePlaceholder": "輸入規則名稱",
+    "save": "儲存"
+  },
+  "RuleMenu": {
+    "delete": "刪除",
+    "info": "資訊"
+  },
+  "RulesPage": {
+    "copyInfo": "複製資訊",
+    "createCampaign": "您可以創建新的規則。",
+    "editView": "編輯 / 檢視",
+    "infoDescription": "將規則資訊分享給玩家。請注意版權問題。",
+    "infoTitle": "資訊已複製到剪貼簿",
+    "noRules": "沒有找到任何規則。",
+    "passphrase": "通關密語",
+    "ruleId": "規則 ID",
+    "ruleLink": "規則連結",
+    "ruleLinkWithPassphrase": "規則連結含通關密語"
   },
   "Secret": {
     "description": "此頁面僅對已登入的用戶可見。",
@@ -187,8 +258,8 @@
     "password": "密碼",
     "registrationFailed": "註冊失敗。",
     "registrationSuccess": "感謝註冊！請確認你的 email 並點擊驗證連結。",
-    "signingUp": "註冊中...",
     "signUp": "註冊",
+    "signingUp": "註冊中...",
     "title": "註冊"
   },
   "TextEditor": {

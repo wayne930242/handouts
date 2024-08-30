@@ -114,13 +114,22 @@ export interface ConfirmDialogData {
   state: "confirmed" | "canceled" | "pending";
 }
 
+type PassphraseDialogKey = "rules" | "campaigns";
+export type PassphraseId = `${PassphraseDialogKey}-${string}`;
+
+export type Passphrase = {
+  [key in PassphraseId]: string;
+};
+
 export interface AppStore {
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
   editingCampaign: boolean;
   setEditingCampaign: (editingCampaign: boolean) => void;
-  passphraseDialog: boolean;
-  setPassphraseDialog: (passphraseDialog: boolean) => void;
+  editingRule: boolean;
+  setEditingRule: (editingRule: boolean) => void;
+  addPassphraseDialog: PassphraseDialogKey | null;
+  setAddPassphraseDialog: (passphraseDialog: PassphraseDialogKey | null) => void;
   confirmDialog: ConfirmDialogData | null;
   setConfirmDialog: (confirmDialog: ConfirmDialogData | null) => void;
   isLoading: boolean;
@@ -176,13 +185,4 @@ export interface Session {
 }
 
 // Rules Data
-export interface Rule {
-  id: string;
-  owner_id: string;
-  title: string;
-  content: string | null;
-  passphrase: string | null;
-  is_public: boolean;
-  created_at: string;
-  updated_at: string;
-}
+export type Rule = Database["public"]["Tables"]["rules"]["Row"];

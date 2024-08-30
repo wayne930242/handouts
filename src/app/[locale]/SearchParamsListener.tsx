@@ -7,12 +7,14 @@ import { useEffect } from "react";
 export default function SearchParamsListener() {
   const searchParams = useSearchParams();
   const { setPassphraseDialog } = useAppStore((state) => ({
-    setPassphraseDialog: state.setPassphraseDialog,
+    setPassphraseDialog: state.setAddPassphraseDialog,
   }));
 
   useEffect(() => {
     if (searchParams.get("campaign_id")) {
-      setPassphraseDialog(true);
+      setPassphraseDialog("campaigns");
+    } else if (searchParams.get("rule_id")) {
+      setPassphraseDialog("rules");
     }
   }, [searchParams]);
 

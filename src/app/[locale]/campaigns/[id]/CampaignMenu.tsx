@@ -3,8 +3,6 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -59,7 +57,7 @@ export default function CampaignMenu({ campaignData }: Props) {
           </ItemButton>
         </Link>
 
-        <ItemButton>
+        <ItemButton onClick={handleExport}>
           <FileDown className="h-4 w-4" />
           <span>{t("export")}</span>
         </ItemButton>

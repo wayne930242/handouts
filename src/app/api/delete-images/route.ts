@@ -13,14 +13,14 @@ const s3Client = new S3Client({
 });
 
 export async function POST(request: Request) {
-  const { campaignId } = await request.json();
+  const { tableKey, id } = await request.json();
 
-  if (!campaignId) {
+  if (!tableKey || !id) {
     return Response.json({ error: "campaignId is required" }, { status: 400 });
   }
 
   try {
-    const prefix = `${campaignId}/images/`;
+    const prefix = `${tableKey}/${id}/images/`;
 
     // List objects with the given prefix
     const listParams = {

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getCampaignDetail } from "../supabase/query/campaignQuery";
+import { getCampaignDetail } from "../supabase/query/campaignsQuery";
 
 const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
   const { initCampaignData, setLoading } = useCampaignStore(state => ({

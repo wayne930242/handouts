@@ -10,6 +10,7 @@ const defaultOptions: Options = {
 };
 
 type Fields = any;
+type ImageTableKey = "campaigns" | "rules";
 
 export default class ImageManager {
   private options: Options;
@@ -20,9 +21,9 @@ export default class ImageManager {
     this.baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   }
 
-  async uploadImage(file: File, campaignId: string): Promise<string> {
+  async uploadImage(file: File, tableKey: ImageTableKey, id: string): Promise<string> {
     const compressedImage = await this.compressImage(file);
-    const key = `${campaignId}/images/${Date.now()}.webp`;
+    const key = `${tableKey}/${id}/images/${Date.now()}.webp`;
     const objectUrl = await this.uploadToS3(compressedImage, key);
     return objectUrl;
   }
@@ -34,10 +35,10 @@ export default class ImageManager {
     return blobToWebP(compressedImage);
   }
 
-  async deleteImagesByCampaignId(campaignId: string): Promise<void> {
+  async deleteImagesByCampaignId(tableKey: ImageTableKey, id: string): Promise<void> {
     try {
       await ky.post(`${this.baseUrl}/api/delete-images`, {
-        json: { campaignId },
+        json: { id, tableKey },
       });
     } catch (error) {
       console.error("Delete failed:", error);
