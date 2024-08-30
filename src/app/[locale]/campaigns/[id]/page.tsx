@@ -39,9 +39,14 @@ export default async function CampaignPage({
     return redirect("/?campaign_id=" + id);
   }
 
+  const queryClient = new QueryClient();
+  await prefetchQuery(queryClient, getCampaignDetail(supabase, id));
+
   return (
     <PageLayout>
-      <Campaign campaignId={id} isAuthorized={isAuthorized} />
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        <Campaign campaignId={id} isAuthorized={isAuthorized} />
+      </HydrationBoundary>
     </PageLayout>
   );
 }

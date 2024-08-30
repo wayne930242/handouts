@@ -15,6 +15,9 @@ const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
     getCampaignDetail(supabase, campaignId),
     {
       enabled: isAuthorized,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
     });
 
   useEffect(() => {
