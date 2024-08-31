@@ -31,9 +31,7 @@ export const useSmoothScroll = (options: SmoothScrollOptions = defaultOptions) =
 
     const decodedHash = decodeURIComponent(url.hash);
     const targetId = decodedHash.slice(1);
-    console.log(targetId);
     const targetElement = document.getElementById(targetId);
-    console.log(targetElement);
 
     if (targetElement) {
       targetElement.scrollIntoView(options);
