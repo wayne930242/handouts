@@ -68,7 +68,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
             {doc.description}
           </div>
           <Markdown
-            className="prose max-w-none"
+            className="prose max-w-none dark:prose-invert"
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[
               rehypeRaw,

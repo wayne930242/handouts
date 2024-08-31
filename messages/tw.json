@@ -1,4 +1,10 @@
 {
+  "ModeToggle": {
+    "dark": "暗色",
+    "light": "亮色",
+    "system": "系統",
+    "toggleTheme": "切換主題"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",

@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import NavItems from "./NavItems";
 import VisuallyHidden from "../ui/visuallyhidden";
+import { ModeToggle } from "@/app/[locale]/ModeToggle";
 
 export default async function PageLayout({
   header,
@@ -72,6 +73,7 @@ export default async function PageLayout({
           </Sheet>
 
           <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 grow-0 justify-end">
+            <ModeToggle />
             <LocaleSwitcher />
             <AuthButton />
           </div>

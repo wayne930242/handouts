@@ -1,4 +1,10 @@
 {
+  "ModeToggle": {
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System",
+    "toggleTheme": "Toggle theme"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",

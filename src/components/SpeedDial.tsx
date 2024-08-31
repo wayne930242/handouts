@@ -15,8 +15,8 @@ export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
     <div className="fixed bottom-4 left-4 z-50 md:hidden block">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" className="rounded-full h-20 w-20">
-            <TableOfContents className="h-12 w-12" />
+          <Button size="icon" className="rounded-full h-14 w-14">
+            <TableOfContents className="h-8 w-8" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -24,7 +24,7 @@ export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
           align="start"
           className="data-[state=closed]:hidden"
         >
-          <div className="flex flex-col gap-2 bg-slate-50 rounded-sm max-h-[40vh] w-[250px] overflow-y-auto overflow-x-hidden px-2">
+          <div className="flex flex-col gap-2 bg-accent text-accent-foreground rounded-sm max-h-[40vh] w-[250px] overflow-y-auto overflow-x-hidden px-2">
             <div>
               <a
                 className="toc-link text-center flex items-center justify-center"

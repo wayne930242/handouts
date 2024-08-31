@@ -12,6 +12,7 @@ import GlobalLoading from "./GlobalLoading";
 import PassphraseDialog from "@/components/PassphraseDialog";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { BASE_URL } from "@/config/app";
+import { ThemeProvider } from "./ThemeProvider";
 
 const defaultUrl = BASE_URL;
 
@@ -79,15 +80,22 @@ export default async function RootLayout({
     <ReactQueryClientProvider>
       <html lang={locale} className={font.className}>
         <body className="bg-background text-foreground">
-          <main className="min-h-screen flex flex-col items-center">
-            <NextIntlClientProvider messages={messages}>
-              {children}
-              <Toaster />
-              <ConfirmDialog />
-              <GlobalLoading />
-              <PassphraseDialog />
-            </NextIntlClientProvider>
-          </main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="min-h-screen flex flex-col items-center">
+              <NextIntlClientProvider messages={messages}>
+                {children}
+                <Toaster />
+                <ConfirmDialog />
+                <GlobalLoading />
+                <PassphraseDialog />
+              </NextIntlClientProvider>
+            </main>
+          </ThemeProvider>
         </body>
       </html>
     </ReactQueryClientProvider>

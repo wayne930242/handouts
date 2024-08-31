@@ -29,9 +29,9 @@ const config = {
               fontWeight: '400',
               fontStyle: 'normal',
               fontSize: '0.9em',
-              backgroundColor: '#f8f8f8',
+              backgroundColor: 'hsl(var(--accent))',
               borderLeftWidth: '4px',
-              borderLeftColor: '#e2e8f0',
+              borderLeftColor: 'hsl(var(--border))',
               padding: '1em 1.5em',
               margin: '1.5em 0',
               borderRadius: '0.375rem',
@@ -59,7 +59,7 @@ const config = {
             },
             'table tr': {
               display: 'table-row',
-              borderBottom: '1px solid #e5e7eb',
+              borderBottom: '1px solid hsl(var(--border))',
             },
             'table td, table th': {
               whiteSpace: 'normal',
