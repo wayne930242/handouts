@@ -20,13 +20,14 @@ export default async function Index({ params: { locale } }: Props) {
         <Hero imageClassName="object-top rounded-t-xl rounded-b-xl md:rounded-b-none" />
       </div>
 
-      <h1 className="text-2xl font-bold text-center text-muted-foreground mt-6 mb-2">
-        {t("welcome")}
-      </h1>
-      <div className="p-4">{t("siteDescription")}</div>
-
-      <div className="flex flex-col items-center my-4">
-        <Features />
+      <div className="flex flex-col items-center pt-6 md:border-r-2 md:border-l-2 md:border-border">
+        <h1 className="text-2xl font-bold text-center text-muted-foreground mb-2">
+          {t("welcome")}
+        </h1>
+        <div className="p-4">{t("siteDescription")}</div>
+        <div className="mt-4">
+          <Features />
+        </div>
       </div>
       <div className="flex-col items-center hidden md:flex">
         <Hero
