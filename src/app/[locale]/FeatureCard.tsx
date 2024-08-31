@@ -23,7 +23,7 @@ export default function FeatureCard({
     <Wrapper href={href!}>
       <Card
         className={cn(
-          "flex flex-col gap-y-1 w-full min-h-48 bg-accent text-accent-foreground hover:bg-accent/80",
+          "flex flex-col gap-y-1 w-full min-h-48 bg-accent text-accent-foreground hover:bg-accent/60",
           {
             "cursor-pointer": href,
           }
