@@ -43,7 +43,7 @@ export default async function CampaignPage({
   await prefetchQuery(queryClient, getDocInfo(supabase, id));
 
   return (
-    <PageLayout needsAuth>
+    <PageLayout>
       <HydrationBoundary state={hydrate(queryClient, null)}>
         <Doc docId={id} />
       </HydrationBoundary>
