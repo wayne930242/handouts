@@ -64,7 +64,7 @@ const config = {
             },
             'table td, table th': {
               whiteSpace: 'normal',
-              minWidth: '100px',
+              minWidth: '160px',
               maxWidth: 'min-content',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
