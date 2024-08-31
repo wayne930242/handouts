@@ -2,29 +2,37 @@ import PageLayout from "@/components/layouts/PageLayout";
 import PassphraseForm from "@/components/PassphraseForm";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import SearchParamsListener from "./SearchParamsListener";
+import Hero from "./Hero";
+import Features from "./Features";
 
 interface Props {
-  searchParams: {
-    campaign_id?: string;
-  };
   params: { locale: string };
 }
 
-export default async function Index({
-  searchParams: { campaign_id },
-  params: { locale },
-}: Props) {
+export default async function Index({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
 
   const t = await getTranslations("Index");
 
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold text-center text-muted-foreground my-12">
+      <div className="flex flex-col items-center">
+        <Hero imageClassName="object-top rounded-t-xl rounded-b-xl md:rounded-b-none" />
+      </div>
+
+      <h1 className="text-2xl font-bold text-center text-muted-foreground mt-6 mb-2">
         {t("welcome")}
       </h1>
+      <div className="p-4">{t("siteDescription")}</div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center my-4">
+        <Features />
+      </div>
+      <div className="flex-col items-center hidden md:flex">
+        <Hero
+          imageClassName="object-bottom rounded-b-xl"
+          containerClassName="h-12 lg:h-24"
+        />
       </div>
       <SearchParamsListener />
     </PageLayout>

@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { ArrowUpToLine, TableOfContents } from "lucide-react";
 import { MultiDOMPortal } from "./Portal";
 
-export default function TocSpeedDial() {
+export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
   return createPortal(
     <div className="fixed bottom-4 left-4 z-50 md:hidden block">
       <DropdownMenu>
@@ -39,12 +39,8 @@ export default function TocSpeedDial() {
                 </Button>
               </a>
             </div>
-            <MultiDOMPortal
-              sourceId="doc-toc"
-              targetIds={["mobile-toc"]}
-              hideOriginal
-            />
-            <div id="mobile-toc"></div>
+            <MultiDOMPortal sourceId={id} targetIds={[targetId]} hideOriginal />
+            <div id={targetId}></div>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -53,4 +49,7 @@ export default function TocSpeedDial() {
   );
 }
 
-interface Props {}
+interface Props {
+  sourceId: string;
+  targetId: string;
+}

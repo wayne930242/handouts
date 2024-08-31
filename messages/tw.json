@@ -111,7 +111,12 @@
   "Index": {
     "campaignId": "戰役 ID",
     "passphrase": "通關密語",
-    "welcome": "歡迎使用 Handouts！"
+    "welcome": "歡迎使用 Handouts！",
+    "campaignsTitle": "戰役",
+    "campaignsDescription": "根據戰役建立一系列的手邊資料分享給玩家，你可以自行決定要公開哪些資料，並將它們呈現在清晰的結構中。",
+    "docsTitle": "文件",
+    "docsDescription": "你可以建立遊戲文件或規則和玩家分享，使用單純的 Markdown 語法編輯器。你可以分享遊戲規則給你的玩家並設定通關密語。",
+    "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。由洪偉開發製作。"
   },
   "LocaleLayout": {
     "campaigns": "戰役",

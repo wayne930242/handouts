@@ -25,7 +25,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
         targetIds={["desktop-toc"]}
         hideOriginal
       />
-      <TocSpeedDial />
+      <TocSpeedDial sourceId="doc-toc" targetId="mobile-toc" />
       <div
         className={cn(
           "hidden md:block max-w-[275px] sticky top-0 overflow-y-auto pr-4 mr-4",
