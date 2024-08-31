@@ -166,7 +166,7 @@ export default function DocEditor({ doc, callback }: Props) {
               <FormControl>
                 <MyMDXEditor
                   markdown={field.value ?? ""}
-                  oldMarkdown={undefined}
+                  oldMarkdown={doc.content ?? ""}
                   onChange={(value) => field.onChange(value)}
                   imageUploadHandler={async (image: File) => {
                     setIsLoading(true);
