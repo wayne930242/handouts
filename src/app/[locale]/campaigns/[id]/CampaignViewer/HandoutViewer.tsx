@@ -71,7 +71,7 @@ export default function HandoutViewer({ handout }: Props) {
           </div>
           {handout.type === "text" && (
             <Markdown
-              className="prose prose-sm max-w-none"
+              className="prose prose-sm max-w-none dark:prose-invert"
               remarkPlugins={[remarkGfm]}
             >
               {handout.content}
@@ -89,7 +89,9 @@ export default function HandoutViewer({ handout }: Props) {
               }}
             />
           )}
-          {handout.type === "link" && <LinkViewer content={handout.content ?? ""} />}
+          {handout.type === "link" && (
+            <LinkViewer content={handout.content ?? ""} />
+          )}
         </div>
       </Wrapper>
     )
