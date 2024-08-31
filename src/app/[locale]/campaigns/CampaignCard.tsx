@@ -47,7 +47,6 @@ export default function CampaignCard({ campaign }: { campaign: FullCampaignData 
                 const info = `
 **${t("campaignId")}**: \`${campaign.id}\`
 **${t("passphrase")}**: \`${campaign.passphrase}\`
-**${t("campaignLink")}**: ${campaignLink}
 **${t("campaignLinkWithPassphrase")}**: ${campaignLinkWithPassphrase}
 `;
                 navigator.clipboard.writeText(info);

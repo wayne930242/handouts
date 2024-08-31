@@ -62,7 +62,6 @@ export default function DocCard({ doc }: { doc: Doc }) {
                 const info = `
 **${t("docId")}**: \`${doc.id}\`
 **${t("passphrase")}**: \`${doc.passphrase}\`
-**${t("docLink")}**: ${docLink}
 **${t("docLinkWithPassphrase")}**: ${docLinkWithPassphrase}
 `;
                 navigator.clipboard.writeText(info);
