@@ -29,7 +29,7 @@ export default function DocViewer({ doc }: Props) {
           {doc.description}
         </div>
         <Markdown
-          className="prose prose-sm max-w-none"
+          className="prose max-w-none"
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeSlug, rehypeToc]}
         >

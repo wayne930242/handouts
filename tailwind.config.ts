@@ -22,19 +22,58 @@ const config = {
         DEFAULT: {
           css: {
             blockquote: {
+              fontWeight: '400',
               fontStyle: 'normal',
-              fontWeight: '500',
-              borderLeftWidth: '0.25rem',
-              borderLeftColor: '#e5e7eb',
-              quotes: 'none',
-              marginLeft: '1rem',
-              paddingLeft: '1rem',
+              fontSize: '0.9em',
+              backgroundColor: '#f8f8f8',
+              borderLeftWidth: '4px',
+              borderLeftColor: '#e2e8f0',
+              padding: '1em 1.5em',
+              margin: '1.5em 0',
+              borderRadius: '0.375rem',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+              '& p:first-of-type::before': {
+                content: 'none',
+              },
+              '& p:last-of-type::after': {
+                content: 'none',
+              },
             },
             'blockquote p:first-of-type::before': {
               content: 'none',
             },
             'blockquote p:last-of-type::after': {
               content: 'none',
+            },
+            table: {
+              display: 'block',
+              width: '100%',
+              overflowX: 'auto',
+              whiteSpace: 'nowrap',
+              borderCollapse: 'collapse',
+              borderSpacing: 0,
+            },
+            'table thead': {
+              display: 'table-header-group',
+            },
+            'table tbody': {
+              display: 'table-row-group',
+            },
+            'table tr': {
+              display: 'table-row',
+              borderBottom: '1px solid #e5e7eb',
+            },
+            'table td, table th': {
+              whiteSpace: 'normal',
+              minWidth: '100px',
+              maxWidth: 'min-content',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              verticalAlign: 'top',
+              padding: '0.5rem 0.75rem',
+            },
+            'table tbody tr:last-child': {
+              borderBottom: 'none',
             },
           },
         }
