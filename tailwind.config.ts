@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      height: {
+        'layout': 'calc(100vh - 5.5rem - 40px)',
+        'layout-full': 'calc(100vh - 5.5rem)',
+      },
       typography: {
         DEFAULT: {
           css: {
@@ -38,12 +42,6 @@ const config = {
               '& p:last-of-type::after': {
                 content: 'none',
               },
-            },
-            'blockquote p:first-of-type::before': {
-              content: 'none',
-            },
-            'blockquote p:last-of-type::after': {
-              content: 'none',
             },
             table: {
               display: 'block',

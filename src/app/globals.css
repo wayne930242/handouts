@@ -76,44 +76,46 @@
   background-color: #f8f8f8;
   border-radius: 5px;
   font-size: 12px;
-  max-height: 400px;
+  min-height: 200px;
+  max-height: 40vh;
   overflow-y: auto;
   margin-top: 16px;
   margin-bottom: 16px;
 }
-
 .toc::-webkit-scrollbar {
   width: 6px;
 }
-
 .toc::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
-
 .toc::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 3px;
 }
-
 .toc::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
 .toc ol {
   list-style-type: none;
-  padding-left: 15px;
+  padding-left: 0;
   margin: 0;
 }
-
 .toc-level-1 {
   padding-left: 0;
 }
-
+.toc-level-2 {
+  padding-left: 10px;
+}
+.toc-level-3 {
+  padding-left: 15px;
+}
+.toc-level-4 {
+  padding-left: 20px;
+}
 .toc-item {
   margin-bottom: 5px;
   position: relative;
 }
-
 .toc-link {
   text-decoration: none;
   color: #333;
@@ -122,24 +124,19 @@
   padding: 2px 0;
   cursor: pointer;
 }
-
 .toc-link:hover {
   color: #007bff;
 }
-
 .toc-link-h1 {
   font-weight: bold;
   font-size: 16px;
 }
-
 .toc-link-h2 {
   font-size: 15px;
 }
-
 .toc-link-h3 {
   font-size: 14px;
 }
-
 .toc-link-h4 {
   font-size: 13px;
 }
