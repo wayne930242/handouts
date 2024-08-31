@@ -24,7 +24,7 @@ export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
           align="start"
           className="data-[state=closed]:hidden"
         >
-          <div className="flex gap-2 rounded-sm max-h-[40vh] w-[250px] overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 py-2 flex-col items-center">
+          <div className="flex gap-2 rounded-sm max-h-[40vh] w-[250px] overflow-y-auto bg-secondary text-secondary-foreground px-4 py-2 flex-col items-center">
             <div className="bg-secondary text-secondary-foreground w-full">
               <a
                 className="toc-link text-center flex items-center justify-center"
@@ -40,7 +40,7 @@ export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
               </a>
             </div>
             <MultiDOMPortal sourceId={id} targetIds={[targetId]} hideOriginal />
-            <div id={targetId}></div>
+            <div className="w-full flex flex-col" id={targetId}></div>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>

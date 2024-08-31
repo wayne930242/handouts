@@ -46,7 +46,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
             </Button>
           </a>
         </div>
-        <div id="desktop-toc" />
+        <div id="desktop-toc" className="w-full flex flex-col" />
       </div>
       <div className="flex flex-col gap-y-2 w-full grow">
         {doc.banner_url && (
