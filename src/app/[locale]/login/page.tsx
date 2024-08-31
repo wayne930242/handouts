@@ -35,7 +35,7 @@ export default async function Login({
     if (error) {
       return encodedRedirect("error", "/login", t("authError"));
     }
-    return redirect("/campaigns");
+    return redirect("/");
   };
 
   return (

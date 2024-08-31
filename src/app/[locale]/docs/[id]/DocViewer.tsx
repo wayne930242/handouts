@@ -28,7 +28,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
       <TocSpeedDial />
       <div
         className={cn(
-          "hidden md:block max-w-[275px] sticky top-0 overflow-y-auto pr-4",
+          "hidden md:block max-w-[275px] sticky top-0 overflow-y-auto pr-4 mr-4",
           canEdit ? "h-layout" : "h-layout-full"
         )}
       >
