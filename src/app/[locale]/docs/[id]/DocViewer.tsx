@@ -28,7 +28,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
       <TocSpeedDial sourceId="doc-toc" targetId="mobile-toc" />
       <div
         className={cn(
-          "hidden md:flex w-[305px] sticky top-0 overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 flex-col items-center",
+          "hidden md:flex w-[305px] sticky top-0 overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 py-2 flex-col items-center",
           canEdit ? "h-layout" : "h-layout-full"
         )}
       >
