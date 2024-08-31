@@ -58,3 +58,20 @@ export async function updatePassphrase(
   }
   return Promise.resolve();
 }
+
+export const checkPassphraseExists = (id: string | number, key: PassphraseDialogKey): boolean => {
+  const cookieValue = getCookies();
+  if (!cookieValue) {
+    // If cookies are not available, we assume the passphrase doesn't exist
+    return false;
+  }
+
+  try {
+    const parsedPassphrases: Passphrase = JSON.parse(cookieValue);
+    const idKey: PassphraseId = `${key}-${id}`;
+    return idKey in parsedPassphrases;
+  } catch (e) {
+    console.error("Error checking passphrase existence:", e);
+    return false;
+  }
+};

@@ -2,7 +2,7 @@ import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import { createClient } from "@/lib/supabase/server";
-import { getPassphrase } from "@/lib/passphrase";
+import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 import { getCampaignDetail } from "@/lib/supabase/query/campaignsQuery";
 
 import Campaign from "./Campaign";
@@ -36,6 +36,7 @@ export default async function CampaignPage({
   );
 
   if (!isAuthorized || authError) {
+    await removePassphrase(id, "campaigns");
     return redirect("/?campaign_id=" + id);
   }
 

@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 
 import Toolbar from "./CampaignToolbar";
 import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
+import { removePassphrase } from "@/lib/passphrase";
 
 const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
   ssr: false,

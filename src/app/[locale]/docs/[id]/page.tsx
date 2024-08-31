@@ -2,7 +2,7 @@ import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import { createClient } from "@/lib/supabase/server";
-import { getPassphrase } from "@/lib/passphrase";
+import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layouts/PageLayout";
@@ -35,7 +35,7 @@ export default async function CampaignPage({
   );
 
   if (!isAuthorized || authError) {
-    console.log(authError, isAuthorized);
+    await removePassphrase(id, "docs");
     return redirect("/?doc_id=" + id);
   }
 
