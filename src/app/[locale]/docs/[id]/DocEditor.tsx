@@ -30,7 +30,7 @@ const formSchema = z.object({
   content: z.string().optional(),
 });
 
-export default function DocEditor({ doc }: Props) {
+export default function DocEditor({ doc, callback }: Props) {
   const supabase = createClient();
   const t = useTranslations("DocEditor");
 
@@ -78,6 +78,7 @@ export default function DocEditor({ doc }: Props) {
         title: t("successTitle"),
         description: t("successDescription"),
       });
+      callback?.();
     }
   };
   const inputRef = useRef<HTMLInputElement>(null);
@@ -214,4 +215,5 @@ export default function DocEditor({ doc }: Props) {
 
 interface Props {
   doc: Doc;
+  callback?: () => any;
 }

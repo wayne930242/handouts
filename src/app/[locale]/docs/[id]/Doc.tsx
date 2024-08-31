@@ -23,7 +23,7 @@ interface Props {
 
 export default function Doc({ docId }: Props) {
   const supabase = useMemo(() => createClient(), []);
-  const { data: doc, isFetching } = useQuery(getDocInfo(supabase, docId));
+  const { data: doc, isFetching, refetch } = useQuery(getDocInfo(supabase, docId));
 
   const { editingDoc } = useAppStore((state) => ({
     editingDoc: state.editingDoc,
@@ -36,7 +36,7 @@ export default function Doc({ docId }: Props) {
     <div className="w-full">
       {canEdit && <Toolbar doc={doc} />}
       <div className="flex flex-col gap-2 w-full my-2 px-2">
-        {editingDoc && <DocEditor doc={doc} />}
+        {editingDoc && <DocEditor doc={doc} callback={refetch} />}
         {!editingDoc && <DocViewer doc={doc} />}
       </div>
     </div>

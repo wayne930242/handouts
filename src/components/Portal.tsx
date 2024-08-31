@@ -13,9 +13,16 @@ const createReactElementFromNode = (node: Node, index: number): React.ReactNode 
   }
   if (node.nodeType === Node.ELEMENT_NODE) {
     const element = node as Element;
+    const props = Array.from(element.attributes).reduce((acc, attr) => {
+      if (attr.name === 'class') {
+        return { ...acc, className: attr.value };
+      }
+      return { ...acc, [attr.name]: attr.value };
+    }, {});
+
     return React.createElement(
       element.tagName.toLowerCase(),
-      { key: index, ...Array.from(element.attributes).reduce((acc, attr) => ({ ...acc, [attr.name]: attr.value }), {}) },
+      { key: index, ...props },
       Array.from(element.childNodes).map((child, childIndex) => createReactElementFromNode(child, childIndex))
     );
   }
