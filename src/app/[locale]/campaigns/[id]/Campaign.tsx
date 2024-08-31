@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useCampaignData from "@/lib/hooks/useCampaignData";
 import useAppStore from "@/lib/store/useAppStore";
@@ -22,18 +22,50 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
   const { editingCampaign } = useAppStore((state) => ({
     editingCampaign: state.editingCampaign,
   }));
-  const { setupRealtimeSubscription } = useCampaignStore((state) => ({
-    setupRealtimeSubscription: state.setupRealtimeSubscription,
-  }));
+  const { setupRealtimeSubscription, connected } = useCampaignStore(
+    (state) => ({
+      setupRealtimeSubscription: state.setupRealtimeSubscription,
+      connected: state.connected,
+    })
+  );
 
   const supabase = useMemo(() => createClient(), []);
   const canEdit = useCanEditCampaign();
+  const unsubscribeRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!isAuthorized) return;
-    const unsubscribe = setupRealtimeSubscription(supabase, campaignId);
-    return unsubscribe;
-  }, [supabase, campaignId, isAuthorized]);
+
+    const setupSubscription = () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+      }
+      unsubscribeRef.current = setupRealtimeSubscription(supabase, campaignId);
+    };
+
+    setupSubscription();
+
+    const handleFocus = () => {
+      if (!connected) {
+        setupSubscription();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+      }
+    };
+  }, [
+    supabase,
+    campaignId,
+    isAuthorized,
+    connected,
+    setupRealtimeSubscription,
+  ]);
 
   return (
     <div className="w-full">
