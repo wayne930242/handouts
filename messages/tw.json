@@ -160,6 +160,8 @@
     "passphrase": "通關密語",
     "pleaseEnterCampaignId": "請輸入戰役 ID",
     "pleaseEnterPassphrase": "請輸入通關密語",
+    "pleaseEnterDocId": "請輸入文件 ID",
+    "docId": "文件 ID",
     "submit": "確定"
   },
   "ResetPassword": {
