@@ -28,18 +28,18 @@ export default function DocViewer({ doc, canEdit }: Props) {
       <TocSpeedDial sourceId="doc-toc" targetId="mobile-toc" />
       <div
         className={cn(
-          "hidden md:block max-w-[275px] sticky top-0 overflow-y-auto pr-4 mr-4",
+          "hidden md:flex w-[305px] sticky top-0 overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 flex-col items-center",
           canEdit ? "h-layout" : "h-layout-full"
         )}
       >
-        <div>
+        <div className="w-full">
           <a
-            className="toc-link text-center flex items-center justify-center"
+            className="toc-link text-center flex items-center justify-center mb-2"
             href="#doc-top"
           >
             <Button
               size="sm"
-              variant="link"
+              variant="secondary"
               className="w-full flex items-center justify-center hover:text-[#007bff]"
             >
               <ArrowUpToLine className="w-5 h-5" />

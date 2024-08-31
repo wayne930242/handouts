@@ -24,15 +24,15 @@ export default function TocSpeedDial({ sourceId: id, targetId }: Props) {
           align="start"
           className="data-[state=closed]:hidden"
         >
-          <div className="flex flex-col gap-2 bg-accent text-accent-foreground rounded-sm max-h-[40vh] w-[250px] overflow-y-auto overflow-x-hidden px-2">
-            <div>
+          <div className="flex gap-2 rounded-sm max-h-[40vh] w-[250px] overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 flex-col items-center">
+            <div className="bg-secondary text-secondary-foreground w-full">
               <a
                 className="toc-link text-center flex items-center justify-center"
                 href="#doc-top"
               >
                 <Button
                   size="sm"
-                  variant="link"
+                  variant="secondary"
                   className="w-full flex items-center justify-center hover:text-[#007bff]"
                 >
                   <ArrowUpToLine className="w-5 h-5" />
