@@ -10,7 +10,7 @@ const defaultOptions: Options = {
 };
 
 type Fields = any;
-type ImageTableKey = "campaigns" | "rules";
+type ImageTableKey = "campaigns" | "docs";
 
 export default class ImageManager {
   private options: Options;
@@ -35,7 +35,7 @@ export default class ImageManager {
     return blobToWebP(compressedImage);
   }
 
-  async deleteImagesByCampaignId(tableKey: ImageTableKey, id: string): Promise<void> {
+  async deleteImagesByKeyAndId(tableKey: ImageTableKey, id: string): Promise<void> {
     try {
       await ky.post(`${this.baseUrl}/api/delete-images`, {
         json: { id, tableKey },

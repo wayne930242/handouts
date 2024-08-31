@@ -15,7 +15,7 @@ export default function DataToolbar({
   }));
   const t = useTranslations("DataToolbar");
 
-  const saddledKey = tableKey === "campaigns" ? "Campaign" : "Rule";
+  const saddledKey = tableKey === "campaigns" ? "Campaign" : "Doc";
 
   return (
     <div className="flex justify-between items-center w-full px-2">

@@ -73,9 +73,9 @@
   },
   "DataToolbar": {
     "joinCampaign": "Join Campaign",
-    "joinRule": "Read Rule",
+    "joinDoc": "Read Document",
     "newCampaign": "New Campaign",
-    "newRule": "New Rule"
+    "newDoc": "New Document"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",
@@ -122,7 +122,7 @@
     "logout": "Logout",
     "myfavorites": "My Favorites",
     "profile": "Profile",
-    "rules": "Rules",
+    "docs": "Documents",
     "secret": "Secret page for logged in users",
     "signup": "Sign up",
     "subscriptions": "Subscriptions",
@@ -150,8 +150,8 @@
     "campaignDescription": "Please enter the Campaign ID and passphrase provided by your GM.",
     "campaignTitle": "Enter passphrase to join campaign",
     "description": "Please enter the ID and passphrase provided by your GM.",
-    "ruleDescription": "Please enter the Rule ID and passphrase provided by your GM.",
-    "ruleTitle": "Enter passphrase to read rule",
+    "docDescription": "Please enter the Document ID and passphrase provided by your GM.",
+    "docTitle": "Enter passphrase to read Document",
     "title": "Passphrase"
   },
   "PhraseForm": {
@@ -160,8 +160,8 @@
     "passphrase": "Passphrase",
     "pleaseEnterCampaignId": "Please enter the campaign ID",
     "pleaseEnterPassphrase": "Please enter the passphrase",
-    "pleaseEnterRuleId": "Please enter the rule ID",
-    "ruleId": "Rule ID",
+    "pleaseEnterDocId": "Please enter the document ID",
+    "docId": "Document ID",
     "submit": "Submit"
   },
   "ResetPassword": {
@@ -175,70 +175,70 @@
     "updateFailed": "Password update failed.",
     "updateSuccess": "Password updated"
   },
-  "RuleDeleteZone": {
-    "deleteButton": "Delete Rule",
-    "deleteRule": "Delete Rule",
-    "deleteRuleDescription": "Deleting a rule will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
-    "description": "Deleting a rule will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
-    "errorDescription": "An error occurred while deleting the rule. Please try again later.",
+  "DocDeleteZone": {
+    "deleteButton": "Delete Document",
+    "deleteDoc": "Delete Document",
+    "deleteDocDescription": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "description": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "errorDescription": "An error occurred while deleting the document. Please try again later.",
     "errorTitle": "Deletion Failed",
     "formValidation": {
-      "required": "Please enter the rule ID"
+      "required": "Please enter the document ID"
     },
-    "idLabel": "Rule ID:",
+    "idLabel": "Document ID:",
     "idMismatchError": "The entered ID does not match",
-    "inputLabel": "Enter the rule ID to confirm deletion",
-    "inputPlaceholder": "Rule ID",
-    "successDescription": "Your rule has been successfully deleted. You now have room to create more rules.",
+    "inputLabel": "Enter the document ID to confirm deletion",
+    "inputPlaceholder": "Document ID",
+    "successDescription": "Your document has been successfully deleted. You now have room to create more documents.",
     "successTitle": "Deletion Successful",
-    "title": "Delete Rule"
+    "title": "Delete Document"
   },
-  "RuleEditor": {
+  "DocEditor": {
     "bannerUrl": "Banner Image",
     "bannerUrlPlaceholder": "Choose banner image",
     "cancel": "Cancel",
-    "errorDescription": "Unable to update the rule. Please try again later.",
+    "errorDescription": "Unable to update the doc. Please try again later.",
     "errorTitle": "Update Failed",
-    "ruleContent": "Rule Content",
-    "ruleName": "Rule Name",
-    "ruleNamePlaceholder": "Enter rule name",
+    "docContent": "Document Content",
+    "docName": "Document Name",
+    "docNamePlaceholder": "Enter Document name",
     "save": "Save",
-    "successDescription": "The rule has been successfully updated.",
+    "successDescription": "The document has been successfully updated.",
     "successTitle": "Update Successful",
     "uploadFailed": "Upload Failed",
     "uploadFailedDescription": "Unable to upload the image. Please try again later."
   },
-  "RuleForm": {
+  "DocForm": {
     "cancel": "Cancel",
     "create": "Create",
     "error": "Error",
     "formTitle": {
-      "edit": "Edit Rule",
-      "new": "Create New Rule"
+      "edit": "Edit Document",
+      "new": "Create New Document"
     },
     "passphrase": "Passphrase",
-    "passphrasePlaceholder": "Enter rule passphrase",
-    "ruleDescription": "Rule Description",
-    "ruleDescriptionPlaceholder": "Enter Rule description",
-    "ruleName": "Rule Name",
-    "ruleNamePlaceholder": "Enter rule name",
+    "passphrasePlaceholder": "Enter document passphrase",
+    "docDescription": "Document Description",
+    "docDescriptionPlaceholder": "Enter document description",
+    "docName": "Document Name",
+    "docNamePlaceholder": "Enter document name",
     "save": "Save"
   },
-  "RuleMenu": {
+  "DocMenu": {
     "delete": "Delete",
     "info": "Info"
   },
-  "RulesPage": {
+  "DocsPage": {
     "copyInfo": "Copy Info",
-    "createCampaign": "You can create a new rule.",
+    "createCampaign": "You can create a new document.",
     "editView": "Edit / View",
     "infoDescription": "Share the information with players, please be careful about copyright issues.",
     "infoTitle": "Information copied to clipboard",
-    "noRules": "No rules found.",
+    "noDocs": "No documents found.",
     "passphrase": "Passphrase",
-    "ruleId": "Rule ID",
-    "ruleLink": "Rule Link",
-    "ruleLinkWithPassphrase": "Rule Link with Passphrase"
+    "docId": "Document ID",
+    "docLink": "Document Link",
+    "docLinkWithPassphrase": "Document Link with Passphrase"
   },
   "Secret": {
     "description": "This page is only visible for logged in users.",

@@ -48,7 +48,7 @@ export default function CampaignDeleteZone({
       if (data.campaign_id === campaignId) {
         try {
           setLoading(true);
-          await imageManager.deleteImagesByCampaignId(
+          await imageManager.deleteImagesByKeyAndId(
             "campaigns",
             data.campaign_id
           );

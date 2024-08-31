@@ -31,16 +31,16 @@ export default function PassphraseDialog() {
           <DialogTitle>
             {passphraseDialog === "campaigns"
               ? t("campaignTitle")
-              : passphraseDialog === "rules"
-              ? t("ruleTitle")
+              : passphraseDialog === "docs"
+              ? t("docTitle")
               : t("title")}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription>
           {passphraseDialog === "campaigns"
             ? t("campaignDescription")
-            : passphraseDialog === "rules"
-            ? t("ruleDescription")
+            : passphraseDialog === "docs"
+            ? t("docDescription")
             : t("description")}
         </DialogDescription>
         {passphraseDialog && (

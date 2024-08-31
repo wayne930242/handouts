@@ -73,9 +73,9 @@
   },
   "DataToolbar": {
     "joinCampaign": "加入戰役",
-    "joinRule": "看規則",
+    "joinDoc": "看文件",
     "newCampaign": "新戰役",
-    "newRule": "新規則"
+    "newDoc": "新文件"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
@@ -122,7 +122,7 @@
     "logout": "登出",
     "myfavorites": "我的最愛",
     "profile": "個人資料",
-    "rules": "規則",
+    "docs": "文件",
     "secret": "已登入用戶的秘密頁面",
     "signup": "註冊",
     "subscriptions": "訂閱",
@@ -150,8 +150,8 @@
     "campaignDescription": "請輸入 GM 提供給你的戰役 ID 與通關密語。",
     "campaignTitle": "輸入通關密語來加入戰役",
     "description": "請輸入 GM 提供給你的 ID 與通關密語。",
-    "ruleDescription": "請輸入 GM 提供給你的規則 ID 與通關密語。",
-    "ruleTitle": "輸入通關密語來閱讀規則",
+    "docDescription": "請輸入 GM 提供給你的文件 ID 與通關密語。",
+    "docTitle": "輸入通關密語來閱讀文件",
     "title": "輸入通關密語"
   },
   "PhraseForm": {
@@ -173,70 +173,70 @@
     "updateFailed": "密碼更新失敗。",
     "updateSuccess": "密碼已更新"
   },
-  "RuleDeleteZone": {
-    "deleteButton": "刪除規則",
-    "deleteRule": "刪除規則",
-    "deleteRuleDescription": "刪除規則後，會連帶刪除該規則的所有內容，這個操作無法復原。是否確認刪除？",
-    "description": "刪除規則後，會連帶刪除該規則的所有內容，這個操作無法復原。是否確認刪除？",
-    "errorDescription": "刪除規則時發生錯誤，請稍後再試。",
+  "DocDeleteZone": {
+    "deleteButton": "刪除文件",
+    "deleteDoc": "刪除文件",
+    "deleteDocDescription": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
+    "description": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
+    "errorDescription": "刪除文件時發生錯誤，請稍後再試。",
     "errorTitle": "刪除失敗",
     "formValidation": {
-      "required": "請輸入規則 ID"
+      "required": "請輸入文件 ID"
     },
-    "idLabel": "規則 ID：",
+    "idLabel": "文件 ID：",
     "idMismatchError": "輸入的 ID 不匹配",
-    "inputLabel": "輸入規則 ID 以確認刪除",
-    "inputPlaceholder": "規則 ID",
-    "successDescription": "你的規則已經成功刪除。你現在有額度可以創建更多規則。",
+    "inputLabel": "輸入文件 ID 以確認刪除",
+    "inputPlaceholder": "文件 ID",
+    "successDescription": "你的文件已經成功刪除。你現在有額度可以創建更多文件。",
     "successTitle": "刪除成功",
-    "title": "刪除規則"
+    "title": "刪除文件"
   },
-  "RuleEditor": {
+  "DocEditor": {
     "bannerUrl": "橫幅圖片",
     "bannerUrlPlaceholder": "選擇橫幅圖片",
     "cancel": "取消",
-    "errorDescription": "無法更新規則。請稍後再試。",
+    "errorDescription": "無法更新文件。請稍後再試。",
     "errorTitle": "更新失敗",
-    "ruleContent": "規則內容",
-    "ruleName": "規則名稱",
-    "ruleNamePlaceholder": "輸入規則名稱",
+    "docContent": "文件內容",
+    "docName": "文件名稱",
+    "docNamePlaceholder": "輸入文件名稱",
     "save": "儲存",
-    "successDescription": "規則已成功更新。",
+    "successDescription": "文件已成功更新。",
     "successTitle": "更新成功",
     "uploadFailed": "上傳失敗",
     "uploadFailedDescription": "無法上傳圖片。請稍後再試。"
   },
-  "RuleForm": {
+  "DocForm": {
     "cancel": "取消",
     "create": "創建",
     "error": "錯誤",
     "formTitle": {
-      "edit": "編輯規則",
-      "new": "創建新規則"
+      "edit": "編輯文件",
+      "new": "創建新文件"
     },
     "passphrase": "通關密語",
-    "passphrasePlaceholder": "輸入規則通關密語",
-    "ruleDescription": "規則描述",
-    "ruleDescriptionPlaceholder": "輸入規則描述",
-    "ruleName": "規則名稱",
-    "ruleNamePlaceholder": "輸入規則名稱",
+    "passphrasePlaceholder": "輸入文件通關密語",
+    "docDescription": "文件描述",
+    "docDescriptionPlaceholder": "輸入文件描述",
+    "docName": "文件名稱",
+    "docNamePlaceholder": "輸入文件名稱",
     "save": "儲存"
   },
-  "RuleMenu": {
+  "DocMenu": {
     "delete": "刪除",
     "info": "資訊"
   },
-  "RulesPage": {
+  "DocsPage": {
     "copyInfo": "複製資訊",
-    "createCampaign": "您可以創建新的規則。",
+    "createCampaign": "您可以創建新的文件。",
     "editView": "編輯 / 檢視",
-    "infoDescription": "將規則資訊分享給玩家。請注意版權問題。",
+    "infoDescription": "將文件資訊分享給玩家。請注意版權問題。",
     "infoTitle": "資訊已複製到剪貼簿",
-    "noRules": "沒有找到任何規則。",
+    "noDocs": "沒有找到任何文件。",
     "passphrase": "通關密語",
-    "ruleId": "規則 ID",
-    "ruleLink": "規則連結",
-    "ruleLinkWithPassphrase": "規則連結含通關密語"
+    "docId": "文件 ID",
+    "docLink": "文件連結",
+    "docLinkWithPassphrase": "文件連結含通關密語"
   },
   "Secret": {
     "description": "此頁面僅對已登入的用戶可見。",

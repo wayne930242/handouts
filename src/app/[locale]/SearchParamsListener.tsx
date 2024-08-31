@@ -13,8 +13,8 @@ export default function SearchParamsListener() {
   useEffect(() => {
     if (searchParams.get("campaign_id")) {
       setPassphraseDialog("campaigns");
-    } else if (searchParams.get("rule_id")) {
-      setPassphraseDialog("rules");
+    } else if (searchParams.get("doc_id")) {
+      setPassphraseDialog("docs");
     }
   }, [searchParams]);
 

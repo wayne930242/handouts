@@ -196,6 +196,83 @@ export type Database = {
           },
         ]
       }
+      doc_blocks: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          doc_id: string | null
+          id: string
+          order_num: number | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          doc_id?: string | null
+          id?: string
+          order_num?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          doc_id?: string | null
+          id?: string
+          order_num?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doc_blocks_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      docs: {
+        Row: {
+          banner_url: string | null
+          content: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          owner_id: string | null
+          passphrase: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          banner_url?: string | null
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          owner_id?: string | null
+          passphrase?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          banner_url?: string | null
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          owner_id?: string | null
+          passphrase?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       encrypted_secrets: {
         Row: {
           created_at: string | null
@@ -335,83 +412,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      rule_blocks: {
-        Row: {
-          content: string | null
-          created_at: string | null
-          id: string
-          order_num: number | null
-          rule_id: string | null
-          title: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          content?: string | null
-          created_at?: string | null
-          id?: string
-          order_num?: number | null
-          rule_id?: string | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          content?: string | null
-          created_at?: string | null
-          id?: string
-          order_num?: number | null
-          rule_id?: string | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "rule_blocks_rule_id_fkey"
-            columns: ["rule_id"]
-            isOneToOne: false
-            referencedRelation: "rules"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      rules: {
-        Row: {
-          banner_url: string | null
-          content: string | null
-          created_at: string | null
-          description: string | null
-          id: string
-          is_public: boolean | null
-          owner_id: string | null
-          passphrase: string | null
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          banner_url?: string | null
-          content?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          is_public?: boolean | null
-          owner_id?: string | null
-          passphrase?: string | null
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          banner_url?: string | null
-          content?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          is_public?: boolean | null
-          owner_id?: string | null
-          passphrase?: string | null
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: []
       }
       sections: {
         Row: {
@@ -595,16 +595,16 @@ export type Database = {
         }
         Returns: boolean
       }
-      check_rule_passphrase: {
+      check_doc_passphrase: {
         Args: {
-          rule_id: string
+          doc_id: string
           input_passphrase: string
         }
         Returns: boolean
       }
-      check_rule_passphrase_rpc: {
+      check_doc_passphrase_rpc: {
         Args: {
-          rule_id: string
+          doc_id: string
           input_passphrase: string
         }
         Returns: boolean

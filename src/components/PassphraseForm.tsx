@@ -44,14 +44,14 @@ export default function PassphraseForm({
   });
 
   useEffect(() => {
-    if (tableKey === "campaigns" && "campaign_id") {
+    if (tableKey === "campaigns" && searchParams.get("campaign_id")) {
       form.setValue(
         "id",
         (searchParams.get("campaign_id") as string) ?? undefined
       );
     }
-    if (tableKey === "rules" && "rule_id") {
-      form.setValue("id", (searchParams.get("rule_id") as string) ?? undefined);
+    if (tableKey === "docs" && searchParams.get("doc_id")) {
+      form.setValue("id", (searchParams.get("doc_id") as string) ?? undefined);
     }
     if (searchParams.get("passphrase")) {
       form.setValue(
@@ -80,14 +80,14 @@ export default function PassphraseForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {tableKey === "campaigns" ? t("campaignId") : t("ruleId")}
+                  {tableKey === "campaigns" ? t("campaignId") : t("docId")}
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder={
                       tableKey === "campaigns"
                         ? t("pleaseEnterCampaignId")
-                        : t("pleaseEnterRuleId")
+                        : t("pleaseEnterDocId")
                     }
                     {...field}
                   />

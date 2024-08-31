@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getRuleInfo } from "@/lib/supabase/query/rulesQuery";
+import { getDocInfo } from "@/lib/supabase/query/docsQuery";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const FormSchema = z.object({
@@ -32,27 +32,27 @@ const FormSchema = z.object({
   is_public: z.boolean(),
 });
 
-export default function RuleForm({
+export default function DocForm({
   id,
   userId,
 }: {
   id: string;
   userId: string;
 }) {
-  const t = useTranslations("RuleForm");
+  const t = useTranslations("DocForm");
   const supabase = createClient();
   const router = useRouter();
-  const { data: ruleInfo } = useQuery(getRuleInfo(supabase, id), {
+  const { data: docInfo } = useQuery(getDocInfo(supabase, id), {
     enabled: id !== "new",
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: ruleInfo ? ruleInfo.title : undefined,
-      description: ruleInfo ? ruleInfo.description ?? undefined : undefined,
-      passphrase: ruleInfo ? ruleInfo.passphrase ?? undefined : undefined,
-      is_public: ruleInfo ? ruleInfo.is_public ?? false : false,
+      title: docInfo ? docInfo.title : undefined,
+      description: docInfo ? docInfo.description ?? undefined : undefined,
+      passphrase: docInfo ? docInfo.passphrase ?? undefined : undefined,
+      is_public: docInfo ? docInfo.is_public ?? false : false,
     },
   });
 
@@ -60,7 +60,7 @@ export default function RuleForm({
     let errorMessage: string | undefined;
     switch (id) {
       case "new":
-        const { error: createError } = await supabase.from("rules").insert([
+        const { error: createError } = await supabase.from("docs").insert([
           {
             title: data.title,
             owner_id: userId,
@@ -80,7 +80,7 @@ export default function RuleForm({
           break;
         }
         const { error: updateError } = await supabase
-          .from("rules")
+          .from("docs")
           .update({
             id,
             owner_id: userId,
@@ -103,7 +103,7 @@ export default function RuleForm({
         variant: "destructive",
       });
     } else {
-      router.push("/rules");
+      router.push("/docs");
     }
   };
 
@@ -118,9 +118,9 @@ export default function RuleForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("ruleName")}</FormLabel>
+              <FormLabel>{t("docName")}</FormLabel>
               <FormControl>
-                <Input placeholder={t("ruleNamePlaceholder")} {...field} />
+                <Input placeholder={t("docNamePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -131,10 +131,10 @@ export default function RuleForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("ruleDescription")}</FormLabel>
+              <FormLabel>{t("docDescription")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t("ruleDescriptionPlaceholder")}
+                  placeholder={t("docDescriptionPlaceholder")}
                   {...field}
                 />
               </FormControl>
@@ -161,7 +161,7 @@ export default function RuleForm({
             variant="destructive"
             onClick={() => {
               form.reset();
-              router.push("/rules");
+              router.push("/docs");
             }}
           >
             {t("cancel")}

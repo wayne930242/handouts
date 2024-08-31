@@ -3,41 +3,41 @@
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { getRuleInfo } from "@/lib/supabase/query/rulesQuery";
+import { getDocInfo } from "@/lib/supabase/query/docsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import useSession from "@/lib/hooks/useSession";
-import Toolbar from "./RuleToolbar";
+import Toolbar from "./DocToolbar";
 import useAppStore from "@/lib/store/useAppStore";
 import { PacmanLoader } from "react-spinners";
 
-const RuleEditor = dynamic(() => import("./RuleEditor"), {
+const DocEditor = dynamic(() => import("./DocEditor"), {
   ssr: false,
 });
-const RuleViewer = dynamic(() => import("./RuleViewer"), {
+const DocViewer = dynamic(() => import("./DocViewer"), {
   ssr: false,
 });
 
 interface Props {
-  ruleId: string;
+  docId: string;
 }
 
-export default function Rule({ ruleId }: Props) {
+export default function Doc({ docId }: Props) {
   const supabase = useMemo(() => createClient(), []);
-  const { data: rule, isFetching } = useQuery(getRuleInfo(supabase, ruleId));
+  const { data: doc, isFetching } = useQuery(getDocInfo(supabase, docId));
 
-  const { editingRule } = useAppStore((state) => ({
-    editingRule: state.editingRule,
+  const { editingDoc } = useAppStore((state) => ({
+    editingDoc: state.editingDoc,
   }));
 
   const session = useSession();
-  const canEdit = rule?.owner_id === session?.user?.id;
+  const canEdit = doc?.owner_id === session?.user?.id;
 
-  return rule ? (
+  return doc ? (
     <div className="w-full">
-      {canEdit && <Toolbar rule={rule} />}
+      {canEdit && <Toolbar doc={doc} />}
       <div className="flex flex-col gap-2 w-full my-2 px-2">
-        {editingRule && <RuleEditor rule={rule} />}
-        {!editingRule && <RuleViewer rule={rule} />}
+        {editingDoc && <DocEditor doc={doc} />}
+        {!editingDoc && <DocViewer doc={doc} />}
       </div>
     </div>
   ) : (

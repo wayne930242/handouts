@@ -11,7 +11,7 @@ const Routers = [
     exact: false,
   },
   {
-    path: "/rules",
+    path: "/docs",
     exact: false,
   },
 ] as const;

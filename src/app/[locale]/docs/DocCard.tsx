@@ -11,37 +11,37 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { Rule } from "@/types/interfaces";
+import { Doc } from "@/types/interfaces";
 import { Pencil } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 
-export default function RuleCard({ rule }: { rule: Rule }) {
-  const t = useTranslations("RulesPage");
+export default function DocCard({ doc }: { doc: Doc }) {
+  const t = useTranslations("DocsPage");
 
-  const passphraseParams = rule.passphrase
-    ? `&passphrase=${rule.passphrase}`
+  const passphraseParams = doc.passphrase
+    ? `&passphrase=${doc.passphrase}`
     : "";
-  const ruleLink = `${BASE_URL}/?rule_id=${rule.id}`;
-  const ruleLinkWithPassphrase = `${BASE_URL}/?rule_id=${rule.id}${passphraseParams}`;
+  const docLink = `${BASE_URL}/?doc_id=${doc.id}`;
+  const docLinkWithPassphrase = `${BASE_URL}/?doc_id=${doc.id}${passphraseParams}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
       <CardHeader className="cursor-pointer hover:bg-accent">
         <Link
-          href={`/rules/info/${rule.id}`}
+          href={`/docs/info/${doc.id}`}
           className="flex items-center gap-1.5 justify-between"
         >
-          <CardTitle>{rule.title}</CardTitle>
+          <CardTitle>{doc.title}</CardTitle>
           <Pencil className="h-4 w-4" />
         </Link>
       </CardHeader>
       <CardContent className="grow relative h-32 overflow-hidden">
-        {rule.banner_url && (
+        {doc.banner_url && (
           <Image
             className="object-cover"
-            src={rule.banner_url}
-            alt={rule.title}
+            src={doc.banner_url}
+            alt={doc.title}
             loader={({ src }) => src}
             unoptimized
             fill
@@ -50,7 +50,7 @@ export default function RuleCard({ rule }: { rule: Rule }) {
       </CardContent>
       <CardContent className="grow relative overflow-hidden py-2">
         <CardDescription className="bg-transparent">
-          {rule.description}
+          {doc.description}
         </CardDescription>
       </CardContent>
       <CardFooter>
@@ -60,10 +60,10 @@ export default function RuleCard({ rule }: { rule: Rule }) {
               type="button"
               onClick={() => {
                 const info = `
-**${t("ruleId")}**: \`${rule.id}\`
-**${t("passphrase")}**: \`${rule.passphrase}\`
-**${t("ruleLink")}**: ${ruleLink}
-**${t("ruleLinkWithPassphrase")}**: ${ruleLinkWithPassphrase}
+**${t("docId")}**: \`${doc.id}\`
+**${t("passphrase")}**: \`${doc.passphrase}\`
+**${t("docLink")}**: ${docLink}
+**${t("docLinkWithPassphrase")}**: ${docLinkWithPassphrase}
 `;
                 navigator.clipboard.writeText(info);
                 toast({
@@ -75,7 +75,7 @@ export default function RuleCard({ rule }: { rule: Rule }) {
               {t("copyInfo")}
             </Button>
           </div>
-          <Link href={`/rules/${rule.id}`}>
+          <Link href={`/docs/${doc.id}`}>
             <Button variant="secondary">{t("editView")}</Button>
           </Link>
         </div>

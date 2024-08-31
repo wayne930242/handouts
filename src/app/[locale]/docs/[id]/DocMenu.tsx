@@ -9,26 +9,26 @@ import {
 import { Button, ItemButton } from "@/components/ui/button";
 import { Info, Settings, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Rule } from "@/types/interfaces";
+import { Doc } from "@/types/interfaces";
 import Link from "next/link";
 
 interface Props {
-  rule: Rule;
+  doc: Doc;
 }
 
-export default function RuleMenu({ rule }: Props) {
-  const t = useTranslations("RuleMenu");
+export default function DocMenu({ doc }: Props) {
+  const t = useTranslations("DocMenu");
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <Settings className="h-5 w-5" />
-          <span className="sr-only">Toggle rule menu</span>
+          <span className="sr-only">Toggle doc menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <Link href={`/rules/${rule.id}/info`}>
+        <Link href={`/docs/${doc.id}/info`}>
           <ItemButton>
             <Info className="h-4 w-4" />
             {t("info")}
@@ -36,7 +36,7 @@ export default function RuleMenu({ rule }: Props) {
         </Link>
 
         <DropdownMenuSeparator />
-        <Link href={`/rules/${rule.id}/info`}>
+        <Link href={`/docs/${doc.id}/info`}>
           <ItemButton className="text-destructive">
             <X className="h-4 w-4" />
             {t("delete")}

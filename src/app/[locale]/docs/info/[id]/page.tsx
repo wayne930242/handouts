@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 
-import RuleForm from "./RuleForm";
+import DocForm from "./DocForm";
 import PageLayout from "@/components/layouts/PageLayout";
 import { Separator } from "@/components/ui/separator";
-import RuleDeleteZone from "./RuleDeleteZone";
+import DocDeleteZone from "./DocDeleteZone";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getRuleInfo } from "@/lib/supabase/query/rulesQuery";
+import { getDocInfo } from "@/lib/supabase/query/docsQuery";
 
 interface Props {
   params: {
@@ -14,7 +14,7 @@ interface Props {
   };
 }
 
-export default async function CampaignPage({ params: { id } }: Props) {
+export default async function DocPage({ params: { id } }: Props) {
   const supabase = createClient();
   const {
     data: { user },
@@ -27,19 +27,19 @@ export default async function CampaignPage({ params: { id } }: Props) {
   const queryClient = new QueryClient();
 
   if (id !== "new") {
-    await prefetchQuery(queryClient, getRuleInfo(supabase, id));
+    await prefetchQuery(queryClient, getDocInfo(supabase, id));
   }
 
   return (
     <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <RuleForm id={id} userId={user.id} />
+        <DocForm id={id} userId={user.id} />
       </HydrationBoundary>
 
       {id !== "new" && (
         <div className="mt-4 flex flex-col gap-4">
           <Separator />
-          <RuleDeleteZone ruleId={id} />
+          <DocDeleteZone docId={id} />
         </div>
       )}
     </PageLayout>

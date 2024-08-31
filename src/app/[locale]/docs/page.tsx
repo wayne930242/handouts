@@ -5,8 +5,8 @@ import PageLayout from "@/components/layouts/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { getRulesByOwnerId } from "@/lib/supabase/query/rulesQuery";
-import Rules from "./Rules";
+import { getDocsByOwnerId } from "@/lib/supabase/query/docsQuery";
+import Docs from "./Docs";
 import DataToolbar from "@/components/DataToolbar";
 
 interface Props {
@@ -29,12 +29,12 @@ export default async function CampaignPage({ params: { locale } }: Props) {
 
   const queryClient = new QueryClient();
 
-  await prefetchQuery(queryClient, getRulesByOwnerId(supabase, user.id));
+  await prefetchQuery(queryClient, getDocsByOwnerId(supabase, user.id));
 
   return (
-    <PageLayout header={<DataToolbar tableKey="rules" />} needsAuth>
+    <PageLayout header={<DataToolbar tableKey="docs" />} needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Rules ownerId={user.id} />
+        <Docs ownerId={user.id} />
       </HydrationBoundary>
     </PageLayout>
   );

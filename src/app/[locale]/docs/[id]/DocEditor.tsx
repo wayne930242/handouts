@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { Rule } from "@/types/interfaces";
+import { Doc } from "@/types/interfaces";
 import ImageManager from "@/lib/ImageManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -30,9 +30,9 @@ const formSchema = z.object({
   content: z.string().optional(),
 });
 
-export default function RuleEditor({ rule }: Props) {
+export default function DocEditor({ doc }: Props) {
   const supabase = createClient();
-  const t = useTranslations("RuleEditor");
+  const t = useTranslations("DocEditor");
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -41,29 +41,29 @@ export default function RuleEditor({ rule }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: rule.title,
-      description: rule.description ?? undefined,
-      banner_url: rule.banner_url ?? undefined,
-      content: rule.content ?? undefined,
+      title: doc.title,
+      description: doc.description ?? undefined,
+      banner_url: doc.banner_url ?? undefined,
+      content: doc.content ?? undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (file) {
-      const imageUrl = await imageManager.uploadImage(file, "rules", rule.id);
+      const imageUrl = await imageManager.uploadImage(file, "docs", doc.id);
       data.banner_url = imageUrl;
       setFile(null);
     }
 
     const { error: updateError } = await supabase
-      .from("rules")
+      .from("docs")
       .update({
         title: data.title,
         description: data.description,
         banner_url: data.banner_url,
         content: data.content,
       })
-      .eq("id", rule.id)
+      .eq("id", doc.id)
       .select()
       .single();
 
@@ -93,9 +93,9 @@ export default function RuleEditor({ rule }: Props) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("ruleName")}</FormLabel>
+              <FormLabel>{t("docName")}</FormLabel>
               <FormControl>
-                <Input placeholder={t("ruleNamePlaceholder")} {...field} />
+                <Input placeholder={t("docNamePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,17 +123,17 @@ export default function RuleEditor({ rule }: Props) {
             }}
           />
           <div className="w-full h-72 border border-border p-2 flex justify-center items-center rounded-sm relative">
-            {(rule.banner_url || file) && (
+            {(doc.banner_url || file) && (
               <Image
                 className="object-cover"
-                src={file ? URL.createObjectURL(file) : rule.banner_url!}
+                src={file ? URL.createObjectURL(file) : doc.banner_url!}
                 alt="banner"
                 loader={({ src }) => src}
                 fill
                 unoptimized
               />
             )}
-            {(file || rule.banner_url) && (
+            {(file || doc.banner_url) && (
               <Button
                 className="absolute top-0 right-0"
                 type="button"
@@ -161,7 +161,7 @@ export default function RuleEditor({ rule }: Props) {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("ruleContent")}</FormLabel>
+              <FormLabel>{t("docContent")}</FormLabel>
               <FormControl>
                 <MyMDXEditor
                   markdown={field.value ?? ""}
@@ -170,7 +170,7 @@ export default function RuleEditor({ rule }: Props) {
                   imageUploadHandler={async (image: File) => {
                     setIsLoading(true);
                     return imageManager
-                      .uploadImage(image, "rules", rule.id)
+                      .uploadImage(image, "docs", doc.id)
                       .then((url) => url)
                       .catch((e) => {
                         toast({
@@ -213,5 +213,5 @@ export default function RuleEditor({ rule }: Props) {
 }
 
 interface Props {
-  rule: Rule;
+  doc: Doc;
 }

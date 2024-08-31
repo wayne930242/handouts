@@ -29,11 +29,11 @@ import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 
 const FormSchema = z.object({
-  rule_id: z.string().min(1, "formValidation.required"),
+  doc_id: z.string().min(1, "formValidation.required"),
 });
 
-export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
-  const t = useTranslations("CampaignDeleteZone");
+export default function DocDeleteZone({ docId }: { docId: string }) {
+  const t = useTranslations("DocDeleteZone");
   const supabase = createClient();
   const imageManager = new ImageManager();
   const router = useRouter();
@@ -41,16 +41,16 @@ export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
 
   const { setConfirm } = useConfirmDialog(
     async (data: z.infer<typeof FormSchema>) => {
-      if (data.rule_id === ruleId) {
+      if (data.doc_id === docId) {
         try {
           setLoading(true);
-          await imageManager.deleteImagesByCampaignId("rules", data.rule_id);
-          await supabase.from("rules").delete().eq("id", data.rule_id);
+          await imageManager.deleteImagesByKeyAndId("docs", data.doc_id);
+          await supabase.from("docs").delete().eq("id", data.doc_id);
           toast({
             title: t("successTitle"),
             description: t("successDescription"),
           });
-          router.push("/rules");
+          router.push("/docs");
         } catch (error) {
           toast({
             title: t("errorTitle"),
@@ -60,7 +60,7 @@ export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
         }
         setLoading(false);
       } else {
-        form.setError("rule_id", {
+        form.setError("doc_id", {
           type: "manual",
           message: t("idMismatchError"),
         });
@@ -71,16 +71,16 @@ export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      rule_id: "",
+      doc_id: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setConfirm(
       {
-        id: `delete-campaign-${data.rule_id}`,
-        title: t("deleteCampaign"),
-        description: t("deleteCampaignDescription"),
+        id: `delete-doc-${data.doc_id}`,
+        title: t("deleteDoc"),
+        description: t("deleteDocDescription"),
       },
       data
     );
@@ -96,14 +96,14 @@ export default function CampaignDeleteZone({ ruleId }: { ruleId: string }) {
         <div className="border border-input p-4 my-4">
           {t("idLabel")}{" "}
           <span className="border border-red-300 px-2 py-1 rounded-md">
-            {ruleId}
+            {docId}
           </span>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="rule_id"
+              name="doc_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("inputLabel")}</FormLabel>

@@ -5,16 +5,16 @@ import { ArrowLeft, Eye, Pen } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
-import { Rule } from "@/types/interfaces";
-import RuleMenu from "./RuleMenu";
+import { Doc } from "@/types/interfaces";
+import DocMenu from "./DocMenu";
 
-export default function Toolbar({ rule }: { rule: Rule }) {
+export default function Toolbar({ doc }: { doc: Doc }) {
   const t = useTranslations("Toolbar");
   const router = useRouter();
 
   const { editing, setEditing } = useAppStore((state) => ({
-    editing: state.editingRule,
-    setEditing: state.setEditingRule,
+    editing: state.editingDoc,
+    setEditing: state.setEditingDoc,
   }));
 
   const supabase = createClient();
@@ -43,7 +43,7 @@ export default function Toolbar({ rule }: { rule: Rule }) {
           {editing ? <Eye className="h-4 w-4" /> : <Pen className="h-4 w-4" />}
           {editing ? t("closeEdit") : t("edit")}
         </Button>
-        {rule && <RuleMenu rule={rule} />}
+        {doc && <DocMenu doc={doc} />}
       </div>
     </div>
   );
