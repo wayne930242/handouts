@@ -25,6 +25,7 @@ export default async function DocPage({ params: { id } }: Props) {
   }
 
   const queryClient = new QueryClient();
+  console.log(id);
 
   if (id !== "new") {
     await prefetchQuery(queryClient, getDocInfo(supabase, id));

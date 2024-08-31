@@ -22,14 +22,13 @@ export default function DocCard({ doc }: { doc: Doc }) {
   const passphraseParams = doc.passphrase
     ? `&passphrase=${doc.passphrase}`
     : "";
-  const docLink = `${BASE_URL}/?doc_id=${doc.id}`;
   const docLinkWithPassphrase = `${BASE_URL}/?doc_id=${doc.id}${passphraseParams}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
       <CardHeader className="cursor-pointer hover:bg-accent">
         <Link
-          href={`/docs/info/${doc.id}`}
+          href={`/docs/${doc.id}/info`}
           className="flex items-center gap-1.5 justify-between"
         >
           <CardTitle>{doc.title}</CardTitle>

@@ -15,20 +15,23 @@ import { Pencil } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 
-export default function CampaignCard({ campaign }: { campaign: FullCampaignData }) {
+export default function CampaignCard({
+  campaign,
+}: {
+  campaign: FullCampaignData;
+}) {
   const t = useTranslations("CampaignCard");
 
   const passphraseParams = campaign.passphrase
     ? `&passphrase=${campaign.passphrase}`
     : "";
-  const campaignLink = `${BASE_URL}/?campaign_id=${campaign.id}`;
   const campaignLinkWithPassphrase = `${BASE_URL}/?campaign_id=${campaign.id}${passphraseParams}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
       <CardHeader className="cursor-pointer hover:bg-accent">
         <Link
-          href={`/campaigns/info/${campaign.id}`}
+          href={`/campaigns/${campaign.id}/info`}
           className="flex items-center gap-1.5 justify-between"
         >
           <CardTitle>{campaign.name}</CardTitle>
