@@ -68,7 +68,7 @@ export default function CampaignMenu({ campaignData }: Props) {
         </ItemButton>
         <DropdownMenuSeparator />
         <Link href={`/campaigns/${campaignData.id}/info`}>
-          <ItemButton className="text-destructive">
+          <ItemButton variant="destructive">
             <X className="h-4 w-4" />
             {t("delete")}
           </ItemButton>

@@ -37,7 +37,7 @@ export default function DocMenu({ doc }: Props) {
 
         <DropdownMenuSeparator />
         <Link href={`/docs/${doc.id}/info`}>
-          <ItemButton className="text-destructive">
+          <ItemButton variant="destructive">
             <X className="h-4 w-4" />
             {t("delete")}
           </ItemButton>
