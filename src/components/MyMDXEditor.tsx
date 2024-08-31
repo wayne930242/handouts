@@ -70,7 +70,7 @@ export const MyMDXEditor = React.forwardRef<
           markdownShortcutPlugin(),
           ...(plugins ?? []),
         ]}
-        contentEditableClassName="prose max-w-screen-2xl dark:prose-invert"
+        contentEditableClassName="prose max-w-screen-2xl bg-white"
         ref={ref}
         {...rest}
       />

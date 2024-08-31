@@ -29,6 +29,7 @@ const config = {
               fontWeight: '400',
               fontStyle: 'normal',
               fontSize: '0.9em',
+              color: 'hsl(var(--accent-foreground))',
               backgroundColor: 'hsl(var(--accent))',
               borderLeftWidth: '4px',
               borderLeftColor: 'hsl(var(--border))',
