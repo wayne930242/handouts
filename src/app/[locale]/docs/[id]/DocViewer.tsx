@@ -10,22 +10,44 @@ import rehypeToc, { HtmlElementNode } from "@jsdevtools/rehype-toc";
 
 import { MultiDOMPortal } from "@/components/Portal";
 import { cn } from "@/lib/utils";
+import useSmoothScroll from "@/lib/hooks/useSmoothScroll";
+import { ArrowUpToLine } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import TocSpeedDial from "@/components/SpeedDial";
 
 export default function DocViewer({ doc, canEdit }: Props) {
+  useSmoothScroll();
+
   return (
-    <div className="flex gap-x-2 w-full relative">
+    <div className="flex gap-x-2 w-full relative" id="doc-top">
       <MultiDOMPortal
         sourceId="doc-toc"
-        targetIds={["desktop-toc", "mobile-toc"]}
-        removeOriginal
+        targetIds={["desktop-toc"]}
+        hideOriginal
       />
+      <TocSpeedDial />
       <div
         className={cn(
           "hidden md:block max-w-[275px] sticky top-0 overflow-y-auto pr-4",
           canEdit ? "h-layout" : "h-layout-full"
         )}
-        id="desktop-toc"
-      ></div>
+      >
+        <div>
+          <a
+            className="toc-link text-center flex items-center justify-center"
+            href="#doc-top"
+          >
+            <Button
+              size="sm"
+              variant="link"
+              className="w-full flex items-center justify-center hover:text-[#007bff]"
+            >
+              <ArrowUpToLine className="w-5 h-5" />
+            </Button>
+          </a>
+        </div>
+        <div id="desktop-toc" />
+      </div>
       <div className="flex flex-col gap-y-2 w-full grow">
         {doc.banner_url && (
           <div className="relative aspect-[32/9] w-full">
@@ -34,6 +56,7 @@ export default function DocViewer({ doc, canEdit }: Props) {
               src={doc.banner_url}
               alt={doc.title}
               loader={({ src }) => src}
+              priority
               unoptimized
               fill
             />

@@ -1,32 +1,22 @@
-import React, { useEffect, useState, ReactNode } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 interface MultiDOMPortalProps {
   sourceId: string;
   targetIds: string[];
-  removeOriginal?: boolean;
+  hideOriginal?: boolean;
 }
 
-const createReactElementFromNode = (node: Node, index: number): ReactNode => {
+const createReactElementFromNode = (node: Node, index: number): React.ReactNode => {
   if (node.nodeType === Node.TEXT_NODE) {
-    return <React.Fragment key={index}>{node.textContent}</React.Fragment>;
+    return node.textContent;
   }
   if (node.nodeType === Node.ELEMENT_NODE) {
     const element = node as Element;
-    const props: Record<string, string> = {};
-    Array.from(element.attributes).forEach((attr) => {
-      if (attr.name === "class") {
-        props.className = attr.value;
-      } else {
-        props[attr.name] = attr.value;
-      }
-    });
     return React.createElement(
       element.tagName.toLowerCase(),
-      { ...props, key: index },
-      Array.from(element.childNodes).map((child, childIndex) =>
-        createReactElementFromNode(child, childIndex)
-      )
+      { key: index, ...Array.from(element.attributes).reduce((acc, attr) => ({ ...acc, [attr.name]: attr.value }), {}) },
+      Array.from(element.childNodes).map((child, childIndex) => createReactElementFromNode(child, childIndex))
     );
   }
   return null;
@@ -35,15 +25,11 @@ const createReactElementFromNode = (node: Node, index: number): ReactNode => {
 export const MultiDOMPortal: React.FC<MultiDOMPortalProps> = ({
   sourceId,
   targetIds,
-  removeOriginal = false,
+  hideOriginal = true,
 }) => {
-  const [sourceContent, setSourceContent] = useState<React.ReactNode | null>(
-    null
-  );
+  const [sourceContent, setSourceContent] = useState<React.ReactNode | null>(null);
   const [targetElements, setTargetElements] = useState<HTMLElement[]>([]);
-  const [originalElement, setOriginalElement] = useState<HTMLElement | null>(
-    null
-  );
+  const [originalElement, setOriginalElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const source = document.getElementById(sourceId);
@@ -54,15 +40,15 @@ export const MultiDOMPortal: React.FC<MultiDOMPortalProps> = ({
           createReactElementFromNode(node, index)
         )
       );
-      if (removeOriginal) {
-        source.remove();
+      if (hideOriginal) {
+        source.style.display = 'none';
       }
     }
     const targets = targetIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
     setTargetElements(targets);
-  }, [sourceId, targetIds, removeOriginal]);
+  }, [sourceId, targetIds, hideOriginal]);
 
   if (!sourceContent) {
     return null;
