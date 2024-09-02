@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
 import BannerUploadFormItem from "@/components/BannerUploadProps";
 import OverlayLoading from "@/components/OverlayLoading";
@@ -49,7 +49,7 @@ export default function CampaignForm({
   const imageManager = new ImageManager();
 
   const router = useRouter();
-  const { data: campaignInfo } = useQuery(
+  const { data: campaignInfo, isFetching } = useQuery(
     getCampaignInfo(supabase, id, userId),
     {
       enabled: id !== "new",
@@ -59,18 +59,23 @@ export default function CampaignForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: campaignInfo ? campaignInfo.name : undefined,
-      description: campaignInfo
-        ? campaignInfo.description ?? undefined
-        : undefined,
-      passphrase: campaignInfo
-        ? campaignInfo.passphrase ?? undefined
-        : undefined,
-      banner_url: campaignInfo
-        ? campaignInfo.banner_url ?? undefined
-        : undefined,
+      name: "",
+      description: "",
+      passphrase: "",
+      banner_url: "",
     },
   });
+  const { reset } = form;
+
+  useEffect(() => {
+    if (!campaignInfo) return;
+    reset({
+      name: campaignInfo?.name ?? "",
+      description: campaignInfo?.description ?? "",
+      passphrase: campaignInfo?.passphrase ?? "",
+      banner_url: campaignInfo?.banner_url ?? "",
+    });
+  }, [campaignInfo, reset]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
@@ -213,7 +218,7 @@ export default function CampaignForm({
           </Button>
         </div>
       </form>
-      {isLoading && <OverlayLoading />}
+      {(isLoading || isFetching) && <OverlayLoading />}
     </Form>
   );
 }

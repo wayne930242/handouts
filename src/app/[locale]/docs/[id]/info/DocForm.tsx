@@ -22,6 +22,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { useEffect, useState } from "react";
+import OverlayLoading from "@/components/OverlayLoading";
 
 const FormSchema = z.object({
   title: z.string().min(1).max(255),
@@ -39,20 +41,32 @@ export default function DocForm({
 }) {
   const t = useTranslations("DocForm");
   const supabase = createClient();
+  const [ isLoading, setIsLoading ] = useState(false);
   const router = useRouter();
-  const { data: docInfo } = useQuery(getDocInfo(supabase, id), {
+  const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id), {
     enabled: id !== "new",
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: docInfo ? docInfo.title : undefined,
-      description: docInfo ? docInfo.description ?? undefined : undefined,
-      passphrase: docInfo ? docInfo.passphrase ?? undefined : undefined,
-      is_public: docInfo ? docInfo.is_public ?? false : false,
+      title: "",
+      description: "",
+      passphrase: "",
+      is_public: false,
     },
   });
+  const { reset } = form;
+
+  useEffect(() => {
+    if (!docInfo) return;
+    reset({
+      title: docInfo?.title ?? "",
+      description: docInfo?.description ?? "",
+      passphrase: docInfo?.passphrase ?? "",
+      is_public: docInfo?.is_public ?? false,
+    });
+  }, [docInfo, reset]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
@@ -173,6 +187,7 @@ export default function DocForm({
           </Button>
         </div>
       </form>
+      {(isFetching || isLoading) && <OverlayLoading />}
     </Form>
   );
 }
