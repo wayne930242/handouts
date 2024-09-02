@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+"use client";
+
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 
 interface MultiDOMPortalProps {
   sourceId: string;
@@ -7,14 +9,17 @@ interface MultiDOMPortalProps {
   hideOriginal?: boolean;
 }
 
-const createReactElementFromNode = (node: Node, index: number): React.ReactNode => {
+const createReactElementFromNode = (
+  node: Node,
+  index: number
+): React.ReactNode => {
   if (node.nodeType === Node.TEXT_NODE) {
     return node.textContent;
   }
   if (node.nodeType === Node.ELEMENT_NODE) {
     const element = node as Element;
     const props = Array.from(element.attributes).reduce((acc, attr) => {
-      if (attr.name === 'class') {
+      if (attr.name === "class") {
         return { ...acc, className: attr.value };
       }
       return { ...acc, [attr.name]: attr.value };
@@ -23,7 +28,9 @@ const createReactElementFromNode = (node: Node, index: number): React.ReactNode 
     return React.createElement(
       element.tagName.toLowerCase(),
       { key: index, ...props },
-      Array.from(element.childNodes).map((child, childIndex) => createReactElementFromNode(child, childIndex))
+      Array.from(element?.childNodes)?.map((child, childIndex) =>
+        createReactElementFromNode(child, childIndex)
+      )
     );
   }
   return null;
@@ -34,21 +41,21 @@ export const MultiDOMPortal: React.FC<MultiDOMPortalProps> = ({
   targetIds,
   hideOriginal = true,
 }) => {
-  const [sourceContent, setSourceContent] = useState<React.ReactNode | null>(null);
+  const [sourceContent, setSourceContent] = useState<React.ReactNode | null>(
+    null
+  );
   const [targetElements, setTargetElements] = useState<HTMLElement[]>([]);
-  const [originalElement, setOriginalElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const source = document.getElementById(sourceId);
     if (source) {
-      setOriginalElement(source);
       setSourceContent(
         Array.from(source.childNodes).map((node, index) =>
           createReactElementFromNode(node, index)
         )
       );
       if (hideOriginal) {
-        source.style.display = 'none';
+        source.style.display = "none";
       }
     }
     const targets = targetIds
