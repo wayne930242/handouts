@@ -20,7 +20,7 @@ export const genSEO = async ({
     alt?: string,
   }[]
 }): Promise<Metadata> => {
-  const t = await getTranslations("DefaultSEO");
+  const t = await getTranslations("LocaleLayout");
   const defaultUrl = BASE_URL;
 
   const defaultImage = {
