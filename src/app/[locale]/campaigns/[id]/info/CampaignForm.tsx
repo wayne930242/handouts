@@ -22,9 +22,13 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
+import { useState } from "react";
+import ImageManager from "@/lib/ImageManager";
+import BannerUploadFormItem from "@/components/BannerUploadProps";
 
 const FormSchema = z.object({
   name: z.string().min(1).max(255),
+  banner_url: z.string().optional(),
   description: z.string().optional(),
   passphrase: z.string().max(255).optional(),
 });
@@ -36,8 +40,13 @@ export default function CampaignForm({
   id: string;
   userId: string;
 }) {
-  const t = useTranslations("CampaignForm");
   const supabase = createClient();
+  const t = useTranslations("CampaignForm");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const imageManager = new ImageManager();
+
   const router = useRouter();
   const { data: campaignInfo } = useQuery(
     getCampaignInfo(supabase, id, userId),
@@ -56,23 +65,37 @@ export default function CampaignForm({
       passphrase: campaignInfo
         ? campaignInfo.passphrase ?? undefined
         : undefined,
+      banner_url: campaignInfo
+        ? campaignInfo.banner_url ?? undefined
+        : undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
+    setIsLoading(true);
+    if (file) {
+      const imageUrl = await imageManager.uploadImage(file, "campaigns", id);
+      data.banner_url = imageUrl;
+      setFile(null);
+    }
+
     switch (id) {
       case "new":
-        const { error: createError } = await supabase.from("campaigns").insert([
-          {
-            gm_id: userId,
-            name: data.name,
-            description: data.description,
-            passphrase: data.passphrase,
-            status: "ACTIVE",
-          },
-        ]);
-
+        const { data: _data, error: createError } = await supabase
+          .from("campaigns")
+          .insert([
+            {
+              gm_id: userId,
+              name: data.name,
+              description: data.description,
+              passphrase: data.passphrase,
+              banner_url: data.banner_url,
+              status: "ACTIVE",
+            },
+          ])
+          .select("id")
+          .single();
         if (createError) {
           errorMessage = createError.message;
         }
@@ -90,6 +113,7 @@ export default function CampaignForm({
             name: data.name,
             description: data.description,
             passphrase: data.passphrase,
+            banner_url: data.banner_url,
           })
           .eq("id", id);
 
@@ -98,6 +122,7 @@ export default function CampaignForm({
         }
     }
 
+    setIsLoading(false);
     if (errorMessage) {
       toast({
         title: t("error"),
@@ -144,6 +169,16 @@ export default function CampaignForm({
             </FormItem>
           )}
         />
+
+        <BannerUploadFormItem
+          initialBannerUrl={campaignInfo?.banner_url}
+          file={file}
+          setFile={setFile}
+          onBannerUrlClear={() => form.setValue("banner_url", undefined)}
+          label={t("bannerUrl")}
+          placeholder={t("bannerUrlPlaceholder")}
+        />
+
         <FormField
           control={form.control}
           name="passphrase"

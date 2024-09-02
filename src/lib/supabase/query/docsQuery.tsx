@@ -10,3 +10,18 @@ export const getDocsByOwnerId = (
 export const getDocInfo = (supabase: MySupabaseClient, docId: string) => {
   return supabase.from("docs").select("*").eq("id", docId).single();
 };
+
+export const getDocSEO = (supabase: MySupabaseClient, docId: string) => {
+  return supabase
+    .from("docs")
+    .select(
+      `
+        id,
+        title,
+        description,
+        banner_url
+      `
+    )
+    .eq("id", docId)
+    .single();
+};

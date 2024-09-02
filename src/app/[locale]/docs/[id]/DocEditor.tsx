@@ -22,6 +22,7 @@ import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
 import Image from "next/image";
 import { X } from "lucide-react";
+import BannerUploadFormItem from "@/components/BannerUploadProps";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),
@@ -103,59 +104,14 @@ export default function DocEditor({ doc, callback }: Props) {
           )}
         />
 
-        <FormItem>
-          <FormLabel>{t("bannerUrl")}</FormLabel>
-
-          <Input
-            ref={inputRef}
-            placeholder={t("bannerUrlPlaceholder")}
-            type="file"
-            accept="image/*"
-            onInput={(e) => {
-              const file = (e.target as any).files?.[0];
-              if (file) {
-                setFile(file);
-              } else {
-                setFile(null);
-                if (inputRef.current) {
-                  inputRef.current.value = "";
-                }
-              }
-            }}
-          />
-          <div className="w-full h-72 border border-border p-2 flex justify-center items-center rounded-sm relative">
-            {(doc.banner_url || file) && (
-              <Image
-                className="object-cover"
-                src={file ? URL.createObjectURL(file) : doc.banner_url!}
-                alt="banner"
-                loader={({ src }) => src}
-                fill
-                unoptimized
-              />
-            )}
-            {(file || doc.banner_url) && (
-              <Button
-                className="absolute top-0 right-0"
-                type="button"
-                size="icon"
-                variant="ghost"
-                onClick={() => {
-                  if (file) {
-                    setFile(null);
-                    if (inputRef.current) {
-                      inputRef.current.value = "";
-                    }
-                  } else {
-                    form.setValue("banner_url", undefined);
-                  }
-                }}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </FormItem>
+        <BannerUploadFormItem
+          initialBannerUrl={doc.banner_url}
+          file={file}
+          setFile={setFile}
+          onBannerUrlClear={() => form.setValue("banner_url", undefined)}
+          label={t("bannerUrl")}
+          placeholder={t("bannerUrlPlaceholder")}
+        />
 
         <FormField
           control={form.control}

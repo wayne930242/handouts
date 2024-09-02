@@ -1,5 +1,4 @@
 import PageLayout from "@/components/layouts/PageLayout";
-import PassphraseForm from "@/components/PassphraseForm";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import SearchParamsListener from "./SearchParamsListener";
 import Hero from "./Hero";

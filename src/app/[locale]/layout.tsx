@@ -11,10 +11,8 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import GlobalLoading from "./GlobalLoading";
 import PassphraseDialog from "@/components/PassphraseDialog";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
-import { BASE_URL } from "@/config/app";
 import { ThemeProvider } from "./ThemeProvider";
-
-const defaultUrl = BASE_URL;
+import { genSEO } from "@/lib/defaultSEO";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -28,41 +26,7 @@ interface Props {
 export async function generateMetadata({
   params: { locale },
 }: Omit<Props, "children">) {
-  const t = await getTranslations({ locale, namespace: "LocaleLayout" });
-
-  return {
-    metadataBase: new URL(defaultUrl),
-    title: t("title"),
-    description: t("description"),
-    openGraph: {
-      type: "website",
-      locale,
-      url: defaultUrl,
-      title: t("title"),
-      description: t("description"),
-      images: [
-        {
-          url: `${defaultUrl}/img/og-img.webp`,
-          width: 1200,
-          height: 714,
-          alt: "Handouts",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
-      images: [
-        {
-          url: `${defaultUrl}/img/og-img.webp`,
-          width: 1200,
-          height: 714,
-          alt: "ShareHandouts",
-        },
-      ],
-    },
-  };
+  return await genSEO({ locale });
 }
 
 const font = Noto_Sans_TC({

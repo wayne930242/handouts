@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -38,6 +39,18 @@ export default function CampaignCard({
           <Pencil className="h-4 w-4" />
         </Link>
       </CardHeader>
+      <CardContent className="grow relative h-32 overflow-hidden">
+        {campaign.banner_url && (
+          <Image
+            className="object-cover"
+            src={campaign.banner_url}
+            alt={campaign.name}
+            loader={({ src }) => src}
+            unoptimized
+            fill
+          />
+        )}
+      </CardContent>
       <CardContent className="grow">
         <CardDescription>{campaign.description}</CardDescription>
       </CardContent>

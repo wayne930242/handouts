@@ -6,16 +6,38 @@ import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layouts/PageLayout";
-import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { getDocInfo, getDocSEO } from "@/lib/supabase/query/docsQuery";
 import Doc from "./Doc";
+import { BASE_URL } from "@/config/app";
+import { genSEO } from "@/lib/defaultSEO";
 
 interface Props {
   params: {
     id: string;
+    locale: string;
   };
   searchParams: {
     passphrase?: string;
   };
+}
+
+export async function generateMetadata({
+  params: { id, locale },
+}: Omit<Props, "children">) {
+  const supabase = createClient();
+  const { data: doc, error } = await getDocSEO(supabase, id);
+
+  if (error) {
+    return await genSEO({ locale });
+  }
+
+  return await genSEO({
+    locale,
+    title: doc?.title,
+    description: doc?.description ?? undefined,
+    url: `${BASE_URL}/docs/${id}`,
+    images: doc?.banner_url ? [{ url: doc.banner_url }] : undefined,
+  });
 }
 
 export default async function CampaignPage({

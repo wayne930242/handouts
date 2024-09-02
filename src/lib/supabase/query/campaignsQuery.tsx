@@ -22,7 +22,7 @@ export const getCampaignInfo = (
 
 export const getCampaignDetail = (
   supabase: MySupabaseClient,
-  campaignId: string,
+  campaignId: string
 ) => {
   return supabase
     .from("campaigns")
@@ -34,6 +34,7 @@ export const getCampaignDetail = (
         description,
         passphrase,
         status,
+        banner_url,
         chapters:chapters (
           id,
           campaign_id,
@@ -72,5 +73,23 @@ export const getCampaignDetail = (
       referencedTable: "chapters.sections.handouts",
       ascending: true,
     })
+    .single();
+};
+
+export const getCampaignSEO = (
+  supabase: MySupabaseClient,
+  campaignId: string
+) => {
+  return supabase
+    .from("campaigns")
+    .select(
+      `
+      id,
+      name,
+      description,
+      banner_url
+    `
+    )
+    .eq("id", campaignId)
     .single();
 };

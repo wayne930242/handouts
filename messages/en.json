@@ -40,6 +40,8 @@
     "chapterButton": "Chapter"
   },
   "CampaignForm": {
+    "bannerUrl": "Banner Image",
+    "bannerUrlPlaceholder": "Choose banner image",
     "campaignDescription": "Campaign Description",
     "campaignDescriptionPlaceholder": "Enter campaign description",
     "campaignName": "Campaign Name",

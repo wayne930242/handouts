@@ -41,6 +41,7 @@ export type Database = {
       }
       campaigns: {
         Row: {
+          banner_url: string | null
           created_at: string
           description: string | null
           gm_id: string | null
@@ -50,6 +51,7 @@ export type Database = {
           status: string
         }
         Insert: {
+          banner_url?: string | null
           created_at?: string
           description?: string | null
           gm_id?: string | null
@@ -59,6 +61,7 @@ export type Database = {
           status: string
         }
         Update: {
+          banner_url?: string | null
           created_at?: string
           description?: string | null
           gm_id?: string | null

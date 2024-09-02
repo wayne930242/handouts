@@ -40,6 +40,8 @@
     "chapterButton": "章節"
   },
   "CampaignForm": {
+    "bannerUrl": "橫幅圖片",
+    "bannerUrlPlaceholder": "選擇橫幅圖片",
     "campaignDescription": "戰役描述",
     "campaignDescriptionPlaceholder": "戰役描述",
     "campaignName": "戰役名稱",

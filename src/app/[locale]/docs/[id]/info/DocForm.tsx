@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +22,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const FormSchema = z.object({
   title: z.string().min(1).max(255),
