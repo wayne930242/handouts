@@ -25,6 +25,7 @@ import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { useState } from "react";
 import ImageManager from "@/lib/ImageManager";
 import BannerUploadFormItem from "@/components/BannerUploadProps";
+import OverlayLoading from "@/components/OverlayLoading";
 
 const FormSchema = z.object({
   name: z.string().min(1).max(255),
@@ -212,6 +213,7 @@ export default function CampaignForm({
           </Button>
         </div>
       </form>
+      {isLoading && <OverlayLoading />}
     </Form>
   );
 }
