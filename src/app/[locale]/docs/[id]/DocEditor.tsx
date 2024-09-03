@@ -1,5 +1,4 @@
 "use client";
-import { createClient } from "@/lib/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { Doc } from "@/types/interfaces";
 import ImageManager from "@/lib/ImageManager";
@@ -20,8 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
-import Image from "next/image";
-import { X } from "lucide-react";
+import { useClient } from "@/lib/supabase/client";
 import BannerUploadFormItem from "@/components/BannerUploadProps";
 
 const formSchema = z.object({
@@ -32,7 +30,7 @@ const formSchema = z.object({
 });
 
 export default function DocEditor({ doc, callback }: Props) {
-  const supabase = createClient();
+  const supabase = useClient();
   const t = useTranslations("DocEditor");
 
   const [isLoading, setIsLoading] = useState(false);

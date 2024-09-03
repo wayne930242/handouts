@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import {
   Form,
@@ -16,14 +18,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
-import { createClient } from "@/lib/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
-import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getDocInfo } from "@/lib/supabase/query/docsQuery";
-import { useEffect, useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
+
+import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
   title: z.string().min(1).max(255),
@@ -40,8 +41,9 @@ export default function DocForm({
   userId: string;
 }) {
   const t = useTranslations("DocForm");
-  const supabase = createClient();
-  const [ isLoading, setIsLoading ] = useState(false);
+  const supabase = useClient();
+
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id), {
     enabled: id !== "new",
@@ -70,6 +72,7 @@ export default function DocForm({
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
+    setIsLoading(true);
     switch (id) {
       case "new":
         const { error: createError } = await supabase.from("docs").insert([
@@ -107,6 +110,7 @@ export default function DocForm({
           errorMessage = updateError.message;
         }
     }
+    setIsLoading(false);
 
     if (errorMessage) {
       toast({

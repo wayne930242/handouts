@@ -1,10 +1,4 @@
 {
-  "ModeToggle": {
-    "dark": "Dark",
-    "light": "Light",
-    "system": "System",
-    "toggleTheme": "Toggle theme"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",
@@ -85,6 +79,71 @@
     "newCampaign": "New Campaign",
     "newDoc": "New Document"
   },
+  "DocDeleteZone": {
+    "deleteButton": "Delete Document",
+    "deleteDoc": "Delete Document",
+    "deleteDocDescription": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "description": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "errorDescription": "An error occurred while deleting the document. Please try again later.",
+    "errorTitle": "Deletion Failed",
+    "formValidation": {
+      "required": "Please enter the document ID"
+    },
+    "idLabel": "Document ID:",
+    "idMismatchError": "The entered ID does not match",
+    "inputLabel": "Enter the document ID to confirm deletion",
+    "inputPlaceholder": "Document ID",
+    "successDescription": "Your document has been successfully deleted. You now have room to create more documents.",
+    "successTitle": "Deletion Successful",
+    "title": "Delete Document"
+  },
+  "DocEditor": {
+    "bannerUrl": "Banner Image",
+    "bannerUrlPlaceholder": "Choose banner image",
+    "cancel": "Cancel",
+    "docContent": "Document Content",
+    "docName": "Document Name",
+    "docNamePlaceholder": "Enter Document name",
+    "errorDescription": "Unable to update the doc. Please try again later.",
+    "errorTitle": "Update Failed",
+    "save": "Save",
+    "successDescription": "The document has been successfully updated.",
+    "successTitle": "Update Successful",
+    "uploadFailed": "Upload Failed",
+    "uploadFailedDescription": "Unable to upload the image. Please try again later."
+  },
+  "DocForm": {
+    "cancel": "Cancel",
+    "create": "Create",
+    "docDescription": "Document Description",
+    "docDescriptionPlaceholder": "Enter document description",
+    "docName": "Document Name",
+    "docNamePlaceholder": "Enter document name",
+    "error": "Error",
+    "formTitle": {
+      "edit": "Edit Document",
+      "new": "Create New Document"
+    },
+    "passphrase": "Passphrase",
+    "passphrasePlaceholder": "Enter document passphrase",
+    "save": "Save"
+  },
+  "DocMenu": {
+    "delete": "Delete",
+    "info": "Info"
+  },
+  "DocsPage": {
+    "copyInfo": "Copy Info",
+    "createCampaign": "You can create a new document.",
+    "docId": "Document ID",
+    "docLink": "Document Link",
+    "docLinkWithPassphrase": "Document Link with Passphrase",
+    "editView": "Edit / View",
+    "infoDescription": "Share the information with players, please be careful about copyright issues.",
+    "infoTitle": "Information copied to clipboard",
+    "noDocs": "No documents found.",
+    "passphrase": "Passphrase"
+  },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",
     "backButton": "Back",
@@ -118,24 +177,24 @@
   },
   "Index": {
     "campaignId": "Campaign ID",
-    "passphrase": "Passphrase",
-    "welcome": "Welcome to Handouts!",
-    "campaignsTitle": "Campaigns",
     "campaignsDescription": "Create a series of handy materials for players based on campaigns. You can decide which information to make public and present them in a clear structure.",
-    "docsTitle": "Documents",
+    "campaignsTitle": "Campaigns",
     "docsDescription": "You can create game documents or rules to share with players using a simple Markdown syntax editor. You can share game rules with your players and set up passphrase.",
-    "siteDescription": "A simple tool to help you easily share and manage your tabletop RPG game materials. Assists you in conveniently sharing game information with players. Developed and created by WeiHung."
+    "docsTitle": "Documents",
+    "passphrase": "Passphrase",
+    "siteDescription": "A simple tool to help you easily share and manage your tabletop RPG game materials. Assists you in conveniently sharing game information with players. Developed and created by WeiHung.",
+    "welcome": "Welcome to Handouts!"
   },
   "LocaleLayout": {
     "campaigns": "Campaigns",
     "description": "A simple tool to help you share and manage handouts of RPG campaigns. Developed by WeiHung.",
+    "docs": "Documents",
     "loggedIn": "Logged in as {username}",
     "loggedOut": "You are logged out.",
     "login": "Login",
     "logout": "Logout",
     "myfavorites": "My Favorites",
     "profile": "Profile",
-    "docs": "Documents",
     "secret": "Secret page for logged in users",
     "signup": "Sign up",
     "subscriptions": "Subscriptions",
@@ -159,6 +218,12 @@
     "subtitle": "Don't have an account?",
     "title": "Log in"
   },
+  "ModeToggle": {
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System",
+    "toggleTheme": "Toggle theme"
+  },
   "PassphraseDialog": {
     "campaignDescription": "Please enter the Campaign ID and passphrase provided by your GM.",
     "campaignTitle": "Enter passphrase to join campaign",
@@ -170,11 +235,11 @@
   "PhraseForm": {
     "campaignId": "Campaign ID",
     "cancel": "Cancel",
+    "docId": "Document ID",
     "passphrase": "Passphrase",
     "pleaseEnterCampaignId": "Please enter the campaign ID",
-    "pleaseEnterPassphrase": "Please enter the passphrase",
     "pleaseEnterDocId": "Please enter the document ID",
-    "docId": "Document ID",
+    "pleaseEnterPassphrase": "Please enter the passphrase",
     "submit": "Submit"
   },
   "ResetPassword": {
@@ -187,71 +252,6 @@
     "title": "Reset Password",
     "updateFailed": "Password update failed.",
     "updateSuccess": "Password updated"
-  },
-  "DocDeleteZone": {
-    "deleteButton": "Delete Document",
-    "deleteDoc": "Delete Document",
-    "deleteDocDescription": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
-    "description": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
-    "errorDescription": "An error occurred while deleting the document. Please try again later.",
-    "errorTitle": "Deletion Failed",
-    "formValidation": {
-      "required": "Please enter the document ID"
-    },
-    "idLabel": "Document ID:",
-    "idMismatchError": "The entered ID does not match",
-    "inputLabel": "Enter the document ID to confirm deletion",
-    "inputPlaceholder": "Document ID",
-    "successDescription": "Your document has been successfully deleted. You now have room to create more documents.",
-    "successTitle": "Deletion Successful",
-    "title": "Delete Document"
-  },
-  "DocEditor": {
-    "bannerUrl": "Banner Image",
-    "bannerUrlPlaceholder": "Choose banner image",
-    "cancel": "Cancel",
-    "errorDescription": "Unable to update the doc. Please try again later.",
-    "errorTitle": "Update Failed",
-    "docContent": "Document Content",
-    "docName": "Document Name",
-    "docNamePlaceholder": "Enter Document name",
-    "save": "Save",
-    "successDescription": "The document has been successfully updated.",
-    "successTitle": "Update Successful",
-    "uploadFailed": "Upload Failed",
-    "uploadFailedDescription": "Unable to upload the image. Please try again later."
-  },
-  "DocForm": {
-    "cancel": "Cancel",
-    "create": "Create",
-    "error": "Error",
-    "formTitle": {
-      "edit": "Edit Document",
-      "new": "Create New Document"
-    },
-    "passphrase": "Passphrase",
-    "passphrasePlaceholder": "Enter document passphrase",
-    "docDescription": "Document Description",
-    "docDescriptionPlaceholder": "Enter document description",
-    "docName": "Document Name",
-    "docNamePlaceholder": "Enter document name",
-    "save": "Save"
-  },
-  "DocMenu": {
-    "delete": "Delete",
-    "info": "Info"
-  },
-  "DocsPage": {
-    "copyInfo": "Copy Info",
-    "createCampaign": "You can create a new document.",
-    "editView": "Edit / View",
-    "infoDescription": "Share the information with players, please be careful about copyright issues.",
-    "infoTitle": "Information copied to clipboard",
-    "noDocs": "No documents found.",
-    "passphrase": "Passphrase",
-    "docId": "Document ID",
-    "docLink": "Document Link",
-    "docLinkWithPassphrase": "Document Link with Passphrase"
   },
   "Secret": {
     "description": "This page is only visible for logged in users.",
@@ -282,11 +282,15 @@
     "uploadFailedDescription": "Image upload failed. Please try again later."
   },
   "Toolbar": {
+    "addFavorite": "Add to Favorites",
     "backToList": "Back to List",
     "closeEdit": "Close Edit",
     "disconnected": "Disconnected",
     "edit": "Edit",
     "export": "Export",
-    "import": "Import"
+    "import": "Import",
+    "join": "Join",
+    "leave": "Leave",
+    "removeFavorite": "Remove from Favorites"
   }
 }

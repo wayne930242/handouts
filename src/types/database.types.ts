@@ -40,7 +40,14 @@ export type Database = {
             foreignKeyName: "campaign_players_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_players_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -70,7 +77,7 @@ export type Database = {
             foreignKeyName: "campaign_users_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -108,10 +115,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "campaigns_gm_id_fkey"
+            foreignKeyName: "campaigns_gm_id_fkey1"
             columns: ["gm_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -213,24 +220,24 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "chat_session_id_fkey"
+            foreignKeyName: "chats_handout_id_fkey"
+            columns: ["handout_id"]
+            isOneToOne: false
+            referencedRelation: "handouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_session_id_fkey"
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "chat_sessions"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "chat_user_id_fkey"
+            foreignKeyName: "chats_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "chats_handout_id_fkey"
-            columns: ["handout_id"]
-            isOneToOne: false
-            referencedRelation: "handouts"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -301,10 +308,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "doc_players_user_id_fkey"
+            foreignKeyName: "doc_players_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -346,7 +353,15 @@ export type Database = {
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "docs_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       encrypted_secrets: {
         Row: {
@@ -391,10 +406,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "handout_users_user_id_fkey"
+            foreignKeyName: "handout_users_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -441,10 +456,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "handouts_owner_id_fkey"
+            foreignKeyName: "handouts_owner_id_fkey1"
             columns: ["owner_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -461,6 +476,7 @@ export type Database = {
           avatar_url: string | null
           created_at: string | null
           display_name: string | null
+          email: string | null
           id: string
           updated_at: string | null
         }
@@ -468,6 +484,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          email?: string | null
           id: string
           updated_at?: string | null
         }
@@ -475,6 +492,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          email?: string | null
           id?: string
           updated_at?: string | null
         }
@@ -572,40 +590,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_campaign_favorites_user_id_fkey"
+            foreignKeyName: "user_campaign_favorites_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_chats: {
-        Row: {
-          chat_id: string
-          user_id: string
-        }
-        Insert: {
-          chat_id: string
-          user_id: string
-        }
-        Update: {
-          chat_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_chats_chat_id_fkey"
-            columns: ["chat_id"]
-            isOneToOne: false
-            referencedRelation: "chats"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_chats_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -641,7 +629,7 @@ export type Database = {
             foreignKeyName: "user_doc_favorites_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -742,21 +730,13 @@ export type Database = {
         }
         Returns: boolean
       }
-      check_doc_passphrase:
-        | {
-            Args: {
-              doc_id: string
-              input_passphrase: string
-            }
-            Returns: boolean
-          }
-        | {
-            Args: {
-              doc_id: string
-              input_passphrase: string
-            }
-            Returns: boolean
-          }
+      check_doc_passphrase: {
+        Args: {
+          doc_id: string
+          input_passphrase: string
+        }
+        Returns: boolean
+      }
       check_doc_passphrase_rpc: {
         Args: {
           doc_id: string

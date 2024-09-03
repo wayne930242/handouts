@@ -28,37 +28,50 @@ export const getCampaignDetail = (
     .from("campaigns")
     .select(
       `
+      id,
+      gm_id,
+      name,
+      description,
+      passphrase,
+      status,
+      banner_url,
+      gm:profiles!campaigns_gm_id_fkey1 (
         id,
-        gm_id,
-        name,
-        description,
-        passphrase,
-        status,
-        banner_url,
-        chapters:chapters (
+        display_name,
+        avatar_url
+      ),
+      players:campaign_players (
+        role,
+        user:profiles!campaign_players_user_id_fkey1 (
           id,
-          campaign_id,
+          display_name,
+          avatar_url
+        )
+      ),
+      chapters:chapters (
+        id,
+        campaign_id,
+        title,
+        order_num,
+        sections:sections (
+          id,
+          chapter_id,
           title,
           order_num,
-          sections:sections (
+          handouts:handouts (
             id,
-            chapter_id,
             title,
-            order_num,
-            handouts:handouts (
-              id,
-              title,
-              content,
-              is_public,
-              section_id,
-              type,
-              owner_id,
-              note,
-              order_num
-            )
+            content,
+            is_public,
+            section_id,
+            type,
+            owner_id,
+            note,
+            order_num
           )
         )
-      `
+      )
+    `
     )
     .eq("id", campaignId)
     .order("order_num", {
@@ -92,4 +105,23 @@ export const getCampaignSEO = (
     )
     .eq("id", campaignId)
     .single();
+};
+
+export const getCampaignWithPlayers = (
+  supabase: MySupabaseClient,
+  campaignId: string
+) => {
+  return supabase
+    .from("campaign_players")
+    .select(
+      `
+      user_id,
+      role,
+      profiles!campaign_players_user_id_fkey1 (
+        avatar_url,
+        display_name
+      )
+    `
+    )
+    .eq("campaign_id", campaignId);
 };

@@ -19,7 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createClient } from "@/lib/supabase/client";
 import ImageManager from "@/lib/ImageManager";
 import { useRouter } from "@/navigation";
 import { toast } from "@/components/ui/use-toast";
@@ -27,6 +26,7 @@ import { useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
+import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
   doc_id: z.string().min(1, "formValidation.required"),
@@ -34,9 +34,10 @@ const FormSchema = z.object({
 
 export default function DocDeleteZone({ docId }: { docId: string }) {
   const t = useTranslations("DocDeleteZone");
-  const supabase = createClient();
+  const supabase = useClient();
   const imageManager = new ImageManager();
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   const { setConfirm } = useConfirmDialog(

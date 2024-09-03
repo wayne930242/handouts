@@ -30,7 +30,7 @@ export default function DataToolbar({
         </Button>
       </div>
       <div>
-        <Link href={`/${tableKey}/info/new`}>
+        <Link href={`/${tableKey}/new/info`}>
           <Button>{t(`new${saddledKey}`)}</Button>
         </Link>
       </div>

@@ -14,9 +14,10 @@ import Link from "next/link";
 
 interface Props {
   campaignData: Campaign;
+  isOwner?: boolean;
 }
 
-export default function CampaignMenu({ campaignData }: Props) {
+export default function CampaignMenu({ campaignData, isOwner }: Props) {
   const t = useTranslations("CampaignMenu");
 
   const handleExport = async () => {

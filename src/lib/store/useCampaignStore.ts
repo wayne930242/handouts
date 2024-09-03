@@ -183,6 +183,7 @@ const useCampaignStore = create(
         });
       },
       setupRealtimeSubscription: (supabase, campaignId) => {
+        if (get().connected) return () => { };
         const campaignChannel = supabase
           .channel("campaign-changes")
           .on(
@@ -210,8 +211,9 @@ const useCampaignStore = create(
               set({ connected: true });
               console.info("Successfully subscribed");
             } else if (status === "CLOSED") {
+              console.info("Subscription closed");
               set({ connected: false });
-              console.info("Subscription closed, retrying in 3s...");
+
               setTimeout(() => {
                 const connectedAtempts = get().connectedAtempts;
                 if (connectedAtempts <= 5) {

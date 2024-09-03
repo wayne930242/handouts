@@ -41,10 +41,10 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import useCampaignStore from "@/lib/store/useCampaignStore";
-import { createClient } from "@/lib/supabase/client";
 import { Handout } from "@/types/interfaces";
 import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
+import { useClient } from "@/lib/supabase/client";
 
 const ImageEditor = dynamic(() => import("./ContentEditor/ImageEditor"), {
   ssr: false,
@@ -73,11 +73,12 @@ export type ContentFieldProps = ControllerRenderProps<
 >;
 
 export default function HandoutCard({ handout, chapterId }: Props) {
+  const supabase = useClient();
+
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     setCampaignData: state.setCampaignData,
     campaignData: state.campaignData,
   }));
-  const supabase = createClient();
   const t = useTranslations("HandoutCard");
 
   const form = useForm<z.infer<typeof formSchema>>({

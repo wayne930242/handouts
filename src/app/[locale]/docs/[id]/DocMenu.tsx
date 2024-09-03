@@ -14,9 +14,10 @@ import Link from "next/link";
 
 interface Props {
   doc: Doc;
+  isOwner?: boolean;
 }
 
-export default function DocMenu({ doc }: Props) {
+export default function DocMenu({ doc, isOwner }: Props) {
   const t = useTranslations("DocMenu");
 
   return (

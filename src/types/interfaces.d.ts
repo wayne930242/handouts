@@ -9,9 +9,18 @@ export type Locale = (typeof locales)[number];
 export type FullCampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'>
 export type CampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'passphrase' | 'created_at'>
 
-export type Campaign = CampaignData & {
+export type Profile = Pick<Database["public"]["Tables"]["profiles"]["Row"], 'id' | 'display_name' | 'avatar_url'>;
+
+export type Player = {
+  role: string;
+  user: Profile | null;
+};
+
+export type Campaign = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'> & {
+  gm: Profile | null;
+  players: Player[];
   chapters: Chapter[];
-}
+};
 
 export type Chapter = ChapterData & {
   sections: Section[];
@@ -68,7 +77,7 @@ export type SetCampaignDataPayload = (
 
 export interface CampaignStore {
   campaignData: Campaign | null;
-  initCampaignData: (campaignData: Campaign) => any;
+  initCampaignData: (campaignData: Campaign | null) => any;
   asGM: boolean;
   setAsGM: (asGM: boolean) => void;
   inWhiteList: boolean;

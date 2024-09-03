@@ -9,10 +9,10 @@ import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Handout } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import LinkViewer from "./LinkViewer";
 import dynamic from "next/dynamic";
+import { useClient } from "@/lib/supabase/client";
 
 const LightBoxWrapper = dynamic(() => import("@/components/LightBoxWrapper"), {
   ssr: false,
@@ -23,7 +23,7 @@ export default function HandoutViewer({ handout }: Props) {
     setCampaignData: state.setCampaignData,
   }));
   const canEdit = useCanEditCampaign();
-  const supabase = createClient();
+  const supabase = useClient();
 
   const Wrapper =
     handout.type === "text" || handout.type === "youtube"
