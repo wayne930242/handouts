@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/navigation";
 import { redirect } from "@/navigation";
-import { Button } from "./ui/button";
+import { Button, ItemButton } from "./ui/button";
 import { getTranslations } from "next-intl/server";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -38,15 +38,12 @@ export default async function AuthButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
+        <Link href="/profile">
+          <ItemButton>{t("profile")}</ItemButton>
+        </Link>
         <DropdownMenuSeparator />
         <form action={signOut}>
-          <Button
-            className="w-full border-none justify-start cursor-default px-2 py-1.5"
-            variant="outline"
-            size="sm"
-          >
-            {t("logout")}
-          </Button>
+          <ItemButton>{t("logout")}</ItemButton>
         </form>
       </DropdownMenuContent>
     </DropdownMenu>

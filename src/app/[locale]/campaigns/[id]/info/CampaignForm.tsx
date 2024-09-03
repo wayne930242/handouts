@@ -23,7 +23,7 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { useEffect, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
-import BannerUploadFormItem from "@/components/BannerUploadProps";
+import ImageUploadFormItem from "@/components/BannerUploadProps";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
 
@@ -176,13 +176,14 @@ export default function CampaignForm({
           )}
         />
 
-        <BannerUploadFormItem
-          initialBannerUrl={campaignInfo?.banner_url}
+        <ImageUploadFormItem
+          initialUrl={campaignInfo?.banner_url}
           file={file}
           setFile={setFile}
-          onBannerUrlClear={() => form.setValue("banner_url", undefined)}
+          onUrlClear={() => form.setValue("banner_url", undefined)}
           label={t("bannerUrl")}
           placeholder={t("bannerUrlPlaceholder")}
+          type="banner"
         />
 
         <FormField

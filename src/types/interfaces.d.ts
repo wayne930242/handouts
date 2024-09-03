@@ -195,3 +195,8 @@ export interface Session {
 
 // Docs Data
 export type Doc = Database["public"]["Tables"]["docs"]["Row"];
+
+export interface ProfileStore {
+  profile: Profile | null;
+  setProfile: (profile: Profile | null) => void;
+}

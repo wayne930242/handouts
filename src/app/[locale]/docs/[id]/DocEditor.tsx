@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
-import BannerUploadFormItem from "@/components/BannerUploadProps";
+import ImageUploadFormItem from "@/components/BannerUploadProps";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),
@@ -102,13 +102,14 @@ export default function DocEditor({ doc, callback }: Props) {
           )}
         />
 
-        <BannerUploadFormItem
-          initialBannerUrl={doc.banner_url}
+        <ImageUploadFormItem
+          initialUrl={doc.banner_url}
           file={file}
           setFile={setFile}
-          onBannerUrlClear={() => form.setValue("banner_url", undefined)}
+          onUrlClear={() => form.setValue("banner_url", undefined)}
           label={t("bannerUrl")}
           placeholder={t("bannerUrlPlaceholder")}
+          type="banner"
         />
 
         <FormField

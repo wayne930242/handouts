@@ -7,21 +7,23 @@ import { Input } from "./ui/input";
 import { X } from "lucide-react";
 
 interface Props {
-  initialBannerUrl?: string | null | undefined;
+  initialUrl?: string | null | undefined;
   file: File | null;
   setFile: (file: File | null) => void;
-  onBannerUrlClear: () => void;
+  onUrlClear: () => void;
   label: string;
   placeholder: string;
+  type: "banner" | "avatar";
 }
 
-const BannerUploadFormItem: React.FC<Props> = ({
-  initialBannerUrl,
+const ImageUploadFormItem: React.FC<Props> = ({
+  initialUrl,
   file,
   setFile,
-  onBannerUrlClear,
+  onUrlClear,
   label,
   placeholder,
+  type,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -44,7 +46,7 @@ const BannerUploadFormItem: React.FC<Props> = ({
         inputRef.current.value = "";
       }
     } else {
-      onBannerUrlClear();
+      onUrlClear();
     }
   };
 
@@ -59,17 +61,17 @@ const BannerUploadFormItem: React.FC<Props> = ({
         onChange={handleFileInput}
       />
       <div className="w-full h-72 border border-border p-2 flex justify-center items-center rounded-sm relative">
-        {(initialBannerUrl || file) && (
+        {(initialUrl || file) && (
           <Image
             className="object-cover"
-            src={file ? URL.createObjectURL(file) : initialBannerUrl!}
+            src={file ? URL.createObjectURL(file) : initialUrl!}
             alt="banner"
             loader={({ src }) => src}
             fill
             unoptimized
           />
         )}
-        {(file || initialBannerUrl) && (
+        {(file || initialUrl) && (
           <Button
             className="absolute top-0 right-0"
             type="button"
@@ -85,4 +87,4 @@ const BannerUploadFormItem: React.FC<Props> = ({
   );
 };
 
-export default BannerUploadFormItem;
+export default ImageUploadFormItem;

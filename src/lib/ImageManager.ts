@@ -10,7 +10,7 @@ const defaultOptions: Options = {
 };
 
 type Fields = any;
-type ImageTableKey = "campaigns" | "docs";
+type ImageTableKey = "campaigns" | "docs" | "profile";
 
 export default class ImageManager {
   private options: Options;
