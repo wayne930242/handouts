@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campaign_players: {
+        Row: {
+          campaign_id: string
+          joined_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          joined_at?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          joined_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_players_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_players_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign_users: {
         Row: {
           campaign_id: string
@@ -233,6 +269,42 @@ export type Database = {
             columns: ["doc_id"]
             isOneToOne: false
             referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doc_players: {
+        Row: {
+          doc_id: string
+          joined_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          doc_id: string
+          joined_at?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          doc_id?: string
+          joined_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doc_players_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doc_players_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -472,6 +544,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_campaign_favorites: {
+        Row: {
+          added_at: string | null
+          campaign_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          campaign_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string | null
+          campaign_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_campaign_favorites_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_campaign_favorites_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_chats: {
         Row: {
           chat_id: string
@@ -495,6 +603,42 @@ export type Database = {
           },
           {
             foreignKeyName: "user_chats_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_doc_favorites: {
+        Row: {
+          added_at: string | null
+          doc_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          doc_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string | null
+          doc_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_doc_favorites_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_doc_favorites_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -598,13 +742,21 @@ export type Database = {
         }
         Returns: boolean
       }
-      check_doc_passphrase: {
-        Args: {
-          doc_id: string
-          input_passphrase: string
-        }
-        Returns: boolean
-      }
+      check_doc_passphrase:
+        | {
+            Args: {
+              doc_id: string
+              input_passphrase: string
+            }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              doc_id: string
+              input_passphrase: string
+            }
+            Returns: boolean
+          }
       check_doc_passphrase_rpc: {
         Args: {
           doc_id: string
