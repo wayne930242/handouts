@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import useSession from "@/lib/hooks/useSession";
@@ -37,7 +36,11 @@ export default function Doc({ docId }: Props) {
 
   return doc ? (
     <div className="w-full">
-      <Toolbar doc={doc} isOwner={doc?.owner_id === session?.user?.id} />
+      <Toolbar
+        doc={doc}
+        isOwner={doc?.owner_id === session?.user?.id}
+        isJoined={!!doc?.players.find((p) => p?.user?.id === session?.user?.id)}
+      />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
         {editingDoc && <DocEditor doc={doc} callback={refetch} />}
         {!editingDoc && <DocViewer doc={doc} />}

@@ -18,9 +18,11 @@ export default function SubscriptCampaign({
     })
   );
   const unsubscribeRef = useRef<(() => void) | null>(null);
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    if (connected) return;
+    if (connected || isMounted.current) return;
+    isMounted.current = true;
     const setupSubscription = () => {
       if (unsubscribeRef.current) {
         unsubscribeRef.current();
@@ -41,7 +43,7 @@ export default function SubscriptCampaign({
     return () => {
       window.removeEventListener("focus", handleFocus);
       if (unsubscribeRef.current) {
-      unsubscribeRef.current();
+        unsubscribeRef.current();
       }
     };
   }, [connected, supabase, campaignId]);
