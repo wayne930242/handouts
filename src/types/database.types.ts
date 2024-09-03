@@ -730,13 +730,21 @@ export type Database = {
         }
         Returns: boolean
       }
-      check_doc_passphrase: {
-        Args: {
-          doc_id: string
-          input_passphrase: string
-        }
-        Returns: boolean
-      }
+      check_doc_passphrase:
+        | {
+            Args: {
+              doc_id: string
+              input_passphrase: string
+            }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              doc_id: string
+              input_passphrase: string
+            }
+            Returns: boolean
+          }
       check_doc_passphrase_rpc: {
         Args: {
           doc_id: string

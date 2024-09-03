@@ -58,6 +58,7 @@ export default async function CampaignPage({
 
   if (!isAuthorized || authError) {
     await removePassphrase(id, "docs");
+    console.error(authError);
     return redirect("/?doc_id=" + id);
   }
 
