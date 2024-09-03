@@ -242,6 +242,18 @@
     "pleaseEnterPassphrase": "Please enter the passphrase",
     "submit": "Submit"
   },
+  "ProfileForm": {
+    "avatarUrl": "Avatar",
+    "avatarUrlPlaceholder": "Upload your avatar",
+    "cancel": "Cancel",
+    "displayName": "Display Name",
+    "displayNamePlaceholder": "Enter your display name",
+    "errorDescription": "Update failed. Please try again later.",
+    "errorTitle": "Update Failed",
+    "save": "Save",
+    "successDescription": "Your profile has been successfully updated.",
+    "successTitle": "Update Successful"
+  },
   "ResetPassword": {
     "confirmPassword": "Confirm Password",
     "description": "Please enter your new password.",

@@ -23,7 +23,7 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { useEffect, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
-import ImageUploadFormItem from "@/components/BannerUploadProps";
+import ImageUploadFormItem from "@/components/ImageUploadFormItem";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
 

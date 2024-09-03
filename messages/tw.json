@@ -242,6 +242,18 @@
     "pleaseEnterPassphrase": "請輸入通關密語",
     "submit": "確定"
   },
+  "ProfileForm": {
+    "avatarUrl": "頭像",
+    "avatarUrlPlaceholder": "上傳您的頭像",
+    "cancel": "取消",
+    "displayName": "顯示名稱",
+    "displayNamePlaceholder": "請輸入您的顯示名稱",
+    "errorDescription": "更新失敗。請稍後再試。",
+    "errorTitle": "更新失敗",
+    "save": "儲存",
+    "successDescription": "您的個人資料已成功更新。",
+    "successTitle": "更新成功"
+  },
   "ResetPassword": {
     "confirmPassword": "確認密碼",
     "description": "請輸入新密碼。",

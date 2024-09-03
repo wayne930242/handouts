@@ -17,7 +17,7 @@ export default class ImageManager {
   private baseUrl: string;
 
   constructor(options: Options = defaultOptions) {
-    this.options = options;
+    this.options = { ...defaultOptions, ...options };
     this.baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   }
 

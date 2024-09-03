@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
-import ImageUploadFormItem from "@/components/BannerUploadProps";
+import ImageUploadFormItem from "@/components/ImageUploadFormItem";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),

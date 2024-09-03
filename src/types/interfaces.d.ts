@@ -196,7 +196,9 @@ export interface Session {
 // Docs Data
 export type Doc = Database["public"]["Tables"]["docs"]["Row"];
 
+export type ProfileData = Database["public"]["Tables"]["profiles"]["Row"];
+
 export interface ProfileStore {
-  profile: Profile | null;
-  setProfile: (profile: Profile | null) => void;
+  profile: ProfileData | null;
+  setProfile: (profile: ProfileData | null) => void;
 }

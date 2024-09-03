@@ -1,8 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+"use client";
+
 import { Link } from "@/navigation";
 import { redirect } from "@/navigation";
 import { Button, ItemButton } from "./ui/button";
-import { getTranslations } from "next-intl/server";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,17 +10,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import useProfileStore from "@/lib/store/useProfileStore";
+import { useClient } from "@/lib/supabase/client";
+import { useTranslations } from "next-intl";
+import useSession from "@/lib/hooks/useSession";
 
-export default async function AuthButton() {
-  const supabase = createClient();
-  const t = await getTranslations("LocaleLayout");
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function AuthButton() {
+  const supabase = useClient();
+  const t = useTranslations("LocaleLayout");
+  const session = useSession();
+  const user = session?.user;
+
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }));
 
   const signOut = async () => {
-    "use server";
-    const supabase = createClient();
     await supabase.auth.signOut();
     return redirect("/login");
   };
@@ -30,8 +35,10 @@ export default async function AuthButton() {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarImage src="/img/default-avatar.webp" />
-            <AvatarFallback>GM</AvatarFallback>
+            <AvatarImage src={profile?.avatar_url ?? ""} />
+            <AvatarFallback>
+              {profile?.display_name ?? profile?.email ?? "GM"}
+            </AvatarFallback>
           </Avatar>
           <span className="sr-only">Toggle user menu</span>
         </Button>

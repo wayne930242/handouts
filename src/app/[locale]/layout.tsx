@@ -13,6 +13,7 @@ import PassphraseDialog from "@/components/PassphraseDialog";
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 import { ThemeProvider } from "./ThemeProvider";
 import { genSEO } from "@/lib/defaultSEO";
+import ProfileQuery from "./ProfileQuery";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -57,6 +58,7 @@ export default async function RootLayout({
                 <ConfirmDialog />
                 <GlobalLoading />
                 <PassphraseDialog />
+                <ProfileQuery />
               </NextIntlClientProvider>
             </main>
           </ThemeProvider>

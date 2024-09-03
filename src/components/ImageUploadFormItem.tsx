@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Props {
   initialUrl?: string | null | undefined;
@@ -60,10 +61,17 @@ const ImageUploadFormItem: React.FC<Props> = ({
         accept="image/*"
         onChange={handleFileInput}
       />
-      <div className="w-full h-72 border border-border p-2 flex justify-center items-center rounded-sm relative">
+      <div
+        className={cn("relative flex justify-center items-center", {
+          "h-72 w-full border border-border p-2 rounded-sm": type === "banner",
+          "h-36 w-36 rounded-full": type === "avatar",
+        })}
+      >
         {(initialUrl || file) && (
           <Image
-            className="object-cover"
+            className={cn("object-cover", {
+              "rounded-full": type === "avatar",
+            })}
             src={file ? URL.createObjectURL(file) : initialUrl!}
             alt="banner"
             loader={({ src }) => src}
@@ -73,10 +81,10 @@ const ImageUploadFormItem: React.FC<Props> = ({
         )}
         {(file || initialUrl) && (
           <Button
-            className="absolute top-0 right-0"
+            className="absolute top-0 right-0 h-6 w-6"
             type="button"
             size="icon"
-            variant="ghost"
+            variant="link"
             onClick={handleClear}
           >
             <X className="h-4 w-4" />
