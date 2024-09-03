@@ -4,7 +4,6 @@ import { Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { HandoutData, Section } from "@/types/interfaces";
-import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import HandoutsArea from "./HandoutsArea";
 import useSession from "@/lib/hooks/useSession";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
+import { useClient } from "@/lib/supabase/client";
 
 interface Props {
   section: Section;
@@ -35,8 +35,9 @@ const emptyHandout = (
 
 export default function SectionCard({ section }: Props) {
   const t = useTranslations("SectionCard");
-  const supabase = createClient();
+  const supabase = useClient();
   const session = useSession();
+
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     setCampaignData: state.setCampaignData,
     campaignData: state.campaignData,

@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
-import { createClient } from "@/lib/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
@@ -26,6 +25,7 @@ import { useEffect, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
 import BannerUploadFormItem from "@/components/BannerUploadProps";
 import OverlayLoading from "@/components/OverlayLoading";
+import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
   name: z.string().min(1).max(255),
@@ -41,7 +41,7 @@ export default function CampaignForm({
   id: string;
   userId: string;
 }) {
-  const supabase = createClient();
+  const supabase = useClient();
   const t = useTranslations("CampaignForm");
 
   const [isLoading, setIsLoading] = useState(false);

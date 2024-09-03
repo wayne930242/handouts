@@ -9,6 +9,27 @@ export type Locale = (typeof locales)[number];
 export type FullCampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'>
 export type CampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'passphrase' | 'created_at'>
 
+export type CampaignWithPlayers = {
+  id: string
+  name: string
+  description: string | null
+  status: string
+  banner_url: string | null
+  campaign_players: {
+    user_id: string
+    role: string
+    joined_at: string | null
+    users: {
+      id: string
+      email: string
+      profiles: {
+        avatar_url: string | null
+        display_name: string | null
+      } | null
+    }
+  }[]
+}
+
 export type Campaign = CampaignData & {
   chapters: Chapter[];
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import { useClient } from "@/lib/supabase/client";
 import { getDocsByOwnerId } from "@/lib/supabase/query/docsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useTranslations } from "next-intl";
@@ -13,7 +13,7 @@ interface Props {
 
 export default function Docs({ ownerId }: Props) {
   const t = useTranslations("DocsPage");
-  const supabase = createClient();
+  const supabase = useClient();
 
   const { data: docs, isFetching } = useQuery(
     getDocsByOwnerId(supabase, ownerId)

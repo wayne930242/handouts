@@ -1,14 +1,14 @@
 "use client";
+
 import { useEffect, useMemo, useRef } from "react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useCampaignData from "@/lib/hooks/useCampaignData";
 import useAppStore from "@/lib/store/useAppStore";
-import { createClient } from "@/lib/supabase/client";
 import dynamic from "next/dynamic";
 
 import Toolbar from "./CampaignToolbar";
 import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
-import { removePassphrase } from "@/lib/passphrase";
+import { createClient } from "@/lib/supabase/client";
 
 const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
   ssr: false,
@@ -18,7 +18,10 @@ const CampaignViewer = dynamic(() => import("./CampaignViewer"), {
 });
 
 export default function Campaign({ campaignId, isAuthorized }: Props) {
+  const supabase = useMemo(() => createClient(), []);
+
   useCampaignData(campaignId, isAuthorized);
+
   const { editingCampaign } = useAppStore((state) => ({
     editingCampaign: state.editingCampaign,
   }));
@@ -29,8 +32,7 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
     })
   );
 
-  const supabase = useMemo(() => createClient(), []);
-  const canEdit = useCanEditCampaign();
+  const isGm = useCanEditCampaign();
   const unsubscribeRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -51,13 +53,14 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
       }
     };
 
-    window.addEventListener("focus", handleFocus);
+    // window.addEventListener("focus", handleFocus);
 
     return () => {
-      window.removeEventListener("focus", handleFocus);
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
-      }
+      // window.removeEventListener("focus", handleFocus);
+      // if (unsubscribeRef.current) {
+      // unsubscribeRef.current();
+      // }
+      console.log("unsubscribeRef.current", unsubscribeRef.current);
     };
   }, [
     supabase,
@@ -69,9 +72,7 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
 
   return (
     <div className="w-full">
-      {canEdit && (
-        <Toolbar campaignId={campaignId} isAuthorized={isAuthorized} />
-      )}
+      <Toolbar campaignId={campaignId} isOwner={isGm} />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
         {editingCampaign && <CampaignEditor />}
         {!editingCampaign && <CampaignViewer />}

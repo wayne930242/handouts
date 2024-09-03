@@ -1,11 +1,13 @@
 "use client";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import { ChapterData } from "@/types/interfaces";
-import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
+
 import { Button } from "@/components/ui/button";
 import ChaptersArea from "./CampaignEditor/ChaptersArea";
-import { useTranslations } from "next-intl";
+import { useClient } from "@/lib/supabase/client";
 
 const genEmptyChapter = (
   campaignId: string,
@@ -17,8 +19,9 @@ const genEmptyChapter = (
 });
 
 export default function CampaignEditor() {
+  const supabase = useClient();
+
   const t = useTranslations("CampaignEditor");
-  const supabase = createClient();
   const { campaignData, setCampaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
     setCampaignData: state.setCampaignData,

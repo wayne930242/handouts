@@ -5,7 +5,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Chapter } from "@/types/interfaces";
 import ChapterCard from "./ChapterCard";
 
-import { createClient } from "@/lib/supabase/client";
+import { useClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import onDragEnd from "@/lib/supabase/onDragEnd";
 
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function ChaptersArea({ chapters, campaignId }: Props) {
-  const supabase = createClient();
+  const supabase = useClient();
 
   const { campaignData, setCampaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,

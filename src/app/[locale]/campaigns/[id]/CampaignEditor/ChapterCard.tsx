@@ -1,7 +1,6 @@
 "use client";
 import { Plus, X } from "lucide-react";
 import { Chapter, SectionData } from "@/types/interfaces";
-import { createClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import { advancedRemoveElement } from "@/lib/arrayAction";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
+import { useClient } from "@/lib/supabase/client";
 
 interface Props {
   chapter: Chapter;
@@ -26,7 +26,8 @@ const emptySection = (
 
 export default function ChapterCard({ chapter }: Props) {
   const t = useTranslations("ChapterCard");
-  const supabase = createClient();
+  const supabase = useClient();
+
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
     setCampaignData: state.setCampaignData,

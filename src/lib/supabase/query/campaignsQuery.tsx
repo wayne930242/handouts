@@ -93,3 +93,22 @@ export const getCampaignSEO = (
     .eq("id", campaignId)
     .single();
 };
+
+export const getCampaignWithPlayers = (
+  supabase: MySupabaseClient,
+  campaignId: string
+) => {
+  return supabase
+    .from("campaign_players")
+    .select(
+      `
+      user_id,
+      role,
+      profiles!campaign_players_user_id_fkey1 (
+        avatar_url,
+        display_name
+      )
+    `
+    )
+    .eq("campaign_id", campaignId);
+};

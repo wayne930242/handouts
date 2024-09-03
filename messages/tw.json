@@ -1,10 +1,4 @@
 {
-  "ModeToggle": {
-    "dark": "暗色",
-    "light": "亮色",
-    "system": "系統",
-    "toggleTheme": "切換主題"
-  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "戰役連結",
@@ -85,6 +79,71 @@
     "newCampaign": "新戰役",
     "newDoc": "新文件"
   },
+  "DocDeleteZone": {
+    "deleteButton": "刪除文件",
+    "deleteDoc": "刪除文件",
+    "deleteDocDescription": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
+    "description": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
+    "errorDescription": "刪除文件時發生錯誤，請稍後再試。",
+    "errorTitle": "刪除失敗",
+    "formValidation": {
+      "required": "請輸入文件 ID"
+    },
+    "idLabel": "文件 ID：",
+    "idMismatchError": "輸入的 ID 不匹配",
+    "inputLabel": "輸入文件 ID 以確認刪除",
+    "inputPlaceholder": "文件 ID",
+    "successDescription": "你的文件已經成功刪除。你現在有額度可以創建更多文件。",
+    "successTitle": "刪除成功",
+    "title": "刪除文件"
+  },
+  "DocEditor": {
+    "bannerUrl": "橫幅圖片",
+    "bannerUrlPlaceholder": "選擇橫幅圖片",
+    "cancel": "取消",
+    "docContent": "文件內容",
+    "docName": "文件名稱",
+    "docNamePlaceholder": "輸入文件名稱",
+    "errorDescription": "無法更新文件。請稍後再試。",
+    "errorTitle": "更新失敗",
+    "save": "儲存",
+    "successDescription": "文件已成功更新。",
+    "successTitle": "更新成功",
+    "uploadFailed": "上傳失敗",
+    "uploadFailedDescription": "無法上傳圖片。請稍後再試。"
+  },
+  "DocForm": {
+    "cancel": "取消",
+    "create": "創建",
+    "docDescription": "文件描述",
+    "docDescriptionPlaceholder": "輸入文件描述",
+    "docName": "文件名稱",
+    "docNamePlaceholder": "輸入文件名稱",
+    "error": "錯誤",
+    "formTitle": {
+      "edit": "編輯文件",
+      "new": "創建新文件"
+    },
+    "passphrase": "通關密語",
+    "passphrasePlaceholder": "輸入文件通關密語",
+    "save": "儲存"
+  },
+  "DocMenu": {
+    "delete": "刪除",
+    "info": "資訊"
+  },
+  "DocsPage": {
+    "copyInfo": "複製資訊",
+    "createCampaign": "您可以創建新的文件。",
+    "docId": "文件 ID",
+    "docLink": "文件連結",
+    "docLinkWithPassphrase": "文件連結含通關密語",
+    "editView": "編輯 / 檢視",
+    "infoDescription": "將文件資訊分享給玩家。請注意版權問題。",
+    "infoTitle": "資訊已複製到剪貼簿",
+    "noDocs": "沒有找到任何文件。",
+    "passphrase": "通關密語"
+  },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",
     "backButton": "返回",
@@ -118,24 +177,24 @@
   },
   "Index": {
     "campaignId": "戰役 ID",
-    "passphrase": "通關密語",
-    "welcome": "歡迎使用 Handouts！",
-    "campaignsTitle": "戰役",
     "campaignsDescription": "根據戰役建立一系列的手邊資料分享給玩家，你可以自行決定要公開哪些資料，並將它們呈現在清晰的結構中。",
-    "docsTitle": "文件",
+    "campaignsTitle": "戰役",
     "docsDescription": "你可以建立遊戲文件或規則和玩家分享，使用單純的 Markdown 語法編輯器。你可以分享遊戲規則給你的玩家並設定通關密語。",
-    "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。由洪偉開發製作。"
+    "docsTitle": "文件",
+    "passphrase": "通關密語",
+    "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。由洪偉開發製作。",
+    "welcome": "歡迎使用 Handouts！"
   },
   "LocaleLayout": {
     "campaigns": "戰役",
     "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
+    "docs": "文件",
     "loggedIn": "已以 {username} 的身份登入",
     "loggedOut": "您已登出。",
     "login": "登入",
     "logout": "登出",
     "myfavorites": "我的最愛",
     "profile": "個人資料",
-    "docs": "文件",
     "secret": "已登入用戶的秘密頁面",
     "signup": "註冊",
     "subscriptions": "訂閱",
@@ -159,6 +218,12 @@
     "subtitle": "還沒有帳號嗎？",
     "title": "登入"
   },
+  "ModeToggle": {
+    "dark": "暗色",
+    "light": "亮色",
+    "system": "系統",
+    "toggleTheme": "切換主題"
+  },
   "PassphraseDialog": {
     "campaignDescription": "請輸入 GM 提供給你的戰役 ID 與通關密語。",
     "campaignTitle": "輸入通關密語來加入戰役",
@@ -170,11 +235,11 @@
   "PhraseForm": {
     "campaignId": "戰役 ID",
     "cancel": "取消",
+    "docId": "文件 ID",
     "passphrase": "通關密語",
     "pleaseEnterCampaignId": "請輸入戰役 ID",
-    "pleaseEnterPassphrase": "請輸入通關密語",
     "pleaseEnterDocId": "請輸入文件 ID",
-    "docId": "文件 ID",
+    "pleaseEnterPassphrase": "請輸入通關密語",
     "submit": "確定"
   },
   "ResetPassword": {
@@ -187,71 +252,6 @@
     "title": "重設密碼",
     "updateFailed": "密碼更新失敗。",
     "updateSuccess": "密碼已更新"
-  },
-  "DocDeleteZone": {
-    "deleteButton": "刪除文件",
-    "deleteDoc": "刪除文件",
-    "deleteDocDescription": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
-    "description": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
-    "errorDescription": "刪除文件時發生錯誤，請稍後再試。",
-    "errorTitle": "刪除失敗",
-    "formValidation": {
-      "required": "請輸入文件 ID"
-    },
-    "idLabel": "文件 ID：",
-    "idMismatchError": "輸入的 ID 不匹配",
-    "inputLabel": "輸入文件 ID 以確認刪除",
-    "inputPlaceholder": "文件 ID",
-    "successDescription": "你的文件已經成功刪除。你現在有額度可以創建更多文件。",
-    "successTitle": "刪除成功",
-    "title": "刪除文件"
-  },
-  "DocEditor": {
-    "bannerUrl": "橫幅圖片",
-    "bannerUrlPlaceholder": "選擇橫幅圖片",
-    "cancel": "取消",
-    "errorDescription": "無法更新文件。請稍後再試。",
-    "errorTitle": "更新失敗",
-    "docContent": "文件內容",
-    "docName": "文件名稱",
-    "docNamePlaceholder": "輸入文件名稱",
-    "save": "儲存",
-    "successDescription": "文件已成功更新。",
-    "successTitle": "更新成功",
-    "uploadFailed": "上傳失敗",
-    "uploadFailedDescription": "無法上傳圖片。請稍後再試。"
-  },
-  "DocForm": {
-    "cancel": "取消",
-    "create": "創建",
-    "error": "錯誤",
-    "formTitle": {
-      "edit": "編輯文件",
-      "new": "創建新文件"
-    },
-    "passphrase": "通關密語",
-    "passphrasePlaceholder": "輸入文件通關密語",
-    "docDescription": "文件描述",
-    "docDescriptionPlaceholder": "輸入文件描述",
-    "docName": "文件名稱",
-    "docNamePlaceholder": "輸入文件名稱",
-    "save": "儲存"
-  },
-  "DocMenu": {
-    "delete": "刪除",
-    "info": "資訊"
-  },
-  "DocsPage": {
-    "copyInfo": "複製資訊",
-    "createCampaign": "您可以創建新的文件。",
-    "editView": "編輯 / 檢視",
-    "infoDescription": "將文件資訊分享給玩家。請注意版權問題。",
-    "infoTitle": "資訊已複製到剪貼簿",
-    "noDocs": "沒有找到任何文件。",
-    "passphrase": "通關密語",
-    "docId": "文件 ID",
-    "docLink": "文件連結",
-    "docLinkWithPassphrase": "文件連結含通關密語"
   },
   "Secret": {
     "description": "此頁面僅對已登入的用戶可見。",
@@ -282,11 +282,15 @@
     "uploadFailedDescription": "圖片上傳失敗，請稍後再試。"
   },
   "Toolbar": {
+    "addFavorite": "加入收藏",
     "backToList": "回列表",
     "closeEdit": "關閉編輯",
     "disconnected": "已斷線",
     "edit": "編輯",
     "export": "匯出",
-    "import": "匯入"
+    "import": "匯入",
+    "join": "加入",
+    "leave": "離開",
+    "removeFavorite": "從收藏中移除"
   }
 }

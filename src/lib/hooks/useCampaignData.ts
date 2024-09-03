@@ -1,16 +1,19 @@
-import { useEffect, useMemo } from "react";
-import { createClient } from "@/lib/supabase/client";
-import useCampaignStore from "@/lib/store/useCampaignStore";
+import { useEffect } from "react";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+
+import useCampaignStore from "@/lib/store/useCampaignStore";
+
 import { getCampaignDetail } from "../supabase/query/campaignsQuery";
+import { useClient } from "../supabase/client";
 
 const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
+  const supabase = useClient()
+
   const { initCampaignData, setLoading } = useCampaignStore(state => ({
     initCampaignData: state.initCampaignData,
     setLoading: state.setLoading,
   }));
 
-  const supabase = useMemo(() => createClient(), []);
   const { data: campaignData, isFetching, error, refetch } = useQuery(
     getCampaignDetail(supabase, campaignId),
     {

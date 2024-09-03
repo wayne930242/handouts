@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import { useClient } from "@/lib/supabase/client";
 import { getOwnedCampaignList } from "@/lib/supabase/query/campaignsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import CampaignCard from "./CampaignCard";
@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { PacmanLoader } from "react-spinners";
 
 export default function Campaigns({ gmId }: { gmId: string }) {
-  const supabase = createClient();
+  const supabase = useClient();
   const { data: campaigns, isFetching } = useQuery(
     getOwnedCampaignList(supabase, gmId)
   );

@@ -5,20 +5,22 @@ import useAppStore from "@/lib/store/useAppStore";
 import { ArrowLeft, Eye, Pen, Unplug } from "lucide-react";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Badge } from "@/components/ui/badge";
-import { createClient } from "@/lib/supabase/client";
+import { useClient } from "@/lib/supabase/client";
 import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 import CampaignMenu from "./CampaignMenu";
 
 export default function Toolbar({
   campaignId,
-  isAuthorized,
+  isOwner,
+  isFavorite,
 }: {
   campaignId: string;
-  isAuthorized: boolean;
+  isOwner?: boolean;
+  isFavorite?: boolean;
 }) {
+  const supabase = useClient();
   const t = useTranslations("Toolbar");
-  const router = useRouter();
 
   const { editingCampaign, setEditingCampaign } = useAppStore((state) => ({
     editingCampaign: state.editingCampaign,
@@ -38,12 +40,10 @@ export default function Toolbar({
     loading: state.loading,
   }));
 
-  const supabase = createClient();
-
   return (
     <div className="flex justify-between items-center w-full">
       <div className="grow-1 flex gap-2 items-center">
-        <Link href="/campaigns">
+        {/* <Link href="/campaigns">
           <Button
             className="flex gap-1.5 items-center"
             size="sm"
@@ -52,7 +52,7 @@ export default function Toolbar({
             <ArrowLeft className="h-4 w-4" />
             <span>{t("backToList")}</span>
           </Button>
-        </Link>
+        </Link> */}
       </div>
       <div className="flex gap-2 items-center">
         <PacmanLoader color="#bbb" loading={loading} size={12} />
@@ -68,19 +68,21 @@ export default function Toolbar({
             <Unplug className="h-4 w-4" />
           </Badge>
         )}
-        <Button
-          size="sm"
-          className="flex gap-2 items-center"
-          variant={editingCampaign ? "outline" : "default"}
-          onClick={() => setEditingCampaign(!editingCampaign)}
-        >
-          {editingCampaign ? (
-            <Eye className="h-4 w-4" />
-          ) : (
-            <Pen className="h-4 w-4" />
-          )}
-          {editingCampaign ? t("closeEdit") : t("edit")}
-        </Button>
+        {isOwner && (
+          <Button
+            size="sm"
+            className="flex gap-2 items-center"
+            variant={editingCampaign ? "outline" : "default"}
+            onClick={() => setEditingCampaign(!editingCampaign)}
+          >
+            {editingCampaign ? (
+              <Eye className="h-4 w-4" />
+            ) : (
+              <Pen className="h-4 w-4" />
+            )}
+            {editingCampaign ? t("closeEdit") : t("edit")}
+          </Button>
+        )}
         {campaignData && <CampaignMenu campaignData={campaignData} />}
       </div>
     </div>
