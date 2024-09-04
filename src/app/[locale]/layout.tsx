@@ -1,18 +1,17 @@
-import { NextIntlClientProvider } from "next-intl";
 import { Noto_Sans_TC } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
+
+import { NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "./ThemeProvider";
+import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
+
+import { genSEO } from "@/lib/defaultSEO";
 import { locales } from "@/navigation";
-import {
-  getMessages,
-  getTranslations,
-  unstable_setRequestLocale,
-} from "next-intl/server";
+
+import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import GlobalLoading from "./GlobalLoading";
+import { Toaster } from "@/components/ui/toaster";
 import PassphraseDialog from "@/components/PassphraseDialog";
-import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
-import { ThemeProvider } from "./ThemeProvider";
-import { genSEO } from "@/lib/defaultSEO";
 import ProfileQuery from "./ProfileQuery";
 
 export function generateStaticParams() {
@@ -43,7 +42,7 @@ export default async function RootLayout({
 
   return (
     <ReactQueryClientProvider>
-      <html lang={locale} className={font.className}>
+      <html lang={locale} className={font.className} suppressHydrationWarning>
         <body className="bg-background text-foreground">
           <ThemeProvider
             attribute="class"
