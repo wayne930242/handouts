@@ -7,8 +7,12 @@ export const getDocsByOwnerId = (
   return supabase.from("docs").select("*").eq("owner_id", ownerId);
 };
 
-export const getDocInfo = (supabase: MySupabaseClient, docId: string) => {
-  return supabase
+export const getDocInfo = (
+  supabase: MySupabaseClient,
+  docId: string,
+  userId?: string
+) => {
+  let query = supabase
     .from("docs")
     .select(
       `
@@ -25,11 +29,20 @@ export const getDocInfo = (supabase: MySupabaseClient, docId: string) => {
           display_name,
           avatar_url
         )
+      ),
+      favorite:user_doc_favorites!left (
+        id,
+        added_at
       )
     `
     )
-    .eq("id", docId)
-    .single();
+    .eq("id", docId);
+
+  if (userId) {
+    query = query.eq("user_doc_favorites.user_id", userId);
+  }
+
+  return query.single();
 };
 
 export const getDocSEO = (supabase: MySupabaseClient, docId: string) => {
@@ -45,4 +58,32 @@ export const getDocSEO = (supabase: MySupabaseClient, docId: string) => {
     )
     .eq("id", docId)
     .single();
+};
+
+export const getMyDocs = (supabase: MySupabaseClient, userId: string) => {
+  return supabase
+    .from("docs")
+    .select(
+      `
+      *,
+      doc_players!inner (user_id)
+    `
+    )
+    .eq("doc_players.user_id", userId);
+};
+
+export const getMyFavDocs = (supabase: MySupabaseClient, userId: string) => {
+  return supabase
+    .from("docs")
+    .select(
+      `
+      *,
+      user_doc_favorites!inner (user_id, added_at)
+    `
+    )
+    .eq("user_doc_favorites.user_id", userId)
+    .order("added_at", {
+      referencedTable: "user_doc_favorites",
+      ascending: false,
+    });
 };

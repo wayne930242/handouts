@@ -18,28 +18,28 @@ const DocViewer = dynamic(() => import("./DocViewer"), {
 
 interface Props {
   docId: string;
+  userId?: string;
 }
 
-export default function Doc({ docId }: Props) {
+export default function Doc({ docId, userId }: Props) {
   const supabase = useClient();
   const {
     data: doc,
     isFetching,
     refetch,
-  } = useQuery(getDocInfo(supabase, docId));
+  } = useQuery(getDocInfo(supabase, docId, userId));
 
   const { editingDoc } = useAppStore((state) => ({
     editingDoc: state.editingDoc,
   }));
 
-  const session = useSession();
-
   return doc ? (
     <div className="w-full">
       <Toolbar
         doc={doc}
-        isOwner={doc?.owner_id === session?.user?.id}
-        isJoined={!!doc?.players.find((p) => p?.user?.id === session?.user?.id)}
+        isOwner={doc?.owner_id === userId}
+        isJoined={!!doc?.players.find((p) => p?.user?.id === userId)}
+        isFavorite={!!doc?.favorite?.length}
       />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
         {editingDoc && <DocEditor doc={doc} callback={refetch} />}

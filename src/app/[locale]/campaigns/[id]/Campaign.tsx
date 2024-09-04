@@ -18,9 +18,8 @@ const SubscriptCampaign = dynamic(() => import("./SubscriptCampaign"), {
   ssr: false,
 });
 
-export default function Campaign({ campaignId, isAuthorized }: Props) {
-  const { campaignData } = useCampaignData(campaignId, isAuthorized);
-  const session = useSession();
+export default function Campaign({ campaignId, isAuthorized, userId }: Props) {
+  const { campaignData } = useCampaignData(campaignId, isAuthorized, userId);
 
   const { editingCampaign } = useAppStore((state) => ({
     editingCampaign: state.editingCampaign,
@@ -33,9 +32,8 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
       <Toolbar
         campaignId={campaignId}
         isOwner={isGm}
-        isJoined={
-          !!campaignData?.players.find((p) => p?.user?.id === session?.user?.id)
-        }
+        isJoined={!!campaignData?.players.find((p) => p?.user?.id === userId)}
+        isFavorite={!!campaignData?.favorite?.length}
       />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
         {editingCampaign && <CampaignEditor />}
@@ -49,4 +47,5 @@ export default function Campaign({ campaignId, isAuthorized }: Props) {
 interface Props {
   campaignId: string;
   isAuthorized: boolean;
+  userId?: string;
 }

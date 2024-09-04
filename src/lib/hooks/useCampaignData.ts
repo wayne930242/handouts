@@ -6,7 +6,7 @@ import useCampaignStore from "@/lib/store/useCampaignStore";
 import { getCampaignDetail } from "../supabase/query/campaignsQuery";
 import { useClient } from "../supabase/client";
 
-const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
+const useCampaignData = (campaignId: string, isAuthorized: boolean, userId?: string) => {
   const supabase = useClient()
 
   const { initCampaignData, setLoading } = useCampaignStore(state => ({
@@ -15,7 +15,7 @@ const useCampaignData = (campaignId: string, isAuthorized: boolean) => {
   }));
 
   const { data: campaignData, isFetching, error, refetch } = useQuery(
-    getCampaignDetail(supabase, campaignId),
+    getCampaignDetail(supabase, campaignId, userId),
     {
       enabled: isAuthorized,
       refetchOnWindowFocus: false,

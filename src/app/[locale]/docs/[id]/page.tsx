@@ -62,13 +62,17 @@ export default async function CampaignPage({
     return redirect("/?doc_id=" + id);
   }
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   const queryClient = new QueryClient();
-  await prefetchQuery(queryClient, getDocInfo(supabase, id));
+  await prefetchQuery(queryClient, getDocInfo(supabase, id, session?.user?.id));
 
   return (
     <PageLayout>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Doc docId={id} />
+        <Doc docId={id} userId={session?.user?.id} />
       </HydrationBoundary>
     </PageLayout>
   );

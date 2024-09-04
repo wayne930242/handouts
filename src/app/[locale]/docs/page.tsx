@@ -34,7 +34,7 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   return (
     <PageLayout header={<DataToolbar tableKey="docs" />} needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Docs ownerId={user.id} />
+        <Docs userId={user.id} />
       </HydrationBoundary>
     </PageLayout>
   );

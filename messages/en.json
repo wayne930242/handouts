@@ -60,7 +60,10 @@
   "CampaignPage": {
     "alert": "During the testing period, each user can only create 1 campaign. If you want to create more campaigns at this time, please contact the author.",
     "createCampaign": "You can create a new campaign.",
-    "noCampaigns": "No campaigns found"
+    "myCampaigns": "My Campaigns",
+    "myFavorites": "My Favorites",
+    "noCampaigns": "No campaigns found",
+    "ownedCampaigns": "Owned Campaigns"
   },
   "ChapterCard": {
     "addSection": "Section",
@@ -141,7 +144,10 @@
     "editView": "Edit / View",
     "infoDescription": "Share the information with players, please be careful about copyright issues.",
     "infoTitle": "Information copied to clipboard",
+    "myDocs": "My Documents",
+    "myFavorites": "My Favorites",
     "noDocs": "No documents found.",
+    "ownedDocs": "Owned Documents",
     "passphrase": "Passphrase"
   },
   "ForgotPassword": {

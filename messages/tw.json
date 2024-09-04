@@ -60,7 +60,10 @@
   "CampaignPage": {
     "alert": "測試期間，每個使用者只能創建 1 個戰役。如果你在此時想創建更多戰役，請聯絡作者。",
     "createCampaign": "您可以創建一個新的戰役。",
-    "noCampaigns": "沒有找到戰役"
+    "myCampaigns": "我的戰役",
+    "myFavorites": "我的最愛",
+    "noCampaigns": "沒有找到戰役",
+    "ownedCampaigns": "我擁有的戰役"
   },
   "ChapterCard": {
     "addSection": "段落",
@@ -141,7 +144,10 @@
     "editView": "編輯 / 檢視",
     "infoDescription": "將文件資訊分享給玩家。請注意版權問題。",
     "infoTitle": "資訊已複製到剪貼簿",
+    "myDocs": "我的文件",
+    "myFavorites": "我的最愛",
     "noDocs": "沒有找到任何文件。",
+    "ownedDocs": "我擁有的文件",
     "passphrase": "通關密語"
   },
   "ForgotPassword": {

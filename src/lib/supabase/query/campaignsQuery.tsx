@@ -1,6 +1,6 @@
 import { MySupabaseClient } from "@/types/interfaces";
 
-export const getOwnedCampaignList = (
+export const getOwnedCampaigns = (
   supabase: MySupabaseClient,
   userId: string
 ) => {
@@ -22,9 +22,10 @@ export const getCampaignInfo = (
 
 export const getCampaignDetail = (
   supabase: MySupabaseClient,
-  campaignId: string
+  campaignId: string,
+  userId?: string
 ) => {
-  return supabase
+  let query = supabase
     .from("campaigns")
     .select(
       `
@@ -70,6 +71,10 @@ export const getCampaignDetail = (
             order_num
           )
         )
+      ),
+      favorite:user_campaign_favorites!left (
+        id,
+        added_at
       )
     `
     )
@@ -85,8 +90,13 @@ export const getCampaignDetail = (
     .order("order_num", {
       referencedTable: "chapters.sections.handouts",
       ascending: true,
-    })
-    .single();
+    });
+
+  if (userId) {
+    query = query.eq("user_campaign_favorites.user_id", userId);
+  }
+
+  return query.single();
 };
 
 export const getCampaignSEO = (
@@ -124,4 +134,35 @@ export const getCampaignWithPlayers = (
     `
     )
     .eq("campaign_id", campaignId);
+};
+
+export const getMyCampaigns = (supabase: MySupabaseClient, userId: string) => {
+  return supabase
+    .from("campaigns")
+    .select(
+      `
+      *,
+      campaign_players!inner (user_id)
+    `
+    )
+    .eq("campaign_players.user_id", userId);
+};
+
+export const getMyFavCampaigns = (
+  supabase: MySupabaseClient,
+  userId: string
+) => {
+  return supabase
+    .from("campaigns")
+    .select(
+      `
+      *,
+      user_campaign_favorites!inner (user_id, added_at)
+    `
+    )
+    .eq("user_campaign_favorites.user_id", userId)
+    .order("added_at", {
+      referencedTable: "user_campaign_favorites",
+      ascending: false,
+    });
 };

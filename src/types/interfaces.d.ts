@@ -16,10 +16,16 @@ export type Player = {
   user: Profile | null;
 };
 
+type Favorite = {
+  id: string;
+  added_at: string | null;
+};
+
 export type Campaign = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'> & {
   gm: Profile | null;
   players: Player[];
   chapters: Chapter[];
+  favorite: Favorite[];
 };
 
 export type Chapter = ChapterData & {
