@@ -116,11 +116,12 @@ export interface CampaignStore {
   ) => () => void;
 }
 
-export interface ConfirmDialogData {
+export interface ConfirmDialogData<T extends any = any> {
   id: string;
   title: string;
   description: string;
   state: "confirmed" | "canceled" | "pending";
+  data?: T;
 }
 
 type PassphraseDialogKey = "docs" | "campaigns";

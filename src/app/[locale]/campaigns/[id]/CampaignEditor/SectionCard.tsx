@@ -154,14 +154,12 @@ export default function SectionCard({ section }: Props) {
           if (!section.handouts?.length) {
             deleteSection(sections);
           } else {
-            setConfirm(
-              {
-                id: `delete-section-${section.id}`,
-                title: t("deleteSection"),
-                description: t("deleteSectionDescription"),
-              },
-              sections
-            );
+            setConfirm({
+              id: `delete-section-${section.id}`,
+              title: t("deleteSection"),
+              description: t("deleteSectionDescription"),
+              data: sections,
+            });
           }
         }}
       >

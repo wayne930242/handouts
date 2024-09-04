@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect } from "react";
 import useAppStore from "../store/useAppStore";
 
-interface ConfirmProps {
+interface ConfirmProps<T> {
   id: string;
   title: string;
   description: string;
+  data: T;
 }
 
 export default function useConfirmDialog<T extends any>(
@@ -16,23 +17,21 @@ export default function useConfirmDialog<T extends any>(
     confirmDialog: state.confirmDialog,
     setConfirmDialog: state.setConfirmDialog,
   }));
-  const dataRef = useRef<T>();
 
   useEffect(() => {
     if (!confirmDialog || confirmDialog.state === "pending") return;
 
     if (confirmDialog.state === "confirmed") {
-      onConfirm(dataRef.current as T);
+      onConfirm(confirmDialog.data);
       setConfirmDialog(null);
     } else if (confirmDialog.state === "canceled") {
-      onCancel?.(dataRef.current as T);
+      onCancel?.(confirmDialog.data);
       setConfirmDialog(null);
     }
   }, [confirmDialog, setConfirmDialog]);
 
   return {
-    setConfirm: (props: ConfirmProps, data: T) => {
-      dataRef.current = data;
+    setConfirm: (props: ConfirmProps<T>) => {
       setConfirmDialog({
         ...props,
         state: "pending",

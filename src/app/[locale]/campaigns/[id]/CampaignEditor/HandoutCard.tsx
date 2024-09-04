@@ -343,14 +343,12 @@ export default function HandoutCard({ handout, chapterId }: Props) {
           if (!handout.content) {
             deleteHandout(handout);
           } else {
-            setConfirm(
-              {
-                id: `delete-handout-${handout.id}`,
-                title: t("deleteHandout"),
-                description: t("deleteHandoutDescription"),
-              },
-              handout
-            );
+            setConfirm({
+              id: `delete-handout-${handout.id}`,
+              title: t("deleteHandout"),
+              description: t("deleteHandoutDescription"),
+              data: handout,
+            });
           }
         }}
       >

@@ -1,5 +1,15 @@
 "use client";
 import { z } from "zod";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+
+import ImageManager from "@/lib/ImageManager";
+import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
+import { useClient } from "@/lib/supabase/client";
+import { useRouter } from "@/navigation";
+
 import {
   Card,
   CardContent,
@@ -9,8 +19,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -19,14 +27,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import ImageManager from "@/lib/ImageManager";
-import { useRouter } from "@/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
-import { useTranslations } from "next-intl";
-import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
-import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
   doc_id: z.string().min(1, "formValidation.required"),
@@ -77,14 +79,12 @@ export default function DocDeleteZone({ docId }: { docId: string }) {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    setConfirm(
-      {
-        id: `delete-doc-${data.doc_id}`,
-        title: t("deleteDoc"),
-        description: t("deleteDocDescription"),
-      },
-      data
-    );
+    setConfirm({
+      id: `delete-doc-${data.doc_id}`,
+      title: t("deleteDoc"),
+      description: t("deleteDocDescription"),
+      data,
+    });
   }
 
   return (

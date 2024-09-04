@@ -139,14 +139,12 @@ export default function ChapterCard({ chapter }: Props) {
           if (!chapter.sections?.length) {
             deleteChapter(chapters);
           } else {
-            setConfirm(
-              {
-                id: `delete-chapter-${chapter.id}`,
-                title: t("deleteChapter"),
-                description: t("deleteChapterDescription"),
-              },
-              chapters
-            );
+            setConfirm({
+              id: `delete-chapter-${chapter.id}`,
+              title: t("deleteChapter"),
+              description: t("deleteChapterDescription"),
+              data: chapters,
+            });
           }
         }}
       >
