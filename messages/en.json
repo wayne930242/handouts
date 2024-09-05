@@ -197,7 +197,7 @@
     "campaigns": "Campaigns",
     "description": "A simple tool to help you share and manage handouts of RPG campaigns. Developed by WeiHung.",
     "docs": "Documents",
-    "generators": "Generator",
+    "generators": "Generators",
     "loggedIn": "Logged in as {username}",
     "loggedOut": "You are logged out.",
     "login": "Login",
