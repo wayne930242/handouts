@@ -6,7 +6,7 @@ export default function Features() {
   const t = useTranslations("Index");
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full min-h-64">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full min-h-64">
       <FeatureCard
         title={t("campaignsTitle")}
         description={t("campaignsDescription")}
