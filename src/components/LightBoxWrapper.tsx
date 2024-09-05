@@ -22,11 +22,11 @@ export default function LightBoxWrapper({
     <Dialog>
       <DialogTrigger asChild>
         <div className="relative w-full h-96 overflow-hidden cursor-zoom-in">
-          <div className="absolute bottom-2.5 left-0 right-0 bg-gradient-to-b h-24 from-transparent to-card pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b h-24 from-transparent to-card pointer-events-none" />
           <div className="w-full h-full overflow-y-hidden p-2">{children}</div>
         </div>
       </DialogTrigger>
-      <DialogContent className="flex flex-col gap-2 w-full p-4 max-w-4xl max-h-svh overflow-y-auto">
+      <DialogContent className="flex flex-col gap-2 w-full p-4 pt-8 max-w-4xl max-h-svh overflow-y-auto">
         <DialogHeader>
           <VisuallyHidden>
             <DialogTitle>Lightbox</DialogTitle>

@@ -10,11 +10,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeToc, { HtmlElementNode } from "@jsdevtools/rehype-toc";
 
 import Toc from "@/components/toc/MagicToc";
-import useSmoothScroll from "@/lib/hooks/useSmoothScroll";
 
 export default function DocViewer({ doc }: Props) {
-  useSmoothScroll();
-
   return (
     <div className="flex gap-x-2 w-full relative" id="doc-top">
       <Toc sourceId="doc-toc" id="toc" />
@@ -34,9 +31,9 @@ export default function DocViewer({ doc }: Props) {
         )}
         <div className="flex flex-col gap-y-2 w-full">
           <h1 className="text-4xl font-bold text-center py-2">{doc.title}</h1>
-          <div className="text-center text-sm text-muted-foreground">
+          <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
             {doc.description}
-          </div>
+          </Markdown>
           <Markdown
             className="prose max-w-none dark:prose-invert"
             remarkPlugins={[remarkGfm]}

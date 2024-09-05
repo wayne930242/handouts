@@ -157,7 +157,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     <Card className="relative">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Collapsible disabled={form.formState.isDirty}>
+          <Collapsible>
             <div className="flex justify-between items-start w-full px-2">
               <CardHeader className="mt-2 flex flex-col gap-y-2 items-stretch grow">
                 <FormField
@@ -308,13 +308,6 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                     )}
                   />
                 )}
-                <div className="flex justify-end mt-4">
-                  {form.formState.isDirty && (
-                    <div className="text-sm text-destructive">
-                      {t("unsavedChanges")}
-                    </div>
-                  )}
-                </div>
               </CardContent>
 
               <CardFooter className="flex gap-2 flex-col-reverse sm:justify-end sm:flex-row items-stretch sm:items-center">
@@ -332,8 +325,17 @@ export default function HandoutCard({ handout, chapterId }: Props) {
               </CardFooter>
             </CollapsibleContent>
           </Collapsible>
+
+          <div className="flex justify-end p-4">
+            {form.formState.isDirty && (
+              <div className="text-sm text-destructive">
+                {t("unsavedChanges")}
+              </div>
+            )}
+          </div>
         </form>
       </Form>
+
       <Button
         className="absolute top-0 right-0 rounded-full w-8 h-8"
         variant="ghost"

@@ -226,6 +226,7 @@ const useCampaignStore = create(
 
         return () => {
           supabase.removeChannel(campaignChannel);
+          set({ connected: false });
           console.info("unsubscribed setupRealtimeSubscription");
         };
       },

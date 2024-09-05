@@ -6,12 +6,14 @@ import { MultiDOMPortal } from "../Portal";
 interface Props {
   sourceId: string;
   id: string;
+  topId?: string;
 }
 
-export default function MagicToc({ sourceId, id }: Props) {
+export default function MagicToc({ sourceId, id, topId }: Props) {
   return (
     <>
       <TocContainer
+        topId={topId}
         mobileChildren={
           <>
             <MultiDOMPortal

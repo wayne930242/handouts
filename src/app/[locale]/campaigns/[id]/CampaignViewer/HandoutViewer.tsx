@@ -34,7 +34,7 @@ export default function HandoutViewer({ handout }: Props) {
     (handout.content || handout.title) && (
       <Wrapper>
         <div
-          className="flex flex-col gap-y-2 w-full h-full p-2 border border-dashed border-border rounded-sm"
+          className="flex flex-col gap-y-2 w-full h-full p-2 rounded-sm"
           id={`handout-${handout.id}`}
         >
           <div className="flex gap-2 items-center justify-between">
@@ -65,7 +65,11 @@ export default function HandoutViewer({ handout }: Props) {
                   );
                 }}
               >
-                {handout.is_public ? <Eye /> : <EyeOff />}
+                {handout.is_public ? (
+                  <Eye className="h-4 w-4" />
+                ) : (
+                  <EyeOff className="h-4 w-4" />
+                )}
               </Button>
             )}
           </div>

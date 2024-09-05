@@ -7,20 +7,28 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { ArrowUpToLine, TableOfContents } from "lucide-react";
+import useSmoothScroll from "@/lib/hooks/useSmoothScroll";
 
 interface Props {
   children: React.ReactNode;
   mobileChildren?: React.ReactNode;
+  topId?: string;
 }
 
-export default function TocContainer({ children, mobileChildren }: Props) {
+export default function TocContainer({
+  children,
+  mobileChildren,
+  topId = "doc-top",
+}: Props) {
+  useSmoothScroll();
+
   return (
     <>
       <div className="hidden md:flex w-[305px] sticky top-0 overflow-y-auto mr-4 bg-secondary text-secondary-foreground px-4 py-2 flex-col items-center h-layout">
         <div className="w-full">
           <a
             className="toc-link text-center flex items-center justify-center mb-2"
-            href="#doc-top"
+            href={`#${topId}`}
           >
             <Button
               size="sm"
@@ -49,7 +57,7 @@ export default function TocContainer({ children, mobileChildren }: Props) {
               <div className="bg-secondary text-secondary-foreground w-full">
                 <a
                   className="toc-link text-center flex items-center justify-center"
-                  href="#doc-top"
+                  href={`#${topId}`}
                 >
                   <Button
                     size="sm"

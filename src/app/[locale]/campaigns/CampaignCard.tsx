@@ -5,16 +5,16 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { FullCampaignData } from "@/types/interfaces";
-import { Pencil } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
+import Markdown from "react-markdown";
 
 export default function CampaignCard({
   campaign,
@@ -36,7 +36,7 @@ export default function CampaignCard({
           className="flex items-center gap-1.5 justify-between"
         >
           <CardTitle>{campaign.name}</CardTitle>
-          <Pencil className="h-4 w-4" />
+          <Settings className="h-5 w-5" />
         </Link>
       </CardHeader>
       <CardContent className="grow relative h-32 overflow-hidden">
@@ -51,8 +51,10 @@ export default function CampaignCard({
           />
         )}
       </CardContent>
-      <CardContent className="grow">
-        <CardDescription>{campaign.description}</CardDescription>
+      <CardContent className="grow px-4 pt-2">
+        <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
+          {campaign.description}
+        </Markdown>
       </CardContent>
       <CardFooter>
         <div className="flex justify-between items-center gap-2 w-full">
