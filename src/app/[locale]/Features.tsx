@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import FeatureCard from "./FeatureCard";
-import { BookHeart, Swords } from "lucide-react";
+import { BookHeart, Dices, Swords } from "lucide-react";
 
 export default function Features() {
   const t = useTranslations("Index");
@@ -18,6 +18,12 @@ export default function Features() {
         description={t("docsDescription")}
         icon={<BookHeart className="h-12 w-12" />}
         href="/docs"
+      />
+      <FeatureCard
+        title={t("generatorTitle")}
+        description={t("generatorDescription")}
+        icon={<Dices className="h-12 w-12" />}
+        href="/generator"
       />
     </div>
   );

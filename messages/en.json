@@ -183,12 +183,14 @@
   },
   "Index": {
     "campaignId": "Campaign ID",
-    "campaignsDescription": "Create a series of handy materials for players based on campaigns. You can decide which information to make public and present them in a clear structure.",
+    "campaignsDescription": "Create a series of handouts for players based on campaigns. You can decide which information to make public and present them in a clear structure. You can add generators and documents to campaigns for easy management and sharing.",
     "campaignsTitle": "Campaigns",
-    "docsDescription": "You can create game documents or rules to share with players using a simple Markdown syntax editor. You can share game rules with your players and set up passphrase.",
+    "docsDescription": "You can create game documents or rules to share with players using a simple Markdown syntax editor. You can share game rules with your players and set passphrases.",
     "docsTitle": "Documents",
+    "generatorTitle": "Generator",
+    "generatorDescription": "Various random tables, draws, or generators to help you create the content you need in the game. You can add generators to campaigns for convenience or share them with players.",
     "passphrase": "Passphrase",
-    "siteDescription": "A simple tool to help you easily share and manage your tabletop RPG game materials. Assists you in conveniently sharing game information with players. Developed and created by WeiHung.",
+    "siteDescription": "A simple tool that allows you to easily share and manage TRPG game handouts. It helps you conveniently share game information with players. Developed and created by Wei Hung.",
     "welcome": "Welcome to Handouts!"
   },
   "LocaleLayout": {
