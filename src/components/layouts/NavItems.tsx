@@ -15,7 +15,7 @@ const Routers = [
     exact: false,
   },
   {
-    path: "/generator",
+    path: "/generators",
     exact: false,
   }
 ] as const;
