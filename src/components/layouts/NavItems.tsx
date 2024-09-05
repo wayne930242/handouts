@@ -14,6 +14,10 @@ const Routers = [
     path: "/docs",
     exact: false,
   },
+  {
+    path: "/generator",
+    exact: false,
+  }
 ] as const;
 
 export default function NavItems() {

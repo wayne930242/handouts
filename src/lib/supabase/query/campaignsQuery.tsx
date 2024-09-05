@@ -84,6 +84,7 @@ export const getCampaignDetail = (
               id,
               name,
               description,
+              type,
               fields:generator_fields (
                 id,
                 name,
@@ -99,6 +100,7 @@ export const getCampaignDetail = (
           id,
           name,
           description,
+          type,
           fields:generator_fields (
             id,
             name,

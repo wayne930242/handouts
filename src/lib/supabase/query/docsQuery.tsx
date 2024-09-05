@@ -30,13 +30,31 @@ export const getDocInfo = (
           avatar_url
         )
       ),
+      generators:doc_generators (
+        generator:generators (
+          id,
+          name,
+          description,
+          type,
+          fields:generator_fields (
+            id,
+            name,
+            content,
+            order_num
+          )
+        )
+      ),
       favorite:user_doc_favorites!left (
         id,
         added_at
       )
     `
     )
-    .eq("id", docId);
+    .eq("id", docId)
+    .order("order_num", {
+      referencedTable: "doc_generators.generator.generator_fields",
+      ascending: true,
+    });
 
   if (userId) {
     query = query.eq("user_doc_favorites.user_id", userId);

@@ -37,7 +37,7 @@ export type GeneratorField = Pick<
 
 export type Generator = Pick<
   Database["public"]["Tables"]["generators"]["Row"],
-  "id" | "name" | "description"
+  "id" | "name" | "description" | "type"
 > & {
   fields?: GeneratorField[];
 };

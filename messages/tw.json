@@ -195,6 +195,7 @@
     "campaigns": "戰役",
     "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
     "docs": "文件",
+    "generator": "產生器",
     "loggedIn": "已以 {username} 的身份登入",
     "loggedOut": "您已登出。",
     "login": "登入",
