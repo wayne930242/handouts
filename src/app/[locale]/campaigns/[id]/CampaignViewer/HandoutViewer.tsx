@@ -48,7 +48,8 @@ export default function HandoutViewer({ handout }: Props) {
                 })}
                 variant="outline"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setCampaignData(
                     {
                       ...handout,
@@ -66,9 +67,9 @@ export default function HandoutViewer({ handout }: Props) {
                 }}
               >
                 {handout.is_public ? (
-                  <Eye className="h-4 w-4" />
+                  <Eye className="h-5 w-5" />
                 ) : (
-                  <EyeOff className="h-4 w-4" />
+                  <EyeOff className="h-5 w-5" />
                 )}
               </Button>
             )}

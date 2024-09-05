@@ -12,7 +12,6 @@ export default function CampaignViewer() {
   const { campaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
   }));
-  const id = campaignData!.id;
 
   const pathname = usePathname();
 
