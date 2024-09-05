@@ -384,6 +384,73 @@ export type Database = {
         }
         Relationships: []
       }
+      generator_fields: {
+        Row: {
+          content: Json
+          created_at: string | null
+          generator_id: string | null
+          id: string
+          name: string
+          order_num: number
+        }
+        Insert: {
+          content: Json
+          created_at?: string | null
+          generator_id?: string | null
+          id?: string
+          name: string
+          order_num: number
+        }
+        Update: {
+          content?: Json
+          created_at?: string | null
+          generator_id?: string | null
+          id?: string
+          name?: string
+          order_num?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generator_fields_generator_id_fkey"
+            columns: ["generator_id"]
+            isOneToOne: false
+            referencedRelation: "generators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      generators: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generators_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       handout_users: {
         Row: {
           handout_id: string
