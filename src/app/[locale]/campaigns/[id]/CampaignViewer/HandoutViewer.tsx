@@ -34,11 +34,11 @@ export default function HandoutViewer({ handout }: Props) {
     (handout.content || handout.title) && (
       <Wrapper>
         <div
-          className="flex flex-col gap-y-2 w-full h-full p-2 rounded-sm"
+          className="flex flex-col gap-y-2 w-full h-full p-2 rounded-sm bg-muted"
           id={`handout-${handout.id}`}
         >
           <div className="flex gap-2 items-center justify-between">
-            <h3 className="text-lg font-bold grow">{handout.title}</h3>
+            <h3 className="text-lg font-bold grow px-2">{handout.title}</h3>
             {canEdit && (
               <Button
                 className={cn({
