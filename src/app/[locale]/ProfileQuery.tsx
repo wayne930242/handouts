@@ -4,7 +4,7 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getMyProfile } from "@/lib/supabase/query/profileQuery";
 import { useEffect } from "react";
 import { useClient } from "@/lib/supabase/client";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 import useProfileStore from "@/lib/store/useProfileStore";
 
 export default function ProfileQuery() {
@@ -13,8 +13,8 @@ export default function ProfileQuery() {
   }));
 
   const supabase = useClient();
-  const session = useSession();
-  const userId = session?.user?.id;
+  const user = useSessionUser();
+  const userId = user?.id;
 
   const { data: profileData } = useQuery(
     getMyProfile(supabase, userId!),

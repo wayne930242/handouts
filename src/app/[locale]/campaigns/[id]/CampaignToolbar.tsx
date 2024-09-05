@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import CampaignMenu from "./CampaignMenu";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 import { useEffect, useState } from "react";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default function Toolbar({
   isJoined?: boolean;
 }) {
   const supabase = useClient();
-  const session = useSession();
+  const user = useSessionUser();
   const router = useRouter();
   const t = useTranslations("Toolbar");
 
@@ -62,7 +62,7 @@ export default function Toolbar({
 
   const handleAddOrRemoveFavorite = async () => {
     if (!campaignData) return;
-    if (!session?.user?.id) {
+    if (!user?.id) {
       router.push("/login");
       return;
     }
@@ -73,7 +73,7 @@ export default function Toolbar({
         .from("campaign_players")
         .insert({
           campaign_id: campaignData.id,
-          user_id: session.user.id,
+          user_id: user.id,
           role: isOwner ? "OWNER" : "PLAYER",
         })
         .select();
@@ -87,7 +87,7 @@ export default function Toolbar({
         .from("user_campaign_favorites")
         .delete()
         .eq("campaign_id", campaignData.id)
-        .eq("user_id", session.user.id);
+        .eq("user_id", user.id);
       if (!error) {
         setIsLocalFavorite(false);
       }
@@ -96,7 +96,7 @@ export default function Toolbar({
         .from("user_campaign_favorites")
         .insert({
           campaign_id: campaignData.id,
-          user_id: session.user.id,
+          user_id: user.id,
         })
         .select();
       if (!error) {
@@ -108,7 +108,7 @@ export default function Toolbar({
 
   const handleJoinOrLeave = async () => {
     if (!campaignData) return;
-    if (!session?.user?.id) {
+    if (!user?.id) {
       router.push("/login");
       return;
     }
@@ -119,7 +119,7 @@ export default function Toolbar({
         .from("campaign_players")
         .delete()
         .eq("campaign_id", campaignData.id)
-        .eq("user_id", session.user.id);
+        .eq("user_id", user.id);
       if (!error) {
         setIsLocalJoined(false);
       }
@@ -129,7 +129,7 @@ export default function Toolbar({
         .insert({
           campaign_id: campaignData.id,
           role: isOwner ? "OWNER" : "PLAYER",
-          user_id: session.user.id,
+          user_id: user.id,
         })
         .select();
       if (!error) {

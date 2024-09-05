@@ -67,13 +67,13 @@ export default async function CampaignPage({
   }
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const queryClient = new QueryClient();
   await prefetchQuery(
     queryClient,
-    getCampaignDetail(supabase, id, session?.user?.id)
+    getCampaignDetail(supabase, id, user?.id)
   );
 
   return (
@@ -82,7 +82,7 @@ export default async function CampaignPage({
         <Campaign
           campaignId={id}
           isAuthorized={isAuthorized}
-          userId={session?.user?.id}
+          userId={user?.id}
         />
       </HydrationBoundary>
     </PageLayout>

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { advancedRemoveElement } from "@/lib/arrayAction";
 import { Label } from "@/components/ui/label";
 import HandoutsArea from "./HandoutsArea";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 
@@ -36,7 +36,7 @@ const emptyHandout = (
 export default function SectionCard({ section }: Props) {
   const t = useTranslations("SectionCard");
   const supabase = useClient();
-  const session = useSession();
+  const user = useSessionUser();
 
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     setCampaignData: state.setCampaignData,
@@ -121,12 +121,12 @@ export default function SectionCard({ section }: Props) {
               size="sm"
               onClick={(e) => {
                 e.preventDefault();
-                if (!session) return;
+                if (!user) return;
 
                 const newHandout = emptyHandout(
                   section.id as number,
                   (section.handouts?.length ?? 0) + 1,
-                  session.user.id
+                  user.id
                 );
 
                 setCampaignData(newHandout, {}, supabase, "handouts", "INSERT");

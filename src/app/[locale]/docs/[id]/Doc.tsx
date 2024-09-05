@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import useSession from "@/lib/hooks/useSession";
 import Toolbar from "./DocToolbar";
 import useAppStore from "@/lib/store/useAppStore";
 import { PacmanLoader } from "react-spinners";

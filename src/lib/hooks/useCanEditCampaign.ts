@@ -1,11 +1,11 @@
 "use client";
 
 import useCampaignStore from "../store/useCampaignStore";
-import useSession from "./useSession";
+import useSessionUser from "./useSession";
 
 export default function useCanEditCampaign() {
-  const session = useSession();
+  const user = useSessionUser();
   const { campaignData } = useCampaignStore();
 
-  return session?.user?.id === campaignData?.gm_id;
+  return user?.id === campaignData?.gm_id;
 }

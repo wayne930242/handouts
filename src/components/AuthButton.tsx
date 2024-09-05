@@ -13,13 +13,12 @@ import {
 import useProfileStore from "@/lib/store/useProfileStore";
 import { useClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 
 export default function AuthButton() {
   const supabase = useClient();
   const t = useTranslations("LocaleLayout");
-  const session = useSession();
-  const user = session?.user;
+  const user = useSessionUser();
 
   const { profile } = useProfileStore((state) => ({
     profile: state.profile,

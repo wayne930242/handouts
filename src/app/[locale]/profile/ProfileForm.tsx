@@ -22,7 +22,7 @@ import useProfileStore from "@/lib/store/useProfileStore";
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/OverlayLoading";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 
 const FormSchema = z.object({
   display_name: z.string().min(1),
@@ -31,8 +31,8 @@ const FormSchema = z.object({
 
 export default function ProfileForm() {
   const supabase = useClient();
-  const session = useSession();
-  const userId = session?.user?.id;
+  const user = useSessionUser();
+  const userId = user?.id;
 
   const imageManager = new ImageManager({
     maxSizeMB: 0.5,

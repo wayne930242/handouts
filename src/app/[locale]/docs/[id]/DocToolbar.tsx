@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { Doc } from "@/types/interfaces";
 import DocMenu from "./DocMenu";
 import { useClient } from "@/lib/supabase/client";
-import useSession from "@/lib/hooks/useSession";
+import useSessionUser from "@/lib/hooks/useSession";
 import { useRouter } from "next/navigation";
 import FavoriteButton from "@/components/FavoriteButton";
 import OverlayLoading from "@/components/OverlayLoading";
@@ -26,7 +26,7 @@ export default function Toolbar({
 }) {
   const t = useTranslations("Toolbar");
   const supabase = useClient();
-  const session = useSession();
+  const user = useSessionUser();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +48,7 @@ export default function Toolbar({
 
   const handleAddOrRemoveFavorite = async () => {
     if (!doc) return;
-    if (!session?.user?.id) {
+    if (!user?.id) {
       router.push("/login");
       return;
     }
@@ -59,7 +59,7 @@ export default function Toolbar({
         .from("doc_players")
         .insert({
           doc_id: doc.id,
-          user_id: session.user.id,
+          user_id: user.id,
           role: isOwner ? "OWNER" : "PLAYER",
         })
         .select();
@@ -73,7 +73,7 @@ export default function Toolbar({
         .from("user_doc_favorites")
         .insert({
           doc_id: doc.id,
-          user_id: session.user.id,
+          user_id: user.id,
         })
         .select();
       if (!error) {
@@ -84,7 +84,7 @@ export default function Toolbar({
         .from("user_doc_favorites")
         .delete()
         .eq("doc_id", doc.id)
-        .eq("user_id", session.user.id);
+        .eq("user_id", user.id);
       if (!error) {
         setIsLocalFavorite(false);
       }
@@ -94,7 +94,7 @@ export default function Toolbar({
 
   const handleJoinOrLeave = async () => {
     if (!doc) return;
-    if (!session?.user?.id) {
+    if (!user?.id) {
       router.push("/login");
       return;
     }
@@ -105,7 +105,7 @@ export default function Toolbar({
         .from("doc_players")
         .delete()
         .eq("doc_id", doc.id)
-        .eq("user_id", session.user.id);
+        .eq("user_id", user.id);
       if (!error) {
         setIsLocalJoined(false);
       }
@@ -115,7 +115,7 @@ export default function Toolbar({
         .insert({
           doc_id: doc.id,
           role: isOwner ? "OWNER" : "PLAYER",
-          user_id: session.user.id,
+          user_id: user.id,
         })
         .select();
       if (!error) {
