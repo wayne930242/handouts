@@ -72,6 +72,41 @@ export const getCampaignDetail = (
           )
         )
       ),
+      docs:campaign_docs (
+        doc:docs (
+          id,
+          title,
+          description,
+          is_public,
+          content,
+          generators:doc_generators (
+            generator:generators (
+              id,
+              name,
+              description,
+              fields:generator_fields (
+                id,
+                name,
+                content,
+                order_num
+              )
+            )
+          )
+        )
+      ),
+      generators:campaign_generators (
+        generator:generators (
+          id,
+          name,
+          description,
+          fields:generator_fields (
+            id,
+            name,
+            content,
+            order_num
+          )
+        )
+      ),
       favorite:user_campaign_favorites!left (
         id,
         added_at
@@ -90,12 +125,14 @@ export const getCampaignDetail = (
     .order("order_num", {
       referencedTable: "chapters.sections.handouts",
       ascending: true,
+    })
+    .order("order_num", {
+      referencedTable: "campaign_generators.generator.generator_fields",
+      ascending: true,
     });
-
   if (userId) {
     query = query.eq("user_campaign_favorites.user_id", userId);
   }
-
   return query.single();
 };
 

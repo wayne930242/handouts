@@ -6,10 +6,19 @@ export type MySupabaseClient = SupabaseClient<Database>;
 
 export type Locale = (typeof locales)[number];
 
-export type FullCampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'>
-export type CampaignData = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'passphrase' | 'created_at'>
+export type FullCampaignData = Omit<
+  Database["public"]["Tables"]["campaigns"]["Row"],
+  "created_at"
+>;
+export type CampaignData = Omit<
+  Database["public"]["Tables"]["campaigns"]["Row"],
+  "passphrase" | "created_at"
+>;
 
-export type Profile = Pick<Database["public"]["Tables"]["profiles"]["Row"], 'id' | 'display_name' | 'avatar_url'>;
+export type Profile = Pick<
+  Database["public"]["Tables"]["profiles"]["Row"],
+  "id" | "display_name" | "avatar_url"
+>;
 
 export type Player = {
   role: string;
@@ -21,28 +30,61 @@ type Favorite = {
   added_at: string | null;
 };
 
-export type Campaign = Omit<Database["public"]["Tables"]["campaigns"]["Row"], 'created_at'> & {
+export type GeneratorField = Pick<
+  Database["public"]["Tables"]["generator_fields"]["Row"],
+  "id" | "name" | "content" | "order_num"
+>;
+
+export type Generator = Pick<
+  Database["public"]["Tables"]["generators"]["Row"],
+  "id" | "name" | "description"
+> & {
+  fields?: GeneratorField[];
+};
+
+export type CampaignDoc = Pick<
+  Database["public"]["Tables"]["docs"]["Row"],
+  "id" | "title" | "description" | "is_public" | "content"
+> & {
+  generators: {
+    generator: Generator | null;
+  }[];
+};
+
+export type Campaign = Omit<
+  Database["public"]["Tables"]["campaigns"]["Row"],
+  "created_at"
+> & {
   gm: Profile | null;
   players: Player[];
   chapters: Chapter[];
   favorite: Favorite[];
+  docs: {
+    doc: CampaignDoc | null;
+  }[];
+  generators: {
+    generator: Generator | null;
+  }[];
 };
 
 export type Chapter = ChapterData & {
   sections: Section[];
-}
+};
 
 export type Section = SectionData & {
   handouts: Handout[];
-}
+};
 
-export type Handout = HandoutData
+export type Handout = HandoutData;
 
-export type ChapterData = Database["public"]["Tables"]["chapters"]["Row"]
+export type ChapterData = Database["public"]["Tables"]["chapters"]["Row"];
 
-export type SectionData = Database["public"]["Tables"]["sections"]["Row"]
+export type SectionData = Database["public"]["Tables"]["sections"]["Row"];
 
-export type HandoutData = Omit<Database["public"]["Tables"]["handouts"]["Row"], 'updated_at' | 'created_at'>
+export type HandoutData = Omit<
+  Database["public"]["Tables"]["handouts"]["Row"],
+  "updated_at" | "created_at"
+>;
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
@@ -65,8 +107,14 @@ export type CampaignSubTable =
   | "handouts";
 
 export type CampaignTableDataPayload =
-  | CampaignData | ChapterData | SectionData | HandoutData
-  | Omit<CampaignData, 'id'> | Omit<ChapterData, 'id'> | Omit<SectionData, 'id'> | Omit<HandoutData, 'id'>
+  | CampaignData
+  | ChapterData
+  | SectionData
+  | HandoutData
+  | Omit<CampaignData, "id">
+  | Omit<ChapterData, "id">
+  | Omit<SectionData, "id">
+  | Omit<HandoutData, "id">
   | Array<ChapterData | SectionData | HandoutData>;
 
 export type SetCampaignDataPayload = (
@@ -145,7 +193,9 @@ export interface AppStore {
   editingDoc: boolean;
   setEditingDoc: (editingDoc: boolean) => void;
   addPassphraseDialog: PassphraseDialogKey | null;
-  setAddPassphraseDialog: (passphraseDialog: PassphraseDialogKey | null) => void;
+  setAddPassphraseDialog: (
+    passphraseDialog: PassphraseDialogKey | null
+  ) => void;
   confirmDialog: ConfirmDialogData | null;
   setConfirmDialog: (confirmDialog: ConfirmDialogData | null) => void;
   isLoading: boolean;
@@ -199,7 +249,7 @@ export interface Session {
   expires_in: number;
   expires_at: number;
   refresh_token: string;
-  user: User
+  user: User;
 }
 
 // Docs Data

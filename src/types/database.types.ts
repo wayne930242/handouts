@@ -9,6 +9,105 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bundle_generators: {
+        Row: {
+          bundle_id: string
+          created_at: string | null
+          generator_id: string
+        }
+        Insert: {
+          bundle_id: string
+          created_at?: string | null
+          generator_id: string
+        }
+        Update: {
+          bundle_id?: string
+          created_at?: string | null
+          generator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bundle_generators_bundle_id_fkey"
+            columns: ["bundle_id"]
+            isOneToOne: false
+            referencedRelation: "generator_bundles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bundle_generators_generator_id_fkey"
+            columns: ["generator_id"]
+            isOneToOne: false
+            referencedRelation: "generators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_docs: {
+        Row: {
+          campaign_id: string
+          created_at: string | null
+          doc_id: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string | null
+          doc_id: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string | null
+          doc_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_docs_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_docs_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_generators: {
+        Row: {
+          campaign_id: string
+          created_at: string | null
+          generator_id: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string | null
+          generator_id: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string | null
+          generator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_generators_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_generators_generator_id_fkey"
+            columns: ["generator_id"]
+            isOneToOne: false
+            referencedRelation: "generators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign_players: {
         Row: {
           campaign_id: string
@@ -280,6 +379,39 @@ export type Database = {
           },
         ]
       }
+      doc_generators: {
+        Row: {
+          created_at: string | null
+          doc_id: string
+          generator_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          doc_id: string
+          generator_id: string
+        }
+        Update: {
+          created_at?: string | null
+          doc_id?: string
+          generator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doc_generators_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doc_generators_generator_id_fkey"
+            columns: ["generator_id"]
+            isOneToOne: false
+            referencedRelation: "generators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doc_players: {
         Row: {
           doc_id: string
@@ -327,6 +459,7 @@ export type Database = {
           owner_id: string | null
           passphrase: string | null
           title: string
+          type: string
           updated_at: string | null
         }
         Insert: {
@@ -339,6 +472,7 @@ export type Database = {
           owner_id?: string | null
           passphrase?: string | null
           title: string
+          type?: string
           updated_at?: string | null
         }
         Update: {
@@ -351,6 +485,7 @@ export type Database = {
           owner_id?: string | null
           passphrase?: string | null
           title?: string
+          type?: string
           updated_at?: string | null
         }
         Relationships: [
@@ -383,6 +518,41 @@ export type Database = {
           purpose?: string
         }
         Relationships: []
+      }
+      generator_bundles: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          type?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generator_bundles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       generator_fields: {
         Row: {
