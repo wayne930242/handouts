@@ -63,7 +63,8 @@ const ImageUploadFormItem: React.FC<Props> = ({
       />
       <div
         className={cn("relative flex justify-center items-center", {
-          "h-72 w-full border border-border p-2 rounded-sm": type === "banner",
+          "w-full border border-border p-2 rounded-sm aspect-[24/9]":
+            type === "banner",
           "h-36 w-36 rounded-full": type === "avatar",
         })}
       >

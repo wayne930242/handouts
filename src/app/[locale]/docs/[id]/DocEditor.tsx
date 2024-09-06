@@ -1,12 +1,17 @@
 "use client";
-import { toast } from "@/components/ui/use-toast";
 import { Doc } from "@/types/interfaces";
-import ImageManager from "@/lib/ImageManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { useRouter } from "@/navigation";
+import ImageManager from "@/lib/ImageManager";
+import { useClient } from "@/lib/supabase/client";
+import usePreventLeave from "@/lib/hooks/usePreventLeave";
+
+import { toast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -19,9 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
-import { useClient } from "@/lib/supabase/client";
 import ImageUploadFormItem from "@/components/ImageUploadFormItem";
-import usePreventLeave from "@/lib/hooks/usePreventLeave";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),
@@ -33,6 +36,8 @@ const formSchema = z.object({
 export default function DocEditor({ doc, callback }: Props) {
   const supabase = useClient();
   const t = useTranslations("DocEditor");
+
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -157,6 +162,7 @@ export default function DocEditor({ doc, callback }: Props) {
             variant="destructive"
             onClick={() => {
               form.reset();
+              router.push("/docs");
             }}
           >
             {t("cancel")}

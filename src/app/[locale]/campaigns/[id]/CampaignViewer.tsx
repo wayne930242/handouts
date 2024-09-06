@@ -43,7 +43,7 @@ export default function CampaignViewer() {
       <div className="flex flex-col gap-y-2 w-full my-2 px-2">
         <div className="flex w-full px-2 flex-col gap-y-6 mb-4 border-b border-border">
           {campaignData?.banner_url && (
-            <div className="w-full relative h-52">
+            <div className="w-full relative aspect-[24/9]">
               <Image
                 src={campaignData.banner_url}
                 alt={campaignData.name}
