@@ -87,7 +87,8 @@ export const getMyDocs = (supabase: MySupabaseClient, userId: string) => {
       doc_players!inner (user_id)
     `
     )
-    .eq("doc_players.user_id", userId);
+    .eq("doc_players.user_id", userId)
+    .neq("owner_id", userId);
 };
 
 export const getMyFavDocs = (supabase: MySupabaseClient, userId: string) => {

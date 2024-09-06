@@ -21,6 +21,7 @@ const CardsArea = ({
   children: React.ReactNode;
   hidden?: boolean;
 }) => {
+  console.log(children);
   return (
     <div className={cn("w-full flex flex-col gap-2 py-4", { hidden })}>
       <h2 className="text-2xl font-bold">{title}</h2>

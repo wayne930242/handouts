@@ -39,7 +39,7 @@ export default function Docs({ userId }: Props) {
   const t = useTranslations("DocsPage");
   const supabase = useClient();
 
-  const { data: docs, isFetching: isFetchingOwnedDocs } = useQuery(
+  const { data: ownedDoc, isFetching: isFetchingOwnedDocs } = useQuery(
     getDocsByOwnerId(supabase, userId)
   );
   const { data: favoriteDocs, isFetching: isFetchingFavoriteDocs } = useQuery(
@@ -48,8 +48,8 @@ export default function Docs({ userId }: Props) {
   const { data: myDocs, isFetching: isFetchingMyDocs } = useQuery(
     getMyDocs(supabase, userId)
   );
-  const isFetching = isFetchingOwnedDocs;
-  const hasData = !!(docs?.length || favoriteDocs?.length || myDocs?.length);
+  const isFetching = isFetchingOwnedDocs || isFetchingFavoriteDocs || isFetchingMyDocs;
+  const hasData = !!(ownedDoc?.length || favoriteDocs?.length || myDocs?.length);
 
   return isFetching ? (
     <main className="flex flex-col items-center justify-center h-96">
@@ -62,17 +62,17 @@ export default function Docs({ userId }: Props) {
     </main>
   ) : (
     <main className="grid grid-cols-1 divide-y gap-y-4">
-      <CardsArea title={t("myFavorites")} hidden={!docs?.length}>
+      <CardsArea title={t("myFavorites")} hidden={!favoriteDocs?.length}>
         {favoriteDocs?.map((doc) => (
           <DocCard doc={doc} key={doc.id} />
         ))}
       </CardsArea>
-      <CardsArea title={t("ownedDocs")} hidden={!docs?.length}>
-        {docs?.map((doc) => (
+      <CardsArea title={t("ownedDocs")} hidden={!ownedDoc?.length}>
+        {ownedDoc?.map((doc) => (
           <DocCard doc={doc} key={doc.id} />
         ))}
       </CardsArea>
-      <CardsArea title={t("myDocs")} hidden={!docs?.length}>
+      <CardsArea title={t("myDocs")} hidden={!myDocs?.length}>
         {myDocs?.map((doc) => (
           <DocCard doc={doc} key={doc.id} />
         ))}

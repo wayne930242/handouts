@@ -5,7 +5,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import {
+  useInsertMutation,
+  useQuery,
+  useUpdateMutation,
+} from "@supabase-cache-helpers/postgrest-react-query";
 
 import {
   Form,
@@ -43,7 +47,6 @@ export default function DocForm({
   const t = useTranslations("DocForm");
   const supabase = useClient();
 
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id), {
     enabled: id !== "new",
@@ -70,12 +73,24 @@ export default function DocForm({
     });
   }, [docInfo, reset]);
 
+  const { mutateAsync: createDoc, isPending: isCreating } = useInsertMutation(
+    supabase.from("docs"),
+    ["title", "owner_id", "description", "passphrase", "is_public"],
+    "id"
+  );
+
+  const { mutateAsync: updateDoc, isPending: isUpdating } = useUpdateMutation(
+    supabase.from("docs"),
+    ["title", "owner_id", "description", "passphrase", "is_public"],
+    "id"
+  );
+  const isLoading = isCreating || isUpdating;
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
-    setIsLoading(true);
     switch (id) {
       case "new":
-        const { error: createError } = await supabase.from("docs").insert([
+        await createDoc([
           {
             title: data.title,
             owner_id: userId,
@@ -83,34 +98,26 @@ export default function DocForm({
             passphrase: data.passphrase,
             is_public: data.is_public,
           },
-        ]);
-
-        if (createError) {
-          errorMessage = createError.message;
-        }
+        ]).catch((e) => {
+          errorMessage = e.message;
+        });
         break;
       default:
         if (!id) {
           errorMessage = "Campaign ID is required";
           break;
         }
-        const { error: updateError } = await supabase
-          .from("docs")
-          .update({
-            id,
-            owner_id: userId,
-            title: data.title,
-            is_public: data.is_public,
-            description: data.description,
-            passphrase: data.passphrase,
-          })
-          .eq("id", id);
-
-        if (updateError) {
-          errorMessage = updateError.message;
-        }
+        await updateDoc({
+          id,
+          owner_id: userId,
+          title: data.title,
+          is_public: data.is_public,
+          description: data.description,
+          passphrase: data.passphrase,
+        }).catch((e) => {
+          errorMessage = e.message;
+        });
     }
-    setIsLoading(false);
 
     if (errorMessage) {
       toast({

@@ -1,17 +1,23 @@
 "use client";
-import { PacmanLoader } from "react-spinners";
-import { Button } from "@/components/ui/button";
-import useAppStore from "@/lib/store/useAppStore";
-import { Eye, Pen, Unplug } from "lucide-react";
-import useCampaignStore from "@/lib/store/useCampaignStore";
-import { Badge } from "@/components/ui/badge";
-import { useClient } from "@/lib/supabase/client";
-import { useTranslations } from "next-intl";
-import CampaignMenu from "./CampaignMenu";
-import useSessionUser from "@/lib/hooks/useSession";
 import { useEffect, useState } from "react";
+import { PacmanLoader } from "react-spinners";
+import { Eye, Pen, Unplug } from "lucide-react";
+import { useTranslations } from "next-intl";
+import {
+  useDeleteMutation,
+  useInsertMutation,
+} from "@supabase-cache-helpers/postgrest-react-query";
+
+import useAppStore from "@/lib/store/useAppStore";
+import { useClient } from "@/lib/supabase/client";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+import useSessionUser from "@/lib/hooks/useSession";
+import { useRouter } from "@/navigation";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import CampaignMenu from "./CampaignMenu";
 import OverlayLoading from "@/components/OverlayLoading";
-import { useRouter } from "next/navigation";
 import FavoriteButton from "@/components/FavoriteButton";
 
 export default function Toolbar({
@@ -30,7 +36,6 @@ export default function Toolbar({
   const router = useRouter();
   const t = useTranslations("Toolbar");
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isLocalJoined, setIsLocalJoined] = useState(false);
   const [isLocalFavorite, setIsLocalFavorite] = useState(false);
 
@@ -60,50 +65,67 @@ export default function Toolbar({
     loading: state.loading,
   }));
 
+  const { mutateAsync: joinCampaign, isPending: isJoining } = useInsertMutation(
+    supabase.from("campaign_players"),
+    ["campaign_id", "user_id"],
+    "campaign_id"
+  );
+  const { mutateAsync: leaveCampaign, isPending: isLeaving } =
+    useDeleteMutation(
+      supabase.from("campaign_players"),
+      ["campaign_id", "user_id"],
+      "campaign_id"
+    );
+  const { mutateAsync: addFavorite, isPending: isFavoriting } =
+    useInsertMutation(
+      supabase.from("user_campaign_favorites"),
+      ["campaign_id", "user_id"],
+      "campaign_id"
+    );
+  const { mutateAsync: removeFavorite, isPending: isUnfavoriting } =
+    useDeleteMutation(
+      supabase.from("user_campaign_favorites"),
+      ["campaign_id", "user_id"],
+      "campaign_id"
+    );
+  const isLoading = isJoining || isLeaving || isFavoriting || isUnfavoriting;
+
   const handleAddOrRemoveFavorite = async () => {
     if (!campaignData) return;
     if (!user?.id) {
       router.push("/login");
       return;
     }
-    setIsLoading(true);
 
     if (!isLocalJoined && !isLocalFavorite) {
-      const { error } = await supabase
-        .from("campaign_players")
-        .insert({
+      await joinCampaign([
+        {
           campaign_id: campaignData.id,
           user_id: user.id,
           role: isOwner ? "OWNER" : "PLAYER",
-        })
-        .select();
-      if (!error) {
+        },
+      ]).then(() => {
         setIsLocalJoined(true);
-      }
+      });
     }
 
     if (isLocalFavorite) {
-      const { error } = await supabase
-        .from("user_campaign_favorites")
-        .delete()
-        .eq("campaign_id", campaignData.id)
-        .eq("user_id", user.id);
-      if (!error) {
+      await removeFavorite({
+        campaign_id: campaignData.id,
+        user_id: user.id,
+      }).then(() => {
         setIsLocalFavorite(false);
-      }
+      });
     } else {
-      const { error } = await supabase
-        .from("user_campaign_favorites")
-        .insert({
+      await addFavorite([
+        {
           campaign_id: campaignData.id,
           user_id: user.id,
-        })
-        .select();
-      if (!error) {
+        },
+      ]).then(() => {
         setIsLocalFavorite(true);
-      }
+      });
     }
-    setIsLoading(false);
   };
 
   const handleJoinOrLeave = async () => {
@@ -112,31 +134,24 @@ export default function Toolbar({
       router.push("/login");
       return;
     }
-    setIsLoading(true);
-
     if (isLocalJoined) {
-      const { error } = await supabase
-        .from("campaign_players")
-        .delete()
-        .eq("campaign_id", campaignData.id)
-        .eq("user_id", user.id);
-      if (!error) {
+      await leaveCampaign({
+        campaign_id: campaignData.id,
+        user_id: user.id,
+      }).then(() => {
         setIsLocalJoined(false);
-      }
+      });
     } else {
-      const { error } = await supabase
-        .from("campaign_players")
-        .insert({
+      await joinCampaign([
+        {
           campaign_id: campaignData.id,
           role: isOwner ? "OWNER" : "PLAYER",
           user_id: user.id,
-        })
-        .select();
-      if (!error) {
+        },
+      ]).then(() => {
         setIsLocalJoined(true);
-      }
+      });
     }
-    setIsLoading(false);
   };
 
   return (

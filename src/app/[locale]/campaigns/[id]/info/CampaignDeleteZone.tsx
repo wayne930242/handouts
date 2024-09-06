@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/OverlayLoading";
+import { useDeleteMutation } from "@supabase-cache-helpers/postgrest-react-query";
 
 const FormSchema = z.object({
   campaign_id: z.string().min(1, "formValidation.required"),
@@ -45,6 +46,12 @@ export default function CampaignDeleteZone({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const { mutateAsync: deleteCampaign } = useDeleteMutation(
+    supabase.from("campaigns"),
+    ["id"],
+    "id"
+  );
+
   const { setConfirm } = useConfirmDialog(
     async (data: z.infer<typeof FormSchema>) => {
       if (data.campaign_id === campaignId) {
@@ -54,7 +61,10 @@ export default function CampaignDeleteZone({
             "campaigns",
             data.campaign_id
           );
-          await supabase.from("campaigns").delete().eq("id", data.campaign_id);
+          await deleteCampaign({
+            id: data.campaign_id,
+          });
+
           toast({
             title: t("successTitle"),
             description: t("successDescription"),

@@ -184,7 +184,8 @@ export const getMyCampaigns = (supabase: MySupabaseClient, userId: string) => {
       campaign_players!inner (user_id)
     `
     )
-    .eq("campaign_players.user_id", userId);
+    .eq("campaign_players.user_id", userId)
+    .neq("gm_id", userId);
 };
 
 export const getMyFavCampaigns = (
