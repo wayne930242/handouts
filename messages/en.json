@@ -190,7 +190,7 @@
     "generatorTitle": "Generator",
     "generatorDescription": "Various random tables, draws, or generators to help you create the content you need in the game. You can add generators to campaigns for convenience or share them with players.",
     "passphrase": "Passphrase",
-    "siteDescription": "A simple tool that allows you to easily share and manage TRPG game handouts. It helps you conveniently share game information with players. Developed and created by Wei Hung.",
+    "siteDescription": "A simple tool that allows you to easily share and manage TTRPG game handouts. It helps you conveniently share game information with players. Developed and created by Wei Hung.",
     "welcome": "Welcome to Handouts!"
   },
   "LocaleLayout": {
@@ -207,7 +207,7 @@
     "secret": "Secret page for logged in users",
     "signup": "Sign up",
     "subscriptions": "Subscriptions",
-    "title": "Handouts - a TRPG tool by WeiHung",
+    "title": "Handouts - a TTRPG tool by WeiHung",
     "welcome": "Welcome"
   },
   "LocaleSwitcher": {
