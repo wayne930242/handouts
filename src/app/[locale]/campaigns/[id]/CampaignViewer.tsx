@@ -60,7 +60,7 @@ export default function CampaignViewer() {
               {campaignData?.name}
             </h1>
             {campaignData?.description && (
-              <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
+              <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground text-center">
                 {campaignData?.description}
               </Markdown>
             )}

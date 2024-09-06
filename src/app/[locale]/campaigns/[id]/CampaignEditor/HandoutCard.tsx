@@ -45,6 +45,7 @@ import { Handout } from "@/types/interfaces";
 import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
+import usePreventLeave from "@/lib/hooks/usePreventLeave";
 
 const ImageEditor = dynamic(() => import("./ContentEditor/ImageEditor"), {
   ssr: false,
@@ -91,6 +92,11 @@ export default function HandoutCard({ handout, chapterId }: Props) {
       note: handout.note ?? undefined,
     },
   });
+
+  const {
+    formState: { isDirty },
+  } = form;
+  usePreventLeave(isDirty, t("leaveAlert"));
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setCampaignData(
@@ -327,7 +333,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
           </Collapsible>
 
           <div className="flex justify-end p-4">
-            {form.formState.isDirty && (
+            {isDirty && (
               <div className="text-sm text-destructive">
                 {t("unsavedChanges")}
               </div>

@@ -17,7 +17,7 @@ export default function DocViewer({ doc }: Props) {
       <Toc sourceId="doc-toc" id="toc" />
       <div className="flex flex-col gap-y-2 w-full grow">
         {doc.banner_url && (
-          <div className="relative aspect-[32/9] w-full">
+          <div className="relative aspect-[24/9] w-full">
             <Image
               className="object-cover"
               src={doc.banner_url}
@@ -31,7 +31,7 @@ export default function DocViewer({ doc }: Props) {
         )}
         <div className="flex flex-col gap-y-2 w-full">
           <h1 className="text-4xl font-bold text-center py-2">{doc.title}</h1>
-          <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
+          <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground text-center">
             {doc.description}
           </Markdown>
           <Markdown

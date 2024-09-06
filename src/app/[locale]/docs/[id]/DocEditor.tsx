@@ -21,6 +21,7 @@ import MyMDXEditor from "@/components/MyMDXEditor";
 import OverlayLoading from "@/components/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
 import ImageUploadFormItem from "@/components/ImageUploadFormItem";
+import usePreventLeave from "@/lib/hooks/usePreventLeave";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),
@@ -46,6 +47,12 @@ export default function DocEditor({ doc, callback }: Props) {
       content: doc.content ?? undefined,
     },
   });
+
+  const {
+    formState: { isDirty },
+  } = form;
+
+  usePreventLeave(isDirty, t("leaveAlert"));
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (file) {
@@ -78,9 +85,9 @@ export default function DocEditor({ doc, callback }: Props) {
         description: t("successDescription"),
       });
       callback?.();
+      form.reset();
     }
   };
-  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <Form {...form}>
@@ -161,6 +168,13 @@ export default function DocEditor({ doc, callback }: Props) {
           >
             {t("save")}
           </Button>
+        </div>
+        <div className="flex justify-end p-4">
+          {isDirty && (
+            <div className="text-sm text-destructive">
+              {t("unsavedChanges")}
+            </div>
+          )}
         </div>
       </form>
       {isLoading && <OverlayLoading />}
