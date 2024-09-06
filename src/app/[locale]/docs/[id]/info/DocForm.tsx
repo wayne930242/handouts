@@ -75,14 +75,12 @@ export default function DocForm({
 
   const { mutateAsync: createDoc, isPending: isCreating } = useInsertMutation(
     supabase.from("docs"),
-    ["title", "owner_id", "description", "passphrase", "is_public"],
-    "id"
+    ["id"],
   );
 
   const { mutateAsync: updateDoc, isPending: isUpdating } = useUpdateMutation(
     supabase.from("docs"),
-    ["title", "owner_id", "description", "passphrase", "is_public"],
-    "id"
+    ["id"],
   );
   const isLoading = isCreating || isUpdating;
 

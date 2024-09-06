@@ -49,7 +49,6 @@ export default function CampaignDeleteZone({
   const { mutateAsync: deleteCampaign } = useDeleteMutation(
     supabase.from("campaigns"),
     ["id"],
-    "id"
   );
 
   const { setConfirm } = useConfirmDialog(

@@ -45,7 +45,6 @@ export default function DocDeleteZone({ docId }: { docId: string }) {
   const { mutateAsync: deleteDoc } = useDeleteMutation(
     supabase.from("docs"),
     ["id"],
-    "id"
   );
 
   const { setConfirm } = useConfirmDialog(

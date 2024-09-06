@@ -67,27 +67,23 @@ export default function Toolbar({
 
   const { mutateAsync: joinCampaign, isPending: isJoining } = useInsertMutation(
     supabase.from("campaign_players"),
-    ["campaign_id", "user_id"],
-    "campaign_id"
+    ["campaign_id", "user_id"]
   );
   const { mutateAsync: leaveCampaign, isPending: isLeaving } =
-    useDeleteMutation(
-      supabase.from("campaign_players"),
-      ["campaign_id", "user_id"],
-      "campaign_id"
-    );
+    useDeleteMutation(supabase.from("campaign_players"), [
+      "campaign_id",
+      "user_id",
+    ]);
   const { mutateAsync: addFavorite, isPending: isFavoriting } =
-    useInsertMutation(
-      supabase.from("user_campaign_favorites"),
-      ["campaign_id", "user_id"],
-      "campaign_id"
-    );
+    useInsertMutation(supabase.from("user_campaign_favorites"), [
+      "campaign_id",
+      "user_id",
+    ]);
   const { mutateAsync: removeFavorite, isPending: isUnfavoriting } =
-    useDeleteMutation(
-      supabase.from("user_campaign_favorites"),
-      ["campaign_id", "user_id"],
-      "campaign_id"
-    );
+    useDeleteMutation(supabase.from("user_campaign_favorites"), [
+      "campaign_id",
+      "user_id",
+    ]);
   const isLoading = isJoining || isLeaving || isFavoriting || isUnfavoriting;
 
   const handleAddOrRemoveFavorite = async () => {

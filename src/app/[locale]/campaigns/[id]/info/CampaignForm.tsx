@@ -19,7 +19,11 @@ import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
-import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import {
+  useInsertMutation,
+  useQuery,
+  useUpdateMutation,
+} from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { useEffect, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
@@ -77,6 +81,15 @@ export default function CampaignForm({
     });
   }, [campaignInfo, reset]);
 
+  const { mutateAsync: createCampaig } = useInsertMutation(
+    supabase.from("campaigns"),
+    ["id"]
+  );
+  const { mutateAsync: updateCampaign } = useUpdateMutation(
+    supabase.from("campaigns"),
+    ["id"]
+  );
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
     setIsLoading(true);
@@ -88,44 +101,34 @@ export default function CampaignForm({
 
     switch (id) {
       case "new":
-        const { data: _data, error: createError } = await supabase
-          .from("campaigns")
-          .insert([
-            {
-              gm_id: userId,
-              name: data.name,
-              description: data.description,
-              passphrase: data.passphrase,
-              banner_url: data.banner_url,
-              status: "ACTIVE",
-            },
-          ])
-          .select("id")
-          .single();
-        if (createError) {
-          errorMessage = createError.message;
-        }
+        await createCampaig([
+          {
+            gm_id: userId,
+            name: data.name,
+            description: data.description,
+            passphrase: data.passphrase,
+            banner_url: data.banner_url,
+            status: "ACTIVE",
+          },
+        ]).catch((e) => {
+          errorMessage = e.message;
+        });
         break;
       default:
         if (!id) {
           errorMessage = "Campaign ID is required";
           break;
         }
-        const { error: updateError } = await supabase
-          .from("campaigns")
-          .update({
-            id,
-            gm_id: userId,
-            name: data.name,
-            description: data.description,
-            passphrase: data.passphrase,
-            banner_url: data.banner_url,
-          })
-          .eq("id", id);
-
-        if (updateError) {
-          errorMessage = updateError.message;
-        }
+        await updateCampaign({
+          id,
+          gm_id: userId,
+          name: data.name,
+          description: data.description,
+          passphrase: data.passphrase,
+          banner_url: data.banner_url,
+        }).catch((e) => {
+          errorMessage = e.message;
+        });
     }
 
     setIsLoading(false);
