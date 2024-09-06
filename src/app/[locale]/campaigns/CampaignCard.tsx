@@ -15,6 +15,7 @@ import { Settings } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 import Markdown from "react-markdown";
+import { getBannerUrl } from "@/lib/bannerUrl";
 
 export default function CampaignCard({
   campaign,
@@ -39,17 +40,15 @@ export default function CampaignCard({
           <Settings className="h-5 w-5" />
         </Link>
       </CardHeader>
-      <CardContent className="grow relative h-32 overflow-hidden">
-        {campaign.banner_url && (
-          <Image
-            className="object-cover"
-            src={campaign.banner_url}
-            alt={campaign.name}
-            loader={({ src }) => src}
-            unoptimized
-            fill
-          />
-        )}
+      <CardContent className="grow relative overflow-hidden aspect-[24/9]">
+        <Image
+          className="object-cover"
+          src={campaign.banner_url ?? getBannerUrl(campaign.id)}
+          alt={campaign.name}
+          loader={({ src }) => src}
+          unoptimized
+          fill
+        />
       </CardContent>
       <CardContent className="grow px-4 pt-2">
         <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
