@@ -30,11 +30,12 @@ export default function NavItems() {
         href="/"
         className="flex items-center gap-1 text-2xl font-bold grow-0 shrink-0 whitespace-nowrap"
       >
-        Handouts
+        RpgHandouts
         <Badge variant="destructive">BETA</Badge>
       </Link>
       {Routers.map(({ path, exact }) => (
         <MenubarItem
+          className="whitespace-nowrap"
           key={path}
           href={path}
           isActive={exact ? pathname === path : pathname.startsWith(path)}

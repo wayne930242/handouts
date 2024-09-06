@@ -193,12 +193,12 @@
     "generatorDescription": "各種各樣的亂數表、抽籤或是產生器，方便你在遊戲中產生所需要的內容。你可以將產生器加入戰役方便使用，或和玩家分享。",
     "generatorTitle": "產生器",
     "passphrase": "通關密語",
-    "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。由洪偉開發製作。",
-    "welcome": "歡迎使用 Handouts！"
+    "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。",
+    "welcome": "歡迎使用 RpgHandouts"
   },
   "LocaleLayout": {
     "campaigns": "戰役",
-    "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的簡單工具。由洪偉開發製作。",
+    "description": "一個讓你方便分享、管理 TRPG 遊戲的手邊資料的工具。",
     "docs": "文件",
     "generators": "產生器",
     "loggedIn": "已以 {username} 的身份登入",
@@ -210,7 +210,7 @@
     "secret": "已登入用戶的秘密頁面",
     "signup": "註冊",
     "subscriptions": "訂閱",
-    "title": "Handouts - a TRPG tool by WeiHung",
+    "title": "RpgHandouts - a TRPG tool by WeiHung",
     "welcome": "歡迎"
   },
   "LocaleSwitcher": {

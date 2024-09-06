@@ -16,7 +16,7 @@ export default async function Index({ params: { locale } }: Props) {
   return (
     <PageLayout>
       <div className="flex flex-col items-center">
-        <Hero imageClassName="object-top" />
+        <Hero />
       </div>
 
       <div className="flex flex-col items-center pt-6">

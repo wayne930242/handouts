@@ -6,23 +6,23 @@ export default function Features() {
   const t = useTranslations("Index");
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full min-h-64">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full min-h-64 auto-rows-fr">
       <FeatureCard
         title={t("campaignsTitle")}
         description={t("campaignsDescription")}
-        icon={<Swords className="h-12 w-12" />}
+        icon={<Swords className="h-8 w-8" />}
         href="/campaigns"
       />
       <FeatureCard
         title={t("docsTitle")}
         description={t("docsDescription")}
-        icon={<BookHeart className="h-12 w-12" />}
+        icon={<BookHeart className="h-8 w-8" />}
         href="/docs"
       />
       <FeatureCard
         title={t("generatorTitle")}
         description={t("generatorDescription")}
-        icon={<Dices className="h-12 w-12" />}
+        icon={<Dices className="h-8 w-8" />}
         href="/generator"
       />
     </div>

@@ -8,4 +8,4 @@
 
 ## Demo
 
-- The site is deploy on [Weihung's ShareHandouts](https://handouts.wayneh.tw/)
+- The site is deploy on [Weihung's RpgHandouts](https://handouts.wayneh.tw/)

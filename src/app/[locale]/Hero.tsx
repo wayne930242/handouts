@@ -10,7 +10,7 @@ export default function Hero({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 w-full">
-      <div className={cn("w-full relative h-72", containerClassName)}>
+      <div className={cn("w-full relative aspect-[16/9] max-h-72", containerClassName)}>
         <Image
           src="/img/og-img.webp"
           alt="Handouts"

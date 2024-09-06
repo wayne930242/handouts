@@ -20,10 +20,10 @@ export default function FeatureCard({
     : (props: any) => <Fragment>{props.children}</Fragment>;
 
   return (
-    <Wrapper href={href!}>
+    <Wrapper href={href!} className="h-full">
       <Card
         className={cn(
-          "flex flex-col gap-y-1 w-full min-h-48 bg-accent text-accent-foreground hover:bg-accent/60",
+          "flex flex-col gap-y-1 w-full min-h-36 border-border hover:bg-accent/60 h-full",
           {
             "cursor-pointer": href,
           }
@@ -31,7 +31,7 @@ export default function FeatureCard({
       >
         <CardHeader>
           <div className="flex justify-center w-full">{icon}</div>
-          <CardTitle className="w-full text-center">{title}</CardTitle>
+          <CardTitle className="w-full text-center text-xl">{title}</CardTitle>
         </CardHeader>
         <CardContent className="grow">
           <CardDescription>{description}</CardDescription>
