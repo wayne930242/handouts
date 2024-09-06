@@ -23,7 +23,7 @@ export default function Features() {
         title={t("generatorTitle")}
         description={t("generatorDescription")}
         icon={<Dices className="h-8 w-8" />}
-        href="/generator"
+        href="/generators"
       />
     </div>
   );
