@@ -13,12 +13,12 @@ export default function SectionViewer({ section }: Props) {
   return section.handouts?.length ? (
     <Card id={`handout-section-${section.id}`}>
       {section.title && (
-        <CardHeader className="pb-1 pt-2">
+        <CardHeader className="pb-1 pt-2 px-1">
           <CardTitle className="text-center text-xl">{section.title}</CardTitle>
         </CardHeader>
       )}
       <CardContent
-        className={cn("flex flex-col gap-y-2")}
+        className={cn("flex flex-col gap-y-2 px-0 pb-1")}
       >
         {
           section.handouts?.length &&

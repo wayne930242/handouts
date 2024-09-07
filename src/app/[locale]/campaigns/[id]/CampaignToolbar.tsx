@@ -51,19 +51,12 @@ export default function Toolbar({
     editingCampaign: state.editingCampaign,
     setEditingCampaign: state.setEditingCampaign,
   }));
-  const {
-    campaignData,
-    connected,
-    setupRealtimeSubscription,
-    resetConnectedAttempts,
-    loading,
-  } = useCampaignStore((state) => ({
-    campaignData: state.campaignData,
-    connected: state.connected,
-    setupRealtimeSubscription: state.setupRealtimeSubscription,
-    resetConnectedAttempts: state.resetConnectedAttempts,
-    loading: state.loading,
-  }));
+  const { campaignData, connected, loading } =
+    useCampaignStore((state) => ({
+      campaignData: state.campaignData,
+      connected: state.connected,
+      loading: state.loading,
+    }));
 
   const { mutateAsync: joinCampaign, isPending: isJoining } = useInsertMutation(
     supabase.from("campaign_players"),
@@ -158,11 +151,7 @@ export default function Toolbar({
         {!connected && (
           <Badge
             variant="outline"
-            className="text-destructive border-transparent animate-pulse cursor-pointer"
-            onClick={() => {
-              resetConnectedAttempts();
-              setupRealtimeSubscription(supabase, campaignId);
-            }}
+            className="text-destructive border-transparent animate-pulse"
           >
             <Unplug className="h-4 w-4" />
           </Badge>

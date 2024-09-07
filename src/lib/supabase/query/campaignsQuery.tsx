@@ -29,6 +29,7 @@ export const getCampaignDetail = (
       passphrase,
       status,
       banner_url,
+      is_template,
       gm:profiles!campaigns_gm_id_fkey1 (
         id,
         display_name,
@@ -50,6 +51,7 @@ export const getCampaignDetail = (
         sections:sections (
           id,
           chapter_id,
+          campaign_id,
           title,
           order_num,
           handouts:handouts (
@@ -58,6 +60,7 @@ export const getCampaignDetail = (
             content,
             is_public,
             section_id,
+            campaign_id,
             type,
             owner_id,
             note,

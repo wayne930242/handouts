@@ -3,10 +3,10 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
-import { getCampaignDetail } from "../supabase/query/campaignsQuery";
-import { useClient } from "../supabase/client";
+import { getCampaignDetail } from "@/lib/supabase/query/campaignsQuery";
+import { useClient } from "@/lib/supabase/client";
 
-const useCampaignData = (campaignId: string, isAuthorized: boolean, userId?: string) => {
+const useCampaignData = (campaignId: string, userId?: string) => {
   const supabase = useClient()
 
   const { initCampaignData, setLoading } = useCampaignStore(state => ({
@@ -17,7 +17,6 @@ const useCampaignData = (campaignId: string, isAuthorized: boolean, userId?: str
   const { data: campaignData, isFetching, error, refetch } = useQuery(
     getCampaignDetail(supabase, campaignId, userId),
     {
-      enabled: isAuthorized,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,

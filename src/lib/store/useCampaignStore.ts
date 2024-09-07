@@ -15,6 +15,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
   setLoading: (loading) => set({ loading }),
   error: null,
   connected: false,
+  setConnected: (connected) => set({ connected }),
   connectedAtempts: 0,
   inWhiteList: false,
   fetchWhiteList: async (supabase) => {
@@ -177,54 +178,6 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
 
       return { campaignData: updatedData };
     });
-  },
-  setupRealtimeSubscription: (supabase, campaignId) => {
-    if (get().connected) return () => {};
-    const campaignChannel = supabase
-      .channel("campaign-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "chapters",
-          filter: `campaign_id=eq.${campaignId}`,
-        },
-        (payload) => get().handleRealtimeUpdate("chapters", payload as any)
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "sections" },
-        (payload) => get().handleRealtimeUpdate("sections", payload as any)
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "handouts" },
-        (payload) => get().handleRealtimeUpdate("handouts", payload as any)
-      )
-      .subscribe((status) => {
-        if (status === "SUBSCRIBED") {
-          set({ connected: true });
-          console.info("Successfully subscribed");
-        } else if (status === "CLOSED") {
-          console.info("Subscription closed");
-          set({ connected: false });
-
-          setTimeout(() => {
-            const connectedAtempts = get().connectedAtempts;
-            if (connectedAtempts <= 5) {
-              get().setupRealtimeSubscription(supabase, campaignId);
-              set({ connectedAtempts: connectedAtempts + 1 });
-            }
-          }, 3000);
-        }
-      });
-
-    return () => {
-      supabase.removeChannel(campaignChannel);
-      set({ connected: false, connectedAtempts: 0 });
-      console.info("unsubscribed setupRealtimeSubscription");
-    };
   },
 }));
 

@@ -157,6 +157,7 @@ export interface CampaignStore {
   loading: boolean;
   setLoading: (loading: boolean) => void;
   connected: boolean;
+  setConnected: (connected: boolean) => void;
   connectedAtempts: number;
   resetConnectedAttempts: () => void;
   error: Error | null;
@@ -164,10 +165,6 @@ export interface CampaignStore {
     table: CampaignSubTable,
     payload: RealtimePayload<T>
   ) => void;
-  setupRealtimeSubscription: (
-    supabase: MySupabaseClient,
-    campaignId: string
-  ) => () => void;
 }
 
 export interface ConfirmDialogData<T extends any = any> {

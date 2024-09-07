@@ -3,6 +3,7 @@
 import useCampaignData from "@/lib/hooks/useCampaignData";
 import useAppStore from "@/lib/store/useAppStore";
 import dynamic from "next/dynamic";
+import useSubscriptionCampaign from "@/lib/hooks/useSubscriptionCampaign";
 
 import Toolbar from "./CampaignToolbar";
 import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
@@ -13,18 +14,17 @@ const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
 const CampaignViewer = dynamic(() => import("./CampaignViewer"), {
   ssr: false,
 });
-const SubscriptCampaign = dynamic(() => import("./SubscriptCampaign"), {
-  ssr: false,
-});
 
-export default function Campaign({ campaignId, isAuthorized, userId }: Props) {
-  const { campaignData } = useCampaignData(campaignId, isAuthorized, userId);
+export default function Campaign({ campaignId, userId }: Props) {
+  const { campaignData } = useCampaignData(campaignId, userId);
 
   const { editingCampaign } = useAppStore((state) => ({
     editingCampaign: state.editingCampaign,
   }));
 
   const isGm = useCanEditCampaign();
+
+  useSubscriptionCampaign(campaignId);
 
   return (
     <div className="w-full">
@@ -38,13 +38,11 @@ export default function Campaign({ campaignId, isAuthorized, userId }: Props) {
         {editingCampaign && <CampaignEditor />}
         {!editingCampaign && <CampaignViewer />}
       </div>
-      {isAuthorized && <SubscriptCampaign campaignId={campaignId} />}
     </div>
   );
 }
 
 interface Props {
   campaignId: string;
-  isAuthorized: boolean;
   userId?: string;
 }

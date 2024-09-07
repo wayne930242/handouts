@@ -188,6 +188,7 @@ export type Database = {
           description: string | null
           gm_id: string | null
           id: string
+          is_template: boolean
           name: string
           passphrase: string | null
           status: string
@@ -198,6 +199,7 @@ export type Database = {
           description?: string | null
           gm_id?: string | null
           id?: string
+          is_template?: boolean
           name: string
           passphrase?: string | null
           status: string
@@ -208,6 +210,7 @@ export type Database = {
           description?: string | null
           gm_id?: string | null
           id?: string
+          is_template?: boolean
           name?: string
           passphrase?: string | null
           status?: string
@@ -524,6 +527,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          is_public: boolean
           name: string
           type: string
           user_id: string | null
@@ -532,6 +536,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_public?: boolean
           name: string
           type?: string
           user_id?: string | null
@@ -540,6 +545,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_public?: boolean
           name?: string
           type?: string
           user_id?: string | null
@@ -562,7 +568,7 @@ export type Database = {
           id: string
           name: string
           order_num: number
-          weight: number | null
+          type: string
         }
         Insert: {
           content: Json
@@ -571,7 +577,7 @@ export type Database = {
           id?: string
           name: string
           order_num: number
-          weight?: number | null
+          type?: string
         }
         Update: {
           content?: Json
@@ -580,7 +586,7 @@ export type Database = {
           id?: string
           name?: string
           order_num?: number
-          weight?: number | null
+          type?: string
         }
         Relationships: [
           {
@@ -597,6 +603,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          is_public: boolean
           name: string
           type: string
           user_id: string | null
@@ -605,6 +612,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_public?: boolean
           name: string
           type?: string
           user_id?: string | null
@@ -613,6 +621,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_public?: boolean
           name?: string
           type?: string
           user_id?: string | null
@@ -659,6 +668,7 @@ export type Database = {
       }
       handouts: {
         Row: {
+          campaign_id: string
           content: string | null
           created_at: string | null
           id: string
@@ -666,12 +676,13 @@ export type Database = {
           note: string | null
           order_num: number
           owner_id: string
-          section_id: number | null
+          section_id: number
           title: string
           type: string | null
           updated_at: string | null
         }
         Insert: {
+          campaign_id: string
           content?: string | null
           created_at?: string | null
           id?: string
@@ -679,12 +690,13 @@ export type Database = {
           note?: string | null
           order_num: number
           owner_id: string
-          section_id?: number | null
+          section_id: number
           title: string
           type?: string | null
           updated_at?: string | null
         }
         Update: {
+          campaign_id?: string
           content?: string | null
           created_at?: string | null
           id?: string
@@ -692,12 +704,19 @@ export type Database = {
           note?: string | null
           order_num?: number
           owner_id?: string
-          section_id?: number | null
+          section_id?: number
           title?: string
           type?: string | null
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "handouts_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "handouts_owner_id_fkey1"
             columns: ["owner_id"]
@@ -751,24 +770,34 @@ export type Database = {
       }
       sections: {
         Row: {
-          chapter_id: number | null
+          campaign_id: string
+          chapter_id: number
           id: number
           order_num: number
           title: string
         }
         Insert: {
-          chapter_id?: number | null
+          campaign_id: string
+          chapter_id: number
           id?: number
           order_num: number
           title: string
         }
         Update: {
-          chapter_id?: number | null
+          campaign_id?: string
+          chapter_id?: number
           id?: number
           order_num?: number
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "sections_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "sections_chapter_id_fkey"
             columns: ["chapter_id"]

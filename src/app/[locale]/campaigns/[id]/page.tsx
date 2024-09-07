@@ -71,19 +71,12 @@ export default async function CampaignPage({
   } = await supabase.auth.getUser();
 
   const queryClient = new QueryClient();
-  await prefetchQuery(
-    queryClient,
-    getCampaignDetail(supabase, id, user?.id)
-  );
+  await prefetchQuery(queryClient, getCampaignDetail(supabase, id, user?.id));
 
   return (
     <PageLayout>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Campaign
-          campaignId={id}
-          isAuthorized={isAuthorized}
-          userId={user?.id}
-        />
+        {isAuthorized && <Campaign campaignId={id} userId={user?.id} />}
       </HydrationBoundary>
     </PageLayout>
   );

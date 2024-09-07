@@ -103,6 +103,7 @@ export default function HandoutCard({ handout, chapterId }: Props) {
       {
         id: handout.id,
         section_id: handout.section_id,
+        campaign_id: handout.campaign_id,
         title: data.title,
         type: data.type ?? null,
         content: data.content ?? null,

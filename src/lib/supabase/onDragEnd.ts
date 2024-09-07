@@ -59,6 +59,7 @@ export default function onDragEnd(
         "order_num"
       ).map((section) => ({
         id: section.id,
+        campaign_id: section.campaign_id,
         chapter_id: section.chapter_id,
         title: section.title,
         order_num: section.order_num,
@@ -155,6 +156,7 @@ export default function onDragEnd(
         title: handout.title,
         content: handout.content,
         section_id: handout.section_id,
+        campaign_id: handout.campaign_id,
         type: handout.type,
         owner_id: handout.owner_id,
         is_public: handout.is_public,

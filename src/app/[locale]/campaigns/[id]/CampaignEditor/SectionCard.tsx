@@ -19,11 +19,13 @@ interface Props {
 }
 
 const emptyHandout = (
+  campaignId: string,
   sectionId: number,
   orderNum: number,
   ownerId: string
 ): Omit<HandoutData, "id"> => ({
   section_id: sectionId,
+  campaign_id: campaignId,
   title: "",
   content: "",
   is_public: false,
@@ -92,12 +94,14 @@ export default function SectionCard({ section }: Props) {
                       chapter_id: section.chapter_id,
                       title: e.target.value,
                       order_num: section.order_num,
+                      campaign_id: section.campaign_id,
                     },
                     {
                       id: section.id,
                       chapter_id: section.chapter_id,
                       title: section.title,
                       order_num: section.order_num,
+                      campaign_id: section.campaign_id,
                     },
                     supabase,
                     "sections",
@@ -124,6 +128,7 @@ export default function SectionCard({ section }: Props) {
                 if (!user) return;
 
                 const newHandout = emptyHandout(
+                  section.campaign_id,
                   section.id as number,
                   (section.handouts?.length ?? 0) + 1,
                   user.id
