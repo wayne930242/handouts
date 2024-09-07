@@ -65,6 +65,9 @@
     "noCampaigns": "No campaigns found",
     "ownedCampaigns": "Owned Campaigns"
   },
+  "CampaignViewer": {
+    "createdBy": "Created by {user}"
+  },
   "ChapterCard": {
     "addSection": "Section",
     "chapterTitle": "Chapter Title",
@@ -137,6 +140,9 @@
     "delete": "Delete",
     "info": "Info"
   },
+  "DocViewer": {
+    "createdBy": "Created by {user}"
+  },
   "DocsPage": {
     "copyInfo": "Copy Info",
     "createCampaign": "You can create a new document.",
@@ -150,7 +156,8 @@
     "myFavorites": "My Favorites",
     "noDocs": "No documents found.",
     "ownedDocs": "Owned Documents",
-    "passphrase": "Passphrase"
+    "passphrase": "Passphrase",
+    "view": "View"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "Already have an account?",

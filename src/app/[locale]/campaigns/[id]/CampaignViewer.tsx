@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Markdown from "react-markdown";
 import { usePathname } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
@@ -8,7 +9,11 @@ import TocContainer from "@/components/toc/TocContainer";
 import Toc from "@/components/toc/Toc";
 import ChapterViewer from "./CampaignViewer/ChapterViewer";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 export default function CampaignViewer() {
+  const t = useTranslations("DocViewer");
+
   const { campaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
   }));
@@ -59,6 +64,19 @@ export default function CampaignViewer() {
             <h1 className="text-4xl font-bold text-center">
               {campaignData?.name}
             </h1>
+            <div className="flex justify-center items-center gap-x-2 w-full mb-4 mt-2">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={campaignData?.gm?.avatar_url ?? ""} />
+                <AvatarFallback>
+                  {campaignData?.gm?.display_name ?? "GM"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="text-center text-sm text-muted-foreground">
+                {t("createdBy", {
+                  user: campaignData?.gm?.display_name ?? "GM",
+                })}
+              </div>
+            </div>
             {campaignData?.description && (
               <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground text-center">
                 {campaignData?.description}

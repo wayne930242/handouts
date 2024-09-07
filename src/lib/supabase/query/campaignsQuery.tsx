@@ -1,12 +1,5 @@
 import { MySupabaseClient } from "@/types/interfaces";
 
-export const getOwnedCampaigns = (
-  supabase: MySupabaseClient,
-  userId: string
-) => {
-  return supabase.from("campaigns").select("*").eq("gm_id", userId);
-};
-
 export const getCampaignInfo = (
   supabase: MySupabaseClient,
   campaignId: string,
@@ -167,6 +160,7 @@ export const getCampaignWithPlayers = (
       user_id,
       role,
       profiles!campaign_players_user_id_fkey1 (
+        id,
         avatar_url,
         display_name
       )
@@ -175,13 +169,38 @@ export const getCampaignWithPlayers = (
     .eq("campaign_id", campaignId);
 };
 
+
+export const getOwnedCampaigns = (
+  supabase: MySupabaseClient,
+  userId: string
+) => {
+  return supabase
+    .from("campaigns")
+    .select(
+      `
+      *,
+      gm:profiles!campaigns_gm_id_fkey1 (
+        id,
+        display_name,
+        avatar_url
+      )
+    `
+    )
+    .eq("gm_id", userId);
+};
+
 export const getMyCampaigns = (supabase: MySupabaseClient, userId: string) => {
   return supabase
     .from("campaigns")
     .select(
       `
       *,
-      campaign_players!inner (user_id)
+      campaign_players!inner (user_id),
+      gm:profiles!campaigns_gm_id_fkey1 (
+        id,
+        display_name,
+        avatar_url
+      )
     `
     )
     .eq("campaign_players.user_id", userId)
@@ -197,7 +216,12 @@ export const getMyFavCampaigns = (
     .select(
       `
       *,
-      user_campaign_favorites!inner (user_id, added_at)
+      user_campaign_favorites!inner (user_id, added_at),
+      gm:profiles!campaigns_gm_id_fkey1 (
+        id,
+        display_name,
+        avatar_url
+      )
     `
     )
     .eq("user_campaign_favorites.user_id", userId)

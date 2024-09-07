@@ -65,6 +65,9 @@
     "noCampaigns": "沒有找到戰役",
     "ownedCampaigns": "我擁有的戰役"
   },
+  "CampaignViewer": {
+    "createdBy": "由 {user} 創建"
+  },
   "ChapterCard": {
     "addSection": "段落",
     "chapterTitle": "章節標題",
@@ -137,6 +140,9 @@
     "delete": "刪除",
     "info": "資訊"
   },
+  "DocViewer": {
+    "createdBy": "由 {user} 創建"
+  },
   "DocsPage": {
     "copyInfo": "複製資訊",
     "createCampaign": "您可以創建新的文件。",
@@ -150,7 +156,8 @@
     "myFavorites": "我的最愛",
     "noDocs": "沒有找到任何文件。",
     "ownedDocs": "我擁有的文件",
-    "passphrase": "通關密語"
+    "passphrase": "通關密語",
+    "view": "檢視"
   },
   "ForgotPassword": {
     "alreadyHaveAccount": "已經有帳號了嗎？",

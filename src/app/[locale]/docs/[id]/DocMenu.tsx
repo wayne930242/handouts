@@ -9,11 +9,11 @@ import {
 import { Button, ItemButton } from "@/components/ui/button";
 import { Info, Settings, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Doc } from "@/types/interfaces";
+import { DocInList } from "@/types/interfaces";
 import Link from "next/link";
 
 interface Props {
-  doc: Doc;
+  doc: DocInList;
   isOwner?: boolean;
 }
 

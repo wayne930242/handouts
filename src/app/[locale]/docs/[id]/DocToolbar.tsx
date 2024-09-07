@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import useAppStore from "@/lib/store/useAppStore";
 import { Eye, Pen } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Doc } from "@/types/interfaces";
+import { DocInList } from "@/types/interfaces";
 import DocMenu from "./DocMenu";
 import { useClient } from "@/lib/supabase/client";
 import useSessionUser from "@/lib/hooks/useSession";
@@ -19,7 +19,7 @@ export default function Toolbar({
   isFavorite,
   isJoined,
 }: {
-  doc: Doc;
+  doc: DocInList;
   isOwner?: boolean;
   isFavorite?: boolean;
   isJoined?: boolean;

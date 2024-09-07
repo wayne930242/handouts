@@ -1,5 +1,5 @@
 "use client";
-import { Doc } from "@/types/interfaces";
+import { DocInList } from "@/types/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -189,6 +189,6 @@ export default function DocEditor({ doc, callback }: Props) {
 }
 
 interface Props {
-  doc: Doc;
+  doc: DocInList;
   callback?: () => any;
 }

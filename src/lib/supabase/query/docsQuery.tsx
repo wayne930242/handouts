@@ -1,12 +1,5 @@
 import { MySupabaseClient } from "@/types/interfaces";
 
-export const getDocsByOwnerId = (
-  supabase: MySupabaseClient,
-  ownerId: string
-) => {
-  return supabase.from("docs").select("*").eq("owner_id", ownerId);
-};
-
 export const getDocInfo = (
   supabase: MySupabaseClient,
   docId: string,
@@ -78,13 +71,37 @@ export const getDocSEO = (supabase: MySupabaseClient, docId: string) => {
     .single();
 };
 
+export const getDocsByOwnerId = (
+  supabase: MySupabaseClient,
+  ownerId: string
+) => {
+  return supabase
+    .from("docs")
+    .select(
+      `
+      *,
+      owner:profiles!docs_owner_id_fkey (
+        id,
+        display_name,
+        avatar_url
+      )
+    `
+    )
+    .eq("owner_id", ownerId);
+};
+
 export const getMyDocs = (supabase: MySupabaseClient, userId: string) => {
   return supabase
     .from("docs")
     .select(
       `
       *,
-      doc_players!inner (user_id)
+      doc_players!inner (user_id),
+      owner:profiles!docs_owner_id_fkey (
+        id,
+        display_name,
+        avatar_url
+      )
     `
     )
     .eq("doc_players.user_id", userId)
@@ -97,7 +114,12 @@ export const getMyFavDocs = (supabase: MySupabaseClient, userId: string) => {
     .select(
       `
       *,
-      user_doc_favorites!inner (user_id, added_at)
+      user_doc_favorites!inner (user_id, added_at),
+      owner:profiles!docs_owner_id_fkey (
+        id,
+        display_name,
+        avatar_url
+      )
     `
     )
     .eq("user_doc_favorites.user_id", userId)

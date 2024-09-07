@@ -10,15 +10,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { Doc } from "@/types/interfaces";
+import { DocInList } from "@/types/interfaces";
 import { Settings } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 import Markdown from "react-markdown";
 import { getBannerUrl } from "@/lib/bannerUrl";
+import useSessionUser from "@/lib/hooks/useSession";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function DocCard({ doc }: { doc: Doc }) {
+export default function DocCard({ doc }: { doc: DocInList }) {
   const t = useTranslations("DocsPage");
+
+  const user = useSessionUser();
+  const isOwner = user?.id === doc.owner_id;
 
   const passphraseParams = doc.passphrase
     ? `&passphrase=${doc.passphrase}`
@@ -27,14 +32,18 @@ export default function DocCard({ doc }: { doc: Doc }) {
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
-      <CardHeader className="cursor-pointer hover:bg-accent">
-        <Link
-          href={`/docs/${doc.id}/info`}
-          className="flex items-center gap-1.5 justify-between"
-        >
-          <CardTitle>{doc.title}</CardTitle>
-          <Settings className="h-5 w-5" />
-        </Link>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-1.5 justify-between">
+          {doc.title}
+
+          {isOwner && (
+            <Link href={`/docs/${doc.id}/info`}>
+              <Button size="icon" variant="ghost">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent className="grow relative overflow-hidden aspect-[24/9]">
         <Image
@@ -45,6 +54,10 @@ export default function DocCard({ doc }: { doc: Doc }) {
           unoptimized
           fill
         />
+        <Avatar className="absolute bottom-2 right-2 border-2 border-border">
+          <AvatarImage src={doc.owner?.avatar_url ?? ""} />
+          <AvatarFallback>{doc.owner?.display_name ?? "GM"}</AvatarFallback>
+        </Avatar>
       </CardContent>
       <CardContent className="grow px-4 pt-2">
         <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
@@ -73,7 +86,9 @@ export default function DocCard({ doc }: { doc: Doc }) {
             </Button>
           </div>
           <Link href={`/docs/${doc.id}`}>
-            <Button variant="secondary">{t("editView")}</Button>
+            <Button variant="secondary">
+              {isOwner ? t("editView") : t("view")}
+            </Button>
           </Link>
         </div>
       </CardFooter>

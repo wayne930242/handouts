@@ -252,10 +252,16 @@ export interface Session {
   user: User;
 }
 
-// Docs Data
-export type Doc = Database["public"]["Tables"]["docs"]["Row"];
-
 export type ProfileData = Database["public"]["Tables"]["profiles"]["Row"];
+
+export type DocInList = Database["public"]["Tables"]["docs"]["Row"] & {
+  owner: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
+};
+
+export type CampaignInList =
+  Database["public"]["Tables"]["campaigns"]["Row"] & {
+    gm: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
+  };
 
 export interface ProfileStore {
   profile: ProfileData | null;

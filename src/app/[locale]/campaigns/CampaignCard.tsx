@@ -10,35 +10,47 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { FullCampaignData } from "@/types/interfaces";
+import { CampaignInList } from "@/types/interfaces";
 import { Settings } from "lucide-react";
 import { Link } from "@/navigation";
 import { BASE_URL } from "@/config/app";
 import Markdown from "react-markdown";
 import { getBannerUrl } from "@/lib/bannerUrl";
+import useSessionUser from "@/lib/hooks/useSession";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function CampaignCard({
   campaign,
 }: {
-  campaign: FullCampaignData;
+  campaign: CampaignInList;
 }) {
   const t = useTranslations("CampaignCard");
+  const user = useSessionUser();
+  const isOwner = user?.id === campaign.gm_id;
 
   const passphraseParams = campaign.passphrase
     ? `&passphrase=${campaign.passphrase}`
     : "";
-  const campaignLinkWithPassphrase = `${BASE_URL}/?campaign_id=${campaign.id}${passphraseParams}`;
+  const campaignLink = `${BASE_URL}/?campaign_id=${campaign.id}`;
+  const campaignLinkWithPassphrase = `${campaignLink}${passphraseParams}`;
+  const info = `**${t("campaignId")}**: \`${campaign.id}\`
+  **${t("passphrase")}**: \`${campaign.passphrase}\`
+  **${t("campaignLinkWithPassphrase")}**: ${campaignLinkWithPassphrase}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
-      <CardHeader className="cursor-pointer hover:bg-accent">
-        <Link
-          href={`/campaigns/${campaign.id}/info`}
-          className="flex items-center gap-1.5 justify-between"
-        >
-          <CardTitle>{campaign.name}</CardTitle>
-          <Settings className="h-5 w-5" />
-        </Link>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-1.5 justify-between">
+          {campaign.name}
+
+          {isOwner && (
+            <Link href={`/campaigns/${campaign.id}/info`}>
+              <Button size="icon" variant="ghost">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent className="grow relative overflow-hidden aspect-[24/9]">
         <Image
@@ -49,6 +61,10 @@ export default function CampaignCard({
           unoptimized
           fill
         />
+        <Avatar className="absolute bottom-2 right-2 border-2 border-border">
+          <AvatarImage src={campaign.gm?.avatar_url ?? ""} />
+          <AvatarFallback>{campaign.gm?.display_name ?? "GM"}</AvatarFallback>
+        </Avatar>
       </CardContent>
       <CardContent className="grow px-4 pt-2">
         <Markdown className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
@@ -61,11 +77,6 @@ export default function CampaignCard({
             <Button
               type="button"
               onClick={() => {
-                const info = `
-**${t("campaignId")}**: \`${campaign.id}\`
-**${t("passphrase")}**: \`${campaign.passphrase}\`
-**${t("campaignLinkWithPassphrase")}**: ${campaignLinkWithPassphrase}
-`;
                 navigator.clipboard.writeText(info);
                 toast({
                   title: t("infoTitle"),
@@ -77,7 +88,9 @@ export default function CampaignCard({
             </Button>
           </div>
           <Link href={`/campaigns/${campaign.id}`}>
-            <Button variant="secondary">{t("editView")}</Button>
+            <Button variant="secondary">
+              {isOwner ? t("editView") : t("view")}
+            </Button>
           </Link>
         </div>
       </CardFooter>
