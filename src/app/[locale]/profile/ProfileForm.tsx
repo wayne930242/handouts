@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -19,7 +19,7 @@ import ImageManager from "@/lib/ImageManager";
 import { Input } from "@/components/ui/input";
 import { useClient } from "@/lib/supabase/client";
 import useProfileStore from "@/lib/store/useProfileStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/OverlayLoading";
 import useSessionUser from "@/lib/hooks/useSession";
@@ -50,22 +50,33 @@ export default function ProfileForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      display_name: "",
-      avatar_url: "",
+      display_name: profile?.display_name ?? "",
+      avatar_url: profile?.avatar_url ?? "",
     },
   });
-  const { setValue } = form;
+  const { reset, control } = form;
+  const avatarUrl = useWatch({
+    control,
+    name: "avatar_url",
+  });
+  const deletingUrl = useRef<string | null>(null);
 
   useEffect(() => {
     if (profile) {
-      setValue("display_name", profile.display_name ?? "");
-      setValue("avatar_url", profile.avatar_url ?? "");
+      reset({
+        display_name: profile.display_name ?? "",
+        avatar_url: profile.avatar_url ?? "",
+      });
     }
-  }, [profile, setValue]);
+  }, [profile, reset]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     if (!userId) return;
     setIsLoading(true);
+    if (deletingUrl.current) {
+      await imageManager.deleteImageByUrl(deletingUrl.current);
+      deletingUrl.current = null;
+    }
 
     if (file) {
       const imageUrl = await imageManager.uploadImage(file, "profile", userId);
@@ -120,10 +131,19 @@ export default function ProfileForm() {
           )}
         />
         <ImageUploadFormItem
-          initialUrl={profile?.avatar_url}
+          url={avatarUrl}
           file={file}
-          setFile={setFile}
-          onUrlClear={() => setValue("avatar_url", undefined)}
+          setFile={(f) => {
+            setFile(f);
+            deletingUrl.current = profile?.avatar_url ?? null;
+          }}
+          onSetFileCancelled={() => {
+            deletingUrl.current = null;
+          }}
+          onUrlClear={() => {
+            form.setValue("avatar_url", "", { shouldValidate: true });
+            deletingUrl.current = profile?.avatar_url ?? null;
+          }}
           label={t("avatarUrl")}
           placeholder={t("avatarUrlPlaceholder")}
           type="avatar"

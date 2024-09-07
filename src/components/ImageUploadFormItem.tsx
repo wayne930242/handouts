@@ -8,19 +8,21 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  initialUrl?: string | null | undefined;
+  url?: string | null | undefined;
   file: File | null;
   setFile: (file: File | null) => void;
-  onUrlClear: () => void;
+  onSetFileCancelled?: () => void;
+  onUrlClear?: () => void;
   label: string;
   placeholder: string;
   type: "banner" | "avatar";
 }
 
 const ImageUploadFormItem: React.FC<Props> = ({
-  initialUrl,
+  url,
   file,
   setFile,
+  onSetFileCancelled,
   onUrlClear,
   label,
   placeholder,
@@ -32,22 +34,19 @@ const ImageUploadFormItem: React.FC<Props> = ({
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-    } else {
-      setFile(null);
-      if (inputRef.current) {
-        inputRef.current.value = "";
-      }
     }
   };
 
-  const handleClear = () => {
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (file) {
       setFile(null);
       if (inputRef.current) {
         inputRef.current.value = "";
       }
+      onSetFileCancelled?.();
     } else {
-      onUrlClear();
+      onUrlClear?.();
     }
   };
 
@@ -62,27 +61,32 @@ const ImageUploadFormItem: React.FC<Props> = ({
         onChange={handleFileInput}
       />
       <div
-        className={cn("relative flex justify-center items-center", {
-          "w-full border border-border p-2 rounded-sm aspect-[24/9]":
-            type === "banner",
-          "h-36 w-36 rounded-full": type === "avatar",
-        })}
+        className={cn(
+          "cursor-pointer relative flex justify-center border-2 items-center border-border p-2",
+          {
+            "w-full rounded-sm aspect-[24/9]": type === "banner",
+            "h-36 w-36 rounded-full": type === "avatar",
+          }
+        )}
+        onClick={() => {
+          inputRef.current?.click();
+        }}
       >
-        {(initialUrl || file) && (
+        {(url || file) && (
           <Image
             className={cn("object-cover", {
               "rounded-full": type === "avatar",
             })}
-            src={file ? URL.createObjectURL(file) : initialUrl!}
+            src={file ? URL.createObjectURL(file) : url!}
             alt="banner"
             loader={({ src }) => src}
             fill
             unoptimized
           />
         )}
-        {(file || initialUrl) && (
+        {(file || url) && (
           <Button
-            className="absolute top-0 right-0 h-6 w-6"
+            className="absolute -top-3 -right-3"
             type="button"
             size="icon"
             variant="link"

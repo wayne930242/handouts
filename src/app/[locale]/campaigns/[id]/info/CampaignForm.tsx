@@ -180,7 +180,7 @@ export default function CampaignForm({
         />
 
         <ImageUploadFormItem
-          initialUrl={campaignInfo?.banner_url}
+          url={campaignInfo?.banner_url}
           file={file}
           setFile={setFile}
           onUrlClear={() => form.setValue("banner_url", undefined)}

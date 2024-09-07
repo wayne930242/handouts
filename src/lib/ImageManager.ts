@@ -84,6 +84,17 @@ export default class ImageManager {
     }
   }
 
+  async deleteImageByUrl(url: string): Promise<void> {
+    try {
+      await ky.post(`${this.baseUrl}/api/delete-image`, {
+        json: { url },
+      });
+    } catch (error) {
+      console.error("Delete failed:", error);
+      throw new Error("Failed to delete image from S3");
+    }
+  }
+
   private async uploadToS3(file: Blob, key: string): Promise<string> {
     try {
       const data: {

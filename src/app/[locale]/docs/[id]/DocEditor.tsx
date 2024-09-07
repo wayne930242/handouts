@@ -131,7 +131,7 @@ export default function DocEditor({ doc, callback }: Props) {
         />
 
         <ImageUploadFormItem
-          initialUrl={doc.banner_url}
+          url={doc.banner_url}
           file={file}
           setFile={setFile}
           onUrlClear={() => form.setValue("banner_url", undefined)}
