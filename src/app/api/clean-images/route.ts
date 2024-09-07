@@ -36,7 +36,6 @@ export async function POST(request: Request) {
     const keepKeySet = new Set(urlsToKeep.map(extractKey));
 
     const objectsToDelete = listedObjects.Contents.filter(({ Key }) => {
-      console.log("Key", Key);
       return Key && !keepKeySet.has(Key);
     });
 
