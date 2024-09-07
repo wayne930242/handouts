@@ -1,16 +1,7 @@
-import {
-  S3Client,
-  DeleteObjectsCommand,
-  ListObjectsV2Command,
-} from "@aws-sdk/client-s3";
+import { createS3Client } from "@/lib/s3/createClient";
+import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 
-const s3Client = new S3Client({
-  region: process.env.S3_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
+const s3Client = createS3Client();
 
 export async function POST(request: Request) {
   const { tableKey, id } = await request.json();

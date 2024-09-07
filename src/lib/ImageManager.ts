@@ -10,7 +10,7 @@ const defaultOptions: Options = {
 };
 
 type Fields = any;
-type ImageTableKey = "campaigns" | "docs" | "profile";
+export type ImageTableKey = "campaigns" | "docs" | "profile";
 
 export default class ImageManager {
   private options: Options;
@@ -21,11 +21,46 @@ export default class ImageManager {
     this.baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   }
 
-  async uploadImage(file: File, tableKey: ImageTableKey, id: string): Promise<string> {
+  async uploadImage(
+    file: File,
+    tableKey: ImageTableKey,
+    id: string
+  ): Promise<string> {
     const compressedImage = await this.compressImage(file);
     const key = `${tableKey}/${id}/images/${Date.now()}.webp`;
     const objectUrl = await this.uploadToS3(compressedImage, key);
     return objectUrl;
+  }
+
+  async cleanImages(
+    tableKey: ImageTableKey,
+    id: string,
+    content: string | undefined,
+    exUrls?: string[]
+  ): Promise<string[]> {
+    const keepUrls = this.prepareKeepUrls(content, exUrls);
+    await ky.post(`${this.baseUrl}/api/clean-images`, {
+      json: { urlsToKeep: keepUrls, tableKey, id },
+    });
+    return keepUrls;
+  }
+
+  private prepareKeepUrls(
+    content: string | undefined,
+    exUrls?: string[]
+  ): string[] {
+    const extractImageUrlsFromMarkdown = (
+      markdown: string | undefined
+    ): string[] => {
+      if (!markdown) return [];
+      const regex = /!\[.*?\]\((.*?)\)/g;
+      const matches = markdown.matchAll(regex);
+
+      return Array.from(matches, (match) => match[1]);
+    };
+
+    const contentUrls = extractImageUrlsFromMarkdown(content);
+    return Array.from(new Set([...contentUrls, ...(exUrls ?? [])]));
   }
 
   private async compressImage(file: File): Promise<Blob> {
@@ -35,7 +70,10 @@ export default class ImageManager {
     return blobToWebP(compressedImage);
   }
 
-  async deleteImagesByKeyAndId(tableKey: ImageTableKey, id: string): Promise<void> {
+  async deleteImagesByKeyAndId(
+    tableKey: ImageTableKey,
+    id: string
+  ): Promise<void> {
     try {
       await ky.post(`${this.baseUrl}/api/delete-images`, {
         json: { id, tableKey },

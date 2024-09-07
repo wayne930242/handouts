@@ -1,14 +1,7 @@
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
-import { S3Client } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
+import { createS3Client } from "@/lib/s3/createClient";
 
-const s3Client = new S3Client({
-  region: process.env.S3_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
+const s3Client = createS3Client();
 
 export async function POST(request: Request) {
   const { contentType, filename } = await request.json();

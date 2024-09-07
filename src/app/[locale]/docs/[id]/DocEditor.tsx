@@ -1,4 +1,5 @@
 "use client";
+import { useUpdateMutation } from "@supabase-cache-helpers/postgrest-react-query";
 import { DocInList } from "@/types/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -41,7 +42,9 @@ export default function DocEditor({ doc, callback }: Props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const imageManager = new ImageManager();
+  const imageManager = new ImageManager({
+    maxSizeMB: 1.5,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,39 +62,52 @@ export default function DocEditor({ doc, callback }: Props) {
 
   usePreventLeave(isDirty, t("leaveAlert"));
 
+  const { mutateAsync: updateDoc } = useUpdateMutation(supabase.from("docs"), [
+    "id",
+  ]);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     if (file) {
       const imageUrl = await imageManager.uploadImage(file, "docs", doc.id);
       data.banner_url = imageUrl;
       setFile(null);
     }
 
-    const { error: updateError } = await supabase
-      .from("docs")
-      .update({
-        title: data.title,
-        description: data.description,
-        banner_url: data.banner_url,
-        content: data.content,
+    await updateDoc({
+      id: doc.id,
+      title: data.title,
+      description: data.description,
+      banner_url: data.banner_url,
+      content: data.content,
+    })
+      .then(() => {
+        toast({
+          title: t("successTitle"),
+          description: t("successDescription"),
+        });
+        callback?.();
+        form.reset({
+          title: data.title,
+          description: data.description,
+          banner_url: data.banner_url,
+          content: data.content,
+        });
       })
-      .eq("id", doc.id)
-      .select()
-      .single();
-
-    if (updateError) {
-      toast({
-        title: t("errorTitle"),
-        description: t("errorDescription"),
-        variant: "destructive",
+      .catch(() => {
+        toast({
+          title: t("errorTitle"),
+          description: t("errorDescription"),
+          variant: "destructive",
+        });
       });
-    } else {
-      toast({
-        title: t("successTitle"),
-        description: t("successDescription"),
-      });
-      callback?.();
-      form.reset();
-    }
+    await imageManager.cleanImages(
+      "docs",
+      doc.id,
+      data.content,
+      data.banner_url ? [data.banner_url] : undefined
+    );
+    setIsLoading(false);
   };
 
   return (
