@@ -87,9 +87,9 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     defaultValues: {
       title: handout.title,
       type: handout.type ?? "text",
-      content: handout.content ?? undefined,
+      content: handout.content ?? "",
       is_public: handout.is_public ?? false,
-      note: handout.note ?? undefined,
+      note: handout.note ?? "",
     },
   });
 
@@ -125,7 +125,13 @@ export default function HandoutCard({ handout, chapterId }: Props) {
       "handouts",
       "UPDATE"
     );
-    form.reset();
+    form.reset({
+      title: data.title,
+      type: data.type,
+      content: data.content,
+      is_public: data.is_public,
+      note: data.note,
+    });
   };
 
   const [triggerReset, setTriggerReset] = useState(false);
@@ -323,7 +329,13 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                   type="button"
                   onClick={() => {
                     setTriggerReset(true);
-                    form.reset();
+                    form.reset({
+                      title: handout.title,
+                      type: handout.type ?? "text",
+                      content: handout.content ?? "",
+                      is_public: handout.is_public ?? false,
+                      note: handout.note ?? "",
+                    });
                   }}
                 >
                   {t("cancel")}
