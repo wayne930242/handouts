@@ -40,13 +40,13 @@ export const genSEO = async ({
       url: url ?? defaultUrl,
       title: title ?? t("title"),
       description: description ?? t("description"),
-      images: [defaultImage, ...(images ?? [])],
+      images: [...(images ?? [defaultImage])],
     },
     twitter: {
       card: "summary_large_image",
       title: title ?? t("title"),
       description: description ?? t("description"),
-      images: [defaultImage, ...(images ?? [])],
+      images: [...(images ?? [defaultImage])],
     },
   };
 };
