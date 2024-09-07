@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslations } from "next-intl";
 
 import {
@@ -25,7 +25,7 @@ import {
   useUpdateMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ImageManager from "@/lib/ImageManager";
 import ImageUploadFormItem from "@/components/ImageUploadFormItem";
 import OverlayLoading from "@/components/OverlayLoading";
@@ -69,7 +69,12 @@ export default function CampaignForm({
       banner_url: "",
     },
   });
-  const { reset } = form;
+  const { reset, control } = form;
+  const bannerUrl = useWatch({
+    control,
+    name: "banner_url",
+  });
+  const deletingUrl = useRef<string | null>(null);
 
   useEffect(() => {
     if (!campaignInfo) return;
@@ -93,6 +98,11 @@ export default function CampaignForm({
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let errorMessage: string | undefined;
     setIsLoading(true);
+    if (deletingUrl.current) {
+      await imageManager.deleteImageByUrl(deletingUrl.current);
+      deletingUrl.current = null;
+    }
+
     if (file) {
       const imageUrl = await imageManager.uploadImage(file, "campaigns", id);
       data.banner_url = imageUrl;
@@ -180,10 +190,20 @@ export default function CampaignForm({
         />
 
         <ImageUploadFormItem
-          url={campaignInfo?.banner_url}
+          url={bannerUrl}
           file={file}
-          setFile={setFile}
-          onUrlClear={() => form.setValue("banner_url", undefined)}
+          setFile={(f) => {
+            setFile(f);
+            deletingUrl.current = campaignInfo?.banner_url ?? null;
+          }}
+          onSetFileCancelled={() => {
+            form.setValue("banner_url", campaignInfo?.banner_url ?? "");
+            deletingUrl.current = null;
+          }}
+          onUrlClear={() => {
+            form.setValue("banner_url", undefined);
+            deletingUrl.current = campaignInfo?.banner_url ?? null;
+          }}
           label={t("bannerUrl")}
           placeholder={t("bannerUrlPlaceholder")}
           type="banner"

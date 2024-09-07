@@ -3,8 +3,8 @@ import { useUpdateMutation } from "@supabase-cache-helpers/postgrest-react-query
 import { DocInList } from "@/types/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { useRouter } from "@/navigation";
@@ -58,7 +58,14 @@ export default function DocEditor({ doc, callback }: Props) {
 
   const {
     formState: { isDirty },
+    control,
   } = form;
+
+  const bannerUrl = useWatch({
+    control,
+    name: "banner_url",
+  });
+  const deletingUrl = useRef<string | null>(null);
 
   usePreventLeave(isDirty, t("leaveAlert"));
 
@@ -68,6 +75,11 @@ export default function DocEditor({ doc, callback }: Props) {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    if (deletingUrl.current) {
+      await imageManager.deleteImageByUrl(deletingUrl.current);
+      deletingUrl.current = null;
+    }
+
     if (file) {
       const imageUrl = await imageManager.uploadImage(file, "docs", doc.id);
       data.banner_url = imageUrl;
@@ -131,10 +143,20 @@ export default function DocEditor({ doc, callback }: Props) {
         />
 
         <ImageUploadFormItem
-          url={doc.banner_url}
+          url={bannerUrl}
           file={file}
-          setFile={setFile}
-          onUrlClear={() => form.setValue("banner_url", undefined)}
+          setFile={(f) => {
+            setFile(f);
+            deletingUrl.current = doc.banner_url ?? null;
+          }}
+          onSetFileCancelled={() => {
+            form.setValue("banner_url", doc.banner_url ?? "");
+            deletingUrl.current = null;
+          }}
+          onUrlClear={() => {
+            form.setValue("banner_url", undefined);
+            deletingUrl.current = doc.banner_url ?? null;
+          }}
           label={t("bannerUrl")}
           placeholder={t("bannerUrlPlaceholder")}
           type="banner"

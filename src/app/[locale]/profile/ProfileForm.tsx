@@ -138,6 +138,7 @@ export default function ProfileForm() {
             deletingUrl.current = profile?.avatar_url ?? null;
           }}
           onSetFileCancelled={() => {
+            form.setValue("avatar_url", profile?.avatar_url ?? "");
             deletingUrl.current = null;
           }}
           onUrlClear={() => {
