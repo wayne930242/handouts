@@ -36,7 +36,9 @@ export async function generateMetadata({
     title: doc?.title,
     description: doc?.description ?? undefined,
     url: `${BASE_URL}/docs/${id}`,
-    images: doc?.banner_url ? [{ url: doc.banner_url }] : undefined,
+    images: doc?.banner_url
+      ? [{ url: doc.banner_url, width: 1200, height: 450 }]
+      : undefined,
   });
 }
 

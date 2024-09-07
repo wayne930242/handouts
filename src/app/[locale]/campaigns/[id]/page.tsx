@@ -40,7 +40,9 @@ export async function generateMetadata({
     title: campaign?.name,
     description: campaign?.description ?? undefined,
     url: `${BASE_URL}/campaigns/${id}`,
-    images: campaign?.banner_url ? [{ url: campaign.banner_url }] : undefined,
+    images: campaign?.banner_url
+      ? [{ url: campaign.banner_url, width: 1200, height: 450 }]
+      : undefined,
   });
 }
 
