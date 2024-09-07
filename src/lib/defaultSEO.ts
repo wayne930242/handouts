@@ -1,6 +1,6 @@
 import { BASE_URL } from "@/config/app";
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server";
 
 export const genSEO = async ({
   locale,
@@ -9,16 +9,16 @@ export const genSEO = async ({
   url,
   images,
 }: {
-  locale: string,
-  title?: string,
-  description?: string,
-  url?: string,
+  locale: string;
+  title?: string;
+  description?: string;
+  url?: string;
   images?: {
-    url: string,
-    width?: number,
-    height?: number,
-    alt?: string,
-  }[]
+    url: string;
+    width?: number;
+    height?: number;
+    alt?: string;
+  }[];
 }): Promise<Metadata> => {
   const t = await getTranslations("LocaleLayout");
   const defaultUrl = BASE_URL;
@@ -40,18 +40,13 @@ export const genSEO = async ({
       url: url ?? defaultUrl,
       title: title ?? t("title"),
       description: description ?? t("description"),
-      images: [
-        ...(images ?? []),
-        defaultImage],
+      images: [...(images ?? [defaultImage])],
     },
     twitter: {
       card: "summary_large_image",
       title: title ?? t("title"),
       description: description ?? t("description"),
-      images: [
-        ...(images ?? []),
-        defaultImage
-      ],
+      images: [...(images ?? [defaultImage])],
     },
-  }
-}
+  };
+};
