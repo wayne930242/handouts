@@ -23,7 +23,7 @@ export default function Features() {
         title={t("gamesTitle")}
         description={t("gamesDescription")}
         icon={<Swords className="h-8 w-8" />}
-        href="/generators"
+        href="/games"
       />
     </div>
   );
