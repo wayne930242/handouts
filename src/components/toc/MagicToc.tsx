@@ -1,7 +1,7 @@
 "use client";
 
 import TocContainer from "./TocContainer";
-import { MultiDOMPortal } from "../Portal";
+import { MultiDOMPortal } from "@/components/utils/Portal";
 
 interface Props {
   sourceId: string;

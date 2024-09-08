@@ -8,10 +8,10 @@ import {
   getCampaignSEO,
 } from "@/lib/supabase/query/campaignsQuery";
 
-import Campaign from "./Campaign";
+import Campaign from "../../../../components/campaign/Campaign";
 
 import { redirect } from "@/navigation";
-import PageLayout from "@/components/layouts/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { genSEO } from "@/lib/defaultSEO";
 import { BASE_URL } from "@/config/app";
 

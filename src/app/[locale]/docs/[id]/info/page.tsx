@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 
-import DocForm from "./DocForm";
-import PageLayout from "@/components/layouts/PageLayout";
+import DocForm from "@/components/doc/DocForm";
+import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
-import DocDeleteZone from "./DocDeleteZone";
+import DocDeleteZone from "@/components/doc/DocDeleteZone";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";

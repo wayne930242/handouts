@@ -1,18 +1,18 @@
 import { Noto_Sans_TC } from "next/font/google";
-
+import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { ThemeProvider } from "./ThemeProvider";
-import { ReactQueryClientProvider } from "./ReactQueryClientProvider";
 
 import { genSEO } from "@/lib/defaultSEO";
 import { locales } from "@/navigation";
 
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
-import ConfirmDialog from "@/components/ConfirmDialog";
-import GlobalLoading from "./GlobalLoading";
 import { Toaster } from "@/components/ui/toaster";
-import PassphraseDialog from "@/components/PassphraseDialog";
-import ProfileQuery from "./ProfileQuery";
+import ConfirmDialog from "@/components/dialog/ConfirmDialog";
+import PassphraseDialog from "@/components/dialog/PassphraseDialog";
+
+import { ThemeProvider } from "@/components/layout/context/ThemeProvider";
+import { ReactQueryClientProvider } from "@/components/layout/context/ReactQueryClientProvider";
+import GlobalLoading from "@/components/layout/context/GlobalLoading";
+import ProfileQuery from "@/components/layout/context/ProfileQuery";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

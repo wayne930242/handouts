@@ -1,12 +1,12 @@
+import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { createClient } from "@/lib/supabase/server";
 
-import CampaignForm from "./CampaignForm";
-import PageLayout from "@/components/layouts/PageLayout";
+import CampaignForm from "@/components/campaign/CampaignForm";
+import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
-import CampaignDeleteZone from "./CampaignDeleteZone";
-import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
+import CampaignDeleteZone from "@/components/campaign/CampaignDeleteZone";
 
 interface Props {
   params: {

@@ -1,8 +1,8 @@
-import PageLayout from "@/components/layouts/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import SearchParamsListener from "./SearchParamsListener";
-import Hero from "./Hero";
-import Features from "./Features";
+import SearchParamsListener from "@/components/layout/context/SearchParamsListener";
+import Hero from "@/components/index/Hero";
+import Features from "@/components/index/Features";
 
 interface Props {
   params: { locale: string };

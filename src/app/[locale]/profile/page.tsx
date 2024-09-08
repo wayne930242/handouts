@@ -1,5 +1,5 @@
-import PageLayout from "@/components/layouts/PageLayout";
-import ProfileForm from "./ProfileForm";
+import PageLayout from "@/components/layout/PageLayout";
+import ProfileForm from "@/components/profile/ProfileForm";
 
 interface Props {
   params: {

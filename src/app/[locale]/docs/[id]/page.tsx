@@ -5,9 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 
 import { redirect } from "@/navigation";
-import PageLayout from "@/components/layouts/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { getDocInfo, getDocSEO } from "@/lib/supabase/query/docsQuery";
-import Doc from "./Doc";
+import Doc from "../../../../components/doc/Doc";
 import { BASE_URL } from "@/config/app";
 import { genSEO } from "@/lib/defaultSEO";
 

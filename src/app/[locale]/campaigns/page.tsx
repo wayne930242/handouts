@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "@/navigation";
-import DataToolbar from "@/components/DataToolbar";
+import DataToolbar from "@/components/toolbar/DataToolbar";
 
-import PageLayout from "@/components/layouts/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ import {
   getMyFavCampaigns,
   getOwnedCampaigns,
 } from "@/lib/supabase/query/campaignsQuery";
-import Campaigns from "./Campaigns";
+import Campaigns from "@/components/campaign/Campaigns";
 
 interface Props {
   params: {

@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "@/navigation";
 
-import PageLayout from "@/components/layouts/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { getDocsByOwnerId } from "@/lib/supabase/query/docsQuery";
-import Docs from "./Docs";
-import DataToolbar from "@/components/DataToolbar";
+import Docs from "@/components/doc/Docs";
+import DataToolbar from "@/components/toolbar/DataToolbar";
 
 interface Props {
   params: {
