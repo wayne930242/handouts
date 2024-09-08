@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import MyMDXEditor from "@/components/form/MyMDXEditor";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import ImageUploadFormItem from "@/components/form/ImageUploadFormItem";
+import useSaveShortcut from "@/lib/hooks/useSaveShortcut";
 
 const formSchema = z.object({
   title: z.string().min(1).max(255),
@@ -39,6 +40,12 @@ export default function DocEditor({ doc, callback }: Props) {
   const t = useTranslations("DocEditor");
 
   const router = useRouter();
+
+  const submitButton = useRef<HTMLButtonElement>(null);
+
+  useSaveShortcut(() => {
+    submitButton.current?.click();
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -209,6 +216,7 @@ export default function DocEditor({ doc, callback }: Props) {
           </Button>
 
           <Button
+            ref={submitButton}
             type="submit"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
           >
