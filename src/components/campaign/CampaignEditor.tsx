@@ -13,6 +13,7 @@ const genEmptyChapter = (
   campaignId: string,
   orderNum: number
 ): Omit<ChapterData, "id"> => ({
+  screen_id: null,
   campaign_id: campaignId,
   title: "",
   order_num: orderNum,

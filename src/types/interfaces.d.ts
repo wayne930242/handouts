@@ -45,11 +45,7 @@ export type Generator = Pick<
 export type CampaignDoc = Pick<
   Database["public"]["Tables"]["docs"]["Row"],
   "id" | "title" | "description" | "is_public" | "content"
-> & {
-  generators: {
-    generator: Generator | null;
-  }[];
-};
+>;
 
 export type Campaign = Omit<
   Database["public"]["Tables"]["campaigns"]["Row"],
@@ -61,9 +57,6 @@ export type Campaign = Omit<
   favorite: Favorite[];
   docs: {
     doc: CampaignDoc | null;
-  }[];
-  generators: {
-    generator: Generator | null;
   }[];
 };
 

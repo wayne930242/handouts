@@ -53,12 +53,14 @@ export default function ChapterCard({ chapter }: Props) {
       {
         id: chapter.id,
         campaign_id: chapter.campaign_id,
+        screen_id: chapter.screen_id,
         title: chapter.title,
         order_num: chapter.order_num,
       },
       {
         id: chapter.id,
         campaign_id: chapter.campaign_id,
+        screen_id: chapter.screen_id,
         title: chapter.title,
         order_num: chapter.order_num,
       },
@@ -88,12 +90,14 @@ export default function ChapterCard({ chapter }: Props) {
                     {
                       id: chapter.id,
                       campaign_id: chapter.campaign_id,
+                      screen_id: chapter.screen_id,
                       title: e.target.value,
                       order_num: chapter.order_num,
                     },
                     {
                       id: chapter.id,
                       campaign_id: chapter.campaign_id,
+                      screen_id: chapter.screen_id,
                       title: chapter.title,
                       order_num: chapter.order_num,
                     },

@@ -45,6 +45,7 @@ export const getCampaignDetail = (
       ),
       chapters:chapters (
         id,
+        screen_id,
         campaign_id,
         title,
         order_num,
@@ -74,35 +75,7 @@ export const getCampaignDetail = (
           title,
           description,
           is_public,
-          content,
-          generators:doc_generators (
-            generator:generators (
-              id,
-              name,
-              description,
-              type,
-              fields:generator_fields (
-                id,
-                name,
-                content,
-                order_num
-              )
-            )
-          )
-        )
-      ),
-      generators:campaign_generators (
-        generator:generators (
-          id,
-          name,
-          description,
-          type,
-          fields:generator_fields (
-            id,
-            name,
-            content,
-            order_num
-          )
+          content
         )
       ),
       favorite:user_campaign_favorites!left (

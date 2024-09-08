@@ -227,21 +227,24 @@ export type Database = {
       }
       chapters: {
         Row: {
-          campaign_id: string
+          campaign_id: string | null
           id: number
           order_num: number
+          screen_id: string | null
           title: string
         }
         Insert: {
-          campaign_id: string
+          campaign_id?: string | null
           id?: number
           order_num: number
+          screen_id?: string | null
           title: string
         }
         Update: {
-          campaign_id?: string
+          campaign_id?: string | null
           id?: number
           order_num?: number
+          screen_id?: string | null
           title?: string
         }
         Relationships: [
@@ -252,28 +255,35 @@ export type Database = {
             referencedRelation: "campaigns"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "chapters_screen_id_fkey"
+            columns: ["screen_id"]
+            isOneToOne: false
+            referencedRelation: "screens"
+            referencedColumns: ["id"]
+          },
         ]
       }
       chat_sessions: {
         Row: {
-          campaign_id: string
           created_at: string | null
+          game_id: string | null
           id: string
           status: string | null
           title: string | null
           updated_at: string | null
         }
         Insert: {
-          campaign_id: string
           created_at?: string | null
+          game_id?: string | null
           id?: string
           status?: string | null
           title?: string | null
           updated_at?: string | null
         }
         Update: {
-          campaign_id?: string
           created_at?: string | null
+          game_id?: string | null
           id?: string
           status?: string | null
           title?: string | null
@@ -281,10 +291,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "chat_sessions_campaign_id_fkey"
-            columns: ["campaign_id"]
+            foreignKeyName: "chat_sessions_game_id_fkey"
+            columns: ["game_id"]
             isOneToOne: false
-            referencedRelation: "campaigns"
+            referencedRelation: "games"
             referencedColumns: ["id"]
           },
         ]
@@ -522,6 +532,131 @@ export type Database = {
         }
         Relationships: []
       }
+      game_campaigns: {
+        Row: {
+          campaign_id: string
+          game_id: string
+        }
+        Insert: {
+          campaign_id: string
+          game_id: string
+        }
+        Update: {
+          campaign_id?: string
+          game_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_campaigns_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_campaigns_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_docs: {
+        Row: {
+          doc_id: string
+          game_id: string
+        }
+        Insert: {
+          doc_id: string
+          game_id: string
+        }
+        Update: {
+          doc_id?: string
+          game_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_docs_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_docs_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_players: {
+        Row: {
+          game_id: string
+          player_id: string
+        }
+        Insert: {
+          game_id: string
+          player_id: string
+        }
+        Update: {
+          game_id?: string
+          player_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_players_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_players_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      games: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          gm_id: string | null
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          gm_id?: string | null
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          gm_id?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_gm_id_fkey"
+            columns: ["gm_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       generator_bundles: {
         Row: {
           created_at: string | null
@@ -733,6 +868,60 @@ export type Database = {
           },
         ]
       }
+      notes: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          game_id: string | null
+          id: string
+          is_public: boolean | null
+          metadata: Json | null
+          order_num: number | null
+          owner_id: string | null
+          type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          order_num?: number | null
+          owner_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          order_num?: number | null
+          owner_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -764,6 +953,65 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      screen_generators: {
+        Row: {
+          generator_id: string
+          screen_id: string
+        }
+        Insert: {
+          generator_id: string
+          screen_id: string
+        }
+        Update: {
+          generator_id?: string
+          screen_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "screen_generators_generator_id_fkey"
+            columns: ["generator_id"]
+            isOneToOne: false
+            referencedRelation: "generators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "screen_generators_screen_id_fkey"
+            columns: ["screen_id"]
+            isOneToOne: false
+            referencedRelation: "screens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      screens: {
+        Row: {
+          created_at: string | null
+          game_id: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "screens_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
             referencedColumns: ["id"]
           },
         ]

@@ -34,6 +34,7 @@ export default function onDragEnd(
       "order_num"
     ).map((chapter) => ({
       id: chapter.id,
+      screen_id: chapter.screen_id,
       campaign_id: chapter.campaign_id,
       title: chapter.title,
       order_num: chapter.order_num,
