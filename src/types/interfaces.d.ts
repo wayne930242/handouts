@@ -257,3 +257,40 @@ export interface ProfileStore {
   profile: ProfileData | null;
   setProfile: (profile: ProfileData | null) => void;
 }
+
+// Game types
+export type Game = {
+  id: string;
+  title: string;
+  description: string | null;
+  gm: Profile | null;
+  players: {
+    player: Profile | null;
+  }[];
+  campaigns: { id: string }[];
+  docs: { id: string }[];
+  screens: ScreenInGame[];
+  notes: Note[];
+  favorite: Favorite[];
+};
+
+export type ScreenInGame = Pick<
+  Database["public"]["Tables"]["screens"]["Row"],
+  "id"
+> & {
+  chapters: Chapter[];
+  generators: {
+    generator: Generator | null;
+  }[];
+};
+
+export type Note = Pick<
+  Database["public"]["Tables"]["notes"]["Row"],
+  | "id"
+  | "owner_id"
+  | "order_num"
+  | "type"
+  | "content"
+  | "is_public"
+  | "metadata"
+>;
