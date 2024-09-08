@@ -15,7 +15,7 @@ const Routers = [
     exact: false,
   },
   {
-    path: "/generators",
+    path: "/games",
     exact: false,
   }
 ] as const;

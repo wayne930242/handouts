@@ -1,7 +1,8 @@
-import PageLayout from "@/components/layout/PageLayout";
-import { createClient } from "@/lib/supabase/server";
 import { QueryClient } from "@tanstack/react-query";
 import { Construction } from "lucide-react";
+
+import PageLayout from "@/components/layout/PageLayout";
+import { createClient } from "@/lib/supabase/server";
 
 interface Props {
   params: {

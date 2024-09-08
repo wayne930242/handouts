@@ -71,7 +71,7 @@ export default function Docs({ userId }: Props) {
   ) : !hasData ? (
     <main className="flex flex-col items-center justify-center gap-2 text-center py-12">
       <div className="text-2xl font-bold">{t("noDocs")}</div>
-      <div className="text-sm text-muted-foreground">{t("createCampaign")}</div>
+      <div className="text-sm text-muted-foreground">{t("createDoc")}</div>
     </main>
   ) : (
     <main className="grid grid-cols-1 divide-y gap-y-4">

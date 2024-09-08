@@ -19,11 +19,11 @@
     "errorDescription": "An error occurred while deleting the campaign. Please try again later.",
     "errorTitle": "Deletion Failed",
     "formValidation": {
-      "required": "Please enter the campaign ID"
+      "required": "Please enter the Campaign ID"
     },
     "idLabel": "Campaign ID:",
     "idMismatchError": "The entered ID does not match",
-    "inputLabel": "Enter the campaign ID to confirm deletion",
+    "inputLabel": "Enter the Campaign ID to confirm deletion",
     "inputPlaceholder": "Campaign ID",
     "successDescription": "Your campaign has been successfully deleted. You now have room to create more campaigns.",
     "successTitle": "Deletion Successful",
@@ -37,9 +37,9 @@
     "bannerUrl": "Banner Image",
     "bannerUrlPlaceholder": "Choose banner image",
     "campaignDescription": "Campaign Description",
-    "campaignDescriptionPlaceholder": "Enter campaign description",
+    "campaignDescriptionPlaceholder": "Enter Campaign description",
     "campaignName": "Campaign Name",
-    "campaignNamePlaceholder": "Enter campaign name",
+    "campaignNamePlaceholder": "Enter Campaign name",
     "cancel": "Cancel",
     "create": "Create",
     "error": "Error",
@@ -48,7 +48,7 @@
       "new": "Create New Campaign"
     },
     "passphrase": "Passphrase",
-    "passphrasePlaceholder": "Enter campaign passphrase",
+    "passphrasePlaceholder": "Enter Campaign passphrase",
     "save": "Save"
   },
   "CampaignMenu": {
@@ -59,10 +59,10 @@
   },
   "CampaignPage": {
     "alert": "During the testing period, each user can only create 1 campaign. If you want to create more campaigns at this time, please contact the author.",
-    "createCampaign": "You can create a new campaign.",
+    "createCampaign": "You can create a new Campaign.",
     "myCampaigns": "My Campaigns",
     "myFavorites": "My Favorites",
-    "noCampaigns": "No campaigns found",
+    "noCampaigns": "No Campaign found",
     "ownedCampaigns": "Owned Campaigns"
   },
   "CampaignViewer": {
@@ -81,7 +81,7 @@
   },
   "DataToolbar": {
     "joinCampaign": "Join Campaign",
-    "joinDoc": "Read Document",
+    "joinDoc": "Join Document",
     "newCampaign": "New Campaign",
     "newDoc": "New Document"
   },
@@ -145,7 +145,7 @@
   },
   "DocsPage": {
     "copyInfo": "Copy Info",
-    "createCampaign": "You can create a new document.",
+    "createDoc": "You can create a new document.",
     "docId": "Document ID",
     "docLink": "Document Link",
     "docLinkWithPassphrase": "Document Link with Passphrase",
@@ -193,20 +193,23 @@
   },
   "Index": {
     "campaignId": "Campaign ID",
-    "campaignsDescription": "Create a series of handouts for players based on campaigns. You can decide which information to make public and present them in a clear structure. You can add generators and documents to campaigns for easy management and sharing.",
+    "campaignsDescription": "Create a series of handouts to share with players. You can decide which information to make public and present them in a clear structure. You can add generators and documents to campaigns for easy management and sharing.",
     "campaignsTitle": "Campaigns",
     "docsDescription": "You can create game documents or rules to share with players using a simple Markdown syntax editor. You can share game rules with your players and set passphrases.",
     "docsTitle": "Documents",
-    "generatorDescription": "Various random tables, draws, or generators to help you create the content you need in the game. You can add generators to campaigns for convenience or share them with players.",
+    "gamesDescription": "Create game tables with players to easily share handouts and various documents, and track the overall game state, including campaign notes, game images, battle records, resource tracking, etc.",
+    "gamesTitle": "Games",
+    "generatorDescription": "Various random tables, draws, or generators to help you generate the content you need in the game. You can add generators to campaigns for convenient use or share them with players.",
     "generatorTitle": "Generator",
     "passphrase": "Passphrase",
-    "siteDescription": "A simple tool that allows you to easily share and manage TTRPG game handouts. It helps you conveniently share game information with players.",
-    "welcome": "Welcome to RpgHandouts!"
+    "siteDescription": "A simple tool that allows you to easily share and manage TRPG game handouts. Helps you conveniently share game information with players.",
+    "welcome": "Welcome to RpgHandouts"
   },
   "LocaleLayout": {
     "campaigns": "Campaigns",
     "description": "A simple tool to help you share and manage handouts of RPG campaigns.",
     "docs": "Documents",
+    "games": "Games",
     "generators": "Generators",
     "loggedIn": "Logged in as {username}",
     "loggedOut": "You are logged out.",
@@ -245,7 +248,7 @@
   },
   "PassphraseDialog": {
     "campaignDescription": "Please enter the Campaign ID and passphrase provided by your GM.",
-    "campaignTitle": "Enter passphrase to join campaign",
+    "campaignTitle": "Enter passphrase to join Campaign",
     "description": "Please enter the ID and passphrase provided by your GM.",
     "docDescription": "Please enter the Document ID and passphrase provided by your GM.",
     "docTitle": "Enter passphrase to read Document",
@@ -256,7 +259,7 @@
     "cancel": "Cancel",
     "docId": "Document ID",
     "passphrase": "Passphrase",
-    "pleaseEnterCampaignId": "Please enter the campaign ID",
+    "pleaseEnterCampaignId": "Please enter the Campaign ID",
     "pleaseEnterDocId": "Please enter the document ID",
     "pleaseEnterPassphrase": "Please enter the passphrase",
     "submit": "Submit"

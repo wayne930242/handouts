@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import FeatureCard from "./FeatureCard";
-import { BookHeart, Dices, Swords } from "lucide-react";
+import { BookHeart, LandPlot, Swords } from "lucide-react";
 
 export default function Features() {
   const t = useTranslations("Index");
@@ -10,7 +10,7 @@ export default function Features() {
       <FeatureCard
         title={t("campaignsTitle")}
         description={t("campaignsDescription")}
-        icon={<Swords className="h-8 w-8" />}
+        icon={<LandPlot className="h-8 w-8" />}
         href="/campaigns"
       />
       <FeatureCard
@@ -20,9 +20,9 @@ export default function Features() {
         href="/docs"
       />
       <FeatureCard
-        title={t("generatorTitle")}
-        description={t("generatorDescription")}
-        icon={<Dices className="h-8 w-8" />}
+        title={t("gamesTitle")}
+        description={t("gamesDescription")}
+        icon={<Swords className="h-8 w-8" />}
         href="/generators"
       />
     </div>
