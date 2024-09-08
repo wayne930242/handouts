@@ -313,7 +313,8 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                           <TextEditor
                             field={field}
                             oldValue={handout.content ?? undefined}
-                            campaignId={campaignData?.id}
+                            campaignId={campaignData?.id ?? ""}
+                            handoutId={handout.id}
                           />
                         </FormControl>
                         <FormMessage />

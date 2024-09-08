@@ -10,7 +10,21 @@ const defaultOptions: Options = {
 };
 
 type Fields = any;
-export type ImageTableKey = "campaigns" | "docs" | "profile";
+
+export type ImageTableKey = "campaigns" | "docs" | "profile" | "games";
+export type ImageTableSubKey = "handouts" | "notes";
+
+export const parseKey = (
+  key: ImageTableKey,
+  id: string,
+  filename?: string,
+  subKey?: ImageTableSubKey,
+  subId?: string
+) => {
+  const prefix = `${key}/${id}/images/`;
+  const subPrefix = subKey ? `${subKey}/${subId}/images/` : undefined;
+  return `${prefix}${subPrefix ?? ""}${filename ?? ""}`;
+};
 
 export default class ImageManager {
   private options: Options;
@@ -24,10 +38,18 @@ export default class ImageManager {
   async uploadImage(
     file: File,
     tableKey: ImageTableKey,
-    id: string
+    id: string,
+    subKey?: ImageTableSubKey,
+    subId?: string
   ): Promise<string> {
     const compressedImage = await this.compressImage(file);
-    const key = `${tableKey}/${id}/images/${Date.now()}.webp`;
+    const key = parseKey(
+      tableKey,
+      id,
+      Date.now().toString() + ".webp",
+      subKey,
+      subId
+    );
     const objectUrl = await this.uploadToS3(compressedImage, key);
     return objectUrl;
   }
@@ -36,11 +58,13 @@ export default class ImageManager {
     tableKey: ImageTableKey,
     id: string,
     content: string | undefined,
-    exUrls?: string[]
+    exUrls?: string[],
+    subKey?: ImageTableSubKey,
+    subId?: string
   ): Promise<string[]> {
     const keepUrls = this.prepareKeepUrls(content, exUrls);
     await ky.post(`${this.baseUrl}/api/clean-images`, {
-      json: { urlsToKeep: keepUrls, tableKey, id },
+      json: { urlsToKeep: keepUrls, tableKey, id, subKey, subId },
     });
     return keepUrls;
   }
@@ -72,11 +96,13 @@ export default class ImageManager {
 
   async deleteImagesByKeyAndId(
     tableKey: ImageTableKey,
-    id: string
+    id: string,
+    subKey?: ImageTableSubKey,
+    subId?: string
   ): Promise<void> {
     try {
       await ky.post(`${this.baseUrl}/api/delete-images`, {
-        json: { id, tableKey },
+        json: { id, tableKey, subKey, subId },
       });
     } catch (error) {
       console.error("Delete failed:", error);

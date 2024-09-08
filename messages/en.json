@@ -82,8 +82,10 @@
   "DataToolbar": {
     "joinCampaign": "Join Campaign",
     "joinDoc": "Join Document",
+    "joinGame": "Join Game",
     "newCampaign": "New Campaign",
-    "newDoc": "New Document"
+    "newDoc": "New Document",
+    "newGame": "New Game"
   },
   "DocDeleteZone": {
     "deleteButton": "Delete Document",
@@ -170,6 +172,13 @@
     "submitButton": "Reset Password",
     "title": "Reset Password"
   },
+  "GamesPage": {
+    "createGame": "You can create a new game.",
+    "myFavorites": "My Favorites",
+    "myGames": "My Games",
+    "noGames": "No Games found",
+    "ownedGames": "Owned Games"
+  },
   "HandoutCard": {
     "cancel": "Cancel",
     "deleteHandout": "Delete Handout",
@@ -252,6 +261,8 @@
     "description": "Please enter the ID and passphrase provided by your GM.",
     "docDescription": "Please enter the Document ID and passphrase provided by your GM.",
     "docTitle": "Enter passphrase to read Document",
+    "gameDescription": "Please enter the Game ID and passphrase provided by your GM.",
+    "gameTitle": "Enter passphrase to join Game",
     "title": "Passphrase"
   },
   "PhraseForm": {

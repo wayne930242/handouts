@@ -1,10 +1,11 @@
 import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { createS3Client } from "@/lib/s3/createClient";
+import { parseKey } from "@/lib/ImageManager";
 
 const s3Client = createS3Client();
 
 export async function POST(request: Request) {
-  const { urlsToKeep, tableKey, id } = await request.json();
+  const { urlsToKeep, tableKey, id, subKey, subId } = await request.json();
   if (!Array.isArray(urlsToKeep) || urlsToKeep.length === 0) {
     return Response.json(
       { error: "Invalid or missing urlsToKeep parameter" },
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
 
   try {
     // Extract the prefix from the first URL to keep
-    const prefix = `${tableKey}/${id}/images/`;
+    const prefix = parseKey(tableKey, id, undefined, subKey, subId);
 
     // List objects with the given prefix
     const listParams = {

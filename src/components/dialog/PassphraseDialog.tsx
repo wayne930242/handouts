@@ -33,6 +33,8 @@ export default function PassphraseDialog() {
               ? t("campaignTitle")
               : passphraseDialog === "docs"
               ? t("docTitle")
+              : passphraseDialog === "games"
+              ? t("gameTitle")
               : t("title")}
           </DialogTitle>
         </DialogHeader>
@@ -41,6 +43,8 @@ export default function PassphraseDialog() {
             ? t("campaignDescription")
             : passphraseDialog === "docs"
             ? t("docDescription")
+            : passphraseDialog === "games"
+            ? t("gameDescription")
             : t("description")}
         </DialogDescription>
         {passphraseDialog && (

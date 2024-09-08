@@ -82,8 +82,10 @@
   "DataToolbar": {
     "joinCampaign": "加入戰役",
     "joinDoc": "加入文件",
+    "joinGame": "加入遊戲",
     "newCampaign": "新戰役",
-    "newDoc": "新文件"
+    "newDoc": "新文件",
+    "newGame": "新遊戲"
   },
   "DocDeleteZone": {
     "deleteButton": "刪除文件",
@@ -170,6 +172,13 @@
     "submitButton": "重設密碼",
     "title": "重設密碼"
   },
+  "GamesPage": {
+    "createGame": "你可以創建一個新的遊戲。",
+    "myFavorites": "我的最愛",
+    "myGames": "我的遊戲",
+    "noGames": "沒有找到遊戲",
+    "ownedGames": "我擁有的遊戲"
+  },
   "HandoutCard": {
     "cancel": "取消",
     "deleteHandout": "刪除手邊資料",
@@ -252,6 +261,8 @@
     "description": "請輸入 GM 提供給你的 ID 與通關密語。",
     "docDescription": "請輸入 GM 提供給你的文件 ID 與通關密語。",
     "docTitle": "輸入通關密語來閱讀文件",
+    "gameDescription": "請輸入 GM 提供給你的遊戲 ID 與通關密語。",
+    "gameTitle": "輸入通關密語來加入遊戲",
     "title": "輸入通關密語"
   },
   "PhraseForm": {

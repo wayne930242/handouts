@@ -8,7 +8,12 @@ import { toast } from "@/components/ui/use-toast";
 import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/form/MyMDXEditor";
 
-export default function TextEditor({ field, oldValue, campaignId }: Props) {
+export default function TextEditor({
+  field,
+  oldValue,
+  campaignId,
+  handoutId,
+}: Props) {
   const { setIsLoading } = useAppStore((state) => ({
     setIsLoading: state.setIsLoading,
   }));
@@ -26,7 +31,13 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
           ? async (image: File) => {
               setIsLoading(true);
               return imageManager
-                .uploadImage(image, "campaigns", campaignId)
+                .uploadImage(
+                  image,
+                  "campaigns",
+                  campaignId,
+                  "handouts",
+                  handoutId
+                )
                 .then((url) => url)
                 .catch((e) => {
                   toast({
@@ -46,6 +57,7 @@ export default function TextEditor({ field, oldValue, campaignId }: Props) {
 
 interface Props {
   field: ContentFieldProps;
-  campaignId?: string;
+  handoutId: string;
+  campaignId: string;
   oldValue?: string;
 }

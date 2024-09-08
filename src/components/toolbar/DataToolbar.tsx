@@ -5,6 +5,12 @@ import useAppStore from "@/lib/store/useAppStore";
 import { useTranslations } from "next-intl";
 import { PassphraseDialogKey } from "@/types/interfaces";
 
+const SaddledKeyMap = {
+  campaigns: "Campaign",
+  games: "Game",
+  docs: "Doc",
+} as const;
+
 export default function DataToolbar({
   tableKey,
 }: {
@@ -15,7 +21,7 @@ export default function DataToolbar({
   }));
   const t = useTranslations("DataToolbar");
 
-  const saddledKey = tableKey === "campaigns" ? "Campaign" : "Doc";
+  const saddledKey = SaddledKeyMap[tableKey];
 
   return (
     <div className="flex justify-between items-center w-full px-2">

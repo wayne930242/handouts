@@ -1,10 +1,11 @@
+import { parseKey } from "@/lib/ImageManager";
 import { createS3Client } from "@/lib/s3/createClient";
 import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 
 const s3Client = createS3Client();
 
 export async function POST(request: Request) {
-  const { tableKey, id, url } = await request.json();
+  const { tableKey, id, url, subKey, subId } = await request.json();
 
   if ((!tableKey || !id) && !url) {
     return Response.json(
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
       objectsToDelete = [{ Key: key }];
     } else {
       // Original behavior: delete all objects with the given prefix
-      const prefix = `${tableKey}/${id}/images/`;
+      const prefix = parseKey(tableKey, id, undefined, subKey, subId);
       const listParams = {
         Bucket: process.env.S3_BUCKET!,
         Prefix: prefix,

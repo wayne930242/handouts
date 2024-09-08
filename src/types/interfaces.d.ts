@@ -168,7 +168,7 @@ export interface ConfirmDialogData<T extends any = any> {
   data?: T;
 }
 
-type PassphraseDialogKey = "docs" | "campaigns";
+type PassphraseDialogKey = "docs" | "campaigns" | "games";
 export type PassphraseId = `${PassphraseDialogKey}-${string}`;
 
 export type Passphrase = {
@@ -294,3 +294,7 @@ export type Note = Pick<
   | "is_public"
   | "metadata"
 >;
+
+export type GameInList = Database["public"]["Tables"]["games"]["Row"] & {
+  gm: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
+};
