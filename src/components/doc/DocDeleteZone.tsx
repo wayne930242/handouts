@@ -42,17 +42,16 @@ export default function DocDeleteZone({ docId }: { docId: string }) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const { mutateAsync: deleteDoc } = useDeleteMutation(
-    supabase.from("docs"),
-    ["id"],
-  );
+  const { mutateAsync: deleteDoc } = useDeleteMutation(supabase.from("docs"), [
+    "id",
+  ]);
 
   const { setConfirm } = useConfirmDialog(
     async (data: z.infer<typeof FormSchema>) => {
       if (data.doc_id === docId) {
         try {
           setLoading(true);
-          await imageManager.deleteImagesByKeyAndId("docs", data.doc_id);
+          await imageManager.deleteImagesByPrefix(`docs/${data.doc_id}/images`);
           await deleteDoc({
             id: data.doc_id,
           });

@@ -104,7 +104,10 @@ export default function CampaignForm({
     }
 
     if (file) {
-      const imageUrl = await imageManager.uploadImage(file, "campaigns", id);
+      const imageUrl = await imageManager.uploadImage(
+        file,
+        `campaigns/${id}/images`
+      );
       data.banner_url = imageUrl;
       setFile(null);
     }

@@ -1,13 +1,12 @@
-import { parseKey } from "@/lib/ImageManager";
 import { createS3Client } from "@/lib/s3/createClient";
 import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 
 const s3Client = createS3Client();
 
 export async function POST(request: Request) {
-  const { tableKey, id, url, subKey, subId } = await request.json();
+  const { url, prefix } = await request.json();
 
-  if ((!tableKey || !id) && !url) {
+  if (!prefix && !url) {
     return Response.json(
       { error: "Either tableKey and id, or url is required" },
       { status: 400 }
@@ -23,7 +22,6 @@ export async function POST(request: Request) {
       objectsToDelete = [{ Key: key }];
     } else {
       // Original behavior: delete all objects with the given prefix
-      const prefix = parseKey(tableKey, id, undefined, subKey, subId);
       const listParams = {
         Bucket: process.env.S3_BUCKET!,
         Prefix: prefix,

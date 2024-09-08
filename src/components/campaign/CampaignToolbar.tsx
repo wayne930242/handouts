@@ -47,10 +47,13 @@ export default function Toolbar({
     setIsLocalFavorite(!!isFavorite);
   }, [setIsLocalFavorite, isFavorite]);
 
-  const { editingCampaign, setEditingCampaign } = useAppStore((state) => ({
-    editingCampaign: state.editingCampaign,
-    setEditingCampaign: state.setEditingCampaign,
-  }));
+  const { editingStage, setEditingStage, setEditingId } = useAppStore(
+    (state) => ({
+      editingStage: state.editingStage,
+      setEditingStage: state.setEditingStage,
+      setEditingId: state.setEditingId,
+    })
+  );
   const { campaignData, connected, loading } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
     connected: state.connected,
@@ -163,21 +166,23 @@ export default function Toolbar({
           <Button
             size="sm"
             className="flex gap-2 items-center"
-            variant={editingCampaign ? "outline" : "default"}
+            variant={editingStage === "campaign" ? "outline" : "default"}
             onClick={() => {
-              if (editingCampaign) {
-                setEditingCampaign(false);
+              if (editingStage === "campaign") {
+                setEditingStage(null);
+                setEditingId(null);
               } else {
-                setEditingCampaign(campaignId);
+                setEditingStage("campaign");
+                setEditingId(campaignId);
               }
             }}
           >
-            {editingCampaign ? (
+            {editingStage === "campaign" ? (
               <Eye className="h-4 w-4" />
             ) : (
               <Pen className="h-4 w-4" />
             )}
-            {editingCampaign ? t("closeEdit") : t("edit")}
+            {editingStage === "campaign" ? t("closeEdit") : t("edit")}
           </Button>
         )}
         {!isOwner && (

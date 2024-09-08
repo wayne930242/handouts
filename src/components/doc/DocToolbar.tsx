@@ -44,10 +44,13 @@ export default function Toolbar({
     setIsLocalFavorite(!!isFavorite);
   }, [setIsLocalFavorite, isFavorite]);
 
-  const { editing, setEditing } = useAppStore((state) => ({
-    editing: state.editingDoc,
-    setEditing: state.setEditingDoc,
-  }));
+  const { editingStage, setEditingStage, setEditingId } = useAppStore(
+    (state) => ({
+      editingStage: state.editingStage,
+      setEditingStage: state.setEditingStage,
+      setEditingId: state.setEditingId,
+    })
+  );
 
   const handleAddOrRemoveFavorite = async () => {
     if (!doc) return;
@@ -151,21 +154,23 @@ export default function Toolbar({
           <Button
             size="sm"
             className="flex gap-2 items-center"
-            variant={editing ? "outline" : "default"}
+            variant={editingStage === "doc" ? "outline" : "default"}
             onClick={() => {
-              if (editing) {
-                setEditing(false);
+              if (editingStage === "doc") {
+                setEditingStage(null);
+                setEditingId(null);
               } else {
-                setEditing(doc.id);
+                setEditingStage("doc");
+                setEditingId(doc.id);
               }
             }}
           >
-            {editing ? (
+            {editingStage === "doc" ? (
               <Eye className="h-4 w-4" />
             ) : (
               <Pen className="h-4 w-4" />
             )}
-            {editing ? t("closeEdit") : t("edit")}
+            {editingStage === "doc" ? t("closeEdit") : t("edit")}
           </Button>
         )}
         {!isOwner && (

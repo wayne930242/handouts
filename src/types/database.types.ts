@@ -803,7 +803,7 @@ export type Database = {
       }
       handouts: {
         Row: {
-          campaign_id: string
+          campaign_id: string | null
           content: string | null
           created_at: string | null
           id: string
@@ -811,13 +811,14 @@ export type Database = {
           note: string | null
           order_num: number
           owner_id: string
+          screen_id: string | null
           section_id: number
           title: string
           type: string | null
           updated_at: string | null
         }
         Insert: {
-          campaign_id: string
+          campaign_id?: string | null
           content?: string | null
           created_at?: string | null
           id?: string
@@ -825,13 +826,14 @@ export type Database = {
           note?: string | null
           order_num: number
           owner_id: string
+          screen_id?: string | null
           section_id: number
           title: string
           type?: string | null
           updated_at?: string | null
         }
         Update: {
-          campaign_id?: string
+          campaign_id?: string | null
           content?: string | null
           created_at?: string | null
           id?: string
@@ -839,6 +841,7 @@ export type Database = {
           note?: string | null
           order_num?: number
           owner_id?: string
+          screen_id?: string | null
           section_id?: number
           title?: string
           type?: string | null
@@ -857,6 +860,13 @@ export type Database = {
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "handouts_screen_id_fkey"
+            columns: ["screen_id"]
+            isOneToOne: false
+            referencedRelation: "screens"
             referencedColumns: ["id"]
           },
           {
@@ -1018,24 +1028,27 @@ export type Database = {
       }
       sections: {
         Row: {
-          campaign_id: string
+          campaign_id: string | null
           chapter_id: number
           id: number
           order_num: number
+          screen_id: string | null
           title: string
         }
         Insert: {
-          campaign_id: string
+          campaign_id?: string | null
           chapter_id: number
           id?: number
           order_num: number
+          screen_id?: string | null
           title: string
         }
         Update: {
-          campaign_id?: string
+          campaign_id?: string | null
           chapter_id?: number
           id?: number
           order_num?: number
+          screen_id?: string | null
           title?: string
         }
         Relationships: [
@@ -1051,6 +1064,13 @@ export type Database = {
             columns: ["chapter_id"]
             isOneToOne: false
             referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sections_screen_id_fkey"
+            columns: ["screen_id"]
+            isOneToOne: false
+            referencedRelation: "screens"
             referencedColumns: ["id"]
           },
         ]
@@ -1147,6 +1167,42 @@ export type Database = {
           },
           {
             foreignKeyName: "user_doc_favorites_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_game_favorites: {
+        Row: {
+          added_at: string | null
+          game_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          added_at?: string | null
+          game_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          added_at?: string | null
+          game_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_game_favorites_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_game_favorites_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"

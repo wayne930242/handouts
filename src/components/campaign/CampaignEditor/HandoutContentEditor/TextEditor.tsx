@@ -1,20 +1,14 @@
 "use client";
 import { useTranslations } from "next-intl";
 
-import ImageManager, { ImageTableKey } from "@/lib/ImageManager";
+import ImageManager, { ImageKeyPrefix } from "@/lib/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 import { toast } from "@/components/ui/use-toast";
 import { ContentFieldProps } from "../HandoutCard";
 import MyMDXEditor from "@/components/form/MyMDXEditor";
 
-export default function TextEditor({
-  field,
-  oldValue,
-  imageTableId,
-  imageTableKey,
-  handoutId,
-}: Props) {
+export default function TextEditor({ field, oldValue, id, prefix }: Props) {
   const { setIsLoading } = useAppStore((state) => ({
     setIsLoading: state.setIsLoading,
   }));
@@ -28,17 +22,11 @@ export default function TextEditor({
       oldMarkdown={oldValue}
       onChange={(value) => field.onChange(value)}
       imageUploadHandler={
-        imageTableId && imageTableKey
+        id && prefix
           ? async (image: File) => {
               setIsLoading(true);
               return imageManager
-                .uploadImage(
-                  image,
-                  imageTableKey,
-                  imageTableId,
-                  "handouts",
-                  handoutId
-                )
+                .uploadImage(image, prefix)
                 .then((url) => url)
                 .catch((e) => {
                   toast({
@@ -58,8 +46,7 @@ export default function TextEditor({
 
 interface Props {
   field: ContentFieldProps;
-  handoutId: string;
-  imageTableKey?: ImageTableKey;
-  imageTableId?: string;
+  prefix?: ImageKeyPrefix | undefined;
+  id?: string;
   oldValue?: string;
 }

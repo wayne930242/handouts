@@ -18,8 +18,8 @@ const CampaignViewer = dynamic(() => import("./CampaignViewer"), {
 export default function Campaign({ campaignId, userId }: Props) {
   const { campaignData } = useCampaignData(campaignId, userId);
 
-  const { editingCampaign } = useAppStore((state) => ({
-    editingCampaign: state.editingCampaign,
+  const { editingStage } = useAppStore((state) => ({
+    editingStage: state.editingStage,
   }));
 
   const isGm = useCanEditCampaign();
@@ -35,8 +35,8 @@ export default function Campaign({ campaignId, userId }: Props) {
         isFavorite={!!campaignData?.favorite?.length}
       />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
-        {editingCampaign && <CampaignEditor />}
-        {!editingCampaign && <CampaignViewer />}
+        {editingStage === "campaign" && <CampaignEditor />}
+        {editingStage !== "campaign" && <CampaignViewer />}
       </div>
     </div>
   );

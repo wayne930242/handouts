@@ -48,7 +48,7 @@ export default function CampaignDeleteZone({
 
   const { mutateAsync: deleteCampaign } = useDeleteMutation(
     supabase.from("campaigns"),
-    ["id"],
+    ["id"]
   );
 
   const { setConfirm } = useConfirmDialog(
@@ -56,9 +56,8 @@ export default function CampaignDeleteZone({
       if (data.campaign_id === campaignId) {
         try {
           setLoading(true);
-          await imageManager.deleteImagesByKeyAndId(
-            "campaigns",
-            data.campaign_id
+          await imageManager.deleteImagesByPrefix(
+            `campaigns/${data.campaign_id}/images`
           );
           await deleteCampaign({
             id: data.campaign_id,

@@ -172,12 +172,10 @@ export type Passphrase = {
 export interface AppStore {
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
-  editingCampaign: false | string;
-  setEditingCampaign: (editingCampaign: false | string) => void;
-  editingDoc: false | string;
-  setEditingDoc: (editingDoc: false | string) => void;
-  editingGame: false | string;
-  setEditingGame: (editingGame: false | string) => void;
+  editingId: string | null;
+  setEditingId: (editingId: string | null) => void;
+  editingStage: "campaign" | "screen" | "doc" | null;
+  setEditingStage: (editingStage: "campaign" | "screen" | "doc" | null) => void;
   addPassphraseDialog: PassphraseDialogKey | null;
   setAddPassphraseDialog: (
     passphraseDialog: PassphraseDialogKey | null

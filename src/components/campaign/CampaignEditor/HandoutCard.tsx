@@ -46,7 +46,7 @@ import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
-import ImageManager from "@/lib/ImageManager";
+import ImageManager, { ImageKeyPrefix } from "@/lib/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 const ImageEditor = dynamic(
@@ -83,15 +83,16 @@ export type ContentFieldProps = ControllerRenderProps<
 
 export default function HandoutCard({ handout }: Props) {
   const supabase = useClient();
-  const { editingCampaign, editingGame } = useAppStore((state) => ({
-    editingGame: state.editingGame,
-    editingCampaign: state.editingCampaign,
+  const { editingStage, editingId } = useAppStore((state) => ({
+    editingStage: state.editingStage,
+    editingId: state.editingId,
   }));
 
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     setCampaignData: state.setCampaignData,
     campaignData: state.campaignData,
   }));
+
   const t = useTranslations("HandoutCard");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -111,32 +112,37 @@ export default function HandoutCard({ handout }: Props) {
   usePreventLeave(isDirty, t("leaveAlert"));
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setCampaignData(
-      {
-        id: handout.id,
-        section_id: handout.section_id,
-        campaign_id: handout.campaign_id,
-        title: data.title,
-        type: data.type ?? null,
-        content: data.content ?? null,
-        is_public: data.is_public,
-        note: data.note ?? null,
-        order_num: handout.order_num,
-        owner_id: handout.owner_id,
-      },
-      {
-        id: handout.id,
-        section_id: handout.section_id,
-        title: handout.title,
-        type: handout.type,
-        content: handout.content,
-        is_public: handout.is_public,
-        note: handout.note,
-      },
-      supabase,
-      "handouts",
-      "UPDATE"
-    );
+    if (editingId) {
+      setCampaignData(
+        {
+          id: handout.id,
+          section_id: handout.section_id,
+          campaign_id: handout.campaign_id,
+          screen_id: handout.screen_id,
+          title: data.title,
+          type: data.type ?? null,
+          content: data.content ?? null,
+          is_public: data.is_public,
+          note: data.note ?? null,
+          order_num: handout.order_num,
+          owner_id: handout.owner_id,
+        },
+        {
+          id: handout.id,
+          section_id: handout.section_id,
+          screen_id: handout.screen_id,
+          campaign_id: handout.campaign_id,
+          title: handout.title,
+          type: handout.type,
+          content: handout.content,
+          is_public: handout.is_public,
+          note: handout.note,
+        },
+        supabase,
+        "handouts",
+        "UPDATE"
+      );
+    }
     form.reset({
       title: data.title,
       type: data.type,
@@ -165,38 +171,33 @@ export default function HandoutCard({ handout }: Props) {
 
   const imageManager = new ImageManager();
 
+  const prefix: ImageKeyPrefix | undefined =
+    editingStage === "campaign"
+      ? `campaigns/${editingId}/handouts/${handout.id}/images`
+      : editingStage === "screen"
+      ? `games/${editingId}/screens/${handout.screen_id}/handouts/${handout.id}/images`
+      : undefined;
+
   const deleteHandout = async (h: Handout) => {
     if (!h) return;
-    if (editingCampaign && h.content) {
-      await imageManager.cleanImages(
-        "campaigns",
-        editingCampaign,
-        h.content,
-        undefined,
+    if (editingStage === "campaign" && h.content && prefix) {
+      await imageManager.cleanImages(prefix, h.content);
+    }
+    if (editingStage === "screen" && h.content && prefix) {
+      await imageManager.cleanImages(prefix, h.content);
+    }
+    if (editingStage === "campaign") {
+      setCampaignData(
+        h,
+        {
+          id: h.id,
+          section_id: h.section_id,
+        },
+        supabase,
         "handouts",
-        h.id
+        "DELETE"
       );
     }
-    if (editingGame && h.content) {
-      await imageManager.cleanImages(
-        "games",
-        editingGame,
-        h.content,
-        undefined,
-        "handouts",
-        h.id
-      );
-    }
-    setCampaignData(
-      h,
-      {
-        id: h.id,
-        section_id: h.section_id,
-      },
-      supabase,
-      "handouts",
-      "DELETE"
-    );
   };
   const { setConfirm } = useConfirmDialog(deleteHandout);
 
@@ -347,15 +348,8 @@ export default function HandoutCard({ handout }: Props) {
                           <TextEditor
                             field={field}
                             oldValue={handout.content ?? undefined}
-                            imageTableId={campaignData?.id ?? ""}
-                            imageTableKey={
-                              editingCampaign
-                                ? "campaigns"
-                                : editingGame
-                                ? "games"
-                                : "docs"
-                            }
-                            handoutId={handout.id}
+                            id={editingId ?? undefined}
+                            prefix={prefix}
                           />
                         </FormControl>
                         <FormMessage />

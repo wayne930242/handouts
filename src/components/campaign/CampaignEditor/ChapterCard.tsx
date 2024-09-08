@@ -18,11 +18,13 @@ interface Props {
 }
 
 const emptySection = (
-  campaignId: string,
+  screenId: string | null,
+  campaignId: string | null,
   chapterId: number,
   orderNum: number
 ): Omit<SectionData, "id"> => ({
   campaign_id: campaignId,
+  screen_id: screenId,
   chapter_id: chapterId,
   title: "",
   order_num: orderNum,
@@ -125,7 +127,8 @@ export default function ChapterCard({ chapter }: Props) {
               size="sm"
               onClick={() => {
                 const newSection = emptySection(
-                  campaignData!.id,
+                  chapter.screen_id,
+                  chapter.campaign_id,
                   chapter.id as number,
                   (chapter.sections?.length ?? 0) + 1
                 );

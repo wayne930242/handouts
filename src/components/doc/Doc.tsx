@@ -28,8 +28,8 @@ export default function Doc({ docId, userId }: Props) {
     refetch,
   } = useQuery(getDocInfo(supabase, docId, userId));
 
-  const { editingDoc } = useAppStore((state) => ({
-    editingDoc: state.editingDoc,
+  const { editingStage } = useAppStore((state) => ({
+    editingStage: state.editingStage,
   }));
 
   return doc ? (
@@ -41,8 +41,8 @@ export default function Doc({ docId, userId }: Props) {
         isFavorite={!!doc?.favorite?.length}
       />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
-        {editingDoc && <DocEditor doc={doc} callback={refetch} />}
-        {!editingDoc && <DocViewer doc={doc} />}
+        {editingStage === "doc" && <DocEditor doc={doc} callback={refetch} />}
+        {editingStage !== "doc" && <DocViewer doc={doc} />}
       </div>
     </div>
   ) : (

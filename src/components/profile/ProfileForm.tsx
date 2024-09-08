@@ -79,7 +79,10 @@ export default function ProfileForm() {
     }
 
     if (file) {
-      const imageUrl = await imageManager.uploadImage(file, "profile", userId);
+      const imageUrl = await imageManager.uploadImage(
+        file,
+        `profile/${userId}/images`
+      );
       data.avatar_url = imageUrl;
       setFile(null);
     }

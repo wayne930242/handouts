@@ -11,20 +11,14 @@ const defaultOptions: Options = {
 
 type Fields = any;
 
-export type ImageTableKey = "campaigns" | "docs" | "profile" | "games";
-export type ImageTableSubKey = "handouts" | "notes";
-
-export const parseKey = (
-  key: ImageTableKey,
-  id: string,
-  filename?: string,
-  subKey?: ImageTableSubKey,
-  subId?: string
-) => {
-  const prefix = `${key}/${id}/images/`;
-  const subPrefix = subKey ? `${subKey}/${subId}/images/` : undefined;
-  return `${prefix}${subPrefix ?? ""}${filename ?? ""}`;
-};
+export type ImageKeyPrefix =
+  | `campaigns/${string}/images`
+  | `docs/${string}/images`
+  | `profile/${string}/images`
+  | `games/${string}/images`
+  | `campaigns/${string}/handouts/${string}/images`
+  | `games/${string}/screens/${string}/handouts/${string}/images`;
+export type ImageKey = `${ImageKeyPrefix}/${string}`;
 
 export default class ImageManager {
   private options: Options;
@@ -35,36 +29,23 @@ export default class ImageManager {
     this.baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   }
 
-  async uploadImage(
-    file: File,
-    tableKey: ImageTableKey,
-    id: string,
-    subKey?: ImageTableSubKey,
-    subId?: string
-  ): Promise<string> {
+  async uploadImage(file: File, prefix: ImageKeyPrefix): Promise<string> {
     const compressedImage = await this.compressImage(file);
-    const key = parseKey(
-      tableKey,
-      id,
-      Date.now().toString() + ".webp",
-      subKey,
-      subId
+    const objectUrl = await this.uploadToS3(
+      compressedImage,
+      `${prefix}/${Date.now().toString()}.webp`
     );
-    const objectUrl = await this.uploadToS3(compressedImage, key);
     return objectUrl;
   }
 
   async cleanImages(
-    tableKey: ImageTableKey,
-    id: string,
+    prefix: ImageKeyPrefix,
     content: string | undefined,
-    exUrls?: string[],
-    subKey?: ImageTableSubKey,
-    subId?: string
+    exUrls?: string[]
   ): Promise<string[]> {
     const keepUrls = this.prepareKeepUrls(content, exUrls);
     await ky.post(`${this.baseUrl}/api/clean-images`, {
-      json: { urlsToKeep: keepUrls, tableKey, id, subKey, subId },
+      json: { urlsToKeep: keepUrls, prefix },
     });
     return keepUrls;
   }
@@ -94,15 +75,10 @@ export default class ImageManager {
     return blobToWebP(compressedImage);
   }
 
-  async deleteImagesByKeyAndId(
-    tableKey: ImageTableKey,
-    id: string,
-    subKey?: ImageTableSubKey,
-    subId?: string
-  ): Promise<void> {
+  async deleteImagesByPrefix(prefix: ImageKeyPrefix): Promise<void> {
     try {
       await ky.post(`${this.baseUrl}/api/delete-images`, {
-        json: { id, tableKey, subKey, subId },
+        json: { prefix },
       });
     } catch (error) {
       console.error("Delete failed:", error);

@@ -81,7 +81,10 @@ export default function DocEditor({ doc, callback }: Props) {
     }
 
     if (file) {
-      const imageUrl = await imageManager.uploadImage(file, "docs", doc.id);
+      const imageUrl = await imageManager.uploadImage(
+        file,
+        `docs/${doc.id}/images`
+      );
       data.banner_url = imageUrl;
       setFile(null);
     }
@@ -114,8 +117,7 @@ export default function DocEditor({ doc, callback }: Props) {
         });
       });
     await imageManager.cleanImages(
-      "docs",
-      doc.id,
+      `docs/${doc.id}/images`,
       data.content,
       data.banner_url ? [data.banner_url] : undefined
     );
@@ -176,7 +178,7 @@ export default function DocEditor({ doc, callback }: Props) {
                   imageUploadHandler={async (image: File) => {
                     setIsLoading(true);
                     return imageManager
-                      .uploadImage(image, "docs", doc.id)
+                      .uploadImage(image, `docs/${doc.id}/images`)
                       .then((url) => url)
                       .catch((e) => {
                         toast({

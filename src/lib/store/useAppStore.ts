@@ -4,12 +4,10 @@ import { AppStore } from "@/types/interfaces";
 const useAppStore = create<AppStore>((set) => ({
   isDragging: false,
   setIsDragging: (isDragging) => set({ isDragging }),
-  editingCampaign: false,
-  setEditingCampaign: (editingCampaign) => set({ editingCampaign }),
-  editingDoc: false,
-  setEditingDoc: (editingDoc) => set({ editingDoc }),
-  editingGame: false,
-  setEditingGame: (editingGame) => set({ editingGame }),
+  editingId: null,
+  setEditingId: (editingId) => set({ editingId }),
+  editingStage: null,
+  setEditingStage: (editingStage) => set({ editingStage }),
   addPassphraseDialog: null,
   setAddPassphraseDialog: (passphraseDialog) =>
     set({ addPassphraseDialog: passphraseDialog }),

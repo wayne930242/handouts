@@ -82,6 +82,7 @@ chapters:chapters (
   sections:sections (
     id,
     chapter_id,
+    screen_id,
     campaign_id,
     title,
     order_num,
@@ -90,6 +91,7 @@ chapters:chapters (
       title,
       content,
       is_public,
+      screen_id,
       section_id,
       campaign_id,
       type,
