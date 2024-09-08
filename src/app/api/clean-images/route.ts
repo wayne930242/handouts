@@ -2,6 +2,26 @@ import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { createS3Client } from "@/lib/s3/createClient";
 
 const s3Client = createS3Client();
+const extractKey = (url: string): string => {
+  try {
+    // Create a URL object
+    const parsedUrl = new URL(url);
+
+    // Get the pathname
+    let pathname = parsedUrl.pathname;
+
+    // Remove leading slash if present
+    if (pathname.startsWith("/")) {
+      pathname = pathname.slice(1);
+    }
+
+    // Return the entire pathname
+    return pathname;
+  } catch (error) {
+    // If URL parsing fails or any other error occurs, throw an error
+    throw new Error("URL processing failed: " + (error as Error).message);
+  }
+};
 
 export async function POST(request: Request) {
   const { urlsToKeep, prefix } = await request.json();
@@ -26,10 +46,6 @@ export async function POST(request: Request) {
       return Response.json({ message: "No objects found to process" });
     }
 
-    const extractKey = (url: string) => {
-      const parts = url.split("/");
-      return parts.slice(parts.indexOf(prefix)).join("/");
-    };
     const keepKeySet = new Set(urlsToKeep.map(extractKey));
 
     const objectsToDelete = listedObjects.Contents.filter(({ Key }) => {
