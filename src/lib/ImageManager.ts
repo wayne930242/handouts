@@ -12,11 +12,11 @@ const defaultOptions: Options = {
 type Fields = any;
 
 export type ImageKeyPrefix =
-  | `campaigns/${string}/images`
-  | `docs/${string}/images`
   | `profile/${string}/images`
-  | `games/${string}/images`
+  | `campaigns/${string}/images`
   | `campaigns/${string}/handouts/${string}/images`
+  | `docs/${string}/images`
+  | `games/${string}/images`
   | `games/${string}/screens/${string}/handouts/${string}/images`;
 export type ImageKey = `${ImageKeyPrefix}/${string}`;
 
