@@ -8,8 +8,11 @@ const useAppStore = create<AppStore>((set) => ({
   setEditingCampaign: (editingCampaign) => set({ editingCampaign }),
   editingDoc: false,
   setEditingDoc: (editingDoc) => set({ editingDoc }),
+  editingGame: false,
+  setEditingGame: (editingGame) => set({ editingGame }),
   addPassphraseDialog: null,
-  setAddPassphraseDialog: (passphraseDialog) => set({ addPassphraseDialog: passphraseDialog }),
+  setAddPassphraseDialog: (passphraseDialog) =>
+    set({ addPassphraseDialog: passphraseDialog }),
   confirmDialog: null,
   setConfirmDialog: (comfirmDialog) => set({ confirmDialog: comfirmDialog }),
   isLoading: false,

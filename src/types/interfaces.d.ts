@@ -125,10 +125,6 @@ export type SetCampaignDataPayload = (
 export interface CampaignStore {
   campaignData: Campaign | null;
   initCampaignData: (campaignData: Campaign | null) => any;
-  asGM: boolean;
-  setAsGM: (asGM: boolean) => void;
-  inWhiteList: boolean;
-  fetchWhiteList: (supabase: MySupabaseClient) => void;
   setCampaignDataLocal: (
     newData: CampaignTableDataPayload,
     oldData: Partial<CampaignTableDataPayload>,
@@ -151,8 +147,6 @@ export interface CampaignStore {
   setLoading: (loading: boolean) => void;
   connected: boolean;
   setConnected: (connected: boolean) => void;
-  connectedAtempts: number;
-  resetConnectedAttempts: () => void;
   error: Error | null;
   handleRealtimeUpdate: <T extends { id: string }>(
     table: CampaignSubTable,
@@ -178,10 +172,12 @@ export type Passphrase = {
 export interface AppStore {
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
-  editingCampaign: boolean;
-  setEditingCampaign: (editingCampaign: boolean) => void;
-  editingDoc: boolean;
-  setEditingDoc: (editingDoc: boolean) => void;
+  editingCampaign: false | string;
+  setEditingCampaign: (editingCampaign: false | string) => void;
+  editingDoc: false | string;
+  setEditingDoc: (editingDoc: false | string) => void;
+  editingGame: false | string;
+  setEditingGame: (editingGame: false | string) => void;
   addPassphraseDialog: PassphraseDialogKey | null;
   setAddPassphraseDialog: (
     passphraseDialog: PassphraseDialogKey | null

@@ -51,12 +51,11 @@ export default function Toolbar({
     editingCampaign: state.editingCampaign,
     setEditingCampaign: state.setEditingCampaign,
   }));
-  const { campaignData, connected, loading } =
-    useCampaignStore((state) => ({
-      campaignData: state.campaignData,
-      connected: state.connected,
-      loading: state.loading,
-    }));
+  const { campaignData, connected, loading } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    connected: state.connected,
+    loading: state.loading,
+  }));
 
   const { mutateAsync: joinCampaign, isPending: isJoining } = useInsertMutation(
     supabase.from("campaign_players"),
@@ -165,7 +164,13 @@ export default function Toolbar({
             size="sm"
             className="flex gap-2 items-center"
             variant={editingCampaign ? "outline" : "default"}
-            onClick={() => setEditingCampaign(!editingCampaign)}
+            onClick={() => {
+              if (editingCampaign) {
+                setEditingCampaign(false);
+              } else {
+                setEditingCampaign(campaignId);
+              }
+            }}
           >
             {editingCampaign ? (
               <Eye className="h-4 w-4" />

@@ -1,7 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 
-import ImageManager from "@/lib/ImageManager";
+import ImageManager, { ImageTableKey } from "@/lib/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 import { toast } from "@/components/ui/use-toast";
@@ -11,7 +11,8 @@ import MyMDXEditor from "@/components/form/MyMDXEditor";
 export default function TextEditor({
   field,
   oldValue,
-  campaignId,
+  imageTableId,
+  imageTableKey,
   handoutId,
 }: Props) {
   const { setIsLoading } = useAppStore((state) => ({
@@ -27,14 +28,14 @@ export default function TextEditor({
       oldMarkdown={oldValue}
       onChange={(value) => field.onChange(value)}
       imageUploadHandler={
-        campaignId
+        imageTableId && imageTableKey
           ? async (image: File) => {
               setIsLoading(true);
               return imageManager
                 .uploadImage(
                   image,
-                  "campaigns",
-                  campaignId,
+                  imageTableKey,
+                  imageTableId,
                   "handouts",
                   handoutId
                 )
@@ -58,6 +59,7 @@ export default function TextEditor({
 interface Props {
   field: ContentFieldProps;
   handoutId: string;
-  campaignId: string;
+  imageTableKey?: ImageTableKey;
+  imageTableId?: string;
   oldValue?: string;
 }

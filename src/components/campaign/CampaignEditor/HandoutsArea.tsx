@@ -34,10 +34,7 @@ export default function HandoutsArea({ section }: Props) {
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                 >
-                  <HandoutCard
-                    handout={handout}
-                    chapterId={section.chapter_id!}
-                  />
+                  <HandoutCard handout={handout} />
                 </div>
               )}
             </Draggable>

@@ -152,7 +152,13 @@ export default function Toolbar({
             size="sm"
             className="flex gap-2 items-center"
             variant={editing ? "outline" : "default"}
-            onClick={() => setEditing(!editing)}
+            onClick={() => {
+              if (editing) {
+                setEditing(false);
+              } else {
+                setEditing(doc.id);
+              }
+            }}
           >
             {editing ? (
               <Eye className="h-4 w-4" />

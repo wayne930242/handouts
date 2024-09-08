@@ -46,19 +46,27 @@ import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
+import ImageManager from "@/lib/ImageManager";
+import useAppStore from "@/lib/store/useAppStore";
 
-const ImageEditor = dynamic(() => import("./HandoutContentEditor/ImageEditor"), {
-  ssr: false,
-});
+const ImageEditor = dynamic(
+  () => import("./HandoutContentEditor/ImageEditor"),
+  {
+    ssr: false,
+  }
+);
 const LinkEditor = dynamic(() => import("./HandoutContentEditor/LinkEditor"), {
   ssr: false,
 });
 const TextEditor = dynamic(() => import("./HandoutContentEditor/TextEditor"), {
   ssr: false,
 });
-const YoutubeEditor = dynamic(() => import("./HandoutContentEditor/YoutubeEditor"), {
-  ssr: false,
-});
+const YoutubeEditor = dynamic(
+  () => import("./HandoutContentEditor/YoutubeEditor"),
+  {
+    ssr: false,
+  }
+);
 
 const formSchema = z.object({
   title: z.string().max(255),
@@ -73,8 +81,12 @@ export type ContentFieldProps = ControllerRenderProps<
   "content"
 >;
 
-export default function HandoutCard({ handout, chapterId }: Props) {
+export default function HandoutCard({ handout }: Props) {
   const supabase = useClient();
+  const { editingCampaign, editingGame } = useAppStore((state) => ({
+    editingGame: state.editingGame,
+    editingCampaign: state.editingCampaign,
+  }));
 
   const { setCampaignData, campaignData } = useCampaignStore((state) => ({
     setCampaignData: state.setCampaignData,
@@ -151,8 +163,30 @@ export default function HandoutCard({ handout, chapterId }: Props) {
     };
   }, [triggerReset]);
 
+  const imageManager = new ImageManager();
+
   const deleteHandout = async (h: Handout) => {
     if (!h) return;
+    if (editingCampaign && h.content) {
+      await imageManager.cleanImages(
+        "campaigns",
+        editingCampaign,
+        h.content,
+        undefined,
+        "handouts",
+        h.id
+      );
+    }
+    if (editingGame && h.content) {
+      await imageManager.cleanImages(
+        "games",
+        editingGame,
+        h.content,
+        undefined,
+        "handouts",
+        h.id
+      );
+    }
     setCampaignData(
       h,
       {
@@ -313,7 +347,14 @@ export default function HandoutCard({ handout, chapterId }: Props) {
                           <TextEditor
                             field={field}
                             oldValue={handout.content ?? undefined}
-                            campaignId={campaignData?.id ?? ""}
+                            imageTableId={campaignData?.id ?? ""}
+                            imageTableKey={
+                              editingCampaign
+                                ? "campaigns"
+                                : editingGame
+                                ? "games"
+                                : "docs"
+                            }
                             handoutId={handout.id}
                           />
                         </FormControl>
@@ -382,5 +423,4 @@ export default function HandoutCard({ handout, chapterId }: Props) {
 
 interface Props {
   handout: Handout;
-  chapterId: number;
 }

@@ -3,7 +3,7 @@ import { advancedArrayMove, advancedMoveAcrossArrays } from "@/lib/arrayAction";
 import { Campaign, SetCampaignDataPayload } from "@/types/interfaces";
 import { MySupabaseClient } from "@/types/interfaces";
 
-export default function onDragEnd(
+export default function onCampaignDragEnd(
   result: DropResult,
   campaignData: Campaign | null,
   supabase: MySupabaseClient,
