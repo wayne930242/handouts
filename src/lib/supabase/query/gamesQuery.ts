@@ -12,30 +12,28 @@ export const getGameDetail = (
       id,
       title,
       description,
-      campaigns:game_campaigns (
-        campaign:campaigns (
+      campaign:campaigns (
+        id,
+        name,
+        description,
+        banner_url,
+        chapters:chapters (
           id,
-          name,
-          description,
-          banner_url,
-          chapters:chapters (
+          title,
+          order_num,
+          sections:sections (
             id,
             title,
             order_num,
-            sections:sections (
+            handouts:handouts (
               id,
               title,
-              order_num,
-              handouts:handouts (
-                id,
-                title,
-                content,
-                is_public,
-                type,
-                owner_id,
-                note,
-                order_num
-              )
+              content,
+              is_public,
+              type,
+              owner_id,
+              note,
+              order_num
             )
           )
         )
@@ -49,7 +47,7 @@ export const getGameDetail = (
           content
         )
       ),
-      screens:screens (
+      screen:screens (
         id,
         chapters:chapters (
           id,
@@ -115,6 +113,22 @@ export const getGameDetail = (
     `
     )
     .eq("id", gameId)
+    .order("order_num", {
+      referencedTable: "notes",
+      ascending: true,
+    })
+    .order("order_num", {
+      referencedTable: "campaigns.chapters",
+      ascending: true,
+    })
+    .order("order_num", {
+      referencedTable: "campaigns.chapters.sections",
+      ascending: true,
+    })
+    .order("order_num", {
+      referencedTable: "campaigns.chapters.sections.handouts",
+      ascending: true,
+    })
     .order("order_num", {
       referencedTable: "screens.chapters",
       ascending: true,

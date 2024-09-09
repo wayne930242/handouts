@@ -532,36 +532,6 @@ export type Database = {
         }
         Relationships: []
       }
-      game_campaigns: {
-        Row: {
-          campaign_id: string
-          game_id: string
-        }
-        Insert: {
-          campaign_id: string
-          game_id: string
-        }
-        Update: {
-          campaign_id?: string
-          game_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "game_campaigns_campaign_id_fkey"
-            columns: ["campaign_id"]
-            isOneToOne: false
-            referencedRelation: "campaigns"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "game_campaigns_game_id_fkey"
-            columns: ["game_id"]
-            isOneToOne: false
-            referencedRelation: "games"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       game_docs: {
         Row: {
           doc_id: string
@@ -625,37 +595,57 @@ export type Database = {
       games: {
         Row: {
           banner_url: string | null
+          campaign_id: string | null
           created_at: string | null
           description: string | null
           gm_id: string | null
           id: string
+          screen_id: string | null
           title: string
           updated_at: string | null
         }
         Insert: {
           banner_url?: string | null
+          campaign_id?: string | null
           created_at?: string | null
           description?: string | null
           gm_id?: string | null
           id?: string
+          screen_id?: string | null
           title: string
           updated_at?: string | null
         }
         Update: {
           banner_url?: string | null
+          campaign_id?: string | null
           created_at?: string | null
           description?: string | null
           gm_id?: string | null
           id?: string
+          screen_id?: string | null
           title?: string
           updated_at?: string | null
         }
         Relationships: [
           {
+            foreignKeyName: "games_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "games_gm_id_fkey"
             columns: ["gm_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_screen_id_fkey"
+            columns: ["screen_id"]
+            isOneToOne: false
+            referencedRelation: "screens"
             referencedColumns: ["id"]
           },
         ]
@@ -1003,31 +993,20 @@ export type Database = {
       screens: {
         Row: {
           created_at: string | null
-          game_id: string | null
           id: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
-          game_id?: string | null
           id?: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
-          game_id?: string | null
           id?: string
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "screens_game_id_fkey"
-            columns: ["game_id"]
-            isOneToOne: false
-            referencedRelation: "games"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       sections: {
         Row: {

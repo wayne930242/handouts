@@ -274,9 +274,9 @@ export type Game = {
   title: string;
   description: string | null;
 
-  campaigns: { campaign: CampaignInGame }[];
+  campaign: CampaignInGame[] | null;
   docs: { doc: DocInGame }[];
-  screens: ScreenInGame[];
+  screens: ScreenInGame | null;
   notes: Note[];
 
   favorite: Favorite[];
