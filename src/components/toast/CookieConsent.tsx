@@ -26,6 +26,7 @@ export default function CookieConsent({}: Props) {
       toast({
         title: t("title"),
         description: t("message"),
+        duration: Infinity,
         action: (
           <ToastAction
             altText={t("confirm")}
