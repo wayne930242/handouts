@@ -51,6 +51,35 @@ export const getCampaignWithPlayers = (
     .eq("campaign_id", campaignId);
 };
 
+export const chaptersQueryString = `
+id,
+campaign_id,
+screen_id,
+title,
+order_num,
+sections:sections (
+  id,
+  chapter_id,
+  screen_id,
+  campaign_id,
+  title,
+  order_num,
+  handouts:handouts (
+    id,
+    title,
+    content,
+    is_public,
+    section_id,
+    screen_id,
+    campaign_id,
+    type,
+    owner_id,
+    note,
+    order_num
+  )
+)
+`;
+
 export const campaignDetailQueryString = `
 id,
 gm_id,
@@ -74,32 +103,7 @@ players:campaign_players (
   )
 ),
 chapters:chapters (
-  id,
-  screen_id,
-  campaign_id,
-  title,
-  order_num,
-  sections:sections (
-    id,
-    chapter_id,
-    screen_id,
-    campaign_id,
-    title,
-    order_num,
-    handouts:handouts (
-      id,
-      title,
-      content,
-      is_public,
-      screen_id,
-      section_id,
-      campaign_id,
-      type,
-      owner_id,
-      note,
-      order_num
-    )
-  )
+  ${chaptersQueryString}
 ),
 docs:campaign_docs (
   doc:docs (

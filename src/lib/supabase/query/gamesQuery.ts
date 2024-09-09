@@ -1,4 +1,5 @@
 import { MySupabaseClient } from "@/types/interfaces";
+import { chaptersQueryString } from "./campaignsQuery";
 
 export const getGameDetail = (
   supabase: MySupabaseClient,
@@ -18,24 +19,7 @@ export const getGameDetail = (
         description,
         banner_url,
         chapters:chapters (
-          id,
-          title,
-          order_num,
-          sections:sections (
-            id,
-            title,
-            order_num,
-            handouts:handouts (
-              id,
-              title,
-              content,
-              is_public,
-              type,
-              owner_id,
-              note,
-              order_num
-            )
-          )
+          ${chaptersQueryString}
         )
       ),
       docs:game_docs (
@@ -50,24 +34,7 @@ export const getGameDetail = (
       screen:screens (
         id,
         chapters:chapters (
-          id,
-          title,
-          order_num,
-          sections:sections (
-            id,
-            title,
-            order_num,
-            handouts:handouts (
-              id,
-              title,
-              content,
-              is_public,
-              type,
-              owner_id,
-              note,
-              order_num
-            )
-          )
+          ${chaptersQueryString}
         ),
         generators:screen_generators (
           generator:generators (
