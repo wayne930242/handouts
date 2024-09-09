@@ -22,7 +22,7 @@ import { useRouter } from "@/navigation";
 import {
   useInsertMutation,
   useQuery,
-  useUpdateMutation,
+  useUpsertMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
 import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { useEffect, useRef, useState } from "react";
@@ -90,7 +90,7 @@ export default function CampaignForm({
     supabase.from("campaigns"),
     ["id"]
   );
-  const { mutateAsync: updateCampaign } = useUpdateMutation(
+  const { mutateAsync: updateCampaign } = useUpsertMutation(
     supabase.from("campaigns"),
     ["id"]
   );
@@ -136,14 +136,17 @@ export default function CampaignForm({
           errorMessage = "Campaign ID is required";
           break;
         }
-        await updateCampaign({
-          id,
-          gm_id: userId,
-          name: data.name,
-          description: data.description,
-          passphrase: data.passphrase,
-          banner_url: data.banner_url,
-        }).catch((e) => {
+        await updateCampaign([
+          {
+            id,
+            gm_id: userId,
+            name: data.name,
+            description: data.description,
+            passphrase: data.passphrase,
+            banner_url: data.banner_url,
+            status: "ACTIVE",
+          },
+        ]).catch((e) => {
           errorMessage = e.message;
         });
     }

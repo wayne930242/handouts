@@ -1,16 +1,4 @@
 {
-  "CampaignCard": {
-    "campaignId": "id",
-    "campaignLink": "Campaign Link",
-    "campaignLinkWithPassphrase": "Campaign Link with Passphrase",
-    "copyInfo": "Copy Info",
-    "edit": "Edit",
-    "editView": "Edit / View",
-    "infoDescription": "Share the information with players to start the game.",
-    "infoTitle": "Information copied to clipboard",
-    "passphrase": "Passphrase",
-    "view": "View"
-  },
   "CampaignDeleteZone": {
     "deleteButton": "Delete Campaign",
     "deleteDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",
@@ -252,6 +240,17 @@
     "passphrase": "Passphrase",
     "siteDescription": "A simple tool that allows you to easily share and manage TRPG game handouts. Helps you conveniently share game information with players.",
     "welcome": "Welcome to RpgHandouts"
+  },
+  "ItemCard": {
+    "copyLink": "Copy Link",
+    "edit": "Edit",
+    "editView": "Edit / View",
+    "id": "ID",
+    "infoDescription": "Share the link with players to start the game.",
+    "infoTitle": "Link copied to clipboard",
+    "link": "Link",
+    "passphrase": "Passphrase",
+    "view": "View"
   },
   "LocaleLayout": {
     "campaigns": "Campaigns",

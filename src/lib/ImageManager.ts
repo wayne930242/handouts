@@ -88,7 +88,7 @@ export default class ImageManager {
 
   async deleteImageByUrl(url: string): Promise<void> {
     try {
-      await ky.post(`${this.baseUrl}/api/delete-image`, {
+      await ky.post(`${this.baseUrl}/api/delete-images`, {
         json: { url },
       });
     } catch (error) {

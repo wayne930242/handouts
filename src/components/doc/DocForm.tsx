@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import {
   useInsertMutation,
   useQuery,
-  useUpdateMutation,
+  useUpsertMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
 
 import {
@@ -48,9 +48,12 @@ export default function DocForm({
   const supabase = useClient();
 
   const router = useRouter();
-  const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id, userId), {
-    enabled: id !== "new",
-  });
+  const { data: docInfo, isFetching } = useQuery(
+    getDocInfo(supabase, id, userId),
+    {
+      enabled: id !== "new",
+    }
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -78,7 +81,7 @@ export default function DocForm({
     ["id"]
   );
 
-  const { mutateAsync: updateDoc, isPending: isUpdating } = useUpdateMutation(
+  const { mutateAsync: updateDoc, isPending: isUpdating } = useUpsertMutation(
     supabase.from("docs"),
     ["id"]
   );
@@ -105,14 +108,16 @@ export default function DocForm({
           errorMessage = "Campaign ID is required";
           break;
         }
-        await updateDoc({
-          id,
-          owner_id: userId,
-          title: data.title,
-          is_public: data.is_public,
-          description: data.description,
-          passphrase: data.passphrase,
-        }).catch((e) => {
+        await updateDoc([
+          {
+            id,
+            owner_id: userId,
+            title: data.title,
+            is_public: data.is_public,
+            description: data.description,
+            passphrase: data.passphrase,
+          },
+        ]).catch((e) => {
           errorMessage = e.message;
         });
     }

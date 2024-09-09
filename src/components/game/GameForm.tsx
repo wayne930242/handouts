@@ -24,6 +24,7 @@ import {
   useInsertMutation,
   useQuery,
   useUpdateMutation,
+  useUpsertMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
 import { getGameInfo } from "@/lib/supabase/query/gamesQuery";
 import ImageManager from "@/lib/ImageManager";
@@ -90,7 +91,7 @@ export default function GameForm({
     ["id"]
   );
 
-  const { mutateAsync: updateGame } = useUpdateMutation(
+  const { mutateAsync: updateGame } = useUpsertMutation(
     supabase.from("games"),
     ["id"]
   );
@@ -117,49 +118,37 @@ export default function GameForm({
 
     switch (id) {
       case "new":
-        const { data: _data, error: createError } = await supabase
-          .from("games")
-          .insert([
-            {
-              gm_id: userId,
-              title: data.title,
-              description: data.description,
-              banner_url: data.banner_url,
-              status: "ACTIVE",
-            },
-          ])
-          .select("id")
-          .single();
-        if (createError) {
-          errorMessage = createError.message;
-        }
+        await createGame([
+          {
+            title: data.title,
+            description: data.description,
+            banner_url: data.banner_url || null,
+            gm_id: userId,
+          },
+        ]).catch((e) => {
+          errorMessage = e.message;
+        });
         break;
       default:
-        if (!id) {
-          errorMessage = "Campaign ID is required";
-          break;
-        }
-        const { error: updateError } = await supabase
-          .from("games")
-          .update({
+        await updateGame([
+          {
             id,
             gm_id: userId,
             title: data.title,
             description: data.description,
-            banner_url: data.banner_url,
-          })
-          .eq("id", id);
-
-        if (updateError) {
-          errorMessage = updateError.message;
-        }
+            banner_url: data.banner_url || null,
+          },
+        ]).catch((e) => {
+          errorMessage = e.message;
+        });
     }
 
     setIsLoading(false);
     if (errorMessage) {
       toast({
         title: t("error"),
-        description: errorMessage,
+        description:
+          "An error occurred while updating the game. Please try again later.",
         variant: "destructive",
       });
     } else {

@@ -1,5 +1,5 @@
 "use client";
-import { useUpdateMutation } from "@supabase-cache-helpers/postgrest-react-query";
+import { useUpsertMutation } from "@supabase-cache-helpers/postgrest-react-query";
 import { DocInList } from "@/types/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -76,7 +76,7 @@ export default function DocEditor({ doc, callback }: Props) {
 
   usePreventLeave(isDirty, t("leaveAlert"));
 
-  const { mutateAsync: updateDoc } = useUpdateMutation(supabase.from("docs"), [
+  const { mutateAsync: updateDoc } = useUpsertMutation(supabase.from("docs"), [
     "id",
   ]);
 
@@ -100,13 +100,15 @@ export default function DocEditor({ doc, callback }: Props) {
     setFile(null);
     deletingUrl.current = null;
 
-    await updateDoc({
-      id: doc.id,
-      title: data.title,
-      description: data.description,
-      banner_url: data.banner_url,
-      content: data.content,
-    })
+    await updateDoc([
+      {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        banner_url: data.banner_url,
+        content: data.content,
+      },
+    ])
       .then(() => {
         toast({
           title: t("successTitle"),

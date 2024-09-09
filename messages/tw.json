@@ -1,16 +1,4 @@
 {
-  "CampaignCard": {
-    "campaignId": "id",
-    "campaignLink": "戰役連結",
-    "campaignLinkWithPassphrase": "戰役連結含通關密語",
-    "copyInfo": "複製資訊",
-    "edit": "編輯",
-    "editView": "編輯 / 檢視",
-    "infoDescription": "將資訊分享給玩家，就可以開始遊戲了。",
-    "infoTitle": "資訊已複製到剪貼簿",
-    "passphrase": "通關密語",
-    "view": "檢視"
-  },
   "CampaignDeleteZone": {
     "deleteButton": "刪除戰役",
     "deleteDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",
@@ -252,6 +240,17 @@
     "passphrase": "通關密語",
     "siteDescription": "一個讓你方便分享、管理 TRPG 遊戲手邊資料的簡單工具。協助你方便將遊戲資訊和玩家分享。",
     "welcome": "歡迎使用 RpgHandouts"
+  },
+  "ItemCard": {
+    "copyLink": "複製連結",
+    "edit": "編輯",
+    "editView": "編輯 / 檢視",
+    "id": "ID",
+    "infoDescription": "將連結分享給玩家，就可以開始遊戲了。",
+    "infoTitle": "連結已複製到剪貼簿",
+    "link": "連結",
+    "passphrase": "通關密語",
+    "view": "檢視"
   },
   "LocaleLayout": {
     "campaigns": "戰役",
