@@ -11,6 +11,22 @@
     "passphrase": "通關密語",
     "view": "檢視"
   },
+  "GameForm": {
+    "bannerUrl": "橫幅圖片",
+    "bannerUrlPlaceholder": "選擇橫幅圖片",
+    "gameDescription": "遊戲描述",
+    "gameDescriptionPlaceholder": "輸入遊戲描述",
+    "gameName": "遊戲名稱",
+    "gameNamePlaceholder": "輸入遊戲名稱",
+    "cancel": "取消",
+    "create": "創建",
+    "error": "錯誤",
+    "formTitle": {
+      "edit": "編輯遊戲",
+      "new": "創建新遊戲"
+    },
+    "save": "儲存" 
+  },
   "CampaignDeleteZone": {
     "deleteButton": "刪除戰役",
     "deleteTitle": "刪除戰役",

@@ -11,6 +11,22 @@
     "passphrase": "Passphrase",
     "view": "View"
   },
+  "GameForm": {
+    "bannerUrl": "Banner Image",
+    "bannerUrlPlaceholder": "Choose banner image",
+    "gameDescription": "Game Description",
+    "gameDescriptionPlaceholder": "Enter Game description",
+    "gameName": "Game Name",
+    "gameNamePlaceholder": "Enter Game name",
+    "cancel": "Cancel",
+    "create": "Create",
+    "error": "Error",
+    "formTitle": {
+      "edit": "Edit Game",
+      "new": "Create New Game"
+    },
+    "save": "Save"
+  },
   "CampaignDeleteZone": {
     "deleteButton": "Delete Campaign",
     "deleteTitle": "Delete Campaign",

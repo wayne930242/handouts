@@ -6,6 +6,8 @@ import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getGameInfo, getGameSEO } from "@/lib/supabase/query/gamesQuery";
 import { redirect } from "@/navigation";
+import GameDeleteZone from "@/components/game/GameDeleteZone";
+import GameForm from "@/components/game/GameForm";
 
 interface Props {
   params: {
@@ -34,12 +36,12 @@ export default async function GamePage({ params: { id } }: Props) {
   return (
     <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        {/* <GameInfo id={id} userId={user.id} /> */}
+        <GameForm id={id} userId={user.id} />
       </HydrationBoundary>
       {id !== "new" && (
         <div className="mt-4 flex flex-col gap-4">
           <Separator />
-          {/* <GameDeleteZone gameId={id} /> */}
+          <GameDeleteZone gameId={id} />
         </div>
       )}
     </PageLayout>

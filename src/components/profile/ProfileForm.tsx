@@ -75,7 +75,6 @@ export default function ProfileForm() {
     setIsLoading(true);
     if (deletingUrl.current) {
       await imageManager.deleteImageByUrl(deletingUrl.current);
-      deletingUrl.current = null;
     }
 
     if (file) {
@@ -84,8 +83,13 @@ export default function ProfileForm() {
         `profile/${userId}/images`
       );
       data.avatar_url = imageUrl;
-      setFile(null);
     }
+
+    if (!file && deletingUrl.current) {
+      data.avatar_url = undefined;
+    }
+    setFile(null);
+    deletingUrl.current = null;
 
     const { data: _data, error } = await supabase
       .from("profiles")

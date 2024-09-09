@@ -84,7 +84,6 @@ export default function DocEditor({ doc, callback }: Props) {
     setIsLoading(true);
     if (deletingUrl.current) {
       await imageManager.deleteImageByUrl(deletingUrl.current);
-      deletingUrl.current = null;
     }
 
     if (file) {
@@ -93,8 +92,13 @@ export default function DocEditor({ doc, callback }: Props) {
         `docs/${doc.id}/images`
       );
       data.banner_url = imageUrl;
-      setFile(null);
     }
+
+    if (!file && deletingUrl.current) {
+      data.banner_url = undefined;
+    }
+    setFile(null);
+    deletingUrl.current = null;
 
     await updateDoc({
       id: doc.id,

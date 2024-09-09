@@ -624,6 +624,7 @@ export type Database = {
       }
       games: {
         Row: {
+          banner_url: string | null
           created_at: string | null
           description: string | null
           gm_id: string | null
@@ -632,6 +633,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          banner_url?: string | null
           created_at?: string | null
           description?: string | null
           gm_id?: string | null
@@ -640,6 +642,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          banner_url?: string | null
           created_at?: string | null
           description?: string | null
           gm_id?: string | null

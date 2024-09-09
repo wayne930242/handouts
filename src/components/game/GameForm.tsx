@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
@@ -24,21 +25,20 @@ import {
   useQuery,
   useUpdateMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
-import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
-import { useEffect, useRef, useState } from "react";
+import { getGameInfo } from "@/lib/supabase/query/gamesQuery";
 import ImageManager from "@/lib/ImageManager";
 import ImageUploadFormItem from "@/components/form/ImageUploadFormItem";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
-  name: z.string().min(1).max(255),
-  banner_url: z.string().optional(),
+  title: z.string().min(1).max(255),
   description: z.string().optional(),
-  passphrase: z.string().max(255).optional(),
+  banner_url: z.string().optional(),
+  content: z.string().optional(),
 });
 
-export default function CampaignForm({
+export default function GameForm({
   id,
   userId,
 }: {
@@ -46,29 +46,29 @@ export default function CampaignForm({
   userId: string;
 }) {
   const supabase = useClient();
-  const t = useTranslations("CampaignForm");
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const imageManager = new ImageManager();
+  const t = useTranslations("GameForm");
 
   const router = useRouter();
-  const { data: campaignInfo, isFetching } = useQuery(
-    getCampaignInfo(supabase, id, userId),
-    {
-      enabled: id !== "new",
-    }
+
+  const { data: gameInfo, isFetching } = useQuery(
+    getGameInfo(supabase, id, userId),
+    { enabled: id !== "new" }
   );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
+      title: "",
       description: "",
-      passphrase: "",
       banner_url: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const imageManager = new ImageManager({
+    maxSizeMB: 1.5,
+  });
+
   const { reset, control } = form;
   const bannerUrl = useWatch({
     control,
@@ -77,21 +77,21 @@ export default function CampaignForm({
   const deletingUrl = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!campaignInfo) return;
+    if (!gameInfo) return;
     reset({
-      name: campaignInfo?.name ?? "",
-      description: campaignInfo?.description ?? "",
-      passphrase: campaignInfo?.passphrase ?? "",
-      banner_url: campaignInfo?.banner_url ?? "",
+      title: gameInfo?.title ?? "",
+      description: gameInfo?.description ?? "",
+      banner_url: gameInfo?.banner_url ?? "",
     });
-  }, [campaignInfo, reset]);
+  }, [gameInfo, reset]);
 
-  const { mutateAsync: createCampaig } = useInsertMutation(
-    supabase.from("campaigns"),
+  const { mutateAsync: createGame } = useInsertMutation(
+    supabase.from("games"),
     ["id"]
   );
-  const { mutateAsync: updateCampaign } = useUpdateMutation(
-    supabase.from("campaigns"),
+
+  const { mutateAsync: updateGame } = useUpdateMutation(
+    supabase.from("games"),
     ["id"]
   );
 
@@ -101,11 +101,10 @@ export default function CampaignForm({
     if (deletingUrl.current) {
       await imageManager.deleteImageByUrl(deletingUrl.current);
     }
-
     if (file) {
       const imageUrl = await imageManager.uploadImage(
         file,
-        `campaigns/${id}/images`
+        `games/${id}/images`
       );
       data.banner_url = imageUrl;
     }
@@ -118,34 +117,42 @@ export default function CampaignForm({
 
     switch (id) {
       case "new":
-        await createCampaig([
-          {
-            gm_id: userId,
-            name: data.name,
-            description: data.description,
-            passphrase: data.passphrase,
-            banner_url: data.banner_url,
-            status: "ACTIVE",
-          },
-        ]).catch((e) => {
-          errorMessage = e.message;
-        });
+        const { data: _data, error: createError } = await supabase
+          .from("games")
+          .insert([
+            {
+              gm_id: userId,
+              title: data.title,
+              description: data.description,
+              banner_url: data.banner_url,
+              status: "ACTIVE",
+            },
+          ])
+          .select("id")
+          .single();
+        if (createError) {
+          errorMessage = createError.message;
+        }
         break;
       default:
         if (!id) {
           errorMessage = "Campaign ID is required";
           break;
         }
-        await updateCampaign({
-          id,
-          gm_id: userId,
-          name: data.name,
-          description: data.description,
-          passphrase: data.passphrase,
-          banner_url: data.banner_url,
-        }).catch((e) => {
-          errorMessage = e.message;
-        });
+        const { error: updateError } = await supabase
+          .from("games")
+          .update({
+            id,
+            gm_id: userId,
+            title: data.title,
+            description: data.description,
+            banner_url: data.banner_url,
+          })
+          .eq("id", id);
+
+        if (updateError) {
+          errorMessage = updateError.message;
+        }
     }
 
     setIsLoading(false);
@@ -156,7 +163,7 @@ export default function CampaignForm({
         variant: "destructive",
       });
     } else {
-      router.push("/campaigns");
+      router.push("/games");
     }
   };
 
@@ -168,12 +175,12 @@ export default function CampaignForm({
       >
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("campaignName")}</FormLabel>
+              <FormLabel>{t("gameName")}</FormLabel>
               <FormControl>
-                <Input placeholder={t("campaignNamePlaceholder")} {...field} />
+                <Input placeholder={t("gameNamePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -184,10 +191,10 @@ export default function CampaignForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("campaignDescription")}</FormLabel>
+              <FormLabel>{t("gameDescription")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t("campaignDescriptionPlaceholder")}
+                  placeholder={t("gameDescriptionPlaceholder")}
                   {...field}
                 />
               </FormControl>
@@ -201,41 +208,28 @@ export default function CampaignForm({
           file={file}
           setFile={(f) => {
             setFile(f);
-            deletingUrl.current = campaignInfo?.banner_url ?? null;
+            deletingUrl.current = gameInfo?.banner_url ?? null;
           }}
           onSetFileCancelled={() => {
-            form.setValue("banner_url", campaignInfo?.banner_url ?? "");
+            form.setValue("banner_url", gameInfo?.banner_url ?? "");
             deletingUrl.current = null;
           }}
           onUrlClear={() => {
             form.setValue("banner_url", undefined);
-            deletingUrl.current = campaignInfo?.banner_url ?? null;
+            deletingUrl.current = gameInfo?.banner_url ?? null;
           }}
           label={t("bannerUrl")}
           placeholder={t("bannerUrlPlaceholder")}
           type="banner"
         />
 
-        <FormField
-          control={form.control}
-          name="passphrase"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel className="w-full">{t("passphrase")}</FormLabel>
-              <FormControl>
-                <Input placeholder={t("passphrasePlaceholder")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="flex justify-end gap-2 mt-6">
           <Button
             type="button"
             variant="destructive"
             onClick={() => {
               form.reset();
-              router.push("/campaigns");
+              router.push("/games");
             }}
           >
             {t("cancel")}
