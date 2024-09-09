@@ -12,26 +12,41 @@ export const getGameDetail = (
       id,
       title,
       description,
-      gm:profiles!games_gm_id_fkey (
-        id,
-        display_name,
-        avatar_url
-      ),
-      players:game_players (
-        player:profiles (
-          id,
-          display_name,
-          avatar_url
-        )
-      ),
       campaigns:game_campaigns (
         campaign:campaigns (
-          id
+          id,
+          name,
+          description,
+          banner_url,
+          chapters:chapters (
+            id,
+            title,
+            order_num,
+            sections:sections (
+              id,
+              title,
+              order_num,
+              handouts:handouts (
+                id,
+                title,
+                content,
+                is_public,
+                type,
+                owner_id,
+                note,
+                order_num
+              )
+            )
+          )
         )
       ),
       docs:game_docs (
         doc:docs (
-          id
+          id,
+          title,
+          description,
+          banner_url,
+          content
         )
       ),
       screens:screens (
@@ -80,6 +95,18 @@ export const getGameDetail = (
         content,
         is_public,
         metadata
+      ),
+      gm:profiles!games_gm_id_fkey (
+        id,
+        display_name,
+        avatar_url
+      ),
+      players:game_players (
+        player:profiles (
+          id,
+          display_name,
+          avatar_url
+        )
       ),
       favorite:user_game_favorites!left (
         id,

@@ -7,7 +7,7 @@ import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layout/PageLayout";
 import { getDocDetail, getDocSEO } from "@/lib/supabase/query/docsQuery";
-import Doc from "../../../../components/doc/Doc";
+import Doc from "@/components/doc/Doc";
 import { BASE_URL } from "@/config/app";
 import { genSEO } from "@/lib/defaultSEO";
 

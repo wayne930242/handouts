@@ -264,25 +264,44 @@ export interface ProfileStore {
 }
 
 // Game types
+export type GameInList = Database["public"]["Tables"]["games"]["Row"] & {
+  gm: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
+};
+
 export type Game = {
   id: string;
+
   title: string;
   description: string | null;
+
+  campaigns: { campaign: CampaignInGame }[];
+  docs: { doc: DocInGame }[];
+  screens: ScreenInGame[];
+  notes: Note[];
+
+  favorite: Favorite[];
   gm: Profile | null;
   players: {
     player: Profile | null;
   }[];
-  campaigns: { id: string }[];
-  docs: { id: string }[];
-  screens: ScreenInGame[];
-  notes: Note[];
-  favorite: Favorite[];
 };
 
-export type ScreenInGame = Pick<
-  Database["public"]["Tables"]["screens"]["Row"],
-  "id"
-> & {
+export type DocInGame = Pick<
+  Database["public"]["Tables"]["docs"]["Row"],
+  "id" | "title" | "description" | "banner_url" | "content"
+>;
+
+export type CampaignInGameData = Pick<
+  Database["public"]["Tables"]["campaigns"]["Row"],
+  "id" | "name" | "description" | "banner_url"
+>;
+export type CampaignInGameData = CampaignInGameData & {
+  chapters: Chapter[];
+};
+
+export type ScreenInGameData = Pick<"id">;
+
+export type ScreenInGame = ScreenInGameData & {
   chapters: Chapter[];
   generators: {
     generator: Generator | null;
@@ -299,7 +318,3 @@ export type Note = Pick<
   | "is_public"
   | "metadata"
 >;
-
-export type GameInList = Database["public"]["Tables"]["games"]["Row"] & {
-  gm: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
-};
