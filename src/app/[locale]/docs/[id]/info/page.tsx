@@ -7,6 +7,7 @@ import DocDeleteZone from "@/components/doc/DocDeleteZone";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { redirect } from "@/navigation";
 
 interface Props {
   params: {
@@ -21,13 +22,13 @@ export default async function DocPage({ params: { id } }: Props) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return <></>;
+    return redirect("/login");
   }
 
   const queryClient = new QueryClient();
 
   if (id !== "new") {
-    await prefetchQuery(queryClient, getDocInfo(supabase, id));
+    await prefetchQuery(queryClient, getDocInfo(supabase, id, user.id));
   }
 
   return (

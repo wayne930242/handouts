@@ -1,7 +1,7 @@
-import { FormMessage, Message } from "@/components/form/form-message";
+import { FormMessage, Message } from "@/components/form/FormMessage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SubmitButton } from "@/components/form/submit-button";
+import { SubmitButton } from "@/components/form/SubmitButton";
 import { createClient } from "@/lib/supabase/server";
 import { encodedRedirect } from "@/lib/route";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";

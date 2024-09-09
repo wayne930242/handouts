@@ -8,7 +8,7 @@ import {
   getCampaignSEO,
 } from "@/lib/supabase/query/campaignsQuery";
 
-import Campaign from "../../../../components/campaign/Campaign";
+import Campaign from "@/components/campaign/Campaign";
 
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layout/PageLayout";

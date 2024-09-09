@@ -13,8 +13,8 @@
   },
   "CampaignDeleteZone": {
     "deleteButton": "Delete Campaign",
-    "deleteCampaign": "Delete Campaign",
-    "deleteCampaignDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",
+    "deleteTitle": "Delete Campaign",
+    "deleteDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",
     "description": "After deleting the campaign, all handouts, images, etc. will be deleted and cannot be recovered.",
     "errorDescription": "An error occurred while deleting the campaign. Please try again later.",
     "errorTitle": "Deletion Failed",
@@ -28,6 +28,24 @@
     "successDescription": "Your campaign has been successfully deleted. You now have room to create more campaigns.",
     "successTitle": "Deletion Successful",
     "title": "Delete Campaign"
+  },
+  "GameDeleteZone": {
+    "deleteButton": "Delete Game",
+    "deleteTitle": "Delete Game",
+    "deleteDescription": "Deleting a game will also delete all handouts, images, etc. This action cannot be undone. Are you sure you want to delete?",
+    "description": "Deleting a game will also delete all handouts, images, etc. This action cannot be undone. Are you sure you want to delete?",
+    "errorDescription": "An error occurred while deleting the game. Please try again later.",
+    "errorTitle": "Deletion Failed",
+    "formValidation": {
+      "required": "Please enter the Game ID"
+    },
+    "idLabel": "Game ID:",
+    "idMismatchError": "The entered ID does not match",
+    "inputLabel": "Enter the Game ID to confirm deletion",
+    "inputPlaceholder": "Game ID",
+    "successDescription": "Your game has been successfully deleted. You now have room to create more games.",
+    "successTitle": "Deletion Successful",
+    "title": "Delete Game"
   },
   "CampaignEditor": {
     "addChapter": "Add Chapter",
@@ -89,8 +107,8 @@
   },
   "DocDeleteZone": {
     "deleteButton": "Delete Document",
-    "deleteDoc": "Delete Document",
-    "deleteDocDescription": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
+    "deleteTitle": "Delete Document",
+    "deleteDescription": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
     "description": "Deleting a document will also delete all content associated with it. This action cannot be undone. Are you sure you want to delete?",
     "errorDescription": "An error occurred while deleting the document. Please try again later.",
     "errorTitle": "Deletion Failed",

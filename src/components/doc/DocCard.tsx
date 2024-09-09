@@ -29,9 +29,9 @@ export default function DocCard({ doc }: { doc: DocInList }) {
   const isOwner = user?.id === doc.owner_id;
 
   const passphraseParams = doc.passphrase
-    ? `&passphrase=${doc.passphrase}`
+    ? `?passphrase=${doc.passphrase}`
     : "";
-  const docLinkWithPassphrase = `${BASE_URL}/?doc_id=${doc.id}${passphraseParams}`;
+  const docLinkWithPassphrase = `${BASE_URL}/docs/${doc.id}${passphraseParams}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">
@@ -73,11 +73,7 @@ export default function DocCard({ doc }: { doc: DocInList }) {
             <Button
               type="button"
               onClick={() => {
-                const info = `
-**${t("docId")}**: \`${doc.id}\`
-**${t("passphrase")}**: \`${doc.passphrase}\`
-**${t("docLinkWithPassphrase")}**: ${docLinkWithPassphrase}
-`;
+                const info = `${docLinkWithPassphrase}`;
                 navigator.clipboard.writeText(info);
                 toast({
                   title: t("infoTitle"),

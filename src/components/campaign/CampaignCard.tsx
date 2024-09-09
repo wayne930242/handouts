@@ -31,13 +31,11 @@ export default function CampaignCard({
   const isOwner = user?.id === campaign.gm_id;
 
   const passphraseParams = campaign.passphrase
-    ? `&passphrase=${campaign.passphrase}`
+    ? `?passphrase=${campaign.passphrase}`
     : "";
-  const campaignLink = `${BASE_URL}/?campaign_id=${campaign.id}`;
+  const campaignLink = `${BASE_URL}/campaigns/${campaign.id}`;
   const campaignLinkWithPassphrase = `${campaignLink}${passphraseParams}`;
-  const info = `**${t("campaignId")}**: \`${campaign.id}\`
-  **${t("passphrase")}**: \`${campaign.passphrase}\`
-  **${t("campaignLinkWithPassphrase")}**: ${campaignLinkWithPassphrase}`;
+  const info = `${campaignLinkWithPassphrase}`;
 
   return (
     <Card className="flex flex-col gap-y-1 w-full min-h-56">

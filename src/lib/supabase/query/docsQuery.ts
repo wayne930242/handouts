@@ -3,6 +3,19 @@ import { MySupabaseClient } from "@/types/interfaces";
 export const getDocInfo = (
   supabase: MySupabaseClient,
   docId: string,
+  userId: string
+) => {
+  return supabase
+    .from("docs")
+    .select(`*`)
+    .eq("id", docId)
+    .eq("owner_id", userId)
+    .single();
+};
+
+export const getDocDetail = (
+  supabase: MySupabaseClient,
+  docId: string,
   userId?: string
 ) => {
   let query = supabase

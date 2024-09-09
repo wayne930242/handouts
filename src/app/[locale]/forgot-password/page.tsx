@@ -1,10 +1,10 @@
 import { Link } from "@/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "@/navigation";
-import { SubmitButton } from "../../../components/form/submit-button";
+import { SubmitButton } from "../../../components/form/SubmitButton";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { FormMessage, Message } from "@/components/form/form-message";
+import { FormMessage, Message } from "@/components/form/FormMessage";
 import { headers } from "next/headers";
 import { encodedRedirect } from "@/lib/route";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";

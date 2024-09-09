@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/navigation";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 
-import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { getDocDetail, getDocInfo } from "@/lib/supabase/query/docsQuery";
 import { useClient } from "@/lib/supabase/client";
 
 const FormSchema = z.object({
@@ -48,7 +48,7 @@ export default function DocForm({
   const supabase = useClient();
 
   const router = useRouter();
-  const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id), {
+  const { data: docInfo, isFetching } = useQuery(getDocInfo(supabase, id, userId), {
     enabled: id !== "new",
   });
 
@@ -75,12 +75,12 @@ export default function DocForm({
 
   const { mutateAsync: createDoc, isPending: isCreating } = useInsertMutation(
     supabase.from("docs"),
-    ["id"],
+    ["id"]
   );
 
   const { mutateAsync: updateDoc, isPending: isUpdating } = useUpdateMutation(
     supabase.from("docs"),
-    ["id"],
+    ["id"]
   );
   const isLoading = isCreating || isUpdating;
 

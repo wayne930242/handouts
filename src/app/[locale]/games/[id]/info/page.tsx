@@ -1,22 +1,22 @@
-import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { getCampaignInfo } from "@/lib/supabase/query/campaignsQuery";
 import { createClient } from "@/lib/supabase/server";
 
-import CampaignForm from "@/components/campaign/CampaignForm";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
-import CampaignDeleteZone from "@/components/campaign/CampaignDeleteZone";
+import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { getGameInfo, getGameSEO } from "@/lib/supabase/query/gamesQuery";
 import { redirect } from "@/navigation";
 
 interface Props {
   params: {
     id: string;
+    locale: string;
   };
 }
 
-export default async function CampaignPage({ params: { id } }: Props) {
+export default async function GamePage({ params: { id } }: Props) {
   const supabase = createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -28,19 +28,18 @@ export default async function CampaignPage({ params: { id } }: Props) {
   const queryClient = new QueryClient();
 
   if (id !== "new") {
-    await prefetchQuery(queryClient, getCampaignInfo(supabase, id, user.id));
+    await prefetchQuery(queryClient, getGameInfo(supabase, id, user.id));
   }
 
   return (
     <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
-        <CampaignForm id={id} userId={user.id} />
+        {/* <GameInfo id={id} userId={user.id} /> */}
       </HydrationBoundary>
-
       {id !== "new" && (
         <div className="mt-4 flex flex-col gap-4">
           <Separator />
-          <CampaignDeleteZone campaignId={id} />
+          {/* <GameDeleteZone gameId={id} /> */}
         </div>
       )}
     </PageLayout>

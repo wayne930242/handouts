@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { getDocInfo } from "@/lib/supabase/query/docsQuery";
+import { getDocDetail } from "@/lib/supabase/query/docsQuery";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import Toolbar from "./DocToolbar";
 import useAppStore from "@/lib/store/useAppStore";
@@ -26,7 +26,7 @@ export default function Doc({ docId, userId }: Props) {
     data: doc,
     isFetching,
     refetch,
-  } = useQuery(getDocInfo(supabase, docId, userId));
+  } = useQuery(getDocDetail(supabase, docId, userId));
 
   const { editingStage } = useAppStore((state) => ({
     editingStage: state.editingStage,

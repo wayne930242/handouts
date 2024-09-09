@@ -6,7 +6,7 @@ import { getPassphrase, removePassphrase } from "@/lib/passphrase";
 
 import { redirect } from "@/navigation";
 import PageLayout from "@/components/layout/PageLayout";
-import { getDocInfo, getDocSEO } from "@/lib/supabase/query/docsQuery";
+import { getDocDetail, getDocSEO } from "@/lib/supabase/query/docsQuery";
 import Doc from "../../../../components/doc/Doc";
 import { BASE_URL } from "@/config/app";
 import { genSEO } from "@/lib/defaultSEO";
@@ -61,7 +61,7 @@ export default async function CampaignPage({
   if (!isAuthorized || authError) {
     await removePassphrase(id, "docs");
     console.error(authError);
-    return redirect("/?doc_id=" + id);
+    return redirect("/?doc_id=" + id + "&passphrase=" + passphrase);
   }
 
   const {
@@ -69,7 +69,7 @@ export default async function CampaignPage({
   } = await supabase.auth.getUser();
 
   const queryClient = new QueryClient();
-  await prefetchQuery(queryClient, getDocInfo(supabase, id, user?.id));
+  await prefetchQuery(queryClient, getDocDetail(supabase, id, user?.id));
 
   return (
     <PageLayout>

@@ -166,3 +166,31 @@ export const getMyFavGames = (supabase: MySupabaseClient, userId: string) => {
       ascending: false,
     });
 };
+
+export const getGameSEO = (supabase: MySupabaseClient, gameId: string) => {
+  return supabase
+    .from("games")
+    .select(
+      `
+      id,
+      title,
+      description,
+      banner_url
+    `
+    )
+    .eq("id", gameId)
+    .single();
+};
+
+export const getGameInfo = (
+  supabase: MySupabaseClient,
+  gameId: string,
+  userId: string
+) => {
+  return supabase
+    .from("games")
+    .select(`*`)
+    .eq("id", gameId)
+    .eq("gm_id", userId)
+    .single();
+};

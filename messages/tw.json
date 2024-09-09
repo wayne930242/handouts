@@ -13,8 +13,8 @@
   },
   "CampaignDeleteZone": {
     "deleteButton": "刪除戰役",
-    "deleteCampaign": "刪除戰役",
-    "deleteCampaignDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",
+    "deleteTitle": "刪除戰役",
+    "deleteDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",
     "description": "刪除戰役後，所有的手邊資料、圖片等都將會被刪除，且無法復原。",
     "errorDescription": "刪除戰役時發生錯誤，請稍後再試。",
     "errorTitle": "刪除失敗",
@@ -28,6 +28,24 @@
     "successDescription": "你的戰役已經成功刪除。你現在有額度可以創建更多戰役。",
     "successTitle": "刪除成功",
     "title": "刪除戰役"
+  },
+  "GameDeleteZone": {
+    "deleteButton": "刪除遊戲",
+    "deleteTitle": "刪除遊戲",
+    "deleteDescription": "刪除遊戲後，會連帶刪除該遊戲的所有的手邊資料，這個操作無法復原。是否確認刪除？",
+    "description": "刪除遊戲後，會連帶刪除該遊戲的所有的手邊資料，這個操作無法復原。是否確認刪除？",
+    "errorDescription": "刪除遊戲時發生錯誤，請稍後再試。",
+    "errorTitle": "刪除失敗",
+    "formValidation": {
+      "required": "請輸入遊戲 ID"
+    },
+    "idLabel": "遊戲 ID：",
+    "idMismatchError": "輸入的 ID 不匹配",
+    "inputLabel": "輸入遊戲 ID 以確認刪除",
+    "inputPlaceholder": "遊戲 ID",
+    "successDescription": "你的遊戲已經成功刪除。你現在有額度可以創建更多遊戲。",
+    "successTitle": "刪除成功",
+    "title": "刪除遊戲"
   },
   "CampaignEditor": {
     "addChapter": "章節",
@@ -89,8 +107,8 @@
   },
   "DocDeleteZone": {
     "deleteButton": "刪除文件",
-    "deleteDoc": "刪除文件",
-    "deleteDocDescription": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
+    "deleteTitle": "刪除文件",
+    "deleteDescription": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
     "description": "刪除文件後，會連帶刪除該文件的所有內容，這個操作無法復原。是否確認刪除？",
     "errorDescription": "刪除文件時發生錯誤，請稍後再試。",
     "errorTitle": "刪除失敗",
