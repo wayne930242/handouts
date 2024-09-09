@@ -3,6 +3,7 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import SearchParamsListener from "@/components/layout/context/SearchParamsListener";
 import Hero from "@/components/index/Hero";
 import Features from "@/components/index/Features";
+import CookieConsent from "@/components/toast/CookieConsent";
 
 interface Props {
   params: { locale: string };
@@ -29,6 +30,7 @@ export default async function Index({ params: { locale } }: Props) {
         </div>
       </div>
       <SearchParamsListener />
+      <CookieConsent />
     </PageLayout>
   );
 }

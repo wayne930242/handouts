@@ -1,4 +1,9 @@
 {
+  "CookieConsent": {
+    "confirm": "Confirm",
+    "message": "This site uses cookies to optimize your experience, to provide user authentication, this is necessary.",
+    "title": "Cookie Consent"
+  },
   "CampaignCard": {
     "campaignId": "id",
     "campaignLink": "Campaign Link",

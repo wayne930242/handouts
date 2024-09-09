@@ -11,6 +11,11 @@
     "passphrase": "通關密語",
     "view": "檢視"
   },
+  "CookieConsent": {
+    "confirm": "確認",
+    "message": "本站使用 Cookie 來優化你的體驗，為了提供使用者驗證的功能，這是必要的。",
+    "title": "Cookie 確認"
+  },
   "GameForm": {
     "bannerUrl": "橫幅圖片",
     "bannerUrlPlaceholder": "選擇橫幅圖片",
@@ -25,7 +30,7 @@
       "edit": "編輯遊戲",
       "new": "創建新遊戲"
     },
-    "save": "儲存" 
+    "save": "儲存"
   },
   "CampaignDeleteZone": {
     "deleteButton": "刪除戰役",
