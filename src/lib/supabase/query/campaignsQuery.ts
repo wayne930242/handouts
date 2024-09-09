@@ -114,7 +114,7 @@ favorite:user_campaign_favorites!left (
   id,
   added_at
 )
-`
+`;
 
 export const getCampaignDetail = (
   supabase: MySupabaseClient,
@@ -135,10 +135,6 @@ export const getCampaignDetail = (
     })
     .order("order_num", {
       referencedTable: "chapters.sections.handouts",
-      ascending: true,
-    })
-    .order("order_num", {
-      referencedTable: "campaign_generators.generator.generator_fields",
       ascending: true,
     });
   if (userId) {

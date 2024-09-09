@@ -2,22 +2,23 @@
 
 import { User } from "@/types/interfaces";
 import { useClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import useAppStore from "../store/useAppStore";
+import { useQuery } from "@tanstack/react-query";
 
 export default function useSessionUser() {
   const supabase = useClient();
+  const { user, setUser } = useAppStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
+  const {} = useQuery({
+    queryKey: ["user"],
+    queryFn: () =>
+      supabase.auth.getUser().then(({ data: { user: u } }) => {
+        setUser(u as User);
+        return u;
+      }),
+  });
 
-  const [session, setSession] = useState<User | null>(null);
-
-  useEffect(() => {
-    const getSession = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setSession(user as User);
-    };
-    getSession();
-  }, [supabase]);
-
-  return session;
+  return user;
 }

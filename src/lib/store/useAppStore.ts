@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { AppStore } from "@/types/interfaces";
 
 const useAppStore = create<AppStore>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
   isDragging: false,
   setIsDragging: (isDragging) => set({ isDragging }),
   editingId: null,

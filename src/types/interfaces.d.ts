@@ -170,6 +170,8 @@ export type Passphrase = {
 };
 
 export interface AppStore {
+  user: User | null;
+  setUser: (user: User | null) => void;
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
   editingId: string | null;
