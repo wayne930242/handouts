@@ -4,8 +4,12 @@ import {
   CampaignStore,
   RealtimePayload,
   CampaignSubTable,
+  Handout,
+  Chapter,
+  Section,
+  Campaign,
 } from "@/types/interfaces";
-import { updateCampaignNestedData } from "../supabase/dataUpdater";
+import { updateCampaignNestedData } from "../supabase/updateCampaignData";
 
 const useCampaignStore = create<CampaignStore>((set, get) => ({
   campaignData: null,
@@ -24,7 +28,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
           let updatedData = updateCampaignNestedData(
             state.campaignData,
             tableName,
-            item,
+            item as Handout | Chapter | Section | Campaign,
             oldData[index] as typeof item,
             type
           );
@@ -37,8 +41,8 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
         let updatedData = updateCampaignNestedData(
           state.campaignData,
           tableName,
-          newData,
-          oldData,
+          newData as Handout | Chapter | Section | Campaign,
+          oldData as Partial<Handout | Chapter | Section | Campaign>,
           type
         );
         return { campaignData: updatedData };
@@ -48,9 +52,9 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
   setCampaignDataRemote: async (
     newData,
     oldData,
-    supabaseClient,
     tableName,
     type,
+    supabaseClient,
     debounce
   ) => {
     const updateRemote = async () => {
@@ -65,7 +69,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
               let updatedData = updateCampaignNestedData(
                 state.campaignData,
                 tableName,
-                item,
+                item as Handout | Chapter | Section | Campaign,
                 oldData[index] as typeof item,
                 type
               );
@@ -122,20 +126,21 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
   setCampaignData: async (
     newData,
     oldData,
-    supabaseClient,
     tableName,
     type,
+    supabaseClient,
     debounce
   ) => {
     if (type === "UPDATE") {
+      // Let INSERT, DELETE be handled by realtime
       get().setCampaignDataLocal(newData, oldData, tableName, type);
     }
     get().setCampaignDataRemote(
       newData,
       oldData,
-      supabaseClient,
       tableName,
       type,
+      supabaseClient,
       debounce
     );
   },

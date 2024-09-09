@@ -135,12 +135,12 @@ export default function HandoutCard({ handout }: Props) {
           title: handout.title,
           type: handout.type,
           content: handout.content,
-          is_public: handout.is_public,
+          is_public: handout.is_public ?? false,
           note: handout.note,
         },
-        supabase,
         "handouts",
-        "UPDATE"
+        "UPDATE",
+        supabase
       );
     }
     form.reset({
@@ -193,9 +193,9 @@ export default function HandoutCard({ handout }: Props) {
           id: h.id,
           section_id: h.section_id,
         },
-        supabase,
         "handouts",
-        "DELETE"
+        "DELETE",
+        supabase
       );
     }
   };

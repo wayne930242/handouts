@@ -81,8 +81,6 @@ export type HandoutData = Omit<
 
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
-export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
-
 export type RealtimePayload<T> = {
   schema: "public";
   table: string;
@@ -92,6 +90,8 @@ export type RealtimePayload<T> = {
   old: T;
   errors?: { [key: string]: string }[];
 };
+
+export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
 
 export type CampaignSubTable =
   | "campaigns"
@@ -104,44 +104,53 @@ export type CampaignTableDataPayload =
   | ChapterData
   | SectionData
   | HandoutData
+  | Array<ChapterData | SectionData | HandoutData>;
+
+export type CampaignTableDataPayloadWithoutId =
   | Omit<CampaignData, "id">
   | Omit<ChapterData, "id">
   | Omit<SectionData, "id">
   | Omit<HandoutData, "id">
-  | Array<ChapterData | SectionData | HandoutData>;
+  | Array<
+      | Omit<ChapterData, "id">
+      | Omit<SectionData, "id">
+      | Omit<HandoutData, "id">
+    >;
 
-export type SetCampaignDataPayload = (
-  newData: CampaignTableDataPayload,
-  oldData: Partial<CampaignTableDataPayload>,
-  supabaseClient: MySupabaseClient,
+export type SetCampaignDataPayload = <
+  E extends MutateEventType,
+  T extends E extends "INSERT"
+    ? CampaignTableDataPayloadWithoutId
+    : CampaignTableDataPayload
+>(
+  newData: T,
+  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
   tableName: CampaignSubTable,
-  type: MutateEventType,
+  type: E,
+  supabaseClient: MySupabaseClient,
   debounce?: {
     key: string;
     delay: number;
   }
 ) => Promise<void>;
 
+export type SetCampaignDataPayloadLocal = <
+  E extends MutateEventType,
+  T extends E extends "INSERT"
+    ? CampaignTableDataPayloadWithoutId
+    : CampaignTableDataPayload
+>(
+  newData: T,
+  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
+  tableName: CampaignSubTable,
+  type: E
+) => void;
+
 export interface CampaignStore {
   campaignData: Campaign | null;
   initCampaignData: (campaignData: Campaign | null) => any;
-  setCampaignDataLocal: (
-    newData: CampaignTableDataPayload,
-    oldData: Partial<CampaignTableDataPayload>,
-    tableName: CampaignSubTable,
-    type: MutateEventType
-  ) => void;
-  setCampaignDataRemote: (
-    newData: CampaignTableDataPayload,
-    oldData: Partial<CampaignTableDataPayload>,
-    supabaseClient: MySupabaseClient,
-    tableName: CampaignSubTable,
-    type: MutateEventType,
-    debounce?: {
-      key: string;
-      delay: number;
-    }
-  ) => Promise<void>;
+  setCampaignDataLocal: SetCampaignDataPayloadLocal;
+  setCampaignDataRemote: SetCampaignDataPayload;
   setCampaignData: SetCampaignDataPayload;
   loading: boolean;
   setLoading: (loading: boolean) => void;

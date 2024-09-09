@@ -40,7 +40,7 @@ export default function onCampaignDragEnd(
       order_num: chapter.order_num,
     }));
 
-    setCampaignData(newChapters, chapters, supabase, "chapters", "UPDATE");
+    setCampaignData(newChapters, chapters, "chapters", "UPDATE", supabase);
   } else if (type === "SECTION") {
     const sourceChapterIndex = chapters.findIndex(
       (chapter) => String(chapter.id) == String(sourceDroppableId[1])
@@ -67,7 +67,7 @@ export default function onCampaignDragEnd(
         order_num: section.order_num,
       }));
 
-      setCampaignData(newSections, sections, supabase, "sections", "UPDATE");
+      setCampaignData(newSections, sections, "sections", "UPDATE", supabase);
     } else {
       // Move section cross chapter
       const sourceChapterId = sourceDroppableId[1];
@@ -104,16 +104,16 @@ export default function onCampaignDragEnd(
       setCampaignData(
         newSourceSections,
         sourceSections,
-        supabase,
         "sections",
-        "UPDATE"
+        "UPDATE",
+        supabase
       );
       setCampaignData(
         newDestSections,
         destSections,
-        supabase,
         "sections",
-        "UPDATE"
+        "UPDATE",
+        supabase
       );
     }
   } else if (type === "HANDOUT") {
@@ -148,7 +148,7 @@ export default function onCampaignDragEnd(
       );
       if (!section) return;
 
-      const newSections = advancedArrayMove(
+      const newHandouts = advancedArrayMove(
         section.handouts,
         sourceIndex,
         destIndex,
@@ -168,11 +168,11 @@ export default function onCampaignDragEnd(
       }));
 
       setCampaignData(
-        newSections,
-        chapter.sections,
-        supabase,
+        newHandouts,
+        section.handouts,
         "handouts",
-        "UPDATE"
+        "UPDATE",
+        supabase
       );
     } else {
       const sourceChapter = chapters.find(
@@ -211,16 +211,17 @@ export default function onCampaignDragEnd(
       setCampaignData(
         newSourceHandouts,
         sourceHandouts,
-        supabase,
         "handouts",
-        "UPDATE"
+        "UPDATE",
+        supabase
       );
       setCampaignData(
         newDestHandouts,
         destHandouts,
-        supabase,
         "handouts",
-        "UPDATE"
+        "UPDATE",
+
+        supabase
       );
     }
   } else if (type === "HANDOUT_IMAGE") {

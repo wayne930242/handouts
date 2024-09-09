@@ -6,7 +6,7 @@ import { ChapterData } from "@/types/interfaces";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 
 import { Button } from "@/components/ui/button";
-import ChaptersArea from "./CampaignEditor/ChaptersArea";
+import ChaptersArea from "../campaignEditor/ChaptersArea";
 import { useClient } from "@/lib/supabase/client";
 
 const genEmptyChapter = (
@@ -42,7 +42,7 @@ export default function CampaignEditor() {
                 campaignData?.id as string,
                 (campaignData?.chapters?.length ?? 0) + 1
               );
-              setCampaignData(newChapter, {}, supabase, "chapters", "INSERT");
+              setCampaignData(newChapter, {}, "chapters", "INSERT", supabase);
             }}
           >
             <p>{t("chapterButton")}</p>

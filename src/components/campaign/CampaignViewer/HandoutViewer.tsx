@@ -14,9 +14,12 @@ import LinkViewer from "./LinkViewer";
 import dynamic from "next/dynamic";
 import { useClient } from "@/lib/supabase/client";
 
-const LightBoxWrapper = dynamic(() => import("@/components/dialog/LightBoxWrapper"), {
-  ssr: false,
-});
+const LightBoxWrapper = dynamic(
+  () => import("@/components/dialog/LightBoxWrapper"),
+  {
+    ssr: false,
+  }
+);
 
 export default function HandoutViewer({ handout }: Props) {
   const { setCampaignData } = useCampaignStore((state) => ({
@@ -58,11 +61,11 @@ export default function HandoutViewer({ handout }: Props) {
                     {
                       id: handout.id,
                       section_id: handout.section_id,
-                      is_public: handout.is_public,
+                      is_public: handout.is_public ?? false,
                     },
-                    supabase,
                     "handouts",
-                    "UPDATE"
+                    "UPDATE",
+                    supabase
                   );
                 }}
               >

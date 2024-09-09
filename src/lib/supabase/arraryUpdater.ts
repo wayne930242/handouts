@@ -1,7 +1,7 @@
 export const updateArray = <T extends { id: number | string }>(
   array: T[],
   record: T,
-  oldRecord: T | undefined,
+  oldRecord: Partial<T> | undefined,
   eventType: "INSERT" | "UPDATE" | "DELETE"
 ): T[] => {
   if (!record) return array;

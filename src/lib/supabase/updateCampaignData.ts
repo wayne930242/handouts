@@ -1,11 +1,19 @@
-import { Campaign, CampaignSubTable } from "@/types/interfaces";
+import {
+  Campaign,
+  CampaignSubTable,
+  Chapter,
+  Handout,
+  Section,
+} from "@/types/interfaces";
 import { updateArray } from "./arraryUpdater";
 
-export const updateCampaignNestedData = (
+export const updateCampaignNestedData = <
+  T extends Campaign | Chapter | Section | Handout
+>(
   campaignData: Campaign | null,
   table: CampaignSubTable,
-  newRecord: any,
-  oldRecord: any,
+  newRecord: T,
+  oldRecord: Partial<T>,
   eventType: "INSERT" | "UPDATE" | "DELETE"
 ): Campaign | null => {
   if (!campaignData) return null;
@@ -14,13 +22,13 @@ export const updateCampaignNestedData = (
 
   switch (table) {
     case "campaigns":
-      return { ...updatedData, ...newRecord };
+      return { ...updatedData, ...(newRecord as Partial<Campaign>) };
 
     case "chapters":
       updatedData.chapters = updateArray(
         updatedData.chapters,
-        newRecord,
-        oldRecord,
+        newRecord as Chapter,
+        oldRecord as Partial<Chapter>,
         eventType
       );
       break;
@@ -36,13 +44,13 @@ export const updateCampaignNestedData = (
           };
         } else {
           // Handle INSERT and UPDATE
-          if (chapter.id === newRecord.chapter_id) {
+          if (chapter.id === (newRecord as Section).chapter_id) {
             return {
               ...chapter,
               sections: updateArray(
                 chapter.sections,
-                newRecord,
-                oldRecord,
+                newRecord as Section,
+                oldRecord as Partial<Section>,
                 eventType
               ),
             };
@@ -72,13 +80,13 @@ export const updateCampaignNestedData = (
             };
           } else {
             // Handle INSERT and UPDATE
-            if (section.id === newRecord.section_id) {
+            if (section.id === (newRecord as Handout).section_id) {
               return {
                 ...section,
                 handouts: updateArray(
                   section.handouts,
-                  newRecord,
-                  oldRecord,
+                  newRecord as Handout,
+                  oldRecord as Partial<Handout>,
                   eventType
                 ),
               };
