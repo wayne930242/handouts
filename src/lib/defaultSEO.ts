@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 export const genSEO = async ({
   locale,
-  title,
+  title: _title,
   description,
   url,
   images,
@@ -30,21 +30,23 @@ export const genSEO = async ({
     alt: "Handouts",
   } as const;
 
+  const title = _title ? t("titleWithItem", { title: _title }) : t("title");
+
   return {
     metadataBase: new URL(defaultUrl),
-    title: title ?? t("title"),
+    title,
     description: description ?? t("description"),
     openGraph: {
       type: "website",
       locale,
       url: url ?? defaultUrl,
-      title: title ?? t("title"),
+      title,
       description: description ?? t("description"),
       images: [...(images ?? [defaultImage])],
     },
     twitter: {
       card: "summary_large_image",
-      title: title ?? t("title"),
+      title,
       description: description ?? t("description"),
       images: [...(images ?? [defaultImage])],
     },
