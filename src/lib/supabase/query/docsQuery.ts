@@ -29,7 +29,6 @@ export const getDocDetail = (
         avatar_url
       ),
       players:doc_players (
-        role,
         user:profiles!doc_players_user_id_fkey1 (
           id,
           display_name,

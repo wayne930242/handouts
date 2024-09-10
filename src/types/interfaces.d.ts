@@ -26,7 +26,6 @@ export type Profile = Pick<
 >;
 
 export type Player = {
-  role: string;
   user: Profile | null;
 };
 

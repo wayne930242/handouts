@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import { Eye, Pen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { useRouter } from "@/navigation";
-
 import useAppStore from "@/lib/store/useAppStore";
-import { useClient } from "@/lib/supabase/client";
 import useSessionUser from "@/lib/hooks/useSession";
 
 import DocMenu from "./DocMenu";
@@ -16,7 +13,6 @@ import OverlayLoading from "@/components/layout/OverlayLoading";
 
 import { DocInList } from "@/types/interfaces";
 import ToolbarLayout from "../layout/ToolbarLayout";
-import { getCurrentUrl } from "@/lib/route";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
 
 export default function Toolbar({
@@ -31,9 +27,7 @@ export default function Toolbar({
   isJoined?: boolean;
 }) {
   const t = useTranslations("Toolbar");
-  const supabase = useClient();
   const user = useSessionUser();
-  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLocalFavorite, setIsLocalFavorite] = useState(false);
@@ -62,7 +56,6 @@ export default function Toolbar({
     tableName: "docs",
     userId: user?.id,
     itemId: doc?.id,
-    role: doc?.owner_id === user?.id ? "OWNER" : "PLAYER",
     isJoined: isLocalJoined,
     isFavorite: isLocalFavorite,
     setIsLoading,
@@ -110,7 +103,7 @@ export default function Toolbar({
         </Button>
       )}
 
-      {doc && <DocMenu doc={doc} />}
+      {doc && <DocMenu doc={doc} isOwner={isOwner} />}
       {isLoading && <OverlayLoading />}
     </ToolbarLayout>
   );

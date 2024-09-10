@@ -1,8 +1,7 @@
-import { MySupabaseClient } from "@/types/interfaces";
 import { useClient } from "../supabase/client";
 import { useRouter } from "@/navigation";
-import { getCurrentUrl } from "../route";
 import { useCallback, useMemo } from "react";
+import useCurrentUrl from "./useCurrentUrl";
 
 const RelatedTableMap = {
   docs: {
@@ -39,7 +38,6 @@ interface Props<T extends TableName> {
   tableName: T;
   userId: string | null | undefined;
   itemId: string | null | undefined;
-  role: "OWNER" | "PLAYER";
   isJoined: boolean;
   isFavorite: boolean;
   setIsLoading?: (loading: boolean) => void;
@@ -51,7 +49,6 @@ export default function useHandleFavAndJoin<T extends TableName>({
   tableName,
   userId,
   itemId,
-  role,
   isJoined,
   isFavorite,
   setIsLoading,
@@ -65,12 +62,12 @@ export default function useHandleFavAndJoin<T extends TableName>({
     [tableName]
   );
 
+  const currentUrl = useCurrentUrl();
+
   const addOrRemoveFavorite = useCallback(async () => {
     if (!itemId) return;
     if (!userId) {
-      router.push(
-        `/login?redirectTo=${getCurrentUrl({ includeSearchParams: true })}`
-      );
+      router.push(`/login?redirectTo=${currentUrl}`);
       return;
     }
     setIsLoading?.(true);
@@ -80,7 +77,6 @@ export default function useHandleFavAndJoin<T extends TableName>({
         .insert({
           [itemIdKey]: itemId,
           [userIdKey]: userId,
-          role,
         } as any)
         .select();
       if (!error) {
@@ -103,8 +99,7 @@ export default function useHandleFavAndJoin<T extends TableName>({
         .insert({
           [itemIdKey]: itemId,
           [userIdKey]: userId,
-          role,
-        })
+        } as any)
         .select();
       if (!error) {
         setIsFavorite?.(true);
@@ -114,7 +109,6 @@ export default function useHandleFavAndJoin<T extends TableName>({
   }, [
     itemId,
     userId,
-    role,
     isFavorite,
     isJoined,
     setIsLoading,
@@ -128,9 +122,7 @@ export default function useHandleFavAndJoin<T extends TableName>({
   const joinOrLeave = useCallback(async () => {
     if (!itemId) return;
     if (!userId) {
-      router.push(
-        `/login?redirectTo=${getCurrentUrl({ includeSearchParams: true })}`
-      );
+      router.push(`/login?redirectTo=${currentUrl}`);
       return;
     }
     setIsLoading?.(true);
@@ -150,7 +142,6 @@ export default function useHandleFavAndJoin<T extends TableName>({
         .insert({
           [itemIdKey]: itemId,
           [userIdKey]: userId,
-          role,
         } as any)
         .select();
       if (!error) {
@@ -161,7 +152,6 @@ export default function useHandleFavAndJoin<T extends TableName>({
   }, [
     itemId,
     userId,
-    role,
     isJoined,
     setIsLoading,
     setIsJoined,

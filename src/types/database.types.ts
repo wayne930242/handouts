@@ -112,19 +112,16 @@ export type Database = {
         Row: {
           campaign_id: string
           joined_at: string | null
-          role: string
           user_id: string
         }
         Insert: {
           campaign_id: string
           joined_at?: string | null
-          role: string
           user_id: string
         }
         Update: {
           campaign_id?: string
           joined_at?: string | null
-          role?: string
           user_id?: string
         }
         Relationships: [
@@ -144,36 +141,6 @@ export type Database = {
           },
           {
             foreignKeyName: "campaign_players_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      campaign_users: {
-        Row: {
-          campaign_id: string
-          user_id: string
-        }
-        Insert: {
-          campaign_id: string
-          user_id: string
-        }
-        Update: {
-          campaign_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "campaign_users_campaign_id_fkey"
-            columns: ["campaign_id"]
-            isOneToOne: false
-            referencedRelation: "campaigns"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "campaign_users_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -429,19 +396,16 @@ export type Database = {
         Row: {
           doc_id: string
           joined_at: string | null
-          role: string
           user_id: string
         }
         Insert: {
           doc_id: string
           joined_at?: string | null
-          role: string
           user_id: string
         }
         Update: {
           doc_id?: string
           joined_at?: string | null
-          role?: string
           user_id?: string
         }
         Relationships: [
@@ -565,15 +529,15 @@ export type Database = {
       game_players: {
         Row: {
           game_id: string
-          player_id: string
+          user_id: string
         }
         Insert: {
           game_id: string
-          player_id: string
+          user_id: string
         }
         Update: {
           game_id?: string
-          player_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -584,8 +548,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "game_players_player_id_fkey"
-            columns: ["player_id"]
+            foreignKeyName: "game_players_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]

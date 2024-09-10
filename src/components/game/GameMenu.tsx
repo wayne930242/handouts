@@ -9,28 +9,28 @@ import {
 import { Button, ItemButton } from "@/components/ui/button";
 import { Info, Settings, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { DocInList } from "@/types/interfaces";
+import { GameInList } from "@/types/interfaces";
 import Link from "next/link";
 
 interface Props {
-  doc: DocInList;
+  game: GameInList;
   isOwner?: boolean;
 }
 
-export default function DocMenu({ doc, isOwner }: Props) {
-  const t = useTranslations("DocMenu");
+export default function GameMenu({ game, isOwner }: Props) {
+  const t = useTranslations("GameMenu");
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <Settings className="h-5 w-5" />
-          <span className="sr-only">Toggle doc menu</span>
+          <span className="sr-only">Toggle game menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {isOwner && (
-          <Link href={`/docs/${doc.id}/info`}>
+          <Link href={`/games/${game.id}/info`}>
             <ItemButton>
               <Info className="h-4 w-4" />
               {t("info")}
@@ -41,7 +41,8 @@ export default function DocMenu({ doc, isOwner }: Props) {
         {isOwner && (
           <>
             <DropdownMenuSeparator />
-            <Link href={`/docs/${doc.id}/info`}>
+            <DropdownMenuSeparator />
+            <Link href={`/games/${game.id}/info`}>
               <ItemButton variant="destructive">
                 <X className="h-4 w-4" />
                 {t("delete")}

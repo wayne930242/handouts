@@ -3,10 +3,6 @@ import { useEffect, useState } from "react";
 import { PacmanLoader } from "react-spinners";
 import { Eye, Pen, Unplug } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-  useDeleteMutation,
-  useInsertMutation,
-} from "@supabase-cache-helpers/postgrest-react-query";
 
 import { GameInList } from "@/types/interfaces";
 import useAppStore from "@/lib/store/useAppStore";
@@ -21,28 +17,74 @@ import FavoriteButton from "@/components/toolbar/FavoriteButton";
 import ToolbarLayout from "../layout/ToolbarLayout";
 
 import useGameStore from "@/lib/store/useGameStore";
+import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
+import GameMenu from "./GameMenu";
 
-export default function GameToolbar({ game }: Props) {
+export default function GameToolbar({
+  game,
+  isOwner,
+  isFavorite,
+  isJoined,
+}: Props) {
   const { connected, loading } = useGameStore((state) => ({
     connected: state.connected,
     loading: state.loading,
   }));
+  const t = useTranslations("Toolbar");
+  const user = useSessionUser();
 
-  const handleAddOrRemoveFavorite = async () => {}
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLocalJoined, setIsLocalJoined] = useState(false);
+  const [isLocalFavorite, setIsLocalFavorite] = useState(false);
 
-  return <ToolbarLayout>
-    <PacmanLoader color="#bbb" loading={loading} size={12} />
-    {!connected && (
-      <Badge
-        variant="outline"
-        className="text-destructive border-transparent animate-pulse"
-      >
-        <Unplug className="h-4 w-4" />
-      </Badge>
-    )}
+  useEffect(() => {
+    setIsLocalJoined(!!isJoined);
+  }, [setIsLocalJoined, isJoined]);
 
-  </ToolbarLayout>;
+  useEffect(() => {
+    setIsLocalFavorite(!!isFavorite);
+  }, [setIsLocalFavorite, isFavorite]);
+
+  const { joinOrLeave, addOrRemoveFavorite } = useHandleFavAndJoin({
+    tableName: "games",
+    userId: user?.id,
+    itemId: game?.id,
+    isJoined: isLocalJoined,
+    isFavorite: isLocalFavorite,
+    setIsLoading,
+    setIsJoined: setIsLocalJoined,
+    setIsFavorite: setIsLocalFavorite,
+  });
+
+  return (
+    <ToolbarLayout>
+      <PacmanLoader color="#bbb" loading={loading} size={12} />
+      {!connected && (
+        <Badge
+          variant="outline"
+          className="text-destructive border-transparent animate-pulse"
+        >
+          <Unplug className="h-4 w-4" />
+        </Badge>
+      )}
+      <FavoriteButton
+        isFavorite={isLocalFavorite}
+        onClick={() => addOrRemoveFavorite()}
+      />
+      {!isOwner && (
+        <Button
+          size="sm"
+          className="flex gap-2 items-center"
+          variant="outline"
+          onClick={() => joinOrLeave()}
+        >
+          {isLocalJoined ? t("leave") : t("join")}
+        </Button>
+      )}
+      {game && <GameMenu game={game} isOwner={isOwner} />}
+      {isLoading && <OverlayLoading />}
+    </ToolbarLayout>
+  );
 }
 
 interface Props {

@@ -140,7 +140,7 @@ export const getMyGames = (supabase: MySupabaseClient, userId: string) => {
     .select(
       `
       *,
-      game_players!inner (player_id),
+      game_players!inner (user_id),
       gm:profiles!games_gm_id_fkey (
         id,
         display_name,
@@ -148,7 +148,7 @@ export const getMyGames = (supabase: MySupabaseClient, userId: string) => {
       )
     `
     )
-    .eq("game_players.player_id", userId)
+    .eq("game_players.user_id", userId)
     .neq("gm_id", userId);
 };
 

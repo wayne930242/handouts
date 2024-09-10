@@ -3,16 +3,10 @@ import { useEffect, useState } from "react";
 import { PacmanLoader } from "react-spinners";
 import { Eye, Pen, Unplug } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-  useDeleteMutation,
-  useInsertMutation,
-} from "@supabase-cache-helpers/postgrest-react-query";
 
 import useAppStore from "@/lib/store/useAppStore";
-import { useClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useSessionUser from "@/lib/hooks/useSession";
-import { useRouter } from "@/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +14,6 @@ import CampaignMenu from "./CampaignMenu";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import FavoriteButton from "@/components/toolbar/FavoriteButton";
 import ToolbarLayout from "../layout/ToolbarLayout";
-import { getCurrentUrl } from "@/lib/route";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
 
 export default function Toolbar({
@@ -34,9 +27,7 @@ export default function Toolbar({
   isFavorite?: boolean;
   isJoined?: boolean;
 }) {
-  const supabase = useClient();
   const user = useSessionUser();
-  const router = useRouter();
   const t = useTranslations("Toolbar");
 
   const [isLocalJoined, setIsLocalJoined] = useState(false);
@@ -71,7 +62,6 @@ export default function Toolbar({
     tableName: "campaigns",
     userId: user?.id,
     itemId: campaignId,
-    role: "OWNER",
     setIsLoading,
     isJoined: isLocalJoined,
     isFavorite: isLocalFavorite,
@@ -127,7 +117,9 @@ export default function Toolbar({
           {isLocalJoined ? t("leave") : t("join")}
         </Button>
       )}
-      {campaignData && <CampaignMenu campaignData={campaignData} />}
+      {campaignData && (
+        <CampaignMenu campaignData={campaignData} isOwner={isOwner} />
+      )}
 
       {isLoading && <OverlayLoading />}
     </ToolbarLayout>

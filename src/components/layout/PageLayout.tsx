@@ -17,7 +17,7 @@ import { Menu } from "lucide-react";
 import NavItems from "./NavItems";
 import VisuallyHidden from "@/components/ui/visuallyhidden";
 import { ModeToggle } from "@/components/layout/ModeToggle";
-import { getCurrentUrl } from "@/lib/route";
+import { getCurrentUrl } from "@/lib/routeServer";
 
 export default async function PageLayout({
   header,

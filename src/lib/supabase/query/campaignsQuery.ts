@@ -40,7 +40,6 @@ export const getCampaignWithPlayers = (
     .select(
       `
       user_id,
-      role,
       profiles!campaign_players_user_id_fkey1 (
         id,
         avatar_url,
@@ -95,7 +94,6 @@ gm:profiles!campaigns_gm_id_fkey1 (
   avatar_url
 ),
 players:campaign_players (
-  role,
   user:profiles!campaign_players_user_id_fkey1 (
     id,
     display_name,

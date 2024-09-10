@@ -51,29 +51,39 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <Link href={`/campaigns/${campaignData.id}/info`}>
-          <ItemButton>
-            <Info className="h-4 w-4" />
-            {t("info")}
-          </ItemButton>
-        </Link>
+        {isOwner && (
+          <Link href={`/campaigns/${campaignData.id}/info`}>
+            <ItemButton>
+              <Info className="h-4 w-4" />
+              {t("info")}
+            </ItemButton>
+          </Link>
+        )}
 
-        <ItemButton onClick={handleExport}>
-          <FileDown className="h-4 w-4" />
-          <span>{t("export")}</span>
-        </ItemButton>
-
-        <ItemButton disabled>
-          <HardDriveUpload className="h-4 w-4" />
-          <span>{t("import")}</span>
-        </ItemButton>
-        <DropdownMenuSeparator />
-        <Link href={`/campaigns/${campaignData.id}/info`}>
-          <ItemButton variant="destructive">
-            <X className="h-4 w-4" />
-            {t("delete")}
+        {isOwner && (
+          <ItemButton onClick={handleExport}>
+            <FileDown className="h-4 w-4" />
+            <span>{t("export")}</span>
           </ItemButton>
-        </Link>
+        )}
+
+        {isOwner && (
+          <ItemButton disabled>
+            <HardDriveUpload className="h-4 w-4" />
+            <span>{t("import")}</span>
+          </ItemButton>
+        )}
+        {isOwner && (
+          <>
+            <DropdownMenuSeparator />
+            <Link href={`/campaigns/${campaignData.id}/info`}>
+              <ItemButton variant="destructive">
+                <X className="h-4 w-4" />
+                {t("delete")}
+              </ItemButton>
+            </Link>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
