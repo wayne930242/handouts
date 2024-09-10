@@ -1,4 +1,10 @@
 {
+  "GamePage": {
+    "screen": "GM Screen",
+    "docs": "Documents",
+    "handouts": "Handouts",
+    "notes": "Notes"
+  },
   "GameMenu": {
     "delete": "Delete",
     "info": "Info"

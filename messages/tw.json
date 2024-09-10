@@ -1,4 +1,10 @@
 {
+  "GamePage": {
+    "screen": "GM 屏幕",
+    "docs": "文件",
+    "handouts": "手邊資料",
+    "notes": "筆記"
+  },
   "GameMenu": {
     "delete": "刪除",
     "info": "資訊"
