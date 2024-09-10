@@ -23,19 +23,20 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/login");
-  }
 
   const queryClient = new QueryClient();
 
-  await prefetchQuery(queryClient, getDocsByOwnerId(supabase, user.id));
+  if (user) {
+    await prefetchQuery(queryClient, getDocsByOwnerId(supabase, user.id));
+  }
 
   return (
     <PageLayout header={<DataToolbar tableKey="docs" />} needsAuth>
-      <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Docs userId={user.id} />
-      </HydrationBoundary>
+      {user && (
+        <HydrationBoundary state={hydrate(queryClient, null)}>
+          <Docs userId={user.id} />
+        </HydrationBoundary>
+      )}
     </PageLayout>
   );
 }

@@ -17,6 +17,7 @@ import { Menu } from "lucide-react";
 import NavItems from "./NavItems";
 import VisuallyHidden from "@/components/ui/visuallyhidden";
 import { ModeToggle } from "@/components/layout/ModeToggle";
+import { getCurrentUrl } from "@/lib/route";
 
 export default async function PageLayout({
   header,
@@ -37,7 +38,9 @@ export default async function PageLayout({
 
   if (needsAuth) {
     if (!user) {
-      return redirect("/login");
+      return redirect(
+        `/login?redirectTo=${getCurrentUrl({ includeSearchParams: true })}`
+      );
     }
   }
 

@@ -10,9 +10,7 @@ export const getGameDetail = (
     .from("games")
     .select(
       `
-      id,
-      title,
-      description,
+      *,
       campaign:campaigns (
         id,
         name,

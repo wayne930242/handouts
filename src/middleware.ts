@@ -10,6 +10,8 @@ const intlMiddleware = createMiddleware({
 });
 
 export async function middleware(request: NextRequest) {
+  request.headers.set('next-url', request.url);
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,

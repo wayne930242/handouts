@@ -5,14 +5,16 @@ import { SubmitButton } from "@/components/form/SubmitButton";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FormMessage, Message } from "@/components/form/FormMessage";
-import { encodedRedirect } from "@/lib/route";
+import { decodeUrlPath, encodedRedirect } from "@/lib/route";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 interface Props {
   params: {
     locale: string;
   };
-  searchParams: Message;
+  searchParams: Message & {
+    redirectTo?: string;
+  };
 }
 
 export default async function Login({
@@ -35,7 +37,7 @@ export default async function Login({
     if (error) {
       return encodedRedirect("error", "/login", t("authError"));
     }
-    return redirect("/");
+    return redirect("/" + decodeUrlPath(searchParams.redirectTo));
   };
 
   return (
@@ -64,7 +66,14 @@ export default async function Login({
         <h1 className="text-2xl font-medium">{t("title")}</h1>
         <p className="text-sm text-foreground/60">
           {t("subtitle")}{" "}
-          <Link className="text-blue-600 font-medium underline" href="/signup">
+          <Link
+            className="text-blue-600 font-medium underline"
+            href={`/signup${
+              searchParams.redirectTo
+                ? `?redirectTo=${searchParams.redirectTo}`
+                : ""
+            }`}
+          >
             {t("signupLink")}
           </Link>
         </p>

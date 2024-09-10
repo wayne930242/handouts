@@ -2,9 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-import { redirect } from "@/navigation";
-import DataToolbar from "@/components/toolbar/DataToolbar";
-
 import PageLayout from "@/components/layout/PageLayout";
 import { getGameDetail, getGameSEO } from "@/lib/supabase/query/gamesQuery";
 import { genSEO } from "@/lib/defaultSEO";
@@ -45,19 +42,20 @@ export default async function GamePage({ params: { id } }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/login");
-  }
 
   const queryClient = new QueryClient();
 
-  await prefetchQuery(queryClient, getGameDetail(supabase, id));
+  if (user) {
+    await prefetchQuery(queryClient, getGameDetail(supabase, id, user.id));
+  }
 
   return (
-    <PageLayout header={<DataToolbar tableKey="games" />} needsAuth>
-      <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Game gameId={id} userId={user.id} />
-      </HydrationBoundary>
+    <PageLayout needsAuth>
+      {user && (
+        <HydrationBoundary state={hydrate(queryClient, null)}>
+          <Game gameId={id} userId={user.id} />
+        </HydrationBoundary>
+      )}
     </PageLayout>
   );
 }

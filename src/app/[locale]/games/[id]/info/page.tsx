@@ -33,7 +33,9 @@ export async function generateMetadata({
     title: game?.title,
     description: game?.description ?? undefined,
     url: `${BASE_URL}/games/${id}`,
-    images: game?.banner_url ? [{ url: game.banner_url, width: 1200, height: 450 }] : undefined,
+    images: game?.banner_url
+      ? [{ url: game.banner_url, width: 1200, height: 450 }]
+      : undefined,
   });
 }
 
@@ -44,26 +46,26 @@ export default async function GamePage({ params: { id } }: Props) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/login");
-  }
-
   const queryClient = new QueryClient();
 
-  if (id !== "new") {
+  if (id !== "new" && user) {
     await prefetchQuery(queryClient, getGameInfo(supabase, id, user.id));
   }
 
   return (
     <PageLayout needsAuth>
-      <HydrationBoundary state={hydrate(queryClient, null)}>
-        <GameForm id={id} userId={user.id} />
-      </HydrationBoundary>
-      {id !== "new" && (
-        <div className="mt-4 flex flex-col gap-4">
-          <Separator />
-          <GameDeleteZone gameId={id} />
-        </div>
+      {user && (
+        <>
+          <HydrationBoundary state={hydrate(queryClient, null)}>
+            <GameForm id={id} userId={user.id} />
+          </HydrationBoundary>
+          {id !== "new" && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Separator />
+              <GameDeleteZone gameId={id} />
+            </div>
+          )}
+        </>
       )}
     </PageLayout>
   );

@@ -12,7 +12,9 @@ interface Props {
   params: {
     locale: string;
   };
-  searchParams: Message;
+  searchParams: Message & {
+    redirectTo?: string;
+  };
 }
 
 export default async function Signup({
@@ -79,7 +81,14 @@ export default async function Signup({
         <h1 className="text-2xl font-medium">{t("title")}</h1>
         <p className="text-sm text text-foreground/60">
           {t("alreadyHaveAccount")}{" "}
-          <Link className="text-blue-600 font-medium underline" href="/login">
+          <Link
+            className="text-blue-600 font-medium underline"
+            href={`/login${
+              searchParams.redirectTo
+                ? `?redirectTo=${searchParams.redirectTo}`
+                : ""
+            }`}
+          >
             {t("login")}
           </Link>
         </p>

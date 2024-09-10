@@ -35,16 +35,18 @@ type Favorite = {
   added_at: string | null;
 };
 
-export type GeneratorField = Pick<
+export type GeneratorFieldData = Pick<
   Database["public"]["Tables"]["generator_fields"]["Row"],
   "id" | "name" | "content" | "order_num"
 >;
 
-export type Generator = Pick<
+export type GeneratorData = Pick<
   Database["public"]["Tables"]["generators"]["Row"],
   "id" | "name" | "description" | "type"
-> & {
-  fields?: GeneratorField[];
+>;
+
+export type Generator = GeneratorData & {
+  fields?: GeneratorFieldData[];
 };
 
 export type CampaignDoc = Pick<
@@ -220,16 +222,13 @@ export type GameInList = Database["public"]["Tables"]["games"]["Row"] & {
   gm: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
 };
 
-export type Game = {
-  id: string;
+export type GameData = Database["public"]["Tables"]["games"]["Row"];
 
-  title: string;
-  description: string | null;
-
-  campaign: CampaignInGame[] | null;
-  docs: { doc: DocInGame }[];
-  screens: ScreenInGame | null;
-  notes: Note[];
+export type Game = GameData & {
+  campaign: CampaignInGame | null;
+  screen: ScreenInGame | null;
+  notes: NoteData[];
+  docs: { doc: DocInGame | null }[];
 
   favorite: Favorite[];
   gm: Profile | null;
@@ -263,7 +262,7 @@ export type ScreenInGame = ScreenInGameData & {
   }[];
 };
 
-export type Note = Pick<
+export type NoteData = Pick<
   Database["public"]["Tables"]["notes"]["Row"],
   | "id"
   | "owner_id"
@@ -273,3 +272,86 @@ export type Note = Pick<
   | "is_public"
   | "metadata"
 >;
+
+export type GeneratorTableDataPayload =
+  | GeneratorData
+  | GeneratorFieldData
+  | Array<GeneratorData | GeneratorFieldData>;
+
+export type GeneratorTableDataPayloadWithoutId =
+  | Omit<GeneratorData, "id">
+  | Omit<GeneratorFieldData, "id">
+  | Array<Omit<GeneratorData, "id"> | Omit<GeneratorFieldData, "id">>;
+
+export type SetGeneratorsPayload = <
+  E extends MutateEventType,
+  T extends E extends "INSERT"
+    ? GeneratorTableDataPayloadWithoutId
+    : GeneratorTableDataPayload
+>(
+  newData: T,
+  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
+  tableName: HandoutsTreeTable,
+  type: E,
+  supabaseClient: MySupabaseClient,
+  debounce?: {
+    key: string;
+    delay: number;
+  }
+) => Promise<void>;
+
+export type NoteDataPayload = NoteData | Array<NoteData>;
+
+export type NoteDataPayloadWithoutId =
+  | Omit<NoteData, "id">
+  | Array<Omit<NoteData, "id">>;
+
+export type SetNoteDataPayloadLocal = <
+  E extends MutateEventType,
+  T extends E extends "INSERT" ? NoteDataPayloadWithoutId : NoteDataPayload
+>(
+  newData: T,
+  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
+  tableName: HandoutsTreeTable,
+  type: E
+) => void;
+
+export type SetNoteDataPayload = <
+  E extends MutateEventType,
+  T extends E extends "INSERT" ? NoteDataPayloadWithoutId : NoteDataPayload
+>(
+  newData: T,
+  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
+  tableName: HandoutsTreeTable,
+  type: E,
+  supabaseClient: MySupabaseClient,
+  debounce?: {
+    key: string;
+    delay: number;
+  }
+) => Promise<void>;
+
+export interface GameStore {
+  gameData: Game | null;
+  initGameData: (gameData: Game | null) => void;
+
+  setCampaignHandoutsLocal: SetHandoutsTreeDataPayloadLocal;
+  setCampaignHandoutsRemote: SetHandoutsTreeDataPayload;
+  setCampaignHandouts: SetHandoutsTreeDataPayload;
+
+  setScreenHandoutsLocal: SetHandoutsTreeDataPayloadLocal;
+  setScreenHandoutsRemote: SetHandoutsTreeDataPayload;
+  setScreenHandouts: SetHandoutsTreeDataPayload;
+
+  setGenerators: SetGeneratorsPayload;
+
+  setNotes: SetNoteDataPayload;
+  setNotesLocal: SetNoteDataPayloadLocal;
+  setNotesRemote: SetNoteDataPayload;
+
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  connected: boolean;
+  setConnected: (connected: boolean) => void;
+  error: Error | null;
+}

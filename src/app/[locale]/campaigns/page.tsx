@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "@/navigation";
 import DataToolbar from "@/components/toolbar/DataToolbar";
 
 import PageLayout from "@/components/layout/PageLayout";
@@ -27,21 +26,22 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/login");
-  }
 
   const queryClient = new QueryClient();
 
-  await prefetchQuery(queryClient, getOwnedCampaigns(supabase, user.id));
-  await prefetchQuery(queryClient, getMyFavCampaigns(supabase, user.id));
-  await prefetchQuery(queryClient, getMyCampaigns(supabase, user.id));
+  if (user) {
+    await prefetchQuery(queryClient, getOwnedCampaigns(supabase, user.id));
+    await prefetchQuery(queryClient, getMyFavCampaigns(supabase, user.id));
+    await prefetchQuery(queryClient, getMyCampaigns(supabase, user.id));
+  }
 
   return (
     <PageLayout header={<DataToolbar tableKey="campaigns" />} needsAuth>
-      <HydrationBoundary state={hydrate(queryClient, null)}>
-        <Campaigns userId={user.id} />
-      </HydrationBoundary>
+      {user && (
+        <HydrationBoundary state={hydrate(queryClient, null)}>
+          <Campaigns userId={user.id} />
+        </HydrationBoundary>
+      )}
     </PageLayout>
   );
 }

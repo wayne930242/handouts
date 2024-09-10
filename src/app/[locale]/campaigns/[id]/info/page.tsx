@@ -7,7 +7,6 @@ import CampaignForm from "@/components/campaign/CampaignForm";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
 import CampaignDeleteZone from "@/components/campaign/CampaignDeleteZone";
-import { redirect } from "@/navigation";
 
 interface Props {
   params: {
@@ -21,27 +20,26 @@ export default async function CampaignPage({ params: { id } }: Props) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/login");
-  }
-
   const queryClient = new QueryClient();
 
-  if (id !== "new") {
+  if (id !== "new" && user) {
     await prefetchQuery(queryClient, getCampaignInfo(supabase, id, user.id));
   }
 
   return (
     <PageLayout needsAuth>
-      <HydrationBoundary state={hydrate(queryClient, null)}>
-        <CampaignForm id={id} userId={user.id} />
-      </HydrationBoundary>
-
-      {id !== "new" && (
-        <div className="mt-4 flex flex-col gap-4">
-          <Separator />
-          <CampaignDeleteZone campaignId={id} />
-        </div>
+      {user && (
+        <>
+          <HydrationBoundary state={hydrate(queryClient, null)}>
+            <CampaignForm id={id} userId={user.id} />
+          </HydrationBoundary>
+          {id !== "new" && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Separator />
+              <CampaignDeleteZone campaignId={id} />
+            </div>
+          )}
+        </>
       )}
     </PageLayout>
   );

@@ -19,6 +19,9 @@ import { Badge } from "@/components/ui/badge";
 import CampaignMenu from "./CampaignMenu";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import FavoriteButton from "@/components/toolbar/FavoriteButton";
+import ToolbarLayout from "../layout/ToolbarLayout";
+import { getCurrentUrl } from "@/lib/route";
+import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
 
 export default function Toolbar({
   campaignId,
@@ -59,145 +62,74 @@ export default function Toolbar({
     connected: state.connected,
     loading: state.loading,
   }));
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { mutateAsync: joinCampaign, isPending: isJoining } = useInsertMutation(
-    supabase.from("campaign_players"),
-    ["campaign_id", "user_id"]
-  );
-  const { mutateAsync: leaveCampaign, isPending: isLeaving } =
-    useDeleteMutation(supabase.from("campaign_players"), [
-      "campaign_id",
-      "user_id",
-    ]);
-  const { mutateAsync: addFavorite, isPending: isFavoriting } =
-    useInsertMutation(supabase.from("user_campaign_favorites"), [
-      "campaign_id",
-      "user_id",
-    ]);
-  const { mutateAsync: removeFavorite, isPending: isUnfavoriting } =
-    useDeleteMutation(supabase.from("user_campaign_favorites"), [
-      "campaign_id",
-      "user_id",
-    ]);
-  const isLoading = isJoining || isLeaving || isFavoriting || isUnfavoriting;
-
-  const handleAddOrRemoveFavorite = async () => {
-    if (!campaignData) return;
-    if (!user?.id) {
-      router.push("/login");
-      return;
-    }
-
-    if (!isLocalJoined && !isLocalFavorite) {
-      await joinCampaign([
-        {
-          campaign_id: campaignData.id,
-          user_id: user.id,
-          role: isOwner ? "OWNER" : "PLAYER",
-        },
-      ]).then(() => {
-        setIsLocalJoined(true);
-      });
-    }
-
-    if (isLocalFavorite) {
-      await removeFavorite({
-        campaign_id: campaignData.id,
-        user_id: user.id,
-      }).then(() => {
-        setIsLocalFavorite(false);
-      });
-    } else {
-      await addFavorite([
-        {
-          campaign_id: campaignData.id,
-          user_id: user.id,
-        },
-      ]).then(() => {
-        setIsLocalFavorite(true);
-      });
-    }
-  };
-
-  const handleJoinOrLeave = async () => {
-    if (!campaignData) return;
-    if (!user?.id) {
-      router.push("/login");
-      return;
-    }
-    if (isLocalJoined) {
-      await leaveCampaign({
-        campaign_id: campaignData.id,
-        user_id: user.id,
-      }).then(() => {
-        setIsLocalJoined(false);
-      });
-    } else {
-      await joinCampaign([
-        {
-          campaign_id: campaignData.id,
-          role: isOwner ? "OWNER" : "PLAYER",
-          user_id: user.id,
-        },
-      ]).then(() => {
-        setIsLocalJoined(true);
-      });
-    }
-  };
+  const {
+    addOrRemoveFavorite: handleAddOrRemoveFavorite,
+    joinOrLeave: handleJoinOrLeave,
+  } = useHandleFavAndJoin({
+    tableName: "campaigns",
+    userId: user?.id,
+    itemId: campaignId,
+    role: "OWNER",
+    setIsLoading,
+    isJoined: isLocalJoined,
+    isFavorite: isLocalFavorite,
+    setIsJoined: setIsLocalJoined,
+    setIsFavorite: setIsLocalFavorite,
+  });
 
   return (
-    <div className="flex justify-between items-center w-full">
-      <div className="grow-1 flex gap-2 items-center"></div>
-      <div className="flex gap-2 items-center">
-        <PacmanLoader color="#bbb" loading={loading} size={12} />
-        {!connected && (
-          <Badge
-            variant="outline"
-            className="text-destructive border-transparent animate-pulse"
-          >
-            <Unplug className="h-4 w-4" />
-          </Badge>
-        )}
-        <FavoriteButton
-          isFavorite={isLocalFavorite}
-          onClick={() => handleAddOrRemoveFavorite()}
-        />
-        {isOwner && (
-          <Button
-            size="sm"
-            className="flex gap-2 items-center"
-            variant={editingStage === "campaign" ? "outline" : "default"}
-            onClick={() => {
-              if (editingStage === "campaign") {
-                setEditingStage(null);
-                setEditingId(null);
-              } else {
-                setEditingStage("campaign");
-                setEditingId(campaignId);
-              }
-            }}
-          >
-            {editingStage === "campaign" ? (
-              <Eye className="h-4 w-4" />
-            ) : (
-              <Pen className="h-4 w-4" />
-            )}
-            {editingStage === "campaign" ? t("closeEdit") : t("edit")}
-          </Button>
-        )}
-        {!isOwner && (
-          <Button
-            size="sm"
-            className="flex gap-2 items-center"
-            variant="outline"
-            onClick={() => handleJoinOrLeave()}
-          >
-            {isLocalJoined ? t("leave") : t("join")}
-          </Button>
-        )}
-        {campaignData && <CampaignMenu campaignData={campaignData} />}
-      </div>
+    <ToolbarLayout>
+      <PacmanLoader color="#bbb" loading={loading} size={12} />
+      {!connected && (
+        <Badge
+          variant="outline"
+          className="text-destructive border-transparent animate-pulse"
+        >
+          <Unplug className="h-4 w-4" />
+        </Badge>
+      )}
+      <FavoriteButton
+        isFavorite={isLocalFavorite}
+        onClick={() => handleAddOrRemoveFavorite()}
+      />
+      {isOwner && (
+        <Button
+          size="sm"
+          className="flex gap-2 items-center"
+          variant={editingStage === "campaign" ? "outline" : "default"}
+          onClick={() => {
+            if (editingStage === "campaign") {
+              setEditingStage(null);
+              setEditingId(null);
+            } else {
+              setEditingStage("campaign");
+              setEditingId(campaignId);
+            }
+          }}
+        >
+          {editingStage === "campaign" ? (
+            <Eye className="h-4 w-4" />
+          ) : (
+            <Pen className="h-4 w-4" />
+          )}
+          {editingStage === "campaign" ? t("closeEdit") : t("edit")}
+        </Button>
+      )}
+      {!isOwner && (
+        <Button
+          size="sm"
+          className="flex gap-2 items-center"
+          variant="outline"
+          onClick={() => handleJoinOrLeave()}
+        >
+          {isLocalJoined ? t("leave") : t("join")}
+        </Button>
+      )}
+      {campaignData && <CampaignMenu campaignData={campaignData} />}
+
       {isLoading && <OverlayLoading />}
-    </div>
+    </ToolbarLayout>
   );
 }
