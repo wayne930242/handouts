@@ -28,19 +28,19 @@ export default async function DocPage({ params: { id } }: Props) {
 
   return (
     <PageLayout needsAuth>
-      {user && (
-        <>
-          <HydrationBoundary state={hydrate(queryClient, null)}>
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && (
+          <>
             <DocForm id={id} userId={user.id} />
-          </HydrationBoundary>
-          {id !== "new" && (
-            <div className="mt-4 flex flex-col gap-4">
-              <Separator />
-              <DocDeleteZone docId={id} />
-            </div>
-          )}
-        </>
-      )}
+            {id !== "new" && (
+              <div className="mt-4 flex flex-col gap-4">
+                <Separator />
+                <DocDeleteZone docId={id} />
+              </div>
+            )}
+          </>
+        )}
+      </HydrationBoundary>
     </PageLayout>
   );
 }

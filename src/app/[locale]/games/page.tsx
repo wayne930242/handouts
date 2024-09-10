@@ -35,11 +35,9 @@ export default async function Generators({ params: { locale } }: Props) {
 
   return (
     <PageLayout header={<DataToolbar tableKey="games" />} needsAuth>
-      {user && (
-        <HydrationBoundary state={hydrate(queryClient, null)}>
-          <Games userId={user.id} />
-        </HydrationBoundary>
-      )}
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && <Games userId={user.id} />}
+      </HydrationBoundary>
     </PageLayout>
   );
 }

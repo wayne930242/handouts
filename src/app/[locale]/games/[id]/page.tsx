@@ -7,6 +7,7 @@ import { getGameDetail, getGameSEO } from "@/lib/supabase/query/gamesQuery";
 import { genSEO } from "@/lib/defaultSEO";
 import { BASE_URL } from "@/config/app";
 import Game from "@/components/game/Game";
+import { redirect } from "@/navigation";
 
 interface Props {
   params: {
@@ -46,16 +47,20 @@ export default async function GamePage({ params: { id } }: Props) {
   const queryClient = new QueryClient();
 
   if (user) {
+    const { data: isValid } = await supabase.rpc("check_user_game_role", {
+      p_user_id: user.id,
+      p_game_id: id,
+    });
+    if (!isValid) return redirect("/games?message=notInGame");
+
     await prefetchQuery(queryClient, getGameDetail(supabase, id, user.id));
   }
 
   return (
     <PageLayout needsAuth>
-      {user && (
-        <HydrationBoundary state={hydrate(queryClient, null)}>
-          <Game gameId={id} userId={user.id} />
-        </HydrationBoundary>
-      )}
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && <Game gameId={id} userId={user.id} />}
+      </HydrationBoundary>
     </PageLayout>
   );
 }

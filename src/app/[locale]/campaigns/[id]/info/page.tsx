@@ -28,19 +28,19 @@ export default async function CampaignPage({ params: { id } }: Props) {
 
   return (
     <PageLayout needsAuth>
-      {user && (
-        <>
-          <HydrationBoundary state={hydrate(queryClient, null)}>
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && (
+          <>
             <CampaignForm id={id} userId={user.id} />
-          </HydrationBoundary>
-          {id !== "new" && (
-            <div className="mt-4 flex flex-col gap-4">
-              <Separator />
-              <CampaignDeleteZone campaignId={id} />
-            </div>
-          )}
-        </>
-      )}
+            {id !== "new" && (
+              <div className="mt-4 flex flex-col gap-4">
+                <Separator />
+                <CampaignDeleteZone campaignId={id} />
+              </div>
+            )}
+          </>
+        )}
+      </HydrationBoundary>
     </PageLayout>
   );
 }

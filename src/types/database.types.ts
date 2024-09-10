@@ -1328,6 +1328,13 @@ export type Database = {
           game_id: string
         }[]
       }
+      check_user_game_role: {
+        Args: {
+          p_user_id: string
+          p_game_id: string
+        }
+        Returns: boolean
+      }
       get_encrypted_secret_992c1b1ea50838a94c0fd3b133c45f6ff808f786: {
         Args: {
           p_purpose: string

@@ -54,19 +54,19 @@ export default async function GamePage({ params: { id } }: Props) {
 
   return (
     <PageLayout needsAuth>
-      {user && (
-        <>
-          <HydrationBoundary state={hydrate(queryClient, null)}>
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && (
+          <>
             <GameForm id={id} userId={user.id} />
-          </HydrationBoundary>
-          {id !== "new" && (
-            <div className="mt-4 flex flex-col gap-4">
-              <Separator />
-              <GameDeleteZone gameId={id} />
-            </div>
-          )}
-        </>
-      )}
+            {id !== "new" && (
+              <div className="mt-4 flex flex-col gap-4">
+                <Separator />
+                <GameDeleteZone gameId={id} />
+              </div>
+            )}
+          </>
+        )}
+      </HydrationBoundary>
     </PageLayout>
   );
 }

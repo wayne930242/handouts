@@ -32,11 +32,9 @@ export default async function CampaignPage({ params: { locale } }: Props) {
 
   return (
     <PageLayout header={<DataToolbar tableKey="docs" />} needsAuth>
-      {user && (
-        <HydrationBoundary state={hydrate(queryClient, null)}>
-          <Docs userId={user.id} />
-        </HydrationBoundary>
-      )}
+      <HydrationBoundary state={hydrate(queryClient, null)}>
+        {user && <Docs userId={user.id} />}
+      </HydrationBoundary>
     </PageLayout>
   );
 }
