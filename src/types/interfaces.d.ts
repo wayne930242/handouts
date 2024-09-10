@@ -1,6 +1,11 @@
 import { locales } from "@/navigation";
 import { Database } from "./database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
+import {
+  HandoutsTreeTable,
+  SetHandoutsTreeDataPayload,
+  SetHandoutsTreeDataPayloadLocal,
+} from "./handouts";
 
 export type MySupabaseClient = SupabaseClient<Database>;
 
@@ -93,72 +98,19 @@ export type RealtimePayload<T> = {
 
 export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
 
-export type CampaignSubTable =
-  | "campaigns"
-  | "chapters"
-  | "sections"
-  | "handouts";
-
-export type CampaignTableDataPayload =
-  | CampaignData
-  | ChapterData
-  | SectionData
-  | HandoutData
-  | Array<ChapterData | SectionData | HandoutData>;
-
-export type CampaignTableDataPayloadWithoutId =
-  | Omit<CampaignData, "id">
-  | Omit<ChapterData, "id">
-  | Omit<SectionData, "id">
-  | Omit<HandoutData, "id">
-  | Array<
-      | Omit<ChapterData, "id">
-      | Omit<SectionData, "id">
-      | Omit<HandoutData, "id">
-    >;
-
-export type SetCampaignDataPayload = <
-  E extends MutateEventType,
-  T extends E extends "INSERT"
-    ? CampaignTableDataPayloadWithoutId
-    : CampaignTableDataPayload
->(
-  newData: T,
-  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
-  tableName: CampaignSubTable,
-  type: E,
-  supabaseClient: MySupabaseClient,
-  debounce?: {
-    key: string;
-    delay: number;
-  }
-) => Promise<void>;
-
-export type SetCampaignDataPayloadLocal = <
-  E extends MutateEventType,
-  T extends E extends "INSERT"
-    ? CampaignTableDataPayloadWithoutId
-    : CampaignTableDataPayload
->(
-  newData: T,
-  oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
-  tableName: CampaignSubTable,
-  type: E
-) => void;
-
 export interface CampaignStore {
   campaignData: Campaign | null;
   initCampaignData: (campaignData: Campaign | null) => any;
-  setCampaignDataLocal: SetCampaignDataPayloadLocal;
-  setCampaignDataRemote: SetCampaignDataPayload;
-  setCampaignData: SetCampaignDataPayload;
+  setCampaignDataLocal: SetHandoutsTreeDataPayloadLocal;
+  setCampaignDataRemote: SetHandoutsTreeDataPayload;
+  setCampaignData: SetHandoutsTreeDataPayload;
   loading: boolean;
   setLoading: (loading: boolean) => void;
   connected: boolean;
   setConnected: (connected: boolean) => void;
   error: Error | null;
   handleRealtimeUpdate: <T extends { id: string }>(
-    table: CampaignSubTable,
+    table: HandoutsTreeTable,
     payload: RealtimePayload<T>
   ) => void;
 }
@@ -295,11 +247,14 @@ export type CampaignInGameData = Pick<
   Database["public"]["Tables"]["campaigns"]["Row"],
   "id" | "name" | "description" | "banner_url"
 >;
-export type CampaignInGameData = CampaignInGameData & {
+export type CampaignInGame = CampaignInGameData & {
   chapters: Chapter[];
 };
 
-export type ScreenInGameData = Pick<"id">;
+export type ScreenInGameData = Pick<
+  Database["public"]["Tables"]["screens"]["Row"],
+  "id"
+>;
 
 export type ScreenInGame = ScreenInGameData & {
   chapters: Chapter[];

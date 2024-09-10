@@ -1,17 +1,12 @@
-import {
-  Campaign,
-  CampaignSubTable,
-  Chapter,
-  Handout,
-  Section,
-} from "@/types/interfaces";
+import { Campaign, Chapter, Handout, Section } from "@/types/interfaces";
+import { HandoutsTreeTable } from "@/types/handouts";
 import { updateArray } from "./arraryUpdater";
 
-export const updateCampaignNestedData = <
-  T extends Campaign | Chapter | Section | Handout
+export const updateHandoutsTreeNestedData = <
+  T extends Chapter | Section | Handout
 >(
   campaignData: Campaign | null,
-  table: CampaignSubTable,
+  table: HandoutsTreeTable,
   newRecord: T,
   oldRecord: Partial<T>,
   eventType: "INSERT" | "UPDATE" | "DELETE"
@@ -21,9 +16,6 @@ export const updateCampaignNestedData = <
   const updatedData = { ...campaignData };
 
   switch (table) {
-    case "campaigns":
-      return { ...updatedData, ...(newRecord as Partial<Campaign>) };
-
     case "chapters":
       updatedData.chapters = updateArray(
         updatedData.chapters,

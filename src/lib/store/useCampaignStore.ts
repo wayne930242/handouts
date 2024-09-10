@@ -1,15 +1,14 @@
 import { create } from "zustand";
 import { debouncify } from "@/lib/debounce";
+import { updateHandoutsTreeNestedData } from "@/lib/supabase/updateCampaignData";
 import {
   CampaignStore,
   RealtimePayload,
-  CampaignSubTable,
   Handout,
   Chapter,
   Section,
-  Campaign,
 } from "@/types/interfaces";
-import { updateCampaignNestedData } from "../supabase/updateCampaignData";
+import { HandoutsTreeTable } from "@/types/handouts";
 
 const useCampaignStore = create<CampaignStore>((set, get) => ({
   campaignData: null,
@@ -25,10 +24,10 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
         set((state) => {
           if (!state.campaignData) return state;
           if (!Array.isArray(oldData)) return state;
-          let updatedData = updateCampaignNestedData(
+          let updatedData = updateHandoutsTreeNestedData(
             state.campaignData,
             tableName,
-            item as Handout | Chapter | Section | Campaign,
+            item as Handout | Chapter | Section ,
             oldData[index] as typeof item,
             type
           );
@@ -38,11 +37,11 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
     } else {
       set((state) => {
         if (!state.campaignData) return state;
-        let updatedData = updateCampaignNestedData(
+        let updatedData = updateHandoutsTreeNestedData(
           state.campaignData,
           tableName,
-          newData as Handout | Chapter | Section | Campaign,
-          oldData as Partial<Handout | Chapter | Section | Campaign>,
+          newData as Handout | Chapter | Section,
+          oldData as Partial<Handout | Chapter | Section>,
           type
         );
         return { campaignData: updatedData };
@@ -66,10 +65,10 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
             set((state) => {
               if (!state.campaignData) return state;
               if (!Array.isArray(oldData)) return state;
-              let updatedData = updateCampaignNestedData(
+              let updatedData = updateHandoutsTreeNestedData(
                 state.campaignData,
                 tableName,
-                item as Handout | Chapter | Section | Campaign,
+                item as Handout | Chapter | Section,
                 oldData[index] as typeof item,
                 type
               );
@@ -145,7 +144,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
     );
   },
   handleRealtimeUpdate: <T extends { id: string | number }>(
-    table: CampaignSubTable,
+    table: HandoutsTreeTable,
     payload: RealtimePayload<T>
   ) => {
     const { eventType, new: newRecord, old: oldRecord } = payload as any;
@@ -157,7 +156,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
     set((state) => {
       if (!state.campaignData) return state;
 
-      let updatedData = updateCampaignNestedData(
+      let updatedData = updateHandoutsTreeNestedData(
         state.campaignData,
         table,
         newRecord,
