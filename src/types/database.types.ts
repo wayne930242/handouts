@@ -526,6 +526,51 @@ export type Database = {
           },
         ]
       }
+      game_invitations: {
+        Row: {
+          code: string
+          created_at: string | null
+          created_by: string | null
+          expires_at: string
+          game_id: string
+          id: string
+          is_used: boolean | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          created_by?: string | null
+          expires_at: string
+          game_id: string
+          id?: string
+          is_used?: boolean | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string
+          game_id?: string
+          id?: string
+          is_used?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_invitations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_invitations_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       game_players: {
         Row: {
           game_id: string
@@ -1273,6 +1318,15 @@ export type Database = {
           input_passphrase: string
         }
         Returns: boolean
+      }
+      check_game_invitation: {
+        Args: {
+          p_code: string
+        }
+        Returns: {
+          is_valid: boolean
+          game_id: string
+        }[]
       }
       get_encrypted_secret_992c1b1ea50838a94c0fd3b133c45f6ff808f786: {
         Args: {

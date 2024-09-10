@@ -54,6 +54,7 @@ export default function DeleteZone({
   const [loading, setLoading] = useState(false);
 
   const { mutateAsync: deleteItem } = useDeleteMutation(
+    // @ts-ignore
     supabase.from(tableName),
     ["id"]
   );

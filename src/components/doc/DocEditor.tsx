@@ -76,6 +76,7 @@ export default function DocEditor({ doc, callback }: Props) {
 
   usePreventLeave(isDirty, t("leaveAlert"));
 
+  // @ts-ignore
   const { mutateAsync: updateDoc } = useUpsertMutation(supabase.from("docs"), [
     "id",
   ]);

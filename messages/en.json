@@ -1,4 +1,8 @@
 {
+  "GameMenu": {
+    "delete": "Delete",
+    "info": "Info"
+  },
   "CampaignDeleteZone": {
     "deleteButton": "Delete Campaign",
     "deleteDescription": "Deleting a campaign will also delete all chapters, sections, handouts and images. This action cannot be undone. Are you sure you want to delete?",

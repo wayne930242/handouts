@@ -77,11 +77,13 @@ export default function DocForm({
   }, [docInfo, reset]);
 
   const { mutateAsync: createDoc, isPending: isCreating } = useInsertMutation(
+    // @ts-ignore
     supabase.from("docs"),
     ["id"]
   );
 
   const { mutateAsync: updateDoc, isPending: isUpdating } = useUpsertMutation(
+    // @ts-ignore
     supabase.from("docs"),
     ["id"]
   );

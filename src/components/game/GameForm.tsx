@@ -87,11 +87,13 @@ export default function GameForm({
   }, [gameInfo, reset]);
 
   const { mutateAsync: createGame } = useInsertMutation(
+    // @ts-ignore
     supabase.from("games"),
     ["id"]
   );
 
   const { mutateAsync: updateGame } = useUpsertMutation(
+    // @ts-ignore
     supabase.from("games"),
     ["id"]
   );

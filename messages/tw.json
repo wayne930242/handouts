@@ -1,4 +1,8 @@
 {
+  "GameMenu": {
+    "delete": "刪除",
+    "info": "資訊"
+  },
   "CampaignDeleteZone": {
     "deleteButton": "刪除戰役",
     "deleteDescription": "刪除戰役後，所有的章節、段落、手邊資料、圖片等都將會被刪除，且無法復原。是否確認刪除？",

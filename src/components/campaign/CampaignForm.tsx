@@ -87,10 +87,13 @@ export default function CampaignForm({
   }, [campaignInfo, reset]);
 
   const { mutateAsync: createCampaig } = useInsertMutation(
+    // @ts-ignore
     supabase.from("campaigns"),
     ["id"]
   );
+
   const { mutateAsync: updateCampaign } = useUpsertMutation(
+    // @ts-ignore
     supabase.from("campaigns"),
     ["id"]
   );
