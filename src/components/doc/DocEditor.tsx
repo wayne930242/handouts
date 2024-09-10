@@ -110,12 +110,20 @@ export default function DocEditor({ doc, callback }: Props) {
         content: data.content,
       },
     ])
-      .then(() => {
+      .then(async () => {
+        imageManager.cleanImages(
+          `docs/${doc.id}/images`,
+          data.content,
+          data.banner_url ? [data.banner_url] : undefined
+        );
+
+        callback?.();
+
         toast({
           title: t("successTitle"),
           description: t("successDescription"),
         });
-        callback?.();
+
         form.reset({
           title: data.title,
           description: data.description,
@@ -130,11 +138,6 @@ export default function DocEditor({ doc, callback }: Props) {
           variant: "destructive",
         });
       });
-    await imageManager.cleanImages(
-      `docs/${doc.id}/images`,
-      data.content,
-      data.banner_url ? [data.banner_url] : undefined
-    );
     setIsLoading(false);
   };
 
