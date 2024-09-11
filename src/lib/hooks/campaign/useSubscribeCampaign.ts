@@ -6,7 +6,7 @@ import { useSubscription } from "@supabase-cache-helpers/postgrest-react-query";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { useClient } from "@/lib/supabase/client";
 
-export default function useSubscriptionCampaign(campaignId: string) {
+export default function useSubscribeCampaign(campaignId: string) {
   const supabase = useClient();
 
   const { setConnected, handleRealtimeUpdate } = useCampaignStore((state) => ({

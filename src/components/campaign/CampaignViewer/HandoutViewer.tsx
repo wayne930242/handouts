@@ -5,7 +5,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import YouTube from "react-youtube";
 
-import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
+import useCanEditCampaign from "@/lib/hooks/campaign/useCanEditCampaign";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Handout } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";

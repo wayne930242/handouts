@@ -1,7 +1,7 @@
 "use client";
 
-import useCampaignStore from "../store/useCampaignStore";
-import useSessionUser from "./useSession";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+import useSessionUser from "@/lib/hooks/useSession";
 
 export default function useCanEditCampaign() {
   const user = useSessionUser();

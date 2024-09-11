@@ -1,12 +1,13 @@
 "use client";
 
-import useCampaignData from "@/lib/hooks/useCampaignData";
-import useAppStore from "@/lib/store/useAppStore";
 import dynamic from "next/dynamic";
-import useSubscriptionCampaign from "@/lib/hooks/useSubscriptionCampaign";
+
+import useCampaignData from "@/lib/hooks/campaign/useCampaignData";
+import useAppStore from "@/lib/store/useAppStore";
+import useSubscribeCampaign from "@/lib/hooks/campaign/useSubscribeCampaign";
+import useCanEditCampaign from "@/lib/hooks/campaign/useCanEditCampaign";
 
 import Toolbar from "./CampaignToolbar";
-import useCanEditCampaign from "@/lib/hooks/useCanEditCampaign";
 
 const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
   ssr: false,
@@ -24,7 +25,7 @@ export default function Campaign({ campaignId, userId }: Props) {
 
   const isGm = useCanEditCampaign();
 
-  useSubscriptionCampaign(campaignId);
+  useSubscribeCampaign(campaignId);
 
   return (
     <div className="w-full">

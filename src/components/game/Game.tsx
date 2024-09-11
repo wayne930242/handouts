@@ -5,15 +5,17 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useTranslations } from "next-intl";
 import { PacmanLoader } from "react-spinners";
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 
 import { useRouter } from "@/navigation";
 import { useClient } from "@/lib/supabase/client";
 import useGameStore from "@/lib/store/useGameStore";
 import GameToolbar from "./GameToolbar";
-import GameScreen from "./GameScreen";
-import GameDocs from "./GameDocs";
-import GameHandouts from "./GameHandouts";
-import GameNote from "./GameNote";
+
+const GameScreen = dynamic(() => import("./GameScreen"));
+const GameDocs = dynamic(() => import("./GameDocs"));
+const GameHandouts = dynamic(() => import("./GameHandouts"));
+const GameNote = dynamic(() => import("./GameNote"));
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
