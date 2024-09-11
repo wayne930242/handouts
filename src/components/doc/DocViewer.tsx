@@ -75,5 +75,4 @@ export default function DocViewer({ doc }: Props) {
 
 interface Props {
   doc: DocInList;
-  canEdit?: boolean;
 }

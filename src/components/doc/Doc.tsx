@@ -8,12 +8,8 @@ import useAppStore from "@/lib/store/useAppStore";
 import { PacmanLoader } from "react-spinners";
 import { useClient } from "@/lib/supabase/client";
 
-const DocEditor = dynamic(() => import("./DocEditor"), {
-  ssr: false,
-});
-const DocViewer = dynamic(() => import("./DocViewer"), {
-  ssr: false,
-});
+const DocEditor = dynamic(() => import("./DocEditor"));
+const DocViewer = dynamic(() => import("./DocViewer"));
 
 interface Props {
   docId: string;
