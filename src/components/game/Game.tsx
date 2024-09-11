@@ -26,6 +26,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import GameNotesSubscriber from "./GameNotesSubscriber";
+import GameHandoutsSubscriber from "./GameHandoutsSubscriber";
 
 interface Props {
   gameId: string;
@@ -36,9 +38,12 @@ export default function Game({ gameId, userId }: Props) {
   const t = useTranslations("GamePage");
 
   const supabase = useClient();
-  const { initGameData } = useGameStore((state) => ({
-    initGameData: state.initGameData,
-  }));
+  const { initGameData, setCurrentCampaignId, currentCampaignId } =
+    useGameStore((state) => ({
+      initGameData: state.initGameData,
+      setCurrentCampaignId: state.setCurrentCampaignId,
+      currentCampaignId: state.currentCampaignId,
+    }));
 
   const {
     data: game,
@@ -52,6 +57,7 @@ export default function Game({ gameId, userId }: Props) {
     if (game) {
       isInit.current = true;
       initGameData(game);
+      setCurrentCampaignId(game.campaign_id);
     }
   }, [game]);
 
@@ -143,6 +149,10 @@ export default function Game({ gameId, userId }: Props) {
           </TabsContent>
         </Tabs>
       </div>
+      {game && <GameNotesSubscriber gameId={gameId} />}
+      {currentCampaignId && (
+        <GameHandoutsSubscriber campaign_id={currentCampaignId} />
+      )}
     </div>
   ) : (
     <div className="flex flex-col items-center justify-center h-96">

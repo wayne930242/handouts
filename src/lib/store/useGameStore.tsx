@@ -11,25 +11,28 @@ import {
 export const useGameStore = create<GameStore>((set, get) => ({
   gameData: null,
   initGameData: (gameData) => set({ gameData }),
+  currentCampaignId: null,
+  setCurrentCampaignId: (currentCampaignId) => set({ currentCampaignId }),
 
   setCampaignHandouts: async () => {},
   setCampaignHandoutsLocal: async () => {},
   setCampaignHandoutsRemote: async () => {},
+  handleRealtimeUpdateCampaignHandouts: async () => {},
 
   setScreenHandouts: async () => {},
-  setScreenHandoutsLocal: async () => {},
-  setScreenHandoutsRemote: async () => {},
-
   setGenerators: async () => {},
 
   setNotes: async () => {},
   setNotesLocal: async () => {},
   setNotesRemote: async () => {},
+  handleRealtimeUpdateNotes: async () => {},
 
   loading: false,
   setLoading: (loading) => set({ loading }),
   connected: false,
   setConnected: (connected) => set({ connected }),
+  needConnect: false,
+  setNeedConnect: (needConnect) => set({ needConnect }),
   error: null,
 }));
 

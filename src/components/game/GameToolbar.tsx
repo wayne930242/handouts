@@ -26,9 +26,10 @@ export default function GameToolbar({
   isFavorite,
   isJoined,
 }: Props) {
-  const { connected, loading } = useGameStore((state) => ({
+  const { connected, loading, needConnect } = useGameStore((state) => ({
     connected: state.connected,
     loading: state.loading,
+    needConnect: state.needConnect,
   }));
   const t = useTranslations("Toolbar");
   const user = useSessionUser();
@@ -59,7 +60,7 @@ export default function GameToolbar({
   return (
     <ToolbarLayout>
       <PacmanLoader color="#bbb" loading={loading} size={12} />
-      {!connected && (
+      {needConnect && !connected && (
         <Badge
           variant="outline"
           className="text-destructive border-transparent animate-pulse"

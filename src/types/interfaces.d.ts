@@ -88,13 +88,13 @@ export type HandoutData = Omit<
 export type HandoutType = "text" | "image" | "link" | "youtube";
 
 export type RealtimePayload<T> = {
-  schema: "public";
+  schema: string;
   table: string;
   commit_timestamp: string;
   eventType: MutateEventType;
-  new: T;
-  old: T;
-  errors?: { [key: string]: string }[];
+  new: Partial<T>;
+  old: Partial<T>;
+  errors?: string[];
 };
 
 export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
@@ -332,14 +332,18 @@ export type SetNoteDataPayload = <
 
 export interface GameStore {
   gameData: Game | null;
+  currentCampaignId: string | null;
+  setCurrentCampaignId: (currentCampaignId: string | null) => void;
   initGameData: (gameData: Game | null) => void;
 
   setCampaignHandoutsLocal: SetHandoutsTreeDataPayloadLocal;
   setCampaignHandoutsRemote: SetHandoutsTreeDataPayload;
   setCampaignHandouts: SetHandoutsTreeDataPayload;
+  handleRealtimeUpdateCampaignHandouts: <T extends { id: string }>(
+    table: HandoutsTreeTable,
+    payload: RealtimePayload<T>
+  ) => void;
 
-  setScreenHandoutsLocal: SetHandoutsTreeDataPayloadLocal;
-  setScreenHandoutsRemote: SetHandoutsTreeDataPayload;
   setScreenHandouts: SetHandoutsTreeDataPayload;
 
   setGenerators: SetGeneratorsPayload;
@@ -347,10 +351,15 @@ export interface GameStore {
   setNotes: SetNoteDataPayload;
   setNotesLocal: SetNoteDataPayloadLocal;
   setNotesRemote: SetNoteDataPayload;
+  handleRealtimeUpdateNotes: <T extends NoteData>(
+    payload: RealtimePayload<T>
+  ) => void;
 
   loading: boolean;
   setLoading: (loading: boolean) => void;
   connected: boolean;
   setConnected: (connected: boolean) => void;
+  needConnect: boolean;
+  setNeedConnect: (needConnect: boolean) => void;
   error: Error | null;
 }
