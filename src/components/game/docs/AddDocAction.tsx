@@ -2,10 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
-import {
-  useInsertMutation,
-  useQuery,
-} from "@supabase-cache-helpers/postgrest-react-query";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
 import { useRouter } from "@/navigation";
 import useSessionUser from "@/lib/hooks/useSession";
@@ -82,8 +79,8 @@ export default function AddDocAction({
   const user = useSessionUser();
   const router = useRouter();
 
-  const { addDocsToGame } = useGameStore((state) => ({
-    addDocsToGame: state.addDocs,
+  const { setGameDocs } = useGameStore((state) => ({
+    setGameDocs: state.setDocs,
   }));
 
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -115,40 +112,41 @@ export default function AddDocAction({
   const isFetching =
     isFetchingOwnedDocs || isFetchingFavoriteDocs || isFetchingMyDocs;
   const [isCreating, setIsCreating] = useState(false);
-
   const handleAddDocs = async () => {
     if (selectedDocs.length === 0) return;
+    setIsCreating(true);
     const creatingData = selectedDocs.map((docId) => ({
       doc_id: docId,
       game_id: gameId,
     }));
     const result = await supabase
       .from("game_docs")
-      .insert(creatingData)
+      .upsert(creatingData)
       .select(
-      `
-      docs:game_docs (
-        doc:docs (
+        `
+      doc_id,
+      game_id,
+      doc:docs (
+        id,
+        title,
+        description,
+        banner_url,
+        content,
+        owner:profiles!docs_owner_id_fkey (
           id,
-          title,
-          description,
-          banner_url,
-          content,
-          owner:profiles!docs_owner_id_fkey (
-            id,
-            display_name,
-            avatar_url
-          )
+          display_name,
+          avatar_url
         )
       )
       `
-      )
-      .single();
-    const resultData = result?.data?.docs;
+      );
+
+    const resultData = result?.data;
 
     if (resultData) {
-      addDocsToGame(resultData);
+      setGameDocs(resultData);
     }
+    setIsCreating(false);
   };
 
   return (

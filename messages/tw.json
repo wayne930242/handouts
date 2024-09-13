@@ -12,7 +12,8 @@
     "myOwned": "我擁有的",
     "otherDocs": "其他文件",
     "cancel": "取消",
-    "add": "新增"
+    "add": "新增",
+    "noDocs": "這個遊戲還沒有任何文件。"
   },
   "GameMenu": {
     "delete": "刪除",

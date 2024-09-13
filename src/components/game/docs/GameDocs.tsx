@@ -1,9 +1,12 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import GameTabCardLayout from "../GameTabCardLayout";
 import useGameStore from "@/lib/store/useGameStore";
 import DocViewer from "../../doc/DocViewer";
 import AddDocAction from "./AddDocAction";
 import { DocInGame } from "@/types/interfaces";
+import DocsInGameViewer from "./DocsInGameViewer";
 
 export default function GameScreen() {
   const t = useTranslations("GamePage");
@@ -23,9 +26,17 @@ export default function GameScreen() {
         />
       }
     >
-      {docs.map((d) => (
-        <DocViewer doc={d.doc!} key={d.doc!.id} />
-      ))}
+      {docs.length === 0 && (
+        <div className="text-center h-96 flex items-center justify-center">
+          <div className="text-2xl font-bold">{t("noDocs")}</div>
+        </div>
+      )}
+      {docs.length > 0 && (
+        <DocsInGameViewer
+          docs={docs.map((d) => d.doc as DocInGame)}
+          gameId={gameData?.id!}
+        />
+      )}
     </GameTabCardLayout>
   );
 }

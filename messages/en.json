@@ -12,7 +12,8 @@
     "myOwned": "My Owned",
     "otherDocs": "Other Docs",
     "cancel": "Cancel",
-    "add": "Add"
+    "add": "Add",
+    "noDocs": "No documents in this game."
   },
   "GameMenu": {
     "delete": "Delete",

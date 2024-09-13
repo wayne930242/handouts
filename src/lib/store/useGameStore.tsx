@@ -10,11 +10,11 @@ import {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   gameData: null,
-  addDocs: (docs) =>
+  setDocs: (docs) =>
     set({
       gameData: {
         ...get().gameData!,
-        docs: [...get().gameData!.docs, ...docs],
+        docs,
       },
     }),
   initGameData: (gameData) => set({ gameData }),
