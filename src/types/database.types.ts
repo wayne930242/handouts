@@ -887,6 +887,7 @@ export type Database = {
           game_id: string | null
           id: string
           is_public: boolean | null
+          is_shared: boolean
           metadata: Json | null
           order_num: number | null
           owner_id: string | null
@@ -899,6 +900,7 @@ export type Database = {
           game_id?: string | null
           id?: string
           is_public?: boolean | null
+          is_shared?: boolean
           metadata?: Json | null
           order_num?: number | null
           owner_id?: string | null
@@ -911,6 +913,7 @@ export type Database = {
           game_id?: string | null
           id?: string
           is_public?: boolean | null
+          is_shared?: boolean
           metadata?: Json | null
           order_num?: number | null
           owner_id?: string | null

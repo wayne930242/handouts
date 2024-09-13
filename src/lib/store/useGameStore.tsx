@@ -10,6 +10,13 @@ import {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   gameData: null,
+  addDocs: (docs) =>
+    set({
+      gameData: {
+        ...get().gameData!,
+        docs: [...get().gameData!.docs, ...docs],
+      },
+    }),
   initGameData: (gameData) => set({ gameData }),
   currentCampaignId: null,
   setCurrentCampaignId: (currentCampaignId) => set({ currentCampaignId }),

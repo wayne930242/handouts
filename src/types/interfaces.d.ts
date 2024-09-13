@@ -334,6 +334,7 @@ export type SetNoteDataPayload = <
 
 export interface GameStore {
   gameData: Game | null;
+  addDocs: (docs: Game["docs"]) => void;
   currentCampaignId: string | null;
   setCurrentCampaignId: (currentCampaignId: string | null) => void;
   initGameData: (gameData: Game | null) => void;

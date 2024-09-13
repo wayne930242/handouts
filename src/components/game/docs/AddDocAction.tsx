@@ -2,7 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
-import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import {
+  useInsertMutation,
+  useQuery,
+} from "@supabase-cache-helpers/postgrest-react-query";
 
 import { useRouter } from "@/navigation";
 import useSessionUser from "@/lib/hooks/useSession";
@@ -38,6 +41,7 @@ import { Label } from "@/components/ui/label";
 import { useCallback, useEffect, useState } from "react";
 import { DocInGame } from "@/types/interfaces";
 import OverlayLoading from "@/components/layout/OverlayLoading";
+import useGameStore from "@/lib/store/useGameStore";
 
 const MyCheckBox = ({
   idSuffix,
@@ -78,7 +82,9 @@ export default function AddDocAction({
   const user = useSessionUser();
   const router = useRouter();
 
-  const [isCreating, setIsCreating] = useState(false);
+  const { addDocsToGame } = useGameStore((state) => ({
+    addDocsToGame: state.addDocs,
+  }));
 
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
 
@@ -108,19 +114,41 @@ export default function AddDocAction({
   );
   const isFetching =
     isFetchingOwnedDocs || isFetchingFavoriteDocs || isFetchingMyDocs;
+  const [isCreating, setIsCreating] = useState(false);
 
   const handleAddDocs = async () => {
-    setIsCreating(true);
-    const insertData = selectedDocs.map((docId) => ({
+    if (selectedDocs.length === 0) return;
+    const creatingData = selectedDocs.map((docId) => ({
       doc_id: docId,
       game_id: gameId,
     }));
-    supabase
+    const result = await supabase
       .from("game_docs")
-      .insert(insertData)
-      .then(() => {
-        setIsCreating(false);
-      });
+      .insert(creatingData)
+      .select(
+      `
+      docs:game_docs (
+        doc:docs (
+          id,
+          title,
+          description,
+          banner_url,
+          content,
+          owner:profiles!docs_owner_id_fkey (
+            id,
+            display_name,
+            avatar_url
+          )
+        )
+      )
+      `
+      )
+      .single();
+    const resultData = result?.data?.docs;
+
+    if (resultData) {
+      addDocsToGame(resultData);
+    }
   };
 
   return (
