@@ -13,7 +13,10 @@
     "otherDocs": "Other Docs",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "noDocs": "No documents in this game."
+    "noDocs": "No documents in this game.",
+    "manageCampaign": "Manage Campaign",
+    "chooseCampaign": "Choose a Campaign to import to the Game.",
+    "noCampaigns": "No handouts in this game. You can create a new one or import an existing one."
   },
   "GameMenu": {
     "delete": "Delete",

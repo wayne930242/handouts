@@ -5,17 +5,16 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useTranslations } from "next-intl";
 import { PacmanLoader } from "react-spinners";
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 
 import { useRouter } from "@/navigation";
 import { useClient } from "@/lib/supabase/client";
 import useGameStore from "@/lib/store/useGameStore";
 import GameToolbar from "./GameToolbar";
 
-const GameScreen = dynamic(() => import("./screen/GameScreen"));
-const GameDocs = dynamic(() => import("./docs/GameDocs"));
-const GameHandouts = dynamic(() => import("./handouts/GameHandouts"));
-const GameNote = dynamic(() => import("./notes/GameNotes"));
+import GameScreen from "./screen/GameScreen";
+import GameDocs from "./docs/GameDocs";
+import GameHandouts from "./handouts/GameHandouts";
+import GameNote from "./notes/GameNotes";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
@@ -27,6 +26,7 @@ import {
 } from "../ui/select";
 import GameNotesSubscriber from "./GameNotesSubscriber";
 import GameHandoutsSubscriber from "./GameHandoutsSubscriber";
+import useCampaignStore from "@/lib/store/useCampaignStore";
 
 interface Props {
   gameId: string;
@@ -37,12 +37,13 @@ export default function Game({ gameId, userId }: Props) {
   const t = useTranslations("GamePage");
 
   const supabase = useClient();
-  const { initGameData, setCurrentCampaignId, currentCampaignId } =
-    useGameStore((state) => ({
-      initGameData: state.initGameData,
-      setCurrentCampaignId: state.setCurrentCampaignId,
-      currentCampaignId: state.currentCampaignId,
-    }));
+  const { initGameData } = useGameStore((state) => ({
+    initGameData: state.initGameData,
+  }));
+  const { initCampaignData, campaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+    initCampaignData: state.initCampaignData,
+  }));
 
   const {
     data: game,
@@ -56,9 +57,11 @@ export default function Game({ gameId, userId }: Props) {
     if (game) {
       isInit.current = true;
       initGameData(game);
-      setCurrentCampaignId(game.campaign_id);
+      if (game.campaign_id !== campaignData?.id) {
+        initCampaignData(null);
+      }
     }
-  }, [game]);
+  }, [game, campaignData]);
 
   const router = useRouter();
 
@@ -121,9 +124,7 @@ export default function Game({ gameId, userId }: Props) {
         </Tabs>
       </div>
       {game && <GameNotesSubscriber gameId={gameId} />}
-      {currentCampaignId && (
-        <GameHandoutsSubscriber campaign_id={currentCampaignId} />
-      )}
+      {campaignData && <GameHandoutsSubscriber campaign_id={campaignData.id} />}
     </div>
   ) : (
     <div className="flex flex-col items-center justify-center h-96">

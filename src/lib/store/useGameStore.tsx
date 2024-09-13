@@ -18,13 +18,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
     }),
   initGameData: (gameData) => set({ gameData }),
-  currentCampaignId: null,
-  setCurrentCampaignId: (currentCampaignId) => set({ currentCampaignId }),
-
-  setCampaignHandouts: async () => {},
-  setCampaignHandoutsLocal: async () => {},
-  setCampaignHandoutsRemote: async () => {},
-  handleRealtimeUpdateCampaignHandouts: async () => {},
 
   setScreenHandouts: async () => {},
   setGenerators: async () => {},

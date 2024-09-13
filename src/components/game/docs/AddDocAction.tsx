@@ -174,7 +174,7 @@ export default function AddDocAction({
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
-              <CommandList className="max-h-48 overflow-y-auto">
+              <CommandList className="h-48 overflow-y-auto">
                 <CommandEmpty>{t("noResults")}</CommandEmpty>
                 <CommandGroup heading={t("myFavorites")}>
                   {favoriteDocs?.map((doc) => (

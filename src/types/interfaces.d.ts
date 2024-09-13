@@ -335,17 +335,7 @@ export type SetNoteDataPayload = <
 export interface GameStore {
   gameData: Game | null;
   setDocs: (docs: Game["docs"]) => void;
-  currentCampaignId: string | null;
-  setCurrentCampaignId: (currentCampaignId: string | null) => void;
   initGameData: (gameData: Game | null) => void;
-
-  setCampaignHandoutsLocal: SetHandoutsTreeDataPayloadLocal;
-  setCampaignHandoutsRemote: SetHandoutsTreeDataPayload;
-  setCampaignHandouts: SetHandoutsTreeDataPayload;
-  handleRealtimeUpdateCampaignHandouts: <T extends { id: string }>(
-    table: HandoutsTreeTable,
-    payload: RealtimePayload<T>
-  ) => void;
 
   setScreenHandouts: SetHandoutsTreeDataPayload;
 

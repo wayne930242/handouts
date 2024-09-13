@@ -27,7 +27,7 @@ export default function TocContainer({
     <>
       <div className="w-[305px] mr-4">
         <Sticky>
-          <div className="w-full hidden px-4 py-2 md:flex top-0 overflow-y-auto flex-col items-center h-layout border-border rounded-lg border">
+          <div className="w-full hidden px-4 py-2 md:flex top-0 overflow-y-auto flex-col items-center h-screen border-border rounded-lg border">
             <div className="w-full">
               <a
                 className="toc-link text-center flex items-center justify-center mb-2"

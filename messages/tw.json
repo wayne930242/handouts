@@ -13,7 +13,10 @@
     "otherDocs": "其他文件",
     "cancel": "取消",
     "confirm": "確認",
-    "noDocs": "這個遊戲還沒有任何文件。"
+    "noDocs": "這個遊戲還沒有任何文件。",
+    "manageCampaign": "管理手邊資料",
+    "chooseCampaign": "選擇要導入遊戲的手邊資料。",
+    "noCampaigns": "這個遊戲還沒建立手邊資料，你可以建立一個新的或是導入現有的。"
   },
   "GameMenu": {
     "delete": "刪除",
