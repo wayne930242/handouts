@@ -2,8 +2,9 @@
 
 import { User } from "@/types/interfaces";
 import { useClient } from "@/lib/supabase/client";
-import useAppStore from "../store/useAppStore";
+import useAppStore from "@/lib/store/useAppStore";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 export default function useSessionUser() {
   const supabase = useClient();
@@ -11,14 +12,16 @@ export default function useSessionUser() {
     user: state.user,
     setUser: state.setUser,
   }));
-  const {} = useQuery({
+  const { data: _user } = useQuery({
     queryKey: ["user"],
-    queryFn: () =>
-      supabase.auth.getUser().then(({ data: { user: u } }) => {
-        setUser(u as User);
-        return u;
-      }),
+    queryFn: () => supabase.auth.getUser().then(({ data: { user: u } }) => u),
   });
+
+  useEffect(() => {
+    if (_user) {
+      setUser(_user as User);
+    }
+  }, [_user]);
 
   return user;
 }

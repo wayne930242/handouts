@@ -50,16 +50,20 @@ export default function Docs({ userId }: Props) {
           title: t("myFavorites"),
           icon: <Star className="h-5 w-5 fill-yellow-300 stroke-yellow-300" />,
           children: favoriteDocs?.map((doc) => (
-            <DocCard doc={doc} key={doc.id} />
+            <DocCard doc={doc} key={`${doc.id}-favorite`} />
           )),
         },
         {
           title: t("ownedDocs"),
-          children: ownedDocs?.map((doc) => <DocCard doc={doc} key={doc.id} />),
+          children: ownedDocs?.map((doc) => (
+            <DocCard doc={doc} key={`${doc.id}-owned`} />
+          )),
         },
         {
           title: t("myDocs"),
-          children: myDocs?.map((doc) => <DocCard doc={doc} key={doc.id} />),
+          children: myDocs?.map((doc) => (
+            <DocCard doc={doc} key={`${doc.id}-my`} />
+          )),
         },
       ]}
     />

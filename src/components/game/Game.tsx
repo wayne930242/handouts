@@ -12,10 +12,10 @@ import { useClient } from "@/lib/supabase/client";
 import useGameStore from "@/lib/store/useGameStore";
 import GameToolbar from "./GameToolbar";
 
-const GameScreen = dynamic(() => import("./GameScreen"));
-const GameDocs = dynamic(() => import("./GameDocs"));
-const GameHandouts = dynamic(() => import("./GameHandouts"));
-const GameNote = dynamic(() => import("./GameNote"));
+const GameScreen = dynamic(() => import("./screen/GameScreen"));
+const GameDocs = dynamic(() => import("./docs/GameDocs"));
+const GameHandouts = dynamic(() => import("./handouts/GameHandouts"));
+const GameNote = dynamic(() => import("./notes/GameNotes"));
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import GameNotesSubscriber from "./GameNotesSubscriber";
 import GameHandoutsSubscriber from "./GameHandoutsSubscriber";
 
@@ -108,44 +107,16 @@ export default function Game({ gameId, userId }: Props) {
             {isOwner && <TabsTrigger value="screen">{t("screen")}</TabsTrigger>}
           </TabsList>
           <TabsContent value="notes">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("notes")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <GameNote />
-              </CardContent>
-            </Card>
+            <GameNote />
           </TabsContent>
           <TabsContent value="handouts">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("handouts")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <GameHandouts />
-              </CardContent>
-            </Card>
+            <GameHandouts />
           </TabsContent>
           <TabsContent value="docs">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("docs")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <GameDocs />
-              </CardContent>
-            </Card>
+            <GameDocs />
           </TabsContent>
           <TabsContent value="screen">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("screen")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <GameScreen />
-              </CardContent>
-            </Card>
+            <GameScreen />
           </TabsContent>
         </Tabs>
       </div>

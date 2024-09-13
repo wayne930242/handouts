@@ -26,7 +26,12 @@ export const getGameDetail = (
           title,
           description,
           banner_url,
-          content
+          content,
+          owner:profiles!docs_owner_id_fkey (
+            id,
+            display_name,
+            avatar_url
+          )
         )
       ),
       screen:screens (

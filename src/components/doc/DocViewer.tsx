@@ -1,6 +1,6 @@
 "use client";
 
-import { DocInList } from "@/types/interfaces";
+import { DocInGame, DocInList } from "@/types/interfaces";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -15,6 +15,8 @@ import Toc from "@/components/toc/MagicToc";
 
 export default function DocViewer({ doc }: Props) {
   const t = useTranslations("DocViewer");
+
+  if (doc === null) return null;
 
   return (
     <div className="flex gap-x-2 w-full relative" id="doc-top">
@@ -74,5 +76,5 @@ export default function DocViewer({ doc }: Props) {
 }
 
 interface Props {
-  doc: DocInList;
+  doc: DocInList | DocInGame | null;
 }

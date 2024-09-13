@@ -46,19 +46,19 @@ export default function Games({ userId }: Props) {
           title: t("myFavorites"),
           icon: <Star className="h-5 w-5 fill-yellow-300 stroke-yellow-300" />,
           children: MyFavGames?.map((game) => (
-            <GameCard game={game} key={game.id} />
+            <GameCard game={game} key={`${game.id}-myfav`} />
           )),
         },
         {
           title: t("ownedGames"),
           children: ownedGames?.map((game) => (
-            <GameCard game={game} key={game.id} />
+            <GameCard game={game} key={`${game.id}-owned`} />
           )),
         },
         {
           title: t("myGames"),
           children: myGames?.map((game) => (
-            <GameCard game={game} key={game.id} />
+            <GameCard game={game} key={`${game.id}-my`} />
           )),
         },
       ]}

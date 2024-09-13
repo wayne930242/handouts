@@ -239,7 +239,9 @@ export type Game = GameData & {
 export type DocInGame = Pick<
   Database["public"]["Tables"]["docs"]["Row"],
   "id" | "title" | "description" | "banner_url" | "content"
->;
+> & {
+  owner: Pick<ProfileData, "display_name" | "avatar_url" | "id"> | null;
+};
 
 export type CampaignInGameData = Pick<
   Database["public"]["Tables"]["campaigns"]["Row"],

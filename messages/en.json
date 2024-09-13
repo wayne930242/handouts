@@ -3,7 +3,16 @@
     "screen": "GM Screen",
     "docs": "Documents",
     "handouts": "Handouts",
-    "notes": "Notes"
+    "notes": "Notes",
+    "addDocument": "Add Document",
+    "chooseDocument": "Choose a Document to add to the Game.",
+    "searchPlaceholder": "Type a command or search...",
+    "noResults": "No results found.",
+    "myFavorites": "My Favorites",
+    "myOwned": "My Owned",
+    "otherDocs": "Other Docs",
+    "cancel": "Cancel",
+    "add": "Add"
   },
   "GameMenu": {
     "delete": "Delete",

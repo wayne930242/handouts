@@ -46,19 +46,19 @@ export default function Campaigns({ userId }: { userId: string }) {
           title: t("myFavorites"),
           icon: <Star className="h-5 w-5 fill-yellow-300 stroke-yellow-300" />,
           children: MyFavCampaigns?.map((campaign) => (
-            <CampaignCard campaign={campaign} key={campaign.id} />
+            <CampaignCard campaign={campaign} key={`${campaign.id}-myfav`} />
           )),
         },
         {
           title: t("ownedCampaigns"),
           children: ownedCampaigns?.map((campaign) => (
-            <CampaignCard campaign={campaign} key={campaign.id} />
+            <CampaignCard campaign={campaign} key={`${campaign.id}-owned`} />
           )),
         },
         {
           title: t("myCampaigns"),
           children: myCampaigns?.map((campaign) => (
-            <CampaignCard campaign={campaign} key={campaign.id} />
+            <CampaignCard campaign={campaign} key={`${campaign.id}-my`} />
           )),
         },
       ]}
