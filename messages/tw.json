@@ -4,15 +4,15 @@
     "docs": "文件",
     "handouts": "手邊資料",
     "notes": "筆記",
-    "addDocument": "新增文件",
-    "chooseDocument": "選擇要加入遊戲的文件",
+    "manageDocuments": "管理文件",
+    "chooseDocument": "選擇要加入遊戲的文件，反選要移除的文件。",
     "searchPlaceholder": "輸入指令或搜尋...",
     "noResults": "沒有找到結果。",
     "myFavorites": "我的最愛",
     "myOwned": "我擁有的",
     "otherDocs": "其他文件",
     "cancel": "取消",
-    "add": "新增",
+    "confirm": "確認",
     "noDocs": "這個遊戲還沒有任何文件。"
   },
   "GameMenu": {

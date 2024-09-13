@@ -4,15 +4,15 @@
     "docs": "Documents",
     "handouts": "Handouts",
     "notes": "Notes",
-    "addDocument": "Add Document",
-    "chooseDocument": "Choose a Document to add to the Game.",
+    "manageDocuments": "Manage Documents",
+    "chooseDocument": "Check Documents you want to add to the Game and unckeck the ones you want to remove.",
     "searchPlaceholder": "Type a command or search...",
     "noResults": "No results found.",
     "myFavorites": "My Favorites",
     "myOwned": "My Owned",
     "otherDocs": "Other Docs",
     "cancel": "Cancel",
-    "add": "Add",
+    "confirm": "Confirm",
     "noDocs": "No documents in this game."
   },
   "GameMenu": {

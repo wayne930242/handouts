@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button";
 import Loading from "@/components/ui/loading";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DocInGame } from "@/types/interfaces";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import useGameStore from "@/lib/store/useGameStore";
@@ -44,18 +44,15 @@ const MyCheckBox = ({
   idSuffix,
   docId,
   selectedDocs,
-  inInitDocs,
   setSelectedDocs,
 }: {
   docId: string;
   idSuffix?: string;
   selectedDocs: string[];
-  inInitDocs: (docId: string) => boolean;
   setSelectedDocs: (selectedDocs: string[]) => void;
 }) => (
   <Checkbox
     id={`${docId}-${idSuffix}`}
-    disabled={inInitDocs(docId)}
     checked={selectedDocs.includes(docId)}
     onCheckedChange={(checked) => {
       if (checked) {
@@ -85,13 +82,6 @@ export default function AddDocAction({
 
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
 
-  const inInitDocs = useCallback(
-    (docId: string) => {
-      return docs?.some((d) => d?.id === docId) ?? false;
-    },
-    [docs]
-  );
-
   useEffect(() => {
     if (docs) {
       setSelectedDocs(docs.map((d) => d.id));
@@ -112,16 +102,24 @@ export default function AddDocAction({
   const isFetching =
     isFetchingOwnedDocs || isFetchingFavoriteDocs || isFetchingMyDocs;
   const [isCreating, setIsCreating] = useState(false);
+
   const handleAddDocs = async () => {
     if (selectedDocs.length === 0) return;
     setIsCreating(true);
-    const creatingData = selectedDocs.map((docId) => ({
-      doc_id: docId,
+    const { error: deleteError } = await supabase
+      .from("game_docs")
+      .delete()
+      .eq("game_id", gameId);
+
+    if (deleteError) throw deleteError;
+    const insertData = selectedDocs.map((docId) => ({
       game_id: gameId,
+      doc_id: docId,
     }));
+
     const result = await supabase
       .from("game_docs")
-      .upsert(creatingData)
+      .insert(insertData)
       .select(
         `
       doc_id,
@@ -152,11 +150,11 @@ export default function AddDocAction({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{t("addDocument")}</Button>
+        <Button>{t("manageDocuments")}</Button>
       </DialogTrigger>{" "}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("addDocument")}</DialogTitle>
+          <DialogTitle>{t("manageDocuments")}</DialogTitle>
         </DialogHeader>
         <DialogDescription>{t("chooseDocument")}</DialogDescription>
         <div className="flex flex-col gap-y-2 w-full">
@@ -188,7 +186,6 @@ export default function AddDocAction({
                         docId={doc.id}
                         idSuffix="favorite"
                         selectedDocs={selectedDocs}
-                        inInitDocs={inInitDocs}
                         setSelectedDocs={setSelectedDocs}
                       />
                       <Label className="grow" htmlFor={`${doc.id}-favorite`}>
@@ -208,7 +205,6 @@ export default function AddDocAction({
                         docId={doc.id}
                         idSuffix="owned"
                         selectedDocs={selectedDocs}
-                        inInitDocs={inInitDocs}
                         setSelectedDocs={setSelectedDocs}
                       />
                       <Label className="grow" htmlFor={`${doc.id}-owned`}>
@@ -228,7 +224,6 @@ export default function AddDocAction({
                         docId={doc.id}
                         idSuffix="other"
                         selectedDocs={selectedDocs}
-                        inInitDocs={inInitDocs}
                         setSelectedDocs={setSelectedDocs}
                       />
                       <Label className="grow" htmlFor={`${doc.id}-other`}>
@@ -246,7 +241,7 @@ export default function AddDocAction({
             <Button variant="secondary">{t("cancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={handleAddDocs}>{t("add")}</Button>
+            <Button onClick={handleAddDocs}>{t("confirm")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
