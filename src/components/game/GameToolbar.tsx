@@ -19,6 +19,9 @@ import ToolbarLayout from "../layout/ToolbarLayout";
 import useGameStore from "@/lib/store/useGameStore";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
 import GameMenu from "./GameMenu";
+import Image from "next/image";
+import { getBannerUrl } from "@/lib/bannerUrl";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function GameToolbar({
   game,
@@ -58,7 +61,19 @@ export default function GameToolbar({
   });
 
   return (
-    <ToolbarLayout>
+    <ToolbarLayout
+      leftSec={
+        <div className="flex justify-center items-center w-full gap-x-2">
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={game.banner_url ?? getBannerUrl(game?.id)} />
+            <AvatarFallback>{game.title}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <div className="text-lg font-semibold ">{game?.title}</div>
+          </div>
+        </div>
+      }
+    >
       <PacmanLoader color="#bbb" loading={loading} size={12} />
       {needConnect && !connected && (
         <Badge
