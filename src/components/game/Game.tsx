@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import GameNotesSubscriber from "./GameNotesSubscriber";
-import GameHandoutsSubscriber from "./GameHandoutsSubscriber";
 import useCampaignStore from "@/lib/store/useCampaignStore";
+import GameHandoutSubscriber from "./GameHandoutSubscriber";
 
 interface Props {
   gameId: string;
@@ -124,7 +124,7 @@ export default function Game({ gameId, userId }: Props) {
         </Tabs>
       </div>
       {game && <GameNotesSubscriber gameId={gameId} />}
-      {campaignData && <GameHandoutsSubscriber campaign_id={campaignData.id} />}
+      {campaignData && <GameHandoutSubscriber campaignId={campaignData.id} />}
     </div>
   ) : (
     <div className="flex flex-col items-center justify-center h-96">
