@@ -43,29 +43,19 @@ export default class ImageManager {
 
   async uploadByUrl(url: string, prefix: ImageKeyPrefix): Promise<string> {
     try {
-      const response = await ky.get(url);
-      const blob = await response.blob();
-      const fileExtension = this.getFileExtension(url);
+      const destinationKey = `${prefix}/${Date.now().toString()}.webp`;
 
-      const compressedImage = await this.compressImage(
-        new File([blob], `temp.${fileExtension}`)
-      );
+      const response = await ky
+        .post(`${this.baseUrl}/api/copy-image`, {
+          json: { sourceUrl: url, destinationKey },
+        })
+        .json<{ newUrl: string }>();
 
-      const objectUrl = await this.uploadToS3(
-        compressedImage,
-        `${prefix}/${Date.now().toString()}.webp`
-      );
-
-      return objectUrl;
+      return response.newUrl;
     } catch (error) {
       console.error("Upload by URL failed:", error);
-      throw new Error("Failed to upload image from URL to S3");
+      throw new Error("Failed to copy image within S3");
     }
-  }
-
-  private getFileExtension(url: string): string {
-    const filename = url.split("/").pop() || "";
-    return filename.split(".").pop() || "jpg";
   }
 
   async cleanImages(

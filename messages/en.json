@@ -63,6 +63,8 @@
     "save": "Save"
   },
   "CampaignMenu": {
+    "importFailed": "Import Failed",
+    "importFailedDescription": "Import Failed. Please check the import format and try again.",
     "delete": "Delete",
     "export": "Export",
     "import": "Import",

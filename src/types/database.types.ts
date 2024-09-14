@@ -1350,6 +1350,13 @@ export type Database = {
         }
         Returns: number
       }
+      import_campaign: {
+        Args: {
+          p_campaign_data: Json
+          p_game_id?: string
+        }
+        Returns: Json
+      }
       is_current_user_whitelisted: {
         Args: Record<PropertyKey, never>
         Returns: boolean

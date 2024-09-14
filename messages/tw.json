@@ -63,6 +63,8 @@
     "save": "儲存"
   },
   "CampaignMenu": {
+    "importFailed": "匯入失敗",
+    "importFailedDescription": "匯入失敗。請確認匯入格式後重試。",
     "delete": "刪除",
     "export": "匯出",
     "import": "匯入",

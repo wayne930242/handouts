@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
+import ImageManager from "@/lib/s3/ImageManager";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import { useRouter } from "@/navigation";
@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/layout/OverlayLoading";
-import { useDeleteMutation } from "@supabase-cache-helpers/postgrest-react-query";
 
 const FormSchema = z.object({
   id: z.string().min(1, "formValidation.required"),
@@ -53,12 +52,6 @@ export default function DeleteZone({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const { mutateAsync: deleteItem } = useDeleteMutation(
-    // @ts-ignore
-    supabase.from(tableName),
-    ["id"]
-  );
-
   const { setConfirm } = useConfirmDialog(
     async (data: z.infer<typeof FormSchema>) => {
       if (data.id === id) {
@@ -67,9 +60,7 @@ export default function DeleteZone({
           await imageManager.deleteImagesByPrefix(
             `${tableName}/${data.id}/images`
           );
-          await deleteItem({
-            id: data.id,
-          });
+          await supabase.from(tableName).delete().eq("id", data.id);
           toast({
             title: t("successTitle"),
             description: t("successDescription"),

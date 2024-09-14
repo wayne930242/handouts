@@ -1,5 +1,10 @@
 "use client";
 
+import { FileDown, HardDriveUpload, Info, Settings, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Campaign } from "@/types/interfaces";
+import Link from "next/link";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,10 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button, ItemButton } from "@/components/ui/button";
-import { FileDown, HardDriveUpload, Info, Settings, X } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Campaign } from "@/types/interfaces";
-import Link from "next/link";
+import CampaignImporter from "@/lib/supabase/CampaignImporter";
+import { useRouter } from "@/navigation";
+import { useClient } from "@/lib/supabase/client";
+import { useRef, useState } from "react";
+import { toast } from "../ui/use-toast";
+import OverlayLoading from "../layout/OverlayLoading";
 
 interface Props {
   campaignData: Campaign;
@@ -19,6 +26,7 @@ interface Props {
 
 export default function CampaignMenu({ campaignData, isOwner }: Props) {
   const t = useTranslations("CampaignMenu");
+  const [loading, setLoading] = useState(false);
 
   const handleExport = async () => {
     // Convert campaignData to JSON string
@@ -41,6 +49,39 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+
+  const router = useRouter();
+  const supabase = useClient();
+
+  const handleImport = async (file: File) => {
+    if (!file) {
+      inputRef.current!.value = "";
+      return;
+    }
+    const json = await file.text();
+    if (!json) return;
+
+    setLoading(true);
+    try {
+      const importingCampaignData = JSON.parse(json) as Campaign;
+      const campaignImporter = new CampaignImporter(
+        supabase,
+        importingCampaignData
+      );
+      const newCampaign = await campaignImporter.importCampaign();
+      router.push(`/campaigns/${newCampaign.id}`);
+    } catch (error) {
+      toast({
+        title: t("importFailed"),
+        description: t("importFailedDescription"),
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
+
+    inputRef.current!.value = "";
+  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <DropdownMenu>
@@ -68,9 +109,15 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
         )}
 
         {isOwner && (
-          <ItemButton disabled>
+          <ItemButton onClick={() => inputRef.current?.click()}>
             <HardDriveUpload className="h-4 w-4" />
             <span>{t("import")}</span>
+            <input
+              type="file"
+              hidden
+              ref={inputRef}
+              onChange={(e) => handleImport(e.target.files![0])}
+            />
           </ItemButton>
         )}
         {isOwner && (
@@ -85,6 +132,7 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
           </>
         )}
       </DropdownMenuContent>
+      {loading && <OverlayLoading />}
     </DropdownMenu>
   );
 }
