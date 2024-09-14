@@ -27,7 +27,7 @@ import {
   useUpsertMutation,
 } from "@supabase-cache-helpers/postgrest-react-query";
 import { getGameInfo } from "@/lib/supabase/query/gamesQuery";
-import ImageManager from "@/lib/ImageManager";
+import ImageManager from "@/lib/s3/ImageManager";
 import ImageUploadFormItem from "@/components/form/ImageUploadFormItem";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import { useClient } from "@/lib/supabase/client";

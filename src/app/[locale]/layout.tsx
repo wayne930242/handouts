@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { genSEO } from "@/lib/defaultSEO";
 import { locales } from "@/navigation";
 
+import CookieConsent from "@/components/toast/CookieConsent";
 import { Toaster } from "@/components/ui/toaster";
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import PassphraseDialog from "@/components/dialog/PassphraseDialog";
@@ -44,23 +45,25 @@ export default async function RootLayout({
     <ReactQueryClientProvider>
       <html lang={locale} className={font.className} suppressHydrationWarning>
         <body className="bg-background text-foreground">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className="min-h-screen flex flex-col items-center">
-              <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className="min-h-screen flex flex-col items-center">
                 {children}
-                <Toaster />
-                <ConfirmDialog />
-                <GlobalLoading />
-                <PassphraseDialog />
-                <ProfileQuery />
-              </NextIntlClientProvider>
-            </main>
-          </ThemeProvider>
+              </main>
+
+              <ConfirmDialog />
+              <GlobalLoading />
+              <PassphraseDialog />
+              <ProfileQuery />
+              <CookieConsent />
+              <Toaster />
+            </ThemeProvider>
+          </NextIntlClientProvider>
         </body>
       </html>
     </ReactQueryClientProvider>

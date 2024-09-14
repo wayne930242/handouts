@@ -1,6 +1,7 @@
 import { blobToWebP } from "webp-converter-browser";
 import imageCompression, { Options } from "browser-image-compression";
 import ky from "ky";
+import { extractImageUrlsFromMarkdown } from "../markdown";
 
 const defaultOptions: Options = {
   maxSizeMB: 1,
@@ -17,6 +18,8 @@ export type ImageKeyPrefix =
   | `campaigns/${string}/handouts/${string}/images`
   | `docs/${string}/images`
   | `games/${string}/images`
+  | `games/${string}/campaigns/${string}/handouts/${string}/images`
+  | `games/${string}/campaigns/${string}/images`
   | `games/${string}/screens/${string}/handouts/${string}/images`;
 export type ImageKey = `${ImageKeyPrefix}/${string}`;
 
@@ -38,6 +41,33 @@ export default class ImageManager {
     return objectUrl;
   }
 
+  async uploadByUrl(url: string, prefix: ImageKeyPrefix): Promise<string> {
+    try {
+      const response = await ky.get(url);
+      const blob = await response.blob();
+      const fileExtension = this.getFileExtension(url);
+
+      const compressedImage = await this.compressImage(
+        new File([blob], `temp.${fileExtension}`)
+      );
+
+      const objectUrl = await this.uploadToS3(
+        compressedImage,
+        `${prefix}/${Date.now().toString()}.webp`
+      );
+
+      return objectUrl;
+    } catch (error) {
+      console.error("Upload by URL failed:", error);
+      throw new Error("Failed to upload image from URL to S3");
+    }
+  }
+
+  private getFileExtension(url: string): string {
+    const filename = url.split("/").pop() || "";
+    return filename.split(".").pop() || "jpg";
+  }
+
   async cleanImages(
     prefix: ImageKeyPrefix,
     content: string | undefined,
@@ -54,16 +84,6 @@ export default class ImageManager {
     content: string | undefined,
     exUrls?: string[]
   ): string[] {
-    const extractImageUrlsFromMarkdown = (
-      markdown: string | undefined
-    ): string[] => {
-      if (!markdown) return [];
-      const regex = /!\[.*?\]\((.*?)\)/g;
-      const matches = markdown.matchAll(regex);
-
-      return Array.from(matches, (match) => match[1]);
-    };
-
     const contentUrls = extractImageUrlsFromMarkdown(content);
     return Array.from(new Set([...contentUrls, ...(exUrls ?? [])]));
   }

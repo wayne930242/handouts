@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import ImageUploadFormItem from "@/components/form/ImageUploadFormItem";
-import ImageManager from "@/lib/ImageManager";
+import ImageManager from "@/lib/s3/ImageManager";
 import { Input } from "@/components/ui/input";
 import { useClient } from "@/lib/supabase/client";
 import useProfileStore from "@/lib/store/useProfileStore";

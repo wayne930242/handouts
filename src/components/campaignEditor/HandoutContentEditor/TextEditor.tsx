@@ -1,7 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 
-import ImageManager, { ImageKeyPrefix } from "@/lib/ImageManager";
+import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 import { toast } from "@/components/ui/use-toast";

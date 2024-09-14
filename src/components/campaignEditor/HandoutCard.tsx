@@ -46,7 +46,7 @@ import { useTranslations } from "next-intl";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
-import ImageManager, { ImageKeyPrefix } from "@/lib/ImageManager";
+import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
 
 const ImageEditor = dynamic(

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import ImageManager, { ImageKeyPrefix } from "@/lib/ImageManager";
+import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
 import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import { useRouter } from "@/navigation";

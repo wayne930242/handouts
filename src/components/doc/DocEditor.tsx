@@ -8,7 +8,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { useRouter } from "@/navigation";
-import ImageManager from "@/lib/ImageManager";
+import ImageManager from "@/lib/s3/ImageManager";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
 
