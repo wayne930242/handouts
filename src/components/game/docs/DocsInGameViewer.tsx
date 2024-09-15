@@ -25,16 +25,16 @@ export default function DocsInGameViewer({
           {docs.map((doc) => (
             <Card
               key={doc.id}
-              className={cn(
-                "w-72 cursor-pointer hover:bg-accent hover:text-accent-foreground",
-                {
-                  "bg-foreground text-background": selectedDoc.id === doc.id,
-                }
-              )}
+              className={cn("w-64 cursor-pointer", {
+                "bg-foreground text-background hover:bg-foreground/70":
+                  selectedDoc.id === doc.id,
+                "hover:bg-accent hover:text-accent-foreground":
+                  selectedDoc.id !== doc.id,
+              })}
               onClick={() => setSelectedDoc(doc)}
             >
               <CardHeader className="p-3">
-                <CardTitle>{doc.title}</CardTitle>
+                <CardTitle className="text-base">{doc.title}</CardTitle>
               </CardHeader>
               <CardContent className="px-3 pt-0 pb-3">
                 <div className="w-full relative aspect-[24/9]">

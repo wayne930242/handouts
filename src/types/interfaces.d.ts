@@ -58,10 +58,10 @@ export type Campaign = Omit<
   "created_at"
 > & {
   gm: Profile | null;
-  players: Player[];
+  players?: Player[];
   chapters: Chapter[];
-  favorite: Favorite[];
-  docs: {
+  favorite?: Favorite[];
+  docs?: {
     doc: CampaignDoc | null;
   }[];
 };

@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
+import { useDeleteMutation } from "@supabase-cache-helpers/postgrest-react-query";
+
 import ImageManager from "@/lib/s3/ImageManager";
 import { useClient } from "@/lib/supabase/client";
 import { useRouter } from "@/navigation";
@@ -54,6 +56,12 @@ export default function DeleteZone({
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [isPending, startTransition] = useTransition();
+  const { mutateAsync: deleteItem } = useDeleteMutation(
+    // @ts-ignore
+    supabase.from(tableName),
+    ["id"],
+    "id"
+  );
 
   const onConfirm = async (data: z.infer<typeof FormSchema>) => {
     if (data.id === id) {
@@ -62,7 +70,7 @@ export default function DeleteZone({
         await imageManager.deleteImagesByPrefix(
           `${tableName}/${data.id}/images`
         );
-        await supabase.from(tableName).delete().eq("id", data.id);
+        await deleteItem({ id: data.id });
         toast({
           title: t("successTitle"),
           description: t("successDescription"),

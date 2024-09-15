@@ -44,24 +44,24 @@ export default async function RootLayout({
     <ReactQueryClientProvider>
       <html lang={locale} className={font.className} suppressHydrationWarning>
         <body className="bg-background text-foreground">
-          <NextIntlClientProvider messages={messages}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextIntlClientProvider messages={messages}>
               <main className="min-h-screen flex flex-col items-center">
                 {children}
-              </main>
 
-              <GlobalLoading />
-              <PassphraseDialog />
-              <ProfileQuery />
-              <CookieConsent />
-              <Toaster />
-            </ThemeProvider>
-          </NextIntlClientProvider>
+                <GlobalLoading />
+                <PassphraseDialog />
+                <ProfileQuery />
+                <CookieConsent />
+                <Toaster />
+              </main>
+            </NextIntlClientProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ReactQueryClientProvider>

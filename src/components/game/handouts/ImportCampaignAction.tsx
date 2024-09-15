@@ -35,6 +35,7 @@ import OverlayLoading from "@/components/layout/OverlayLoading";
 import useGameStore from "@/lib/store/useGameStore";
 import { getOwnedCampaigns } from "@/lib/supabase/query/campaignsQuery";
 import useCampaignStore from "@/lib/store/useCampaignStore";
+import CampaignImporter from "@/lib/supabase/CampaignImporter";
 
 export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   const t = useTranslations("GamePage");
@@ -49,7 +50,9 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
     initCampaignData: state.initCampaignData,
   }));
 
-  const [selectedCampaign, setSelectedCampaign] = useState<string | null>(null);
+  const [selectedCampaign, setSelectedCampaign] = useState<string | undefined>(
+    undefined
+  );
 
   const userId = user!.id;
 
@@ -58,7 +61,10 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   );
   const [isImporting, setIsImporting] = useState(false);
 
-  const handleAddDocs = async () => {};
+  const handleImport = async () => {
+    if (!selectedCampaign) return;
+    setIsImporting(true);
+  };
 
   return (
     <Dialog>
@@ -90,7 +96,14 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
               <CommandList className="h-48 overflow-y-auto">
                 <CommandEmpty>{t("noResults")}</CommandEmpty>
                 <CommandGroup>
-                  <RadioGroup defaultValue={undefined} className="w-full">
+                  <RadioGroup
+                    defaultValue={undefined}
+                    className="w-full"
+                    onValueChange={(value) => {
+                      setSelectedCampaign(value);
+                    }}
+                    value={selectedCampaign}
+                  >
                     {ownedCampaigns?.map((c) => (
                       <CommandItem
                         key={`${c.id}`}
@@ -113,7 +126,7 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
             <Button variant="secondary">{t("cancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={handleAddDocs}>{t("confirm")}</Button>
+            <Button onClick={handleImport}>{t("confirm")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

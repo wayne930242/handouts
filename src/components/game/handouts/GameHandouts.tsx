@@ -9,7 +9,6 @@ import { useClient } from "@/lib/supabase/client";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useAppStore from "@/lib/store/useAppStore";
-import CampaignEditor from "@/components/campaign/CampaignEditor";
 import CampaignViewer from "@/components/campaign/CampaignViewer";
 import ImportCampaignAction from "./ImportCampaignAction";
 
@@ -50,7 +49,6 @@ export default function GameHandouts() {
   return (
     <GameTabCardLayout
       title={t("handouts")}
-      action={<ImportCampaignAction gameId={gameData?.id!} />}
     >
       {campaignData && (
         <div className="flex flex-col gap-2 w-full my-2 px-2">
