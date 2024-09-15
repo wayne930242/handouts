@@ -108,7 +108,7 @@ export default function DeleteZone({
         <CardDescription>{t("description")}</CardDescription>
         <div className="border border-input p-4 my-4">
           {t("idLabel")}{" "}
-          <span className="border border-red-300 px-2 py-1 rounded-md">
+          <span className="border border-red-300 px-2 py-1 rounded-md whitespace-nowrap">
             {id}
           </span>
         </div>

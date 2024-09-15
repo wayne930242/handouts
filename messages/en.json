@@ -73,6 +73,7 @@
   "CampaignPage": {
     "alert": "During the testing period, each user can only create 1 campaign. If you want to create more campaigns at this time, please contact the author.",
     "createCampaign": "You can create a new Campaign.",
+    "importCampaign": "Import Campaign",
     "myCampaigns": "My Campaigns",
     "myFavorites": "My Favorites",
     "noCampaigns": "No Campaign found",

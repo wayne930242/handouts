@@ -11,6 +11,7 @@ import {
   getOwnedCampaigns,
 } from "@/lib/supabase/query/campaignsQuery";
 import Campaigns from "@/components/campaign/Campaigns";
+import ImportCampaignButton from "@/components/campaign/ImportCampaignButton";
 
 interface Props {
   params: {
@@ -36,7 +37,14 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   }
 
   return (
-    <PageLayout header={<DataToolbar tableKey="campaigns" />} needsAuth>
+    <PageLayout
+      header={
+        <DataToolbar tableKey="campaigns">
+          <ImportCampaignButton />
+        </DataToolbar>
+      }
+      needsAuth
+    >
       <HydrationBoundary state={hydrate(queryClient, null)}>
         {user && <Campaigns userId={user.id} />}
       </HydrationBoundary>

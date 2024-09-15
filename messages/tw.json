@@ -73,6 +73,7 @@
   "CampaignPage": {
     "alert": "測試期間，每個使用者只能創建 1 個戰役。如果你在此時想創建更多戰役，請聯絡作者。",
     "createCampaign": "您可以創建一個新的戰役。",
+    "importCampaign": "匯入戰役",
     "myCampaigns": "我的戰役",
     "myFavorites": "我的最愛",
     "noCampaigns": "沒有找到戰役",

@@ -18,7 +18,6 @@ const extractKey = (url: string): string => {
 
 export async function POST(request: Request) {
   const { sourceUrl, destinationKey } = await request.json();
-
   if (!sourceUrl || !destinationKey) {
     return Response.json(
       { error: "Source URL and destination key are required" },
@@ -32,12 +31,14 @@ export async function POST(request: Request) {
       Bucket: process.env.S3_BUCKET!,
       CopySource: `${process.env.S3_BUCKET}/${sourceKey}`,
       Key: destinationKey,
+      ACL: "public-read",
     });
-
     await s3Client.send(command);
 
-    const newUrl = `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${destinationKey}`;
-    return Response.json({ message: "File copied successfully", newUrl });
+    // Construct the new URL for the copied file
+    const newFileUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${destinationKey}`;
+
+    return Response.json({ url: newFileUrl }, { status: 200 });
   } catch (error: any) {
     console.error("S3 Copy Error:", error);
     return Response.json(

@@ -49,9 +49,9 @@ export default class ImageManager {
         .post(`${this.baseUrl}/api/copy-image`, {
           json: { sourceUrl: url, destinationKey },
         })
-        .json<{ newUrl: string }>();
+        .json<{ url: string }>();
 
-      return response.newUrl;
+      return response.url;
     } catch (error) {
       console.error("Upload by URL failed:", error);
       throw new Error("Failed to copy image within S3");
