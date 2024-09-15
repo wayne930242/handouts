@@ -28,7 +28,7 @@ export default async function Index({ params: { locale } }: Props) {
           <Features />
         </div>
       </div>
-      {/* <SearchParamsListener /> */}
+      <SearchParamsListener />
     </PageLayout>
   );
 }

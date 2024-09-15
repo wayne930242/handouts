@@ -14,7 +14,6 @@ import useProfileStore from "@/lib/store/useProfileStore";
 import { useClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import useSessionUser from "@/lib/hooks/useSession";
-import ProfileQuery from "./context/ProfileQuery";
 
 export default function AuthButton() {
   const supabase = useClient();
@@ -53,7 +52,6 @@ export default function AuthButton() {
           <ItemButton>{t("logout")}</ItemButton>
         </form>
       </DropdownMenuContent>
-      <ProfileQuery />
     </DropdownMenu>
   ) : (
     <div className="flex gap-2">
