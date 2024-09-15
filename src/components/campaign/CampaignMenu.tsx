@@ -53,36 +53,6 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
   const router = useRouter();
   const supabase = useClient();
 
-  const handleImport = async (file: File) => {
-    if (!file) {
-      inputRef.current!.value = "";
-      return;
-    }
-    const json = await file.text();
-    if (!json) return;
-
-    setLoading(true);
-    try {
-      const importingCampaignData = JSON.parse(json) as Campaign;
-      const campaignImporter = new CampaignImporter(
-        supabase,
-        importingCampaignData
-      );
-      const newCampaign = await campaignImporter.importCampaign();
-      router.push(`/campaigns/${newCampaign.id}`);
-    } catch (error) {
-      toast({
-        title: t("importFailed"),
-        description: t("importFailedDescription"),
-        variant: "destructive",
-      });
-    }
-    setLoading(false);
-
-    inputRef.current!.value = "";
-  };
-  const inputRef = useRef<HTMLInputElement>(null);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -108,18 +78,6 @@ export default function CampaignMenu({ campaignData, isOwner }: Props) {
           </ItemButton>
         )}
 
-        {isOwner && (
-          <ItemButton onClick={() => inputRef.current?.click()}>
-            <HardDriveUpload className="h-4 w-4" />
-            <span>{t("import")}</span>
-            <input
-              type="file"
-              hidden
-              ref={inputRef}
-              onChange={(e) => handleImport(e.target.files![0])}
-            />
-          </ItemButton>
-        )}
         {isOwner && (
           <>
             <DropdownMenuSeparator />
