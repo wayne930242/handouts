@@ -13,8 +13,9 @@ import HandoutsArea from "./HandoutsArea";
 
 import { advancedRemoveElement } from "@/lib/arrayAction";
 import useSessionUser from "@/lib/hooks/useSession";
-import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
+import { useState } from "react";
+import ConfirmDialog from "../dialog/ConfirmDialog";
 
 interface Props {
   section: Section;
@@ -76,7 +77,8 @@ export default function SectionCard({ section }: Props) {
     );
   };
 
-  const { setConfirm } = useConfirmDialog(deleteSection);
+  const [deleteData, setDeleteData] = useState<Section[]>();
+  const [isOpenConfirm, setOpenConfirm] = useState(false);
 
   return (
     <div className="relative flex flex-col gap-y-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -166,17 +168,21 @@ export default function SectionCard({ section }: Props) {
           if (!section.handouts?.length) {
             deleteSection(sections);
           } else {
-            setConfirm({
-              id: `delete-section-${section.id}`,
-              title: t("deleteSection"),
-              description: t("deleteSectionDescription"),
-              data: sections,
-            });
+            setDeleteData(sections);
+            setOpenConfirm(true);
           }
         }}
       >
         <X className="h-4 w-4" />
       </Button>
+      <ConfirmDialog
+        open={isOpenConfirm}
+        setOpen={setOpenConfirm}
+        title={t("deleteSection")}
+        description={t("deleteSectionDescription")}
+        data={deleteData!}
+        onConfirm={deleteSection}
+      />
     </div>
   );
 }

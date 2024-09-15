@@ -122,6 +122,8 @@ export interface ConfirmDialogData<T extends any = any> {
   description: string;
   state: "confirmed" | "canceled" | "pending";
   data?: T;
+  onConfirm: (data: T) => Promise<void>;
+  onCancel?: (data: T) => Promise<void>;
 }
 
 type PassphraseDialogKey = "docs" | "campaigns" | "games";
@@ -144,8 +146,6 @@ export interface AppStore {
   setAddPassphraseDialog: (
     passphraseDialog: PassphraseDialogKey | null
   ) => void;
-  confirmDialog: ConfirmDialogData | null;
-  setConfirmDialog: (confirmDialog: ConfirmDialogData | null) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
 }

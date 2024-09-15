@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Dialog,
   DialogContent,
@@ -9,26 +7,34 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useAppStore from "@/lib/store/useAppStore";
 import { useTranslations } from "next-intl";
 
-export default function ConfirmDialog() {
-  const { confirmDialog, setConfirmDialog } = useAppStore((state) => ({
-    confirmDialog: state.confirmDialog,
-    setConfirmDialog: state.setConfirmDialog,
-  }));
+interface Props<T extends any = any> {
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  title: string;
+  description: string;
+  onConfirm: (data: T) => Promise<void>;
+  data: T;
+  onCancel?: (data: T) => Promise<void>;
+}
 
+export default function ConfirmDialog<T extends any = any>({
+  open,
+  setOpen,
+  title,
+  description,
+  data,
+  onConfirm,
+  onCancel,
+}: Props<T>) {
   const t = useTranslations("ConfirmDialog");
-
-  const { id, title, description } = confirmDialog ?? {};
 
   return (
     <Dialog
-      open={!!confirmDialog && confirmDialog.state === "pending"}
+      open={open}
       onOpenChange={(open) => {
-        if (!open) {
-          setConfirmDialog(null);
-        }
+        setOpen?.(open);
       }}
     >
       <DialogContent className="flex flex-col gap-2 w-full max-w-md p-4">
@@ -40,26 +46,20 @@ export default function ConfirmDialog() {
           <Button
             variant="secondary"
             onClick={() => {
-              setConfirmDialog({
-                id: id!,
-                title: title!,
-                description: description!,
-                state: "canceled",
-              });
+              onCancel?.(data);
+              setOpen?.(false);
             }}
+            type="button"
           >
             {t("cancel")}
           </Button>
           <Button
             variant="destructive"
             onClick={() => {
-              setConfirmDialog({
-                id: id!,
-                title: title!,
-                description: description!,
-                state: "confirmed",
-              });
+              onConfirm(data);
+              setOpen?.(false);
             }}
+            type="button"
           >
             {t("confirm")}
           </Button>

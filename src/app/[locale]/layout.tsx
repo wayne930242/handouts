@@ -7,7 +7,6 @@ import { locales } from "@/navigation";
 
 import CookieConsent from "@/components/toast/CookieConsent";
 import { Toaster } from "@/components/ui/toaster";
-import ConfirmDialog from "@/components/dialog/ConfirmDialog";
 import PassphraseDialog from "@/components/dialog/PassphraseDialog";
 
 import { ThemeProvider } from "@/components/layout/context/ThemeProvider";
@@ -56,7 +55,6 @@ export default async function RootLayout({
                 {children}
               </main>
 
-              <ConfirmDialog />
               <GlobalLoading />
               <PassphraseDialog />
               <ProfileQuery />

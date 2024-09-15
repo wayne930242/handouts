@@ -4,7 +4,6 @@ import { Plus, X } from "lucide-react";
 
 import { advancedRemoveElement } from "@/lib/arrayAction";
 import useCampaignStore from "@/lib/store/useCampaignStore";
-import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import SectionsArea from "./SectionsArea";
 import { Label } from "@/components/ui/label";
 import { Chapter, SectionData } from "@/types/interfaces";
+import { useState } from "react";
+import ConfirmDialog from "../dialog/ConfirmDialog";
 
 interface Props {
   chapter: Chapter;
@@ -72,7 +73,8 @@ export default function ChapterCard({ chapter }: Props) {
     );
   };
 
-  const { setConfirm } = useConfirmDialog(deleteChapter);
+  const [deleteData, setDeleteData] = useState<Chapter[]>();
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   return (
     <div className="relative flex flex-col gap-2 w-full min-h-12 bg-black/5 p-3 rounded-md cursor-default">
@@ -151,17 +153,21 @@ export default function ChapterCard({ chapter }: Props) {
           if (!chapter.sections?.length) {
             deleteChapter(chapters);
           } else {
-            setConfirm({
-              id: `delete-chapter-${chapter.id}`,
-              title: t("deleteChapter"),
-              description: t("deleteChapterDescription"),
-              data: chapters,
-            });
+            setDeleteData(chapters);
+            setOpenConfirm(true);
           }
         }}
       >
         <X className="h-4 w-4" />
       </Button>
+      <ConfirmDialog
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+        title={t("deleteChapter")}
+        description={t("deleteChapterDescription")}
+        data={deleteData!}
+        onConfirm={deleteChapter}
+      />
     </div>
   );
 }

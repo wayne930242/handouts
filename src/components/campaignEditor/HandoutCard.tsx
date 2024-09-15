@@ -43,11 +43,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { Handout } from "@/types/interfaces";
 import { useTranslations } from "next-intl";
-import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
 import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
 import useAppStore from "@/lib/store/useAppStore";
+import ConfirmDialog from "../dialog/ConfirmDialog";
 
 const ImageEditor = dynamic(
   () => import("./HandoutContentEditor/ImageEditor"),
@@ -199,7 +199,8 @@ export default function HandoutCard({ handout }: Props) {
       );
     }
   };
-  const { setConfirm } = useConfirmDialog(deleteHandout);
+  
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   return (
     <Card className="relative">
@@ -400,17 +401,20 @@ export default function HandoutCard({ handout }: Props) {
           if (!handout.content) {
             deleteHandout(handout);
           } else {
-            setConfirm({
-              id: `delete-handout-${handout.id}`,
-              title: t("deleteHandout"),
-              description: t("deleteHandoutDescription"),
-              data: handout,
-            });
+            setOpenConfirm(true);
           }
         }}
       >
         <X className="h-4 w-4" />
       </Button>
+      <ConfirmDialog
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+        title={t("deleteHandout")}
+        description={t("deleteHandoutDescription")}
+        data={handout}
+        onConfirm={deleteHandout}
+      />
     </Card>
   );
 }

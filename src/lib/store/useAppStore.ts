@@ -13,8 +13,6 @@ const useAppStore = create<AppStore>((set) => ({
   addPassphraseDialog: null,
   setAddPassphraseDialog: (passphraseDialog) =>
     set({ addPassphraseDialog: passphraseDialog }),
-  confirmDialog: null,
-  setConfirmDialog: (comfirmDialog) => set({ confirmDialog: comfirmDialog }),
   isLoading: false,
   setIsLoading: (isLoading) => set({ isLoading }),
 }));

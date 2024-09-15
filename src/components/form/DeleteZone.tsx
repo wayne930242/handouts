@@ -4,9 +4,8 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import ImageManager from "@/lib/s3/ImageManager";
-import useConfirmDialog from "@/lib/hooks/useConfirmDialog";
 import { useClient } from "@/lib/supabase/client";
 import { useRouter } from "@/navigation";
 import {
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/layout/OverlayLoading";
+import ConfirmDialog from "../dialog/ConfirmDialog";
 
 const FormSchema = z.object({
   id: z.string().min(1, "formValidation.required"),
@@ -51,37 +51,40 @@ export default function DeleteZone({
   const imageManager = new ImageManager();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
-  const { setConfirm } = useConfirmDialog(
-    async (data: z.infer<typeof FormSchema>) => {
-      if (data.id === id) {
-        try {
-          setLoading(true);
-          await imageManager.deleteImagesByPrefix(
-            `${tableName}/${data.id}/images`
-          );
-          await supabase.from(tableName).delete().eq("id", data.id);
-          toast({
-            title: t("successTitle"),
-            description: t("successDescription"),
-          });
+  const [isPending, startTransition] = useTransition();
+
+  const onConfirm = async (data: z.infer<typeof FormSchema>) => {
+    if (data.id === id) {
+      try {
+        setLoading(true);
+        await imageManager.deleteImagesByPrefix(
+          `${tableName}/${data.id}/images`
+        );
+        await supabase.from(tableName).delete().eq("id", data.id);
+        toast({
+          title: t("successTitle"),
+          description: t("successDescription"),
+        });
+        startTransition(() => {
           router.push(redirectPath);
-        } catch (error) {
-          toast({
-            title: t("errorTitle"),
-            description: t("errorDescription"),
-            variant: "destructive",
-          });
-        }
-        setLoading(false);
-      } else {
-        form.setError("id", {
-          type: "manual",
-          message: t("idMismatchError"),
+        });
+      } catch (error) {
+        toast({
+          title: t("errorTitle"),
+          description: t("errorDescription"),
+          variant: "destructive",
         });
       }
+      setLoading(false);
+    } else {
+      form.setError("id", {
+        type: "manual",
+        message: t("idMismatchError"),
+      });
     }
-  );
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -90,13 +93,10 @@ export default function DeleteZone({
     },
   });
 
+  const [data, setData] = useState<z.infer<typeof FormSchema>>();
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    setConfirm({
-      id: `delete-${type}-${data.id}`,
-      title: t("deleteTitle"),
-      description: t("deleteDescription"),
-      data,
-    });
+    setOpenConfirm(true);
+    setData(data);
   }
 
   return (
@@ -133,7 +133,15 @@ export default function DeleteZone({
           </form>
         </Form>
       </CardContent>
-      {loading && <OverlayLoading />}
+      <ConfirmDialog
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+        title={t("deleteTitle")}
+        description={t("deleteDescription")}
+        data={data!}
+        onConfirm={onConfirm}
+      />
+      {(loading || isPending) && <OverlayLoading />}
     </Card>
   );
 }
