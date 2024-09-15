@@ -12,7 +12,6 @@ import PassphraseDialog from "@/components/dialog/PassphraseDialog";
 import { ThemeProvider } from "@/components/layout/context/ThemeProvider";
 import { ReactQueryClientProvider } from "@/components/layout/context/ReactQueryClientProvider";
 import GlobalLoading from "@/components/layout/context/GlobalLoading";
-import ProfileQuery from "@/components/layout/context/ProfileQuery";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -55,9 +54,8 @@ export default async function RootLayout({
                 {children}
               </main>
 
-              <GlobalLoading />
-              <PassphraseDialog />
-              <ProfileQuery />
+              {/* <GlobalLoading /> */}
+              {/* <PassphraseDialog /> */}
               <CookieConsent />
               <Toaster />
             </ThemeProvider>

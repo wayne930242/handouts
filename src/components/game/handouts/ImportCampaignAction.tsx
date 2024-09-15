@@ -58,7 +58,7 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   );
   const [isImporting, setIsImporting] = useState(false);
 
-  const handleAddDocs = async () => {};
+  const handleImportCampaign = async () => {};
 
   return (
     <Dialog>
@@ -113,7 +113,7 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
             <Button variant="secondary">{t("cancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={handleAddDocs}>{t("confirm")}</Button>
+            <Button onClick={handleImportCampaign}>{t("confirm")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

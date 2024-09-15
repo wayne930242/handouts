@@ -25,7 +25,7 @@ export default function ProfileQuery() {
     if (!profileData || isMounted.current) return;
     isMounted.current = true;
     setProfile(profileData);
-  }, [profileData]);
+  }, [profileData, setProfile]);
 
   return <></>;
 }

@@ -28,6 +28,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import OverlayLoading from "@/components/layout/OverlayLoading";
 import ConfirmDialog from "../dialog/ConfirmDialog";
+import { useDeleteMutation } from "@supabase-cache-helpers/postgrest-react-query";
 
 const FormSchema = z.object({
   id: z.string().min(1, "formValidation.required"),
@@ -55,6 +56,11 @@ export default function DeleteZone({
 
   const [isPending, startTransition] = useTransition();
 
+  const { mutateAsync: deleteItem } = useDeleteMutation(
+    supabase.from(tableName),
+    ["id"]
+  );
+
   const onConfirm = async (data: z.infer<typeof FormSchema>) => {
     if (data.id === id) {
       try {
@@ -62,7 +68,7 @@ export default function DeleteZone({
         await imageManager.deleteImagesByPrefix(
           `${tableName}/${data.id}/images`
         );
-        await supabase.from(tableName).delete().eq("id", data.id);
+        await deleteItem({ id: data.id });
         toast({
           title: t("successTitle"),
           description: t("successDescription"),

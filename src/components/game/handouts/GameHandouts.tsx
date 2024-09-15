@@ -19,9 +19,6 @@ export default function GameHandouts() {
   const { gameData } = useGameStore((state) => ({
     gameData: state.gameData,
   }));
-  const { editingStage } = useAppStore((state) => ({
-    editingStage: state.editingStage,
-  }));
 
   const { campaignData, initCampaignData } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
