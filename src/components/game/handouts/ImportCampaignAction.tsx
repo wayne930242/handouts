@@ -32,10 +32,13 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import OverlayLoading from "@/components/layout/OverlayLoading";
-import useGameStore from "@/lib/store/useGameStore";
-import { getOwnedCampaigns } from "@/lib/supabase/query/campaignsQuery";
+import {
+  getCampaignDetail,
+  getOwnedCampaigns,
+} from "@/lib/supabase/query/campaignsQuery";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import CampaignImporter from "@/lib/supabase/CampaignImporter";
+import { toast } from "@/components/ui/use-toast";
 
 export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   const t = useTranslations("GamePage");
@@ -61,7 +64,21 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   const handleImport = async () => {
     if (!selectedCampaign) return;
     setIsImporting(true);
-    
+    try {
+      const { data } = await getCampaignDetail(supabase, selectedCampaign);
+      if (!data) throw new Error(`Campaign not found: id=${selectedCampaign}`);
+      const campaignImporter = new CampaignImporter(supabase, data, gameId);
+      const newCampaign = await campaignImporter.importCampaign();
+      if (!newCampaign) throw new Error(`New Campaign not resolved`);
+      initCampaignData(newCampaign);
+    } catch (error) {
+      toast({
+        title: t("importFailed"),
+        description: t("importFailedDescription"),
+        variant: "destructive",
+      });
+    }
+    setIsImporting(false);
   };
 
   return (

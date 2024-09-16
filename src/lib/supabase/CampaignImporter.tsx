@@ -1,71 +1,81 @@
-import { Campaign, MySupabaseClient, Handout } from "@/types/interfaces";
+import {
+  Campaign,
+  MySupabaseClient,
+  Handout,
+} from "@/types/interfaces";
 import { extractImageUrlsFromMarkdown } from "../markdown";
 import ImageManager, { ImageKeyPrefix } from "../s3/ImageManager";
-import { PostgrestError } from "@supabase/supabase-js";
 
 export default class CampaignImporter {
-  private supabase: MySupabaseClient;
-  private campaignData: Campaign;
   private imageManager: ImageManager;
-  private gameId?: string;
 
   constructor(
-    supabase: MySupabaseClient,
-    campaignData: Campaign,
-    gameId?: string
+    private supabase: MySupabaseClient,
+    private campaignData: Campaign,
+    private gameId?: string
   ) {
-    this.supabase = supabase;
-    this.campaignData = campaignData;
-    this.gameId = gameId;
     this.imageManager = new ImageManager();
   }
 
-  async importCampaign() {
-    let newCampaign: Campaign;
-    let error: PostgrestError | null = null;
-    const { data, error: _error } = await this.supabase.rpc("import_campaign", {
+  async importCampaign(): Promise<Campaign> {
+    const user = await this.getAuthenticatedUser();
+    this.campaignData.gm_id = user.id;
+    this.campaignData.in_game = true;
+
+    const { data, error } = await this.supabase.rpc("import_campaign", {
       p_campaign_data: this.campaignData,
       p_game_id: this.gameId,
     });
-    error = _error ?? null;
-    newCampaign = data as Campaign;
 
     if (error) throw error;
 
-    await this.handleImages(newCampaign as Campaign);
-
-    return newCampaign as Campaign;
+    const newCampaign = data as Campaign;
+    await this.handleImages(newCampaign);
+    return newCampaign;
   }
 
-  private async handleImages(newCampaign: Campaign) {
-    const imagePromises: Promise<void>[] = [];
+  private async getAuthenticatedUser() {
+    const {
+      data: { user },
+    } = await this.supabase.auth.getUser();
+    if (!user) throw new Error("User not authenticated");
+    return user;
+  }
 
-    if (this.campaignData.banner_url) {
-      imagePromises.push(this.updateCampaignBanner(newCampaign.id));
-    }
-
-    for (const chapter of newCampaign.chapters) {
-      for (const section of chapter.sections) {
-        for (const handout of section.handouts) {
-          if (handout.content) {
-            imagePromises.push(
-              this.updateHandoutImages(newCampaign.id, section.id, handout)
-            );
-          }
-        }
-      }
-    }
+  private async handleImages(newCampaign: Campaign): Promise<void> {
+    const imagePromises: Promise<void>[] = [
+      this.updateCampaignBanner(newCampaign.id),
+      ...this.getHandoutImagePromises(newCampaign),
+    ];
 
     await Promise.all(imagePromises);
   }
 
-  private async updateCampaignBanner(campaignId: string) {
-    const key: ImageKeyPrefix = this.gameId
-      ? `games/${this.gameId}/campaigns/${campaignId}/images`
-      : `campaigns/${campaignId}/images`;
+  private getHandoutImagePromises(campaign: Campaign): Promise<void>[] {
+    return campaign.chapters.flatMap((chapter, chapterIndex) =>
+      chapter.sections.flatMap((section, sectionIndex) =>
+        section.handouts
+          .filter((handout) => handout.content)
+          .map((handout, handoutIndex) =>
+            this.updateHandoutImages(
+              campaign.id,
+              section.id,
+              handout,
+              chapterIndex,
+              sectionIndex,
+              handoutIndex
+            )
+          )
+      )
+    );
+  }
 
+  private async updateCampaignBanner(campaignId: string): Promise<void> {
+    if (!this.campaignData.banner_url) return;
+
+    const key = this.getImageKey(campaignId, "campaigns");
     const newUrl = await this.imageManager.uploadByUrl(
-      this.campaignData.banner_url!,
+      this.campaignData.banner_url,
       key
     );
 
@@ -73,21 +83,23 @@ export default class CampaignImporter {
       .from("campaigns")
       .update({ banner_url: newUrl })
       .eq("id", campaignId);
+
+    this.campaignData.banner_url = newUrl;
   }
 
   private async updateHandoutImages(
     campaignId: string,
     sectionId: number,
-    handout: Handout
-  ) {
+    handout: Handout,
+    chapterIndex: number,
+    sectionIndex: number,
+    handoutIndex: number
+  ): Promise<void> {
     const imageUrls = extractImageUrlsFromMarkdown(handout.content!);
     let updatedContent = handout.content;
 
     for (const url of imageUrls) {
-      const key: ImageKeyPrefix = this.gameId
-        ? `games/${this.gameId}/campaigns/${campaignId}/handouts/${sectionId}/images`
-        : `campaigns/${campaignId}/handouts/${sectionId}/images`;
-
+      const key = this.getImageKey(campaignId, "handouts", sectionId);
       const newUrl = await this.imageManager.uploadByUrl(url, key);
       updatedContent = updatedContent!.replace(url, newUrl);
     }
@@ -96,5 +108,21 @@ export default class CampaignImporter {
       .from("handouts")
       .update({ content: updatedContent })
       .eq("id", handout.id);
+
+    this.campaignData.chapters[chapterIndex].sections[sectionIndex].handouts[
+      handoutIndex
+    ].content = updatedContent;
+  }
+
+  private getImageKey(
+    campaignId: string,
+    type: "campaigns" | "handouts",
+    sectionId?: number
+  ): ImageKeyPrefix {
+    return `${
+      this.gameId ? `games/${this.gameId}/` : ""
+    }campaigns/${campaignId}/${
+      type === "campaigns" ? "images" : `handouts/${sectionId}/images`
+    }` as ImageKeyPrefix;
   }
 }

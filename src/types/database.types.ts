@@ -155,6 +155,7 @@ export type Database = {
           description: string | null
           gm_id: string | null
           id: string
+          in_game: boolean | null
           is_template: boolean
           name: string
           passphrase: string | null
@@ -166,6 +167,7 @@ export type Database = {
           description?: string | null
           gm_id?: string | null
           id?: string
+          in_game?: boolean | null
           is_template?: boolean
           name: string
           passphrase?: string | null
@@ -177,6 +179,7 @@ export type Database = {
           description?: string | null
           gm_id?: string | null
           id?: string
+          in_game?: boolean | null
           is_template?: boolean
           name?: string
           passphrase?: string | null

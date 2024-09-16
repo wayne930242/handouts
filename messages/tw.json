@@ -5,6 +5,8 @@
     "handouts": "手邊資料",
     "notes": "筆記",
     "manageDocuments": "管理文件",
+    "importFailed": "匯入失敗",
+    "importFailedDescription": "匯入失敗。請確認匯入格式後重試。",
     "chooseDocument": "選擇要加入遊戲的文件，反選要移除的文件。",
     "searchPlaceholder": "輸入指令或搜尋...",
     "noResults": "沒有找到結果。",
@@ -14,8 +16,8 @@
     "cancel": "取消",
     "confirm": "確認",
     "noDocs": "這個遊戲還沒有任何文件。",
-    "manageCampaign": "管理手邊資料",
-    "chooseCampaign": "選擇要導入遊戲的手邊資料。",
+    "manageCampaign": "匯入手邊資料",
+    "chooseCampaign": "選擇要匯入本遊戲的手邊資料。",
     "noCampaigns": "這個遊戲還沒建立手邊資料，你可以建立一個新的或是導入現有的。"
   },
   "GameMenu": {

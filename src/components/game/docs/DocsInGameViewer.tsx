@@ -54,7 +54,7 @@ export default function DocsInGameViewer({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <div className="mt-4">
-        {selectedDoc && <DocViewer doc={selectedDoc} />}
+        {selectedDoc && <DocViewer doc={selectedDoc} withoutHeader />}
       </div>
     </div>
   );

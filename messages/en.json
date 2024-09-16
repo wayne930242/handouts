@@ -4,6 +4,8 @@
     "docs": "Documents",
     "handouts": "Handouts",
     "notes": "Notes",
+    "importFailed": "Import Failed",
+    "importFailedDescription": "Import Failed. Please check the import format and try again.",
     "manageDocuments": "Manage Documents",
     "chooseDocument": "Check Documents you want to add to the Game and unckeck the ones you want to remove.",
     "searchPlaceholder": "Type a command or search...",
@@ -14,8 +16,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "noDocs": "No documents in this game.",
-    "manageCampaign": "Manage Campaign",
-    "chooseCampaign": "Choose a Campaign to import to the Game.",
+    "manageCampaign": "Import Handouts",
+    "chooseCampaign": "Choose Handouts to import to the Game.",
     "noCampaigns": "No handouts in this game. You can create a new one or import an existing one."
   },
   "GameMenu": {

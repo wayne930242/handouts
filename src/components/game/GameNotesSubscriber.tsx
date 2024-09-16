@@ -15,6 +15,7 @@ export default function GameNotesSubscriber({ gameId }: { gameId: string }) {
     }));
 
   useEffect(() => {
+    setConnected(false);
     setNeedConnect(true);
     return () => {
       setNeedConnect(false);

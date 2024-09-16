@@ -21,11 +21,13 @@ export default function Toolbar({
   isOwner,
   isFavorite,
   isJoined,
+  gameId,
 }: {
   campaignId: string;
   isOwner?: boolean;
   isFavorite?: boolean;
   isJoined?: boolean;
+  gameId?: string;
 }) {
   const user = useSessionUser();
   const t = useTranslations("Toolbar");
@@ -80,10 +82,12 @@ export default function Toolbar({
           <Unplug className="h-4 w-4" />
         </Badge>
       )}
-      <FavoriteButton
-        isFavorite={isLocalFavorite}
-        onClick={() => handleAddOrRemoveFavorite()}
-      />
+      {!gameId && (
+        <FavoriteButton
+          isFavorite={isLocalFavorite}
+          onClick={() => handleAddOrRemoveFavorite()}
+        />
+      )}
       {isOwner && (
         <Button
           size="sm"
@@ -107,7 +111,7 @@ export default function Toolbar({
           {editingStage === "campaign" ? t("closeEdit") : t("edit")}
         </Button>
       )}
-      {!isOwner && (
+      {!isOwner && !gameId && (
         <Button
           size="sm"
           className="flex gap-2 items-center"
@@ -118,7 +122,11 @@ export default function Toolbar({
         </Button>
       )}
       {campaignData && (
-        <CampaignMenu campaignData={campaignData} isOwner={isOwner} />
+        <CampaignMenu
+          campaignData={campaignData}
+          isOwner={isOwner}
+          gameId={gameId}
+        />
       )}
 
       {isLoading && <OverlayLoading />}

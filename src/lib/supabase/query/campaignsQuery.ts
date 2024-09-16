@@ -88,6 +88,7 @@ passphrase,
 status,
 banner_url,
 is_template,
+in_game,
 gm:profiles!campaigns_gm_id_fkey1 (
   id,
   display_name,
@@ -161,7 +162,8 @@ export const getOwnedCampaigns = (
       )
     `
     )
-    .eq("gm_id", userId);
+    .eq("gm_id", userId)
+    .eq("in_game", false);
 };
 
 export const getMyCampaigns = (supabase: MySupabaseClient, userId: string) => {
@@ -179,7 +181,8 @@ export const getMyCampaigns = (supabase: MySupabaseClient, userId: string) => {
     `
     )
     .eq("campaign_players.user_id", userId)
-    .neq("gm_id", userId);
+    .neq("gm_id", userId)
+    .eq("in_game", false);
 };
 
 export const getMyFavCampaigns = (
@@ -200,6 +203,7 @@ export const getMyFavCampaigns = (
     `
     )
     .eq("user_campaign_favorites.user_id", userId)
+    .eq("in_game", false)
     .order("added_at", {
       referencedTable: "user_campaign_favorites",
       ascending: false,

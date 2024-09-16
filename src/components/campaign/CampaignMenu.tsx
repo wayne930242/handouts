@@ -22,9 +22,10 @@ import OverlayLoading from "../layout/OverlayLoading";
 interface Props {
   campaignData: Campaign;
   isOwner?: boolean;
+  gameId?: string;
 }
 
-export default function CampaignMenu({ campaignData, isOwner }: Props) {
+export default function CampaignMenu({ campaignData, isOwner, gameId }: Props) {
   const t = useTranslations("CampaignMenu");
   const [loading, setLoading] = useState(false);
 
