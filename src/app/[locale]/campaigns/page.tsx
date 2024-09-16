@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import DataToolbar from "@/components/toolbar/DataToolbar";
 
 import PageLayout from "@/components/layout/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
@@ -11,7 +10,6 @@ import {
   getOwnedCampaigns,
 } from "@/lib/supabase/query/campaignsQuery";
 import Campaigns from "@/components/campaign/Campaigns";
-import ImportCampaignButton from "@/components/campaign/ImportCampaignButton";
 
 interface Props {
   params: {
@@ -37,14 +35,7 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   }
 
   return (
-    <PageLayout
-      header={
-        <DataToolbar tableKey="campaigns">
-          <ImportCampaignButton />
-        </DataToolbar>
-      }
-      needsAuth
-    >
+    <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
         {user && <Campaigns userId={user.id} />}
       </HydrationBoundary>

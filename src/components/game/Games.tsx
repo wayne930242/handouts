@@ -10,6 +10,7 @@ import {
   getMyGames,
   getOwnedGames,
 } from "@/lib/supabase/query/gamesQuery";
+import DataToolbar from "@/components/toolbar/DataToolbar";
 
 import QueryListLayout from "../layout/itemsList/QueryListLayout";
 import GameCard from "./GameCard";
@@ -17,15 +18,21 @@ import GameCard from "./GameCard";
 export default function Games({ userId }: Props) {
   const t = useTranslations("GamesPage");
   const supabase = useClient();
-  const { data: ownedGames, isFetching: isFetchingOwnedGames } = useQuery(
-    getOwnedGames(supabase, userId)
-  );
-  const { data: myGames, isFetching: isFetchingMyGames } = useQuery(
-    getMyGames(supabase, userId)
-  );
-  const { data: MyFavGames, isFetching: isFetchingMyFavGames } = useQuery(
-    getMyFavGames(supabase, userId)
-  );
+  const {
+    data: ownedGames,
+    isFetching: isFetchingOwnedGames,
+    refetch: refetchOwnedGames,
+  } = useQuery(getOwnedGames(supabase, userId));
+  const {
+    data: myGames,
+    isFetching: isFetchingMyGames,
+    refetch: refetchMyGames,
+  } = useQuery(getMyGames(supabase, userId));
+  const {
+    data: MyFavGames,
+    isFetching: isFetchingMyFavGames,
+    refetch: refetchMyFavGames,
+  } = useQuery(getMyFavGames(supabase, userId));
 
   const isFetching =
     isFetchingOwnedGames || isFetchingMyGames || isFetchingMyFavGames;
@@ -36,33 +43,46 @@ export default function Games({ userId }: Props) {
   );
 
   return (
-    <QueryListLayout
-      isLoading={isFetching}
-      noItemTitle={t("noGames")}
-      noItemDescription={t("createGame")}
-      hasNoItem={!hasData}
-      items={[
-        {
-          title: t("myFavorites"),
-          icon: <Star className="h-5 w-5 fill-yellow-300 stroke-yellow-300" />,
-          children: MyFavGames?.map((game) => (
-            <GameCard game={game} key={`${game.id}-myfav`} />
-          )),
-        },
-        {
-          title: t("ownedGames"),
-          children: ownedGames?.map((game) => (
-            <GameCard game={game} key={`${game.id}-owned`} />
-          )),
-        },
-        {
-          title: t("myGames"),
-          children: myGames?.map((game) => (
-            <GameCard game={game} key={`${game.id}-my`} />
-          )),
-        },
-      ]}
-    />
+    <div className="w-full flex flex-col gap-2">
+      <DataToolbar
+        tableKey="games"
+        isRefreshing={isFetching}
+        handleRefresh={() => {
+          refetchOwnedGames();
+          refetchMyGames();
+          refetchMyFavGames();
+        }}
+      />
+      <QueryListLayout
+        isLoading={isFetching}
+        noItemTitle={t("noGames")}
+        noItemDescription={t("createGame")}
+        hasNoItem={!hasData}
+        items={[
+          {
+            title: t("myFavorites"),
+            icon: (
+              <Star className="h-5 w-5 fill-yellow-300 stroke-yellow-300" />
+            ),
+            children: MyFavGames?.map((game) => (
+              <GameCard game={game} key={`${game.id}-myfav`} />
+            )),
+          },
+          {
+            title: t("ownedGames"),
+            children: ownedGames?.map((game) => (
+              <GameCard game={game} key={`${game.id}-owned`} />
+            )),
+          },
+          {
+            title: t("myGames"),
+            children: myGames?.map((game) => (
+              <GameCard game={game} key={`${game.id}-my`} />
+            )),
+          },
+        ]}
+      />
+    </div>
   );
 }
 

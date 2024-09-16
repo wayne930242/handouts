@@ -7,7 +7,6 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { getDocsByOwnerId } from "@/lib/supabase/query/docsQuery";
 import Docs from "@/components/doc/Docs";
-import DataToolbar from "@/components/toolbar/DataToolbar";
 
 interface Props {
   params: {
@@ -31,7 +30,7 @@ export default async function CampaignPage({ params: { locale } }: Props) {
   }
 
   return (
-    <PageLayout header={<DataToolbar tableKey="docs" />} needsAuth>
+    <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
         {user && <Docs userId={user.id} />}
       </HydrationBoundary>

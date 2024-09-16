@@ -9,8 +9,6 @@ import {
   getMyGames,
   getOwnedGames,
 } from "@/lib/supabase/query/gamesQuery";
-import { redirect } from "@/navigation";
-import DataToolbar from "@/components/toolbar/DataToolbar";
 
 interface Props {
   params: {
@@ -34,7 +32,7 @@ export default async function Generators({ params: { locale } }: Props) {
   }
 
   return (
-    <PageLayout header={<DataToolbar tableKey="games" />} needsAuth>
+    <PageLayout needsAuth>
       <HydrationBoundary state={hydrate(queryClient, null)}>
         {user && <Games userId={user.id} />}
       </HydrationBoundary>
