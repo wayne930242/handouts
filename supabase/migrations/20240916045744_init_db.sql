@@ -12,6 +12,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 
+CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
+
+
+
+
+
+
 CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
 
 
@@ -246,6 +253,69 @@ END;$$;
 ALTER FUNCTION "public"."check_doc_passphrase_rpc"("doc_id" "uuid", "input_passphrase" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."check_game_invitation"("p_code" character varying) RETURNS TABLE("is_valid" boolean, "game_id" "uuid")
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        CASE 
+            WHEN gi.id IS NOT NULL AND gi.expires_at > now() AND gi.is_used = FALSE 
+            THEN TRUE 
+            ELSE FALSE 
+        END AS is_valid,
+        gi.game_id
+    FROM public.game_invitations gi
+    WHERE gi.code = p_code;
+    
+    -- If the invitation is valid, mark it as used
+    IF FOUND AND (is_valid = TRUE) THEN
+        UPDATE public.game_invitations
+        SET is_used = TRUE
+        WHERE code = p_code;
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."check_game_invitation"("p_code" character varying) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."check_user_game_role"("p_user_id" "uuid", "p_game_id" "uuid") RETURNS boolean
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+DECLARE
+    is_gm BOOLEAN;
+    is_player BOOLEAN;
+BEGIN
+    -- Check if the user is the GM of the game
+    SELECT (gm_id = p_user_id) INTO is_gm
+    FROM games
+    WHERE id = p_game_id;
+
+    -- If the user is the GM, return true
+    IF is_gm THEN
+        RETURN TRUE;
+    END IF;
+
+    -- Check if the user is a player in the game
+    SELECT EXISTS (
+        SELECT 1
+        FROM game_players
+        WHERE game_id = p_game_id AND user_id = p_user_id
+    ) INTO is_player;
+
+    -- Return the result (true if the user is a player, false otherwise)
+    RETURN is_player;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."check_user_game_role"("p_user_id" "uuid", "p_game_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."create_campaign_owner"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
@@ -348,6 +418,83 @@ $$;
 ALTER FUNCTION "public"."handle_user_changes"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."import_campaign"("p_campaign_data" "jsonb", "p_game_id" "uuid" DEFAULT NULL::"uuid") RETURNS "jsonb"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+DECLARE
+  v_campaign_id uuid;
+  v_chapter_id bigint;
+  v_section_id bigint;
+  v_handout_id uuid;
+  v_chapter jsonb;
+  v_section jsonb;
+  v_handout jsonb;
+  v_result jsonb;
+BEGIN
+  -- Insert campaign
+  INSERT INTO campaigns (name, description, gm_id, status)
+  VALUES (
+    p_campaign_data->>'name',
+    p_campaign_data->>'description',
+    (p_campaign_data->>'gm_id')::uuid,
+    p_campaign_data->>'status'
+  )
+  RETURNING id INTO v_campaign_id;
+
+  -- Update game if game_id is provided
+  IF p_game_id IS NOT NULL THEN
+    UPDATE games SET campaign_id = v_campaign_id WHERE id = p_game_id;
+  END IF;
+
+  -- Insert chapters, sections, and handouts
+  FOR v_chapter IN SELECT jsonb_array_elements(p_campaign_data->'chapters')
+  LOOP
+    INSERT INTO chapters (campaign_id, title)
+    VALUES (v_campaign_id, v_chapter->>'title')
+    RETURNING id INTO v_chapter_id;
+
+    FOR v_section IN SELECT jsonb_array_elements(v_chapter->'sections')
+    LOOP
+      INSERT INTO sections (campaign_id, chapter_id, title)
+      VALUES (v_campaign_id, v_chapter_id, v_section->>'title')
+      RETURNING id INTO v_section_id;
+
+      FOR v_handout IN SELECT jsonb_array_elements(v_section->'handouts')
+      LOOP
+        INSERT INTO handouts (campaign_id, section_id, title, content, is_public, type, owner_id, note)
+        VALUES (
+          v_campaign_id,
+          v_section_id,
+          v_handout->>'title',
+          v_handout->>'content',
+          false,
+          v_handout->>'type',
+          (v_handout->>'owner_id')::uuid,
+          v_handout->>'note'
+        )
+        RETURNING id INTO v_handout_id;
+      END LOOP;
+    END LOOP;
+  END LOOP;
+
+  -- Prepare result
+  SELECT jsonb_build_object(
+    'id', v_campaign_id,
+    'name', p_campaign_data->>'name',
+    'description', p_campaign_data->>'description',
+    'gm_id', p_campaign_data->>'gm_id',
+    'status', p_campaign_data->>'status',
+    'chapters', p_campaign_data->'chapters'
+  ) INTO v_result;
+
+  RETURN v_result;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."import_campaign"("p_campaign_data" "jsonb", "p_game_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."is_current_user_whitelisted"() RETURNS boolean
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET "search_path" TO 'public'
@@ -415,6 +562,27 @@ $$;
 
 
 ALTER FUNCTION "public"."set_handout_campaign_id"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."set_order_num_generic"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  max_order_num integer;
+BEGIN
+  EXECUTE format('SELECT COALESCE(MAX(order_num), 0) FROM %I', TG_RELNAME)
+  INTO max_order_num;
+
+  IF NEW.order_num IS NULL THEN
+    NEW.order_num := max_order_num + 1;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."set_order_num_generic"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."set_section_campaign_id"() RETURNS "trigger"
@@ -641,6 +809,24 @@ CREATE TABLE IF NOT EXISTS "public"."game_docs" (
 ALTER TABLE "public"."game_docs" OWNER TO "postgres";
 
 
+COMMENT ON TABLE "public"."game_docs" IS 'This table associates games with docs. It allows multiple associations between games and docs.';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."game_invitations" (
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "game_id" "uuid" NOT NULL,
+    "code" character varying(20) NOT NULL,
+    "expires_at" timestamp with time zone NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "created_by" "uuid",
+    "is_used" boolean DEFAULT false
+);
+
+
+ALTER TABLE "public"."game_invitations" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."game_players" (
     "game_id" "uuid" NOT NULL,
     "user_id" "uuid" NOT NULL
@@ -747,7 +933,8 @@ CREATE TABLE IF NOT EXISTS "public"."notes" (
     "is_public" boolean DEFAULT false,
     "metadata" "jsonb",
     "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "is_shared" boolean DEFAULT false NOT NULL
 );
 
 
@@ -962,6 +1149,16 @@ ALTER TABLE ONLY "public"."game_docs"
 
 
 
+ALTER TABLE ONLY "public"."game_invitations"
+    ADD CONSTRAINT "game_invitations_code_key" UNIQUE ("code");
+
+
+
+ALTER TABLE ONLY "public"."game_invitations"
+    ADD CONSTRAINT "game_invitations_pkey" PRIMARY KEY ("id");
+
+
+
 ALTER TABLE ONLY "public"."game_players"
     ADD CONSTRAINT "game_players_pkey" PRIMARY KEY ("game_id", "user_id");
 
@@ -1108,6 +1305,18 @@ CREATE INDEX "idx_doc_generators_generator_id" ON "public"."doc_generators" USIN
 
 
 
+CREATE UNIQUE INDEX "idx_game_docs_game_id_doc_id" ON "public"."game_docs" USING "btree" ("game_id", "doc_id");
+
+
+
+CREATE INDEX "idx_game_invitations_code" ON "public"."game_invitations" USING "btree" ("code");
+
+
+
+CREATE INDEX "idx_game_invitations_game_id" ON "public"."game_invitations" USING "btree" ("game_id");
+
+
+
 CREATE INDEX "idx_generator_fields_generator_id" ON "public"."generator_fields" USING "btree" ("generator_id");
 
 
@@ -1121,6 +1330,14 @@ CREATE INDEX "idx_generators_user_id" ON "public"."generators" USING "btree" ("u
 
 
 CREATE INDEX "idx_handout_users" ON "public"."handout_users" USING "btree" ("handout_id");
+
+
+
+CREATE INDEX "idx_notes_is_shared" ON "public"."notes" USING "btree" ("is_shared");
+
+
+
+CREATE INDEX "idx_notes_owner_id_is_public_is_shared" ON "public"."notes" USING "btree" ("owner_id", "is_public", "is_shared");
 
 
 
@@ -1141,6 +1358,26 @@ CREATE INDEX "idx_user_campaign_favorites_campaign_id" ON "public"."user_campaig
 
 
 CREATE INDEX "idx_user_campaign_favorites_user_id" ON "public"."user_campaign_favorites" USING "btree" ("user_id");
+
+
+
+CREATE OR REPLACE TRIGGER "before_insert_order_num_chapters" BEFORE INSERT ON "public"."chapters" FOR EACH ROW EXECUTE FUNCTION "public"."set_order_num_generic"();
+
+
+
+CREATE OR REPLACE TRIGGER "before_insert_order_num_generator_fields" BEFORE INSERT ON "public"."generator_fields" FOR EACH ROW EXECUTE FUNCTION "public"."set_order_num_generic"();
+
+
+
+CREATE OR REPLACE TRIGGER "before_insert_order_num_handouts" BEFORE INSERT ON "public"."handouts" FOR EACH ROW EXECUTE FUNCTION "public"."set_order_num_generic"();
+
+
+
+CREATE OR REPLACE TRIGGER "before_insert_order_num_notes" BEFORE INSERT ON "public"."notes" FOR EACH ROW EXECUTE FUNCTION "public"."set_order_num_generic"();
+
+
+
+CREATE OR REPLACE TRIGGER "before_insert_order_num_sections" BEFORE INSERT ON "public"."sections" FOR EACH ROW EXECUTE FUNCTION "public"."set_order_num_generic"();
 
 
 
@@ -1271,12 +1508,22 @@ ALTER TABLE ONLY "public"."docs"
 
 
 ALTER TABLE ONLY "public"."game_docs"
-    ADD CONSTRAINT "game_docs_doc_id_fkey" FOREIGN KEY ("doc_id") REFERENCES "public"."docs"("id");
+    ADD CONSTRAINT "game_docs_doc_id_fkey" FOREIGN KEY ("doc_id") REFERENCES "public"."docs"("id") ON DELETE CASCADE;
 
 
 
 ALTER TABLE ONLY "public"."game_docs"
-    ADD CONSTRAINT "game_docs_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id");
+    ADD CONSTRAINT "game_docs_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."game_invitations"
+    ADD CONSTRAINT "game_invitations_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id");
+
+
+
+ALTER TABLE ONLY "public"."game_invitations"
+    ADD CONSTRAINT "game_invitations_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE CASCADE;
 
 
 
@@ -1497,11 +1744,26 @@ ALTER TABLE "public"."campaigns" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."chat_sessions" ENABLE ROW LEVEL SECURITY;
 
 
+CREATE POLICY "create_invitation" ON "public"."game_invitations" FOR INSERT TO "authenticated" WITH CHECK ((EXISTS ( SELECT 1
+   FROM "public"."games"
+  WHERE (("games"."id" = "game_invitations"."game_id") AND ("games"."gm_id" = "auth"."uid"())))));
+
+
+
+CREATE POLICY "delete_invitation" ON "public"."game_invitations" FOR DELETE TO "authenticated" USING ((EXISTS ( SELECT 1
+   FROM "public"."games"
+  WHERE (("games"."id" = "game_invitations"."game_id") AND ("games"."gm_id" = "auth"."uid"())))));
+
+
+
 CREATE POLICY "delete_policy" ON "public"."campaigns" FOR DELETE USING (("auth"."uid"() = "gm_id"));
 
 
 
 ALTER TABLE "public"."docs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."game_invitations" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."handouts" ENABLE ROW LEVEL SECURITY;
@@ -1511,7 +1773,20 @@ CREATE POLICY "insert_policy" ON "public"."campaigns" FOR INSERT TO "authenticat
 
 
 
+ALTER TABLE "public"."notes" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "read_invitation" ON "public"."game_invitations" FOR SELECT TO "authenticated" USING (true);
+
+
+
 CREATE POLICY "select_policy" ON "public"."campaigns" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "update_invitation" ON "public"."game_invitations" FOR UPDATE TO "authenticated" USING ((EXISTS ( SELECT 1
+   FROM "public"."games"
+  WHERE (("games"."id" = "game_invitations"."game_id") AND ("games"."gm_id" = "auth"."uid"())))));
 
 
 
@@ -1523,6 +1798,22 @@ ALTER TABLE "public"."user_campaign_favorites" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."user_subscriptions" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "users_full_access_own_notes" ON "public"."notes" USING (("owner_id" = "auth"."uid"())) WITH CHECK (("owner_id" = "auth"."uid"()));
+
+
+
+CREATE POLICY "users_read_public_notes" ON "public"."notes" FOR SELECT USING (("is_public" = true));
+
+
+
+CREATE POLICY "users_read_update_shared_notes" ON "public"."notes" FOR SELECT USING (("is_shared" = true));
+
+
+
+CREATE POLICY "users_update_shared_notes" ON "public"."notes" FOR UPDATE USING (("is_shared" = true)) WITH CHECK (("is_shared" = true));
+
 
 
 
@@ -1554,10 +1845,19 @@ ALTER PUBLICATION "supabase_realtime" ADD TABLE ONLY "public"."sections";
 
 
 
+
+
+
 GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+
+
+
+
+
 
 
 
@@ -1792,6 +2092,18 @@ GRANT ALL ON FUNCTION "public"."check_doc_passphrase_rpc"("doc_id" "uuid", "inpu
 
 
 
+GRANT ALL ON FUNCTION "public"."check_game_invitation"("p_code" character varying) TO "anon";
+GRANT ALL ON FUNCTION "public"."check_game_invitation"("p_code" character varying) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."check_game_invitation"("p_code" character varying) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."check_user_game_role"("p_user_id" "uuid", "p_game_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."check_user_game_role"("p_user_id" "uuid", "p_game_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."check_user_game_role"("p_user_id" "uuid", "p_game_id" "uuid") TO "service_role";
+
+
+
 GRANT ALL ON FUNCTION "public"."create_campaign_owner"() TO "anon";
 GRANT ALL ON FUNCTION "public"."create_campaign_owner"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."create_campaign_owner"() TO "service_role";
@@ -1828,6 +2140,12 @@ GRANT ALL ON FUNCTION "public"."handle_user_changes"() TO "service_role";
 
 
 
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" "jsonb", "p_game_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" "jsonb", "p_game_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" "jsonb", "p_game_id" "uuid") TO "service_role";
+
+
+
 GRANT ALL ON FUNCTION "public"."is_current_user_whitelisted"() TO "anon";
 GRANT ALL ON FUNCTION "public"."is_current_user_whitelisted"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."is_current_user_whitelisted"() TO "service_role";
@@ -1843,6 +2161,12 @@ GRANT ALL ON FUNCTION "public"."manage_subscription_992c1b1ea50838a94c0fd3b133c4
 GRANT ALL ON FUNCTION "public"."set_handout_campaign_id"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_handout_campaign_id"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."set_handout_campaign_id"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."set_order_num_generic"() TO "anon";
+GRANT ALL ON FUNCTION "public"."set_order_num_generic"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_order_num_generic"() TO "service_role";
 
 
 
@@ -1969,6 +2293,12 @@ GRANT ALL ON SEQUENCE "public"."encrypted_secrets_id_seq" TO "service_role";
 GRANT ALL ON TABLE "public"."game_docs" TO "anon";
 GRANT ALL ON TABLE "public"."game_docs" TO "authenticated";
 GRANT ALL ON TABLE "public"."game_docs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."game_invitations" TO "anon";
+GRANT ALL ON TABLE "public"."game_invitations" TO "authenticated";
+GRANT ALL ON TABLE "public"."game_invitations" TO "service_role";
 
 
 
@@ -2147,3 +2477,219 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 
 
 RESET ALL;
+
+--
+-- Dumped schema changes for auth and storage
+--
+
+CREATE TABLE IF NOT EXISTS "auth"."campaign_players" (
+    "user_id" "uuid" NOT NULL,
+    "campaign_id" "uuid" NOT NULL,
+    "joined_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "role" character varying NOT NULL
+);
+
+
+ALTER TABLE "auth"."campaign_players" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "auth"."campaign_users" (
+    "campaign_id" "uuid" NOT NULL,
+    "user_id" "uuid" NOT NULL
+);
+
+
+ALTER TABLE "auth"."campaign_users" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "auth"."chats" (
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "session_id" "uuid" NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "message" "text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "is_public" boolean DEFAULT true NOT NULL,
+    "handout_id" "uuid"
+);
+
+
+ALTER TABLE "auth"."chats" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "auth"."user_doc_favorites" (
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "doc_id" "uuid" NOT NULL,
+    "added_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE "auth"."user_doc_favorites" OWNER TO "postgres";
+
+
+ALTER TABLE ONLY "auth"."campaign_players"
+    ADD CONSTRAINT "campaign_players_pkey" PRIMARY KEY ("user_id", "campaign_id");
+
+
+
+ALTER TABLE ONLY "auth"."campaign_users"
+    ADD CONSTRAINT "campaign_users_pkey" PRIMARY KEY ("campaign_id", "user_id");
+
+
+
+ALTER TABLE ONLY "auth"."chats"
+    ADD CONSTRAINT "chat_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "auth"."user_doc_favorites"
+    ADD CONSTRAINT "user_doc_favorites_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "auth"."user_doc_favorites"
+    ADD CONSTRAINT "user_doc_favorites_user_id_doc_id_key" UNIQUE ("user_id", "doc_id");
+
+
+
+CREATE INDEX "idx_campaign_users_campaign_id" ON "auth"."campaign_users" USING "btree" ("campaign_id");
+
+
+
+CREATE INDEX "idx_campaign_users_user_id" ON "auth"."campaign_users" USING "btree" ("user_id");
+
+
+
+CREATE INDEX "idx_chat_session_id" ON "auth"."chats" USING "btree" ("session_id");
+
+
+
+CREATE INDEX "idx_chat_user_id" ON "auth"."chats" USING "btree" ("user_id");
+
+
+
+CREATE INDEX "idx_user_doc_favorites_doc_id" ON "auth"."user_doc_favorites" USING "btree" ("doc_id");
+
+
+
+CREATE INDEX "idx_user_doc_favorites_user_id" ON "auth"."user_doc_favorites" USING "btree" ("user_id");
+
+
+
+CREATE OR REPLACE TRIGGER "on_auth_user_created" AFTER INSERT ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_user_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "on_auth_user_deleted" BEFORE DELETE ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."delete_profile_for_deleted_user"();
+
+
+
+CREATE OR REPLACE TRIGGER "on_auth_user_updated" AFTER UPDATE ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_user_changes"();
+
+
+
+ALTER TABLE ONLY "auth"."campaign_players"
+    ADD CONSTRAINT "campaign_players_campaign_id_fkey" FOREIGN KEY ("campaign_id") REFERENCES "public"."campaigns"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."campaign_players"
+    ADD CONSTRAINT "campaign_players_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id");
+
+
+
+ALTER TABLE ONLY "auth"."campaign_players"
+    ADD CONSTRAINT "campaign_players_user_id_fkey1" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."campaign_users"
+    ADD CONSTRAINT "campaign_users_campaign_id_fkey" FOREIGN KEY ("campaign_id") REFERENCES "public"."campaigns"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."campaign_users"
+    ADD CONSTRAINT "campaign_users_user_id_fkey1" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."chats"
+    ADD CONSTRAINT "chat_session_id_fkey" FOREIGN KEY ("session_id") REFERENCES "public"."chat_sessions"("id");
+
+
+
+ALTER TABLE ONLY "auth"."chats"
+    ADD CONSTRAINT "chats_handout_id_fkey" FOREIGN KEY ("handout_id") REFERENCES "public"."handouts"("id");
+
+
+
+ALTER TABLE ONLY "auth"."chats"
+    ADD CONSTRAINT "chats_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."user_doc_favorites"
+    ADD CONSTRAINT "user_doc_favorites_doc_id_fkey" FOREIGN KEY ("doc_id") REFERENCES "public"."docs"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "auth"."user_doc_favorites"
+    ADD CONSTRAINT "user_doc_favorites_user_id_fkey1" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+CREATE POLICY "Users can delete their own doc favorites" ON "auth"."user_doc_favorites" FOR DELETE USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can insert their own doc favorites" ON "auth"."user_doc_favorites" FOR INSERT WITH CHECK (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can view their own doc favorites" ON "auth"."user_doc_favorites" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+ALTER TABLE "auth"."campaign_users" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "auth"."chats" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "auth"."user_doc_favorites" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "Allow anonymous access to all files in images bucket" ON "storage"."objects" FOR SELECT USING ((("bucket_id" = 'images'::"text") AND ("auth"."role"() = 'anon'::"text")));
+
+
+
+CREATE POLICY "Allow upload for whitelisted users only" ON "storage"."objects" FOR INSERT WITH CHECK ((("bucket_id" = 'images'::"text") AND ("auth"."uid"() IN ( SELECT "white_list_users"."user_id"
+   FROM "public"."white_list_users"))));
+
+
+
+GRANT ALL ON TABLE "auth"."campaign_players" TO "anon";
+GRANT ALL ON TABLE "auth"."campaign_players" TO "authenticated";
+GRANT ALL ON TABLE "auth"."campaign_players" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "auth"."campaign_users" TO "anon";
+GRANT ALL ON TABLE "auth"."campaign_users" TO "authenticated";
+GRANT ALL ON TABLE "auth"."campaign_users" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "auth"."chats" TO "anon";
+GRANT ALL ON TABLE "auth"."chats" TO "authenticated";
+GRANT ALL ON TABLE "auth"."chats" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "auth"."user_doc_favorites" TO "anon";
+GRANT ALL ON TABLE "auth"."user_doc_favorites" TO "authenticated";
+GRANT ALL ON TABLE "auth"."user_doc_favorites" TO "service_role";
+
+
+
