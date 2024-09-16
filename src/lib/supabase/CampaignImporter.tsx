@@ -1,6 +1,7 @@
 import { Campaign, MySupabaseClient, Handout } from "@/types/interfaces";
 import { extractImageUrlsFromMarkdown } from "../markdown";
 import ImageManager, { ImageKeyPrefix } from "../s3/ImageManager";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export default class CampaignImporter {
   private supabase: MySupabaseClient;
@@ -20,13 +21,14 @@ export default class CampaignImporter {
   }
 
   async importCampaign() {
-    const { data: newCampaign, error } = await this.supabase.rpc(
-      "import_campaign",
-      {
-        p_campaign_data: this.campaignData,
-        p_game_id: this.gameId,
-      }
-    );
+    let newCampaign: Campaign;
+    let error: PostgrestError | null = null;
+    const { data, error: _error } = await this.supabase.rpc("import_campaign", {
+      p_campaign_data: this.campaignData,
+      p_game_id: this.gameId,
+    });
+    error = _error ?? null;
+    newCampaign = data as Campaign;
 
     if (error) throw error;
 

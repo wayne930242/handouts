@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import merge from "lodash/merge";
+import { produce } from "immer";
 import { debouncify } from "@/lib/debounce";
 import {
   GameStore,
@@ -10,14 +12,15 @@ import {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   gameData: null,
-  setDocs: (docs) =>
-    set({
-      gameData: {
-        ...get().gameData!,
-        docs,
-      },
-    }),
   initGameData: (gameData) => set({ gameData }),
+  setGameData: (partialGameData) =>
+    set((state) => ({
+      gameData: produce(state.gameData, (draft) => {
+        if (draft && partialGameData) {
+          merge(draft, partialGameData);
+        }
+      }),
+    })),
 
   setScreenHandouts: async () => {},
   setGenerators: async () => {},

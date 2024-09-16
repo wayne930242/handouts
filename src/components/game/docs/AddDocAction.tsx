@@ -76,8 +76,8 @@ export default function AddDocAction({
   const user = useSessionUser();
   const router = useRouter();
 
-  const { setGameDocs } = useGameStore((state) => ({
-    setGameDocs: state.setDocs,
+  const { setGameData } = useGameStore((state) => ({
+    setGameData: state.setGameData,
   }));
 
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -142,7 +142,9 @@ export default function AddDocAction({
     const resultData = result?.data;
 
     if (resultData) {
-      setGameDocs(resultData);
+      setGameData({
+        docs: resultData,
+      });
     }
     setIsCreating(false);
   };

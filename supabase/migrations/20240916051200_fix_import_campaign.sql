@@ -105,3 +105,8 @@ BEGIN
   RETURN v_result;
 END;
 $$;
+
+
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" jsonb, "p_game_id" uuid, "p_target_campaign_id" uuid) TO "anon";
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" jsonb, "p_game_id" uuid, "p_target_campaign_id" uuid) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."import_campaign"("p_campaign_data" jsonb, "p_game_id" uuid, "p_target_campaign_id" uuid) TO "service_role";

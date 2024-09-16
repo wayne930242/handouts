@@ -43,9 +43,6 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   const user = useSessionUser();
   const router = useRouter();
 
-  const { setGameDocs } = useGameStore((state) => ({
-    setGameDocs: state.setDocs,
-  }));
   const { initCampaignData } = useCampaignStore((state) => ({
     initCampaignData: state.initCampaignData,
   }));
@@ -64,6 +61,7 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   const handleImport = async () => {
     if (!selectedCampaign) return;
     setIsImporting(true);
+    
   };
 
   return (

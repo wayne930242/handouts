@@ -1354,6 +1354,15 @@ export type Database = {
         Args: {
           p_campaign_data: Json
           p_game_id?: string
+          p_target_campaign_id?: string
+        }
+        Returns: Json
+      }
+      import_campaign_by_id: {
+        Args: {
+          p_campaign_id: string
+          p_game_id?: string
+          p_target_campaign_id?: string
         }
         Returns: Json
       }

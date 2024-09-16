@@ -6,6 +6,7 @@ import {
   SetHandoutsTreeDataPayload,
   SetHandoutsTreeDataPayloadLocal,
 } from "./handouts";
+import { DeepPartial } from "react-hook-form";
 
 export type MySupabaseClient = SupabaseClient<Database>;
 
@@ -334,8 +335,8 @@ export type SetNoteDataPayload = <
 
 export interface GameStore {
   gameData: Game | null;
-  setDocs: (docs: Game["docs"]) => void;
   initGameData: (gameData: Game | null) => void;
+  setGameData: (partialGameData: DeepPartial<Game>) => void;
 
   setScreenHandouts: SetHandoutsTreeDataPayload;
 
