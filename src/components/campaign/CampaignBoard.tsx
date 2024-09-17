@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 
 import useAppStore from "@/lib/store/useAppStore";
-import useSubscribeCampaign from "@/lib/hooks/campaign/useSubscribeCampaign";
 import useCanEditCampaign from "@/lib/hooks/campaign/useCanEditCampaign";
 import { Campaign as CampaignData } from "@/types/interfaces";
 import CampaignViewer from "./CampaignViewer";
@@ -20,8 +19,6 @@ export default function CampaignBoard({ campaignData, userId, gameId }: Props) {
   }));
 
   const isGm = useCanEditCampaign();
-
-  useSubscribeCampaign(campaignData.id);
 
   return (
     <div className="w-full">

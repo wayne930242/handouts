@@ -16,8 +16,6 @@ export default function useSubscribeCampaign(campaignId: string) {
   }));
 
   useEffect(() => {
-    setGameConnected(false);
-    setConnected(false);
     setNeedConnect(true);
 
     return () => {

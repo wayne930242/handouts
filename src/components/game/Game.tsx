@@ -26,6 +26,7 @@ import {
 } from "../ui/select";
 import GameNotesSubscriber from "./GameNotesSubscriber";
 import useCampaignStore from "@/lib/store/useCampaignStore";
+import CampaignSubscriber from "../campaign/CampaignSubscriber";
 
 interface Props {
   gameId: string;
@@ -56,7 +57,7 @@ export default function Game({ gameId, userId }: Props) {
     if (game) {
       isInit.current = true;
       initGameData(game);
-      if (game.campaign_id !== campaignData?.id) {
+      if (!game.campaign_id) {
         initCampaignData(null);
       }
     }
@@ -123,6 +124,9 @@ export default function Game({ gameId, userId }: Props) {
         </Tabs>
       </div>
       {game && <GameNotesSubscriber gameId={gameId} />}
+      {game && campaignData && (
+        <CampaignSubscriber campaignId={campaignData.id} />
+      )}
     </div>
   ) : (
     <div className="flex flex-col items-center justify-center h-96">

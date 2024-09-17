@@ -2,6 +2,7 @@
 
 import useCampaignData from "@/lib/hooks/campaign/useCampaignData";
 import CampaignBoard from "./CampaignBoard";
+import CampaignSubscriber from "./CampaignSubscriber";
 
 export default function Campaign({ campaignId, userId }: Props) {
   const { campaignData } = useCampaignData(campaignId, userId);
@@ -9,7 +10,10 @@ export default function Campaign({ campaignId, userId }: Props) {
   return (
     <div className="w-full">
       {campaignData && (
-        <CampaignBoard campaignData={campaignData} userId={userId} />
+        <>
+          <CampaignBoard campaignData={campaignData} userId={userId} />
+          <CampaignSubscriber campaignId={campaignData.id} />
+        </>
       )}
     </div>
   );
