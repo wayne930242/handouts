@@ -5,7 +5,6 @@ import Image from "next/image";
 import Markdown from "react-markdown";
 
 import { BASE_URL } from "@/config/app";
-import { Link } from "@/navigation";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -19,6 +18,9 @@ import { toast } from "../ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTranslations } from "next-intl";
 import useSessionUser from "@/lib/hooks/useSession";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import OverlayLoading from "../layout/OverlayLoading";
 
 export default function ItemCard({
   tableName,
@@ -33,6 +35,9 @@ export default function ItemCard({
   const user = useSessionUser();
   const isOwner = user?.id === ownerInfo?.id;
 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const passphraseParams = passphrase ? `?passphrase=${passphrase}` : "";
   const link = `${BASE_URL}/${tableName}/${id}${passphraseParams}`;
 
@@ -43,11 +48,17 @@ export default function ItemCard({
           {title}
 
           {isOwner && (
-            <Link href={`/${tableName}/${id}/info`}>
-              <Button size="icon" variant="ghost">
-                <Settings className="h-5 w-5" />
-              </Button>
-            </Link>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => {
+                startTransition(() => {
+                  router.push(`/${tableName}/${id}/info`);
+                });
+              }}
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
           )}
         </CardTitle>
       </CardHeader>
@@ -86,11 +97,19 @@ export default function ItemCard({
               {t("copyLink")}
             </Button>
           </div>
-          <Link href={`/${tableName}/${id}`}>
-            <Button variant="secondary">{t("editView")}</Button>
-          </Link>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              startTransition(() => {
+                router.push(`/${tableName}/${id}`);
+              });
+            }}
+          >
+            {t("editView")}
+          </Button>
         </div>
       </CardFooter>
+      {isPending && <OverlayLoading />}
     </Card>
   );
 }
