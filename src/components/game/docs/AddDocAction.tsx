@@ -152,7 +152,7 @@ export default function AddDocAction({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{t("manageDocuments")}</Button>
+        <Button variant="secondary">{t("manageDocuments")}</Button>
       </DialogTrigger>{" "}
       <DialogContent>
         <DialogHeader>

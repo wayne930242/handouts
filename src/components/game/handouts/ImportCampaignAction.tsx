@@ -84,7 +84,7 @@ export default function ImportCampaignAction({ gameId }: { gameId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{t("manageCampaign")}</Button>
+        <Button variant="secondary">{t("manageCampaign")}</Button>
       </DialogTrigger>{" "}
       <DialogContent>
         <DialogHeader>
