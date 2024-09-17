@@ -3,6 +3,7 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import SearchParamsListener from "@/components/layout/context/SearchParamsListener";
 import Hero from "@/components/index/Hero";
 import Features from "@/components/index/Features";
+import OverlayLoading from "@/components/layout/OverlayLoading";
 
 interface Props {
   params: { locale: string };

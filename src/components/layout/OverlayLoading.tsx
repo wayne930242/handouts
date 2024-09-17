@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { PacmanLoader } from "react-spinners";
 
 export default function OverlayLoading({ isLoading = true }) {
@@ -12,7 +12,6 @@ export default function OverlayLoading({ isLoading = true }) {
       document.body.style.overflow = "";
       document.body.style.pointerEvents = "";
     }
-
     return () => {
       document.body.style.overflow = "";
       document.body.style.pointerEvents = "";
@@ -21,10 +20,9 @@ export default function OverlayLoading({ isLoading = true }) {
 
   if (!isLoading) return null;
 
-  return (
+  const overlay = (
     <div
-      className="fixed inset-0 bg-foreground/60 flex justify-center items-center z-[9999]"
-      style={{ pointerEvents: "auto" }}
+      className="fixed inset-0 bg-foreground/60 flex justify-center items-center pointer-events-auto z-[9999]"
       onClick={(e) => e.stopPropagation()}
       role="alert"
       aria-busy="true"
@@ -32,4 +30,6 @@ export default function OverlayLoading({ isLoading = true }) {
       <PacmanLoader color="hsl(var(--foreground))" loading={true} />
     </div>
   );
+
+  return createPortal(overlay, document.body);
 }
