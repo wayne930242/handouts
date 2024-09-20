@@ -1,11 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "@/navigation";
 
 import PageLayout from "@/components/layout/PageLayout";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { hydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { getDocsByOwnerId } from "@/lib/supabase/query/docsQuery";
+import {
+  getDocsByOwnerId,
+  getMyDocs,
+  getMyFavDocs,
+} from "@/lib/supabase/query/docsQuery";
 import Docs from "@/components/doc/Docs";
 
 interface Props {
@@ -15,9 +17,6 @@ interface Props {
 }
 
 export default async function CampaignPage({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
-
-  const t = await getTranslations("CampaignPage");
   const supabase = createClient();
   const {
     data: { user },
@@ -27,6 +26,8 @@ export default async function CampaignPage({ params: { locale } }: Props) {
 
   if (user) {
     await prefetchQuery(queryClient, getDocsByOwnerId(supabase, user.id));
+    await prefetchQuery(queryClient, getMyFavDocs(supabase, user.id));
+    await prefetchQuery(queryClient, getMyDocs(supabase, user.id));
   }
 
   return (
