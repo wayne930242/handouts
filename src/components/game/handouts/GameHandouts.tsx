@@ -4,9 +4,8 @@ import GameTabCardLayout from "../GameTabCardLayout";
 import useGameStore from "@/lib/store/useGameStore";
 import ImportCampaignAction from "./ImportCampaignAction";
 import useSessionUser from "@/lib/hooks/useSession";
-import useCampaignData from "@/lib/hooks/campaign/useCampaignData";
 import CampaignBoard from "@/components/campaign/CampaignBoard";
-import Loading from "@/components/ui/loading";
+import useCampaignStore from "@/lib/store/useCampaignStore";
 
 export default function GameHandouts() {
   const t = useTranslations("GamePage");
@@ -16,10 +15,9 @@ export default function GameHandouts() {
     gameData: state.gameData,
   }));
 
-  const { campaignData, isFetching } = useCampaignData(
-    gameData?.campaign_id,
-    user?.id
-  );
+  const { campaignData } = useCampaignStore((state) => ({
+    campaignData: state.campaignData,
+  }));
 
   return (
     <GameTabCardLayout
@@ -27,16 +25,15 @@ export default function GameHandouts() {
       action={<ImportCampaignAction gameId={gameData?.id!} />}
     >
       {campaignData && (
-        <CampaignBoard campaignData={campaignData} userId={user!.id} gameId={gameData?.id!} />
+        <CampaignBoard
+          campaignData={campaignData}
+          userId={user!.id}
+          gameId={gameData?.id!}
+        />
       )}
-      {!campaignData && !isFetching && (
+      {!campaignData && (
         <div className="text-center h-96 flex items-center justify-center">
           <p className="font-bold text-muted-foreground">{t("noCampaigns")}</p>
-        </div>
-      )}
-      {isFetching && (
-        <div className="text-center h-96 flex items-center justify-center">
-          <Loading loading={isFetching} />
         </div>
       )}
     </GameTabCardLayout>

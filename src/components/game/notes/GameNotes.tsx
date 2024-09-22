@@ -1,12 +1,14 @@
 import { useTranslations } from "next-intl";
 import GameTabCardLayout from "../GameTabCardLayout";
+import useGameStore from "@/lib/store/useGameStore";
 
 export default function GameNote() {
   const t = useTranslations("GamePage");
 
-  return (
-    <GameTabCardLayout title={t("notes")} action={<div>Add new note</div>}>
-      Game notes
-    </GameTabCardLayout>
-  );
+  const { gameData } = useGameStore((state) => ({
+    gameData: state.gameData,
+  }));
+  const notes = gameData?.notes ?? [];
+
+  return <GameTabCardLayout title={t("notes")}>Game notes</GameTabCardLayout>;
 }

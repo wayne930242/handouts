@@ -1,5 +1,5 @@
 import { DropResult } from "@hello-pangea/dnd";
-import { advancedArrayMove, advancedMoveAcrossArrays } from "@/lib/arrayAction";
+import { arrayMove, moveAcrossArrays } from "@/lib/arrayAction";
 import { Campaign } from "@/types/interfaces";
 import { SetHandoutsTreeDataPayload } from "@/types/handouts";
 import { MySupabaseClient } from "@/types/interfaces";
@@ -28,7 +28,7 @@ export default function onCampaignDragEnd(
 
     if (sourceIndex === destIndex) return;
 
-    const newChapters = advancedArrayMove(
+    const newChapters = arrayMove(
       chapters,
       sourceIndex,
       destIndex,
@@ -54,7 +54,7 @@ export default function onCampaignDragEnd(
 
       const sections = chapters[sourceChapterIndex].sections;
 
-      const newSections = advancedArrayMove(
+      const newSections = arrayMove(
         sections,
         sourceIndex,
         destIndex,
@@ -88,7 +88,7 @@ export default function onCampaignDragEnd(
           (chapter) => String(chapter.id) === String(destChapterId)
         )?.sections ?? [];
 
-      const [newSourceSections, newDestSections] = advancedMoveAcrossArrays(
+      const [newSourceSections, newDestSections] = moveAcrossArrays(
         sourceSections,
         destSections,
         sourceIndex,
@@ -149,7 +149,7 @@ export default function onCampaignDragEnd(
       );
       if (!section) return;
 
-      const newHandouts = advancedArrayMove(
+      const newHandouts = arrayMove(
         section.handouts,
         sourceIndex,
         destIndex,
@@ -195,7 +195,7 @@ export default function onCampaignDragEnd(
       const sourceHandouts = sourceSection.handouts;
       const destHandouts = destSection.handouts;
 
-      const [newSourceHandouts, newDestHandouts] = advancedMoveAcrossArrays(
+      const [newSourceHandouts, newDestHandouts] = moveAcrossArrays(
         sourceHandouts,
         destHandouts,
         sourceIndex,

@@ -22,18 +22,29 @@ import GameMenu from "./GameMenu";
 import Image from "next/image";
 import { getBannerUrl } from "@/lib/bannerUrl";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import useCampaignStore from "@/lib/store/useCampaignStore";
 
 export default function GameToolbar({
   game,
   isOwner,
   isFavorite,
   isJoined,
+  hasCampaign,
 }: Props) {
-  const { connected, loading, needConnect } = useGameStore((state) => ({
-    connected: state.connected,
-    loading: state.loading,
-    needConnect: state.needConnect,
+  const { loadingCampaigns } = useCampaignStore((state) => ({
+    loadingCampaigns: state.loading,
   }));
+
+  const {
+    notesConnectd,
+    loading: loadingNotes,
+    campaignConnected,
+  } = useGameStore((state) => ({
+    notesConnectd: state.notesConnected,
+    campaignConnected: state.campaignConnected,
+    loading: state.loading,
+  }));
+
   const t = useTranslations("Toolbar");
   const user = useSessionUser();
 
@@ -60,6 +71,9 @@ export default function GameToolbar({
     setIsFavorite: setIsLocalFavorite,
   });
 
+  const connected = notesConnectd && (campaignConnected || hasCampaign);
+  const realtimeLoading = loadingCampaigns || loadingNotes;
+
   return (
     <ToolbarLayout
       leftSec={
@@ -74,8 +88,8 @@ export default function GameToolbar({
         </div>
       }
     >
-      <PacmanLoader color="#bbb" loading={loading} size={12} />
-      {needConnect && !connected && (
+      <PacmanLoader color="#bbb" loading={realtimeLoading} size={12} />
+      {!connected && (
         <Badge
           variant="outline"
           className="text-destructive border-transparent animate-pulse"
@@ -108,4 +122,5 @@ interface Props {
   isOwner?: boolean;
   isFavorite?: boolean;
   isJoined?: boolean;
+  hasCampaign?: boolean;
 }

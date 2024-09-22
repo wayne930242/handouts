@@ -32,10 +32,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   loading: false,
   setLoading: (loading) => set({ loading }),
-  connected: false,
-  setConnected: (connected) => set({ connected }),
-  needConnect: false,
-  setNeedConnect: (needConnect) => set({ needConnect }),
+  notesConnected: false,
+  setNotesConnected: (connected) => set({ notesConnected: connected }),
+  campaignConnected: false,
+  setCampaignConnected: (connected) => set({ campaignConnected: connected }),
   error: null,
 }));
 

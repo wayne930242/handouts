@@ -351,9 +351,9 @@ export interface GameStore {
 
   loading: boolean;
   setLoading: (loading: boolean) => void;
-  connected: boolean;
-  setConnected: (connected: boolean) => void;
-  needConnect: boolean;
-  setNeedConnect: (needConnect: boolean) => void;
+  notesConnected: boolean;
+  setNotesConnected: (connected: boolean) => void;
+  campaignConnected: boolean;
+  setCampaignConnected: (connected: boolean) => void;
   error: Error | null;
 }

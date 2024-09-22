@@ -1,4 +1,4 @@
-export const advancedArrayMove = <T extends Record<string, any>>(
+export const arrayMove = <T extends Record<string, any>>(
   arr: readonly T[],
   oldIndex: number,
   newIndex: number,
@@ -44,7 +44,7 @@ export const advancedArrayMove = <T extends Record<string, any>>(
   return result;
 };
 
-export const advancedInsertElement = <T extends Record<string, any>>(
+export const insertElement = <T extends Record<string, any>>(
   arr: readonly T[],
   newIndex: number,
   element: T,
@@ -78,7 +78,7 @@ export const advancedInsertElement = <T extends Record<string, any>>(
   return result;
 };
 
-export const advancedRemoveElement = <T extends Record<string, any>>(
+export const removeElement = <T extends Record<string, any>>(
   arr: readonly T[],
   oldIndex: number,
   orderNumKey?: keyof T,
@@ -106,7 +106,7 @@ export const advancedRemoveElement = <T extends Record<string, any>>(
 
   return result;
 };
-export const advancedMoveAcrossArrays = <T extends Record<string, any>>(
+export const moveAcrossArrays = <T extends Record<string, any>>(
   sourceArr: readonly T[],
   targetArr: readonly T[],
   oldIndex: number,
@@ -168,7 +168,7 @@ export const advancedMoveAcrossArrays = <T extends Record<string, any>>(
   };
 
   updateArray(newSourceArr, oldIndex, sourceUpdater);
-  updateArray(newTargetArr, 0, targetUpdater); // Update all elements in the target array
+  updateArray(newTargetArr, newIndex, targetUpdater);
 
   return [newSourceArr, newTargetArr];
 };

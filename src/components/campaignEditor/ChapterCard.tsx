@@ -2,7 +2,7 @@
 import { useTranslations } from "next-intl";
 import { Plus, X } from "lucide-react";
 
-import { advancedRemoveElement } from "@/lib/arrayAction";
+import { removeElement } from "@/lib/arrayAction";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import { useClient } from "@/lib/supabase/client";
 
@@ -43,7 +43,7 @@ export default function ChapterCard({ chapter }: Props) {
   const deleteChapter = async (chapters: Chapter[]) => {
     if (!chapters || chapters.length === 0) return;
     const chapterIndex = chapters.findIndex((c) => c.id === chapter.id);
-    const newChapters = advancedRemoveElement(
+    const newChapters = removeElement(
       chapters ?? [],
       chapterIndex,
       "order_num",

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import HandoutsArea from "./HandoutsArea";
 
-import { advancedRemoveElement } from "@/lib/arrayAction";
+import { removeElement } from "@/lib/arrayAction";
 import useSessionUser from "@/lib/hooks/useSession";
 import { useClient } from "@/lib/supabase/client";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export default function SectionCard({ section }: Props) {
     if (!sections || sections.length === 0) return;
     const sectionIndex = sections.findIndex((s) => s.id === section.id);
 
-    const newSections = advancedRemoveElement(
+    const newSections = removeElement(
       sections ?? [],
       sectionIndex,
       "order_num",

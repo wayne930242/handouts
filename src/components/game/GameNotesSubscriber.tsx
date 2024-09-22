@@ -7,20 +7,10 @@ import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 export default function GameNotesSubscriber({ gameId }: { gameId: string }) {
   const supabase = useClient();
-  const { setConnected, handleRealtimeUpdateNotes, setNeedConnect } =
-    useGameStore((state) => ({
-      setConnected: state.setConnected,
-      handleRealtimeUpdateNotes: state.handleRealtimeUpdateNotes,
-      setNeedConnect: state.setNeedConnect,
-    }));
-
-  useEffect(() => {
-    setConnected(false);
-    setNeedConnect(true);
-    return () => {
-      setNeedConnect(false);
-    };
-  }, [setNeedConnect]);
+  const { setConnected, handleRealtimeUpdateNotes } = useGameStore((state) => ({
+    setConnected: state.setNotesConnected,
+    handleRealtimeUpdateNotes: state.handleRealtimeUpdateNotes,
+  }));
 
   const { status } = useSubscription(
     supabase,

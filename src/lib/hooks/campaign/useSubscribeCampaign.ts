@@ -2,24 +2,19 @@
 
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import useSubscribeHandouts from "../useSubscribeHandouts";
-import useGameStore from "@/lib/store/useGameStore";
 import { useEffect } from "react";
 
-export default function useSubscribeCampaign(campaignId: string) {
-  const { setConnected, handleRealtimeUpdate } = useCampaignStore((state) => ({
-    setConnected: state.setConnected,
+export default function useSubscribeCampaign(
+  campaignId: string,
+  setConnected?: (connected: boolean) => void
+) {
+  const { handleRealtimeUpdate } = useCampaignStore((state) => ({
     handleRealtimeUpdate: state.handleRealtimeUpdate,
-  }));
-  const { setGameConnected, setNeedConnect } = useGameStore((state) => ({
-    setGameConnected: state.setConnected,
-    setNeedConnect: state.setNeedConnect,
   }));
 
   useEffect(() => {
-    setNeedConnect(true);
-
     return () => {
-      setNeedConnect(false);
+      setConnected?.(false);
     };
   }, []);
 
@@ -27,12 +22,10 @@ export default function useSubscribeCampaign(campaignId: string) {
     campaignId,
     handleRealtimeUpdate,
     () => {
-      setConnected(true);
-      setGameConnected(true);
+      setConnected?.(true);
     },
     () => {
-      setConnected(false);
-      setGameConnected(false);
+      setConnected?.(false);
     }
   );
 }

@@ -27,6 +27,7 @@ import {
 import GameNotesSubscriber from "./GameNotesSubscriber";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import CampaignSubscriber from "../campaign/CampaignSubscriber";
+import useCampaignData from "@/lib/hooks/campaign/useCampaignData";
 
 interface Props {
   gameId: string;
@@ -40,8 +41,7 @@ export default function Game({ gameId, userId }: Props) {
   const { initGameData } = useGameStore((state) => ({
     initGameData: state.initGameData,
   }));
-  const { initCampaignData, campaignData } = useCampaignStore((state) => ({
-    campaignData: state.campaignData,
+  const { initCampaignData } = useCampaignStore((state) => ({
     initCampaignData: state.initCampaignData,
   }));
 
@@ -50,6 +50,8 @@ export default function Game({ gameId, userId }: Props) {
     isFetching,
     isFetched,
   } = useQuery(getGameDetail(supabase, gameId, userId));
+
+  const { campaignData } = useCampaignData(game?.campaign_id, userId);
 
   const isInit = useRef(false);
   useEffect(() => {
@@ -83,6 +85,7 @@ export default function Game({ gameId, userId }: Props) {
         isOwner={game?.gm_id === userId}
         isJoined={!!game?.players.find((p) => p?.player?.id === userId)}
         isFavorite={!!game?.favorite?.length}
+        hasCampaign={!!campaignData}
       />
       <div className="px-1 py-3">
         <Select value={currentTab} onValueChange={(v) => setCurrentTab(v)}>
@@ -125,7 +128,7 @@ export default function Game({ gameId, userId }: Props) {
       </div>
       {game && <GameNotesSubscriber gameId={gameId} />}
       {game && campaignData && (
-        <CampaignSubscriber campaignId={campaignData.id} />
+        <CampaignSubscriber campaignId={campaignData.id} inGame />
       )}
     </div>
   ) : (

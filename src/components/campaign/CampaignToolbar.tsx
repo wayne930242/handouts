@@ -15,6 +15,7 @@ import OverlayLoading from "@/components/layout/OverlayLoading";
 import FavoriteButton from "@/components/toolbar/FavoriteButton";
 import ToolbarLayout from "../layout/ToolbarLayout";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
+import useGameStore from "@/lib/store/useGameStore";
 
 export default function Toolbar({
   campaignId,
@@ -50,11 +51,17 @@ export default function Toolbar({
       setEditingId: state.setEditingId,
     })
   );
-  const { campaignData, connected, loading } = useCampaignStore((state) => ({
+  const { campaignData, connected: _connected, loading } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
     connected: state.connected,
     loading: state.loading,
   }));
+  const { connectedInGame } = useGameStore((state) => ({
+    connectedInGame: state.campaignConnected,
+  }));
+
+  const connected = gameId ? connectedInGame : _connected;
+
   const [isLoading, setIsLoading] = useState(false);
 
   const {
