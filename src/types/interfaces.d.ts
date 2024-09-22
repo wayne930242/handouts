@@ -72,14 +72,14 @@ export type Chapter = ChapterData & {
 };
 
 export type Section = SectionData & {
-  handouts: Handout[];
+  handouts: HandoutData[];
 };
-
-export type Handout = HandoutData;
 
 export type ChapterData = Database["public"]["Tables"]["chapters"]["Row"];
 
 export type SectionData = Database["public"]["Tables"]["sections"]["Row"];
+
+export type Handout = HandoutData;
 
 export type HandoutData = Omit<
   Database["public"]["Tables"]["handouts"]["Row"],
@@ -103,8 +103,6 @@ export type MutateEventType = "INSERT" | "UPDATE" | "DELETE";
 export interface CampaignStore {
   campaignData: Campaign | null;
   initCampaignData: (campaignData: Campaign | null) => any;
-  setCampaignDataLocal: SetHandoutsTreeDataPayloadLocal;
-  setCampaignDataRemote: SetHandoutsTreeDataPayload;
   setCampaignData: SetHandoutsTreeDataPayload;
   isDragging: boolean;
   setIsDragging: (isDragging: boolean) => void;
@@ -315,7 +313,6 @@ export type SetNoteDataPayloadLocal = <
 >(
   newData: T,
   oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
-  tableName: HandoutsTreeTable,
   type: E
 ) => void;
 
@@ -325,7 +322,6 @@ export type SetNoteDataPayload = <
 >(
   newData: T,
   oldData: T extends Array<any> ? Partial<T[number]>[] : Partial<T>,
-  tableName: HandoutsTreeTable,
   type: E,
   supabaseClient: MySupabaseClient,
   debounce?: {

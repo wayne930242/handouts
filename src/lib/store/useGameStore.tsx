@@ -1,14 +1,7 @@
 import { create } from "zustand";
 import merge from "lodash/merge";
 import { produce } from "immer";
-import { debouncify } from "@/lib/debounce";
-import {
-  GameStore,
-  RealtimePayload,
-  Handout,
-  Chapter,
-  Section,
-} from "@/types/interfaces";
+import { GameStore } from "@/types/interfaces";
 
 export const useGameStore = create<GameStore>((set, get) => ({
   gameData: null,
@@ -25,9 +18,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setScreenHandouts: async () => {},
   setGenerators: async () => {},
 
-  setNotes: async () => {},
-  setNotesLocal: async () => {},
-  setNotesRemote: async () => {},
+  setNotes: async (newData, oldData, type, supabaseClient, debounce) => {
+    if (type === "UPDATE") {
+      // Let INSERT, DELETE be handled by realtime
+      get().setNotesLocal(newData, oldData, type);
+    }
+
+    get().setNotesRemote(newData, oldData, type, supabaseClient, debounce);
+  },
+  setNotesLocal: async (newData, oldData, type) => {},
+  setNotesRemote: async (newData, oldData, type, supabaseClient, debounce) => {
+    set({ loading: true, error: null });
+  },
   handleRealtimeUpdateNotes: async () => {},
 
   loading: false,

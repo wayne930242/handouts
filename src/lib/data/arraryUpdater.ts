@@ -1,12 +1,12 @@
 export const updateArray = <T extends { id: number | string }>(
   array: T[],
   record: T,
-  oldRecord: Partial<T> | undefined,
+  oldRecord: { id: number | string } | undefined,
   eventType: "INSERT" | "UPDATE" | "DELETE"
 ): T[] => {
   if (!record) return array;
 
-  const safeArray = array || [];
+  const safeArray: T[] = array || [];
 
   let newArray: T[];
   switch (eventType) {
