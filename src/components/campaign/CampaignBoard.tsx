@@ -2,21 +2,29 @@
 
 import dynamic from "next/dynamic";
 
-import useAppStore from "@/lib/store/useAppStore";
 import useCanEditCampaign from "@/lib/hooks/campaign/useCanEditCampaign";
 import { Campaign as CampaignData } from "@/types/interfaces";
 import CampaignViewer from "./CampaignViewer";
 
 import Toolbar from "./CampaignToolbar";
+import useCampaignStore from "@/lib/store/useCampaignStore";
+import { useEffect } from "react";
 
 const CampaignEditor = dynamic(() => import("./CampaignEditor"), {
   ssr: false,
 });
 
 export default function CampaignBoard({ campaignData, userId, gameId }: Props) {
-  const { editingStage } = useAppStore((state) => ({
+  const { editingStage, setEditingStage } = useCampaignStore((state) => ({
     editingStage: state.editingStage,
+    setEditingStage: state.setEditingStage,
   }));
+
+  useEffect(() => {
+    return () => {
+      setEditingStage(null);
+    };
+  }, []);
 
   const isGm = useCanEditCampaign();
 

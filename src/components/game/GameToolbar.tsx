@@ -1,14 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PacmanLoader } from "react-spinners";
-import { Eye, Pen, Unplug } from "lucide-react";
+import { Unplug } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { GameInList } from "@/types/interfaces";
-import useAppStore from "@/lib/store/useAppStore";
-import { useClient } from "@/lib/supabase/client";
 import useSessionUser from "@/lib/hooks/useSession";
-import { useRouter } from "@/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +16,6 @@ import ToolbarLayout from "../layout/ToolbarLayout";
 import useGameStore from "@/lib/store/useGameStore";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
 import GameMenu from "./GameMenu";
-import Image from "next/image";
 import { getBannerUrl } from "@/lib/bannerUrl";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import useCampaignStore from "@/lib/store/useCampaignStore";
@@ -31,17 +27,15 @@ export default function GameToolbar({
   isJoined,
   hasCampaign,
 }: Props) {
-  const { loadingCampaigns } = useCampaignStore((state) => ({
-    loadingCampaigns: state.loading,
-  }));
+  const { loadingCampaigns, campaignConnected, campaignData } =
+    useCampaignStore((state) => ({
+      loadingCampaigns: state.loading,
+      campaignData: state.campaignData,
+      campaignConnected: state.connected,
+    }));
 
-  const {
-    notesConnectd,
-    loading: loadingNotes,
-    campaignConnected,
-  } = useGameStore((state) => ({
+  const { notesConnectd, loading: loadingNotes } = useGameStore((state) => ({
     notesConnectd: state.notesConnected,
-    campaignConnected: state.campaignConnected,
     loading: state.loading,
   }));
 

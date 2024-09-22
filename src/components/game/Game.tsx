@@ -128,7 +128,7 @@ export default function Game({ gameId, userId }: Props) {
       </div>
       {game && <GameNotesSubscriber gameId={gameId} />}
       {game && campaignData && (
-        <CampaignSubscriber campaignId={campaignData.id} inGame />
+        <CampaignSubscriber campaignId={campaignData.id} />
       )}
     </div>
   ) : (

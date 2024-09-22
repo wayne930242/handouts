@@ -46,7 +46,6 @@ import { useTranslations } from "next-intl";
 import { useClient } from "@/lib/supabase/client";
 import usePreventLeave from "@/lib/hooks/usePreventLeave";
 import ImageManager, { ImageKeyPrefix } from "@/lib/s3/ImageManager";
-import useAppStore from "@/lib/store/useAppStore";
 import ConfirmDialog from "../dialog/ConfirmDialog";
 
 const ImageEditor = dynamic(
@@ -83,15 +82,14 @@ export type ContentFieldProps = ControllerRenderProps<
 
 export default function HandoutCard({ handout }: Props) {
   const supabase = useClient();
-  const { editingStage, editingId } = useAppStore((state) => ({
-    editingStage: state.editingStage,
-    editingId: state.editingId,
-  }));
 
-  const { setCampaignData, campaignData } = useCampaignStore((state) => ({
-    setCampaignData: state.setCampaignData,
-    campaignData: state.campaignData,
-  }));
+  const { setCampaignData, editingStage, editingId } = useCampaignStore(
+    (state) => ({
+      setCampaignData: state.setCampaignData,
+      editingStage: state.editingStage,
+      editingId: state.editingId,
+    })
+  );
 
   const t = useTranslations("HandoutCard");
 
@@ -199,7 +197,7 @@ export default function HandoutCard({ handout }: Props) {
       );
     }
   };
-  
+
   const [openConfirm, setOpenConfirm] = useState(false);
 
   return (

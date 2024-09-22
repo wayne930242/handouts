@@ -44,23 +44,21 @@ export default function Toolbar({
     setIsLocalFavorite(!!isFavorite);
   }, [setIsLocalFavorite, isFavorite]);
 
-  const { editingStage, setEditingStage, setEditingId } = useAppStore(
-    (state) => ({
-      editingStage: state.editingStage,
-      setEditingStage: state.setEditingStage,
-      setEditingId: state.setEditingId,
-    })
-  );
-  const { campaignData, connected: _connected, loading } = useCampaignStore((state) => ({
+  const {
+    campaignData,
+    connected,
+    loading,
+    editingStage,
+    setEditingStage,
+    setEditingId,
+  } = useCampaignStore((state) => ({
     campaignData: state.campaignData,
     connected: state.connected,
     loading: state.loading,
+    editingStage: state.editingStage,
+    setEditingStage: state.setEditingStage,
+    setEditingId: state.setEditingId,
   }));
-  const { connectedInGame } = useGameStore((state) => ({
-    connectedInGame: state.campaignConnected,
-  }));
-
-  const connected = gameId ? connectedInGame : _connected;
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -81,7 +79,7 @@ export default function Toolbar({
   return (
     <ToolbarLayout>
       <PacmanLoader color="#bbb" loading={loading} size={12} />
-      {!connected && (
+      {!!campaignData && !connected && (
         <Badge
           variant="outline"
           className="text-destructive border-transparent animate-pulse"

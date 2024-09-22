@@ -10,6 +10,7 @@ export default function useSubscribeCampaign(
 ) {
   const { handleRealtimeUpdate } = useCampaignStore((state) => ({
     handleRealtimeUpdate: state.handleRealtimeUpdate,
+    campaignData: state.campaignData,
   }));
 
   useEffect(() => {

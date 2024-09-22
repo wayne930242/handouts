@@ -106,6 +106,12 @@ export interface CampaignStore {
   setCampaignDataLocal: SetHandoutsTreeDataPayloadLocal;
   setCampaignDataRemote: SetHandoutsTreeDataPayload;
   setCampaignData: SetHandoutsTreeDataPayload;
+  isDragging: boolean;
+  setIsDragging: (isDragging: boolean) => void;
+  editingId: string | null;
+  setEditingId: (editingId: string | null) => void;
+  editingStage: "campaign" | "screen" | "doc" | null;
+  setEditingStage: (editingStage: "campaign" | "screen" | "doc" | null) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
   connected: boolean;
@@ -137,12 +143,7 @@ export type Passphrase = {
 export interface AppStore {
   user: User | null;
   setUser: (user: User | null) => void;
-  isDragging: boolean;
-  setIsDragging: (isDragging: boolean) => void;
-  editingId: string | null;
-  setEditingId: (editingId: string | null) => void;
-  editingStage: "campaign" | "screen" | "doc" | null;
-  setEditingStage: (editingStage: "campaign" | "screen" | "doc" | null) => void;
+
   addPassphraseDialog: PassphraseDialogKey | null;
   setAddPassphraseDialog: (
     passphraseDialog: PassphraseDialogKey | null
@@ -353,7 +354,41 @@ export interface GameStore {
   setLoading: (loading: boolean) => void;
   notesConnected: boolean;
   setNotesConnected: (connected: boolean) => void;
-  campaignConnected: boolean;
-  setCampaignConnected: (connected: boolean) => void;
   error: Error | null;
+}
+
+export type DocData = Pick<
+  Database["public"]["Tables"]["docs"]["Row"],
+  | "id"
+  | "title"
+  | "content"
+  | "passphrase"
+  | "is_public"
+  | "created_at"
+  | "updated_at"
+  | "banner_url"
+  | "description"
+  | "type"
+>;
+
+export interface Doc extends DocData {
+  owner: Profile;
+  players: {
+    user: Profile;
+  }[];
+  generators: {
+    generator: Generator;
+  }[];
+  favorite?: {
+    id: string | null;
+    added_at: string | null;
+  };
+}
+
+export interface DocStore {
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void;
+  editingId: string | null;
+  setEditingId: (editingId: string | null) => void;
+  currentDoc: Doc | null;
 }

@@ -14,6 +14,7 @@ import OverlayLoading from "@/components/layout/OverlayLoading";
 import { DocInList } from "@/types/interfaces";
 import ToolbarLayout from "../layout/ToolbarLayout";
 import useHandleFavAndJoin from "@/lib/hooks/useHandleFavAndJoin";
+import useDocStore from "@/lib/store/useDocStore";
 
 export default function Toolbar({
   doc,
@@ -41,13 +42,11 @@ export default function Toolbar({
     setIsLocalFavorite(!!isFavorite);
   }, [setIsLocalFavorite, isFavorite]);
 
-  const { editingStage, setEditingStage, setEditingId } = useAppStore(
-    (state) => ({
-      editingStage: state.editingStage,
-      setEditingStage: state.setEditingStage,
-      setEditingId: state.setEditingId,
-    })
-  );
+  const { isEditing, setIsEditing, setEditingId } = useDocStore((state) => ({
+    isEditing: state.isEditing,
+    setIsEditing: state.setIsEditing,
+    setEditingId: state.setEditingId,
+  }));
 
   const {
     addOrRemoveFavorite: handleAddOrRemoveFavorite,
@@ -73,23 +72,23 @@ export default function Toolbar({
         <Button
           size="sm"
           className="flex gap-2 items-center"
-          variant={editingStage === "doc" ? "outline" : "default"}
+          variant={isEditing ? "outline" : "default"}
           onClick={() => {
-            if (editingStage === "doc") {
-              setEditingStage(null);
+            if (isEditing) {
+              setIsEditing(false);
               setEditingId(null);
             } else {
-              setEditingStage("doc");
+              setIsEditing(true);
               setEditingId(doc.id);
             }
           }}
         >
-          {editingStage === "doc" ? (
+          {isEditing ? (
             <Eye className="h-4 w-4" />
           ) : (
             <Pen className="h-4 w-4" />
           )}
-          {editingStage === "doc" ? t("closeEdit") : t("edit")}
+          {isEditing ? t("closeEdit") : t("edit")}
         </Button>
       )}
       {!isOwner && (

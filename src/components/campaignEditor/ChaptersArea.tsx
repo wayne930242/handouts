@@ -8,7 +8,6 @@ import ChapterCard from "./ChapterCard";
 import { useClient } from "@/lib/supabase/client";
 import useCampaignStore from "@/lib/store/useCampaignStore";
 import onCampaignDragEnd from "@/lib/dnd/onCampaignDragEnd";
-import useAppStore from "@/lib/store/useAppStore";
 
 interface Props {
   chapters: Chapter[];
@@ -17,14 +16,13 @@ interface Props {
 export default function ChaptersArea({ chapters }: Props) {
   const supabase = useClient();
 
-  const { editingStage } = useAppStore((state) => ({
-    editingStage: state.editingStage,
-  }));
-
-  const { campaignData, setCampaignData } = useCampaignStore((state) => ({
-    campaignData: state.campaignData,
-    setCampaignData: state.setCampaignData,
-  }));
+  const { campaignData, setCampaignData, editingStage } = useCampaignStore(
+    (state) => ({
+      campaignData: state.campaignData,
+      setCampaignData: state.setCampaignData,
+      editingStage: state.editingStage,
+    })
+  );
 
   return (
     <DragDropContext

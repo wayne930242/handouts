@@ -18,6 +18,12 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
   error: null,
   connected: false,
   setConnected: (connected) => set({ connected }),
+  isDragging: false,
+  setIsDragging: (isDragging) => set({ isDragging }),
+  editingId: null,
+  setEditingId: (editingId) => set({ editingId }),
+  editingStage: null,
+  setEditingStage: (editingStage) => set({ editingStage }),
   setCampaignDataLocal: async (newData, oldData, tableName, type) => {
     if (Array.isArray(newData)) {
       newData.forEach((item, index) => {
@@ -27,7 +33,7 @@ const useCampaignStore = create<CampaignStore>((set, get) => ({
           let updatedData = updateHandoutsTreeNestedData(
             state.campaignData,
             tableName,
-            item as Handout | Chapter | Section ,
+            item as Handout | Chapter | Section,
             oldData[index] as typeof item,
             type
           );

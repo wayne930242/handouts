@@ -7,6 +7,8 @@ import Toolbar from "./DocToolbar";
 import useAppStore from "@/lib/store/useAppStore";
 import { PacmanLoader } from "react-spinners";
 import { useClient } from "@/lib/supabase/client";
+import useDocStore from "@/lib/store/useDocStore";
+import { useEffect } from "react";
 
 const DocEditor = dynamic(() => import("./DocEditor"));
 const DocViewer = dynamic(() => import("./DocViewer"));
@@ -24,9 +26,16 @@ export default function Doc({ docId, userId }: Props) {
     refetch,
   } = useQuery(getDocDetail(supabase, docId, userId));
 
-  const { editingStage } = useAppStore((state) => ({
-    editingStage: state.editingStage,
+  const { isEditing, setIsEditing } = useDocStore((state) => ({
+    isEditing: state.isEditing,
+    setIsEditing: state.setIsEditing,
   }));
+
+  useEffect(() => {
+    return () => {
+      setIsEditing(false);
+    };
+  }, []);
 
   return doc ? (
     <div className="w-full">
@@ -37,8 +46,8 @@ export default function Doc({ docId, userId }: Props) {
         isFavorite={!!doc?.favorite?.length}
       />
       <div className="flex flex-col gap-2 w-full my-2 px-2">
-        {editingStage === "doc" && <DocEditor doc={doc} callback={refetch} />}
-        {editingStage !== "doc" && <DocViewer doc={doc} />}
+        {isEditing && <DocEditor doc={doc} callback={refetch} />}
+        {!isEditing && <DocViewer doc={doc} />}
       </div>
     </div>
   ) : (
